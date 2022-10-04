@@ -16,7 +16,7 @@ const nextConfig = {
       }
     ]
   },
-  distDir: 'build',
+  // distDir: 'build',
   cleanDistDir: true,
   eslint: {
     // Warning: This allows production builds to successfully complete even if

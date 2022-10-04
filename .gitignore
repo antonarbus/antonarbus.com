@@ -36,3 +36,4 @@ yarn-error.log*
 posts/terminal.js
 build.tar
 build.tar.gz
+archive.tar.gz

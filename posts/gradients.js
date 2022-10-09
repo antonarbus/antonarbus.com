@@ -5,10 +5,10 @@ const style = { height: '200px', display: 'flex', justifyContent: 'center', alig
 function Cmpt(props) {
   return (
     <div style={style}>
-      {props.css}
+      {props.styles}
       <style jsx>{`
         div {
-          ${props.css}
+          ${props.styles}
         }
       `}</style>
     </div>
@@ -41,7 +41,7 @@ const postObj = {
       background: linear-gradient(red, green)
       `}</Code>
 
-      <Cmpt css='background: linear-gradient(red, green)'></Cmpt>
+      <Cmpt styles='background: linear-gradient(red, green)'></Cmpt>
 
       <p>We can specify the direction of the gradient line.</p>
 
@@ -49,7 +49,7 @@ const postObj = {
       background: linear-gradient(to top right, red, green)
       `}</Code>
 
-      <Cmpt css='background: linear-gradient(to top right, red, green)'></Cmpt>
+      <Cmpt styles='background: linear-gradient(to top right, red, green)'></Cmpt>
 
       <p>Or use an angle.</p>
 
@@ -63,7 +63,7 @@ const postObj = {
 
       <p>Or use an angle. Note that as far as the div shape is not square, the line doesn't go diagonally.</p>
 
-      <Cmpt css='background: linear-gradient(0deg, red, green)' />
+      <Cmpt styles='background: linear-gradient(0deg, red, green)' />
 
       <p>Or use an angle. Note that as far as the div shape is not square, the line doesn't go diagonally.</p>
 
@@ -71,7 +71,7 @@ const postObj = {
       background: linear-gradient(45deg, red, green)
       `}</Code>
 
-      <Cmpt css='background: linear-gradient(45deg, red, green)' />
+      <Cmpt styles='background: linear-gradient(45deg, red, green)' />
 
       <p>We can have multiple comma separated colors.</p>
 
@@ -79,7 +79,7 @@ const postObj = {
       background: linear-gradient(red, white, green)
       `}</Code>
 
-      <Cmpt css='background: linear-gradient(red, white, green)' />
+      <Cmpt styles='background: linear-gradient(red, white, green)' />
 
       <p>You can set a start point for a color.</p>
 
@@ -87,13 +87,13 @@ const postObj = {
       background: linear-gradient(to right, red 0%, white 10%, green 50%);
       `}</Code>
 
-      <Cmpt css='background: linear-gradient(to right, red 0%, white 10%, green 50%)' />
+      <Cmpt styles='background: linear-gradient(to right, red 0%, white 10%, green 50%)' />
 
       <p>Background image can span across the whole container or can be fixed. Check the difference.</p>
 
-      <Cmpt css='height: 600px !important; background: linear-gradient(red, green);' />
+      <Cmpt styles='height: 600px !important; background: linear-gradient(red, green);' />
       <br />
-      <Cmpt css='height: 600px !important; background: linear-gradient(red, green); background-attachment: fixed;' />
+      <Cmpt styles='height: 600px !important; background: linear-gradient(red, green); background-attachment: fixed;' />
     </>
   )
 }

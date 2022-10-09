@@ -19,13 +19,15 @@ module.exports = {
   },
   plugins: [
     'react',
-    '@typescript-eslint'
+    '@typescript-eslint',
+    '@emotion'
   ],
   rules: {
     'react/react-in-jsx-scope': 'off',
     'space-before-function-paren': 'off',
     'react/prop-types': 'off',
     'import/no-absolute-path': 'off',
-    'react/no-unescaped-entities': 'off'
+    'react/no-unescaped-entities': 'off',
+    'react/no-unknown-property': ['error', { ignore: ['css', 'jsx'] }]
   }
 }

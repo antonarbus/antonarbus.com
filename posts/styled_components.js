@@ -46,18 +46,18 @@ const Div3 = styled.div`
 
 // #region Pass whole CSS string
 const PassWholeCssString = () => (
-  <DivADFAG CSS={'font-size: 20px;color: tomato;font-weight: 800;'}>I am div</DivADFAG>
+  <DivADFAG styles={'font-size: 20px;color: tomato;font-weight: 800;'}>I am div</DivADFAG>
 )
 const DivADFAG = styled.div`
-  ${props => props.CSS}
+  ${props => props.styles}
 `
 // #endregion
 
 // #region Pass part of CSS as string
-const PassPartOfCssAsString = props => <Div6 css={props.css}>I am div</Div6>
+const PassPartOfCssAsString = props => <Div6 styles={props.styles}>I am div</Div6>
 const Div6 = styled.div`
   font-size: 20px;
-  ${props => props.css};
+  ${props => props.styles};
 `
 // #endregion
 
@@ -325,7 +325,7 @@ const postObj = {
 
       <Code block jsx>{`
       const PassWholeCssString = () => (
-        <DivADFAG CSS={'font-size: 20px;color: tomato;font-weight: 800;'}>I am div</DivADFAG>
+        <DivADFAG styles={'font-size: 20px;color: tomato;font-weight: 800;'}>I am div</DivADFAG>
       )
       const DivADFAG = styled.div\`
         \${props => props.CSS}
@@ -341,16 +341,16 @@ const postObj = {
       <p>For example we may add additional CSS rules to existing ones.</p>
 
       <Code block jsx>{`
-        const PassPartOfCssAsString = (props) => <Div6 css={props.css}>I am div</Div6>
+        const PassPartOfCssAsString = (props) => <Div6 styles={props.css}>I am div</Div6>
         const Div6 = styled.div\`
           font-size: 20px;
           \${props => props.css};
         \`
 
-        <PassPartOfCssAsString css='color: brown; border: 1px solid grey;' />
+        <PassPartOfCssAsString styles='color: brown; border: 1px solid grey;' />
       `}</Code>
 
-      <PassPartOfCssAsString css="color: brown; border: 1px solid grey;" />
+      <PassPartOfCssAsString styles="color: brown; border: 1px solid grey;" />
 
       <H>Pass all props</H>
 

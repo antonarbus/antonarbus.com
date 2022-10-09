@@ -17,7 +17,7 @@ const DragHandle = sortableHandle(() => (
   </span>
 ))
 
-const SortableBlock = sortableElement(({ value, css }) => (
+const SortableBlock = sortableElement(({ value, styles }) => (
   <div className='line'>
     <DragHandle />{value}
 
@@ -29,7 +29,7 @@ const SortableBlock = sortableElement(({ value, css }) => (
         padding: 5px;
         border: 1px dotted grey;
         white-space: nowrap;
-        ${css}
+        ${styles}
       }
     `}</style>
   </div>
@@ -37,7 +37,7 @@ const SortableBlock = sortableElement(({ value, css }) => (
 
 const SortableContainer = sortableContainer(({ children }) => <div>{children}</div>)
 
-function SortContainer({ css, axis }) {
+function SortContainer({ styles, axis }) {
   const arrInit = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6']
   const [state, setState] = useState(arrInit)
   const onSortEnd = ({ oldIndex, newIndex }) => setState(arrayMoveImmutable(state, oldIndex, newIndex))
@@ -49,7 +49,7 @@ function SortContainer({ css, axis }) {
       useDragHandle
     >
       {state.map((value, index) => (
-        <SortableBlock key={`item-${value}`} index={index} value={value} css={css} />
+        <SortableBlock key={`item-${value}`} index={index} value={value} styles={styles} />
       ))}
     </SortableContainer>
   )
@@ -70,11 +70,11 @@ const postObj = {
 
       <H>Sort lines</H>
 
-      <SortContainer css='display: flex;' axis='y' />
+      <SortContainer styles='display: flex;' axis='y' />
 
       <H>Sort columns</H>
 
-      <SortContainer css='display: inline-flex;' axis='x' />
+      <SortContainer styles='display: inline-flex;' axis='x' />
 
       <Code block jsx>{`
       import { sortableContainer, sortableElement, sortableHandle } from 'react-sortable-hoc'
@@ -122,7 +122,7 @@ const postObj = {
         return (
           <SortableContainer onSortEnd={onSortEnd} axis={axis} useDragHandle>
             {state.map((value, index) => (
-              <SortableBlock key={\`item-\${value}\`} index={index} value={value} css={css} />
+              <SortableBlock key={\`item-\${value}\`} index={index} value={value} styles={css} />
             ))}
           </SortableContainer>
         )

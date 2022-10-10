@@ -33,7 +33,6 @@ yarn-error.log*
 
 # vercel
 .vercel
-posts/terminal.js
 build.tar
 build.tar.gz
 archive.tar.gz

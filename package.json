@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "node exportAllPostsCreate && next dev",
     "build": "node exportAllPostsCreate && next build",
+    "deploy": "node deploy_script",
     "start": "next start",
     "lint": "next lint",
     "test": "jest --watch",

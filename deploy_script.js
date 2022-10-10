@@ -29,12 +29,12 @@ output = execSync('ssh sherb@35.209.92.93 "cd /var/www/html/antonarbus.com/ && t
 console.log(output)
 console.log('extracted files from the archive')
 
-// output = execSync('ssh sherb@35.209.92.93 "cd /var/www/html/antonarbus.com/ && /home/sherb/.nvm/versions/node/v16.8.0/bin/npm i -f"', options)
-// console.log(output)
-// console.log('installed packages')
+output = execSync('ssh sherb@35.209.92.93 "source ~/.nvm/nvm.sh && cd /var/www/html/antonarbus.com/ && npm i -f"', options)
+console.log(output)
+console.log('installed packages')
 
-// output = execSync('ssh sherb@35.209.92.93 "pm2 restart app"', options)
-// console.log(output)
-// console.log('restarted the app')
+output = execSync('ssh sherb@35.209.92.93 "source ~/.nvm/nvm.sh && pm2 restart app"', options)
+console.log(output)
+console.log('restarted the app')
 
 console.log('done!')

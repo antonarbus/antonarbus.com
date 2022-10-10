@@ -106,7 +106,7 @@ const postObj = {
       <H>Tar</H>
 
       <ul>
-        <li><Code bash>tar czvf ~/Temp/archive.tar.gz -C ~/Temp/ xxx yyy hi.txt</Code> tar folders <code>xxx</code>b <code>yyy</code> and <code>file hi.txt</code> from <code>~/Temp/</code> folder and put into <code>~/Temp/archive.tar.gz</code> archive file</li>
+        <li><Code bash>tar czvf ~/Temp/archive.tar.gz -C ~/Temp/ xxx yyy hi.txt</Code> archive listed folders and files from <code>~/Temp/</code> and put into <code>~/Temp/archive.tar.gz</code></li>
         <li><Code bash>tar -xf ~/Temp/archive.tar.gz -C ~/Temp/extracted</Code> extract the archive <code>archive.tar.gz</code> from folder <code>~/Temp/</code> into folder <code>~/Temp/extracted</code></li>
       </ul>
 

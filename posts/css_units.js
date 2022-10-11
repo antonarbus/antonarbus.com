@@ -3,7 +3,7 @@ import { H, jsxToStr, Lnk } from '/components/post/reExport'
 const postObj = {
   title: 'css units',
   date: '2022.06.09',
-  tags: ['CSS', 'basics'],
+  tags: ['css', 'basics'],
   imgUrl: 'https://antonarbus.com/imgs/css_units.png',
   desc: 'css units',
   body: (

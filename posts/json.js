@@ -35,7 +35,7 @@ const postObj = {
         name: 'John',
         age: 30,
         isAdmin: false,
-        courses: ['HTML', 'CSS', 'JavaScript'],
+        courses: ['HTML', 'css', 'JavaScript'],
         wife: null
       };
   

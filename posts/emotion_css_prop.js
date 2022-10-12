@@ -138,7 +138,14 @@ const postObj = {
           'react/no-unknown-property': ['error', { ignore: ['css', 'jsx'] }]
         }
       }
+      `}</Code>
 
+      <H>webpack</H>
+
+      <p><code>css</code> prop from emotion does not work in react with webpack automatically, like it works with vite for ex. To let it work on top of the file need to put...</p>
+
+      <Code block jsx>{`
+      /** @jsxImportSource @emotion/react */
       `}</Code>
 
     </>

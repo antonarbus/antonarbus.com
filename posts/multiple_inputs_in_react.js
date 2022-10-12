@@ -1,57 +1,16 @@
-import { Code, H, Hs, LazyImg, Lnk, React, useEffect, useState, useRef, useCallback, useMemo, jsxToStr } from '/components/post/reExport'
+import { Code, H, Lnk, useState, jsxToStr } from '/components/post/reExport'
 
 function Component() {
-  // const handleInputValueChange = (e) => {
-  //   const target = (e.target)
-  //   setInputValue({ ...inputValue, [target.name]: target.value })
-  // }
+  const [values, setValues] = useState({ first: '', last: '', age: '' })
+  const updateValues = (e) => setValues({ ...values, [e.target.name]: e.target.value })
 
   return (
-    <form action="/api/action_for_inputs_post" method="POST" autoComplete="off" name="myForm" >
-      <fieldset>
-        <legend>Radios</legend>
-        <input type="radio" id="html" name="fav_language" defaultValue="HTML" defaultChecked />
-        <label htmlFor="html">HTML</label><br />
-        <input type="radio" id="css" name="fav_language" defaultValue="CSS" />
-        <label htmlFor="css">CSS</label><br />
-        <input type="radio" id="javascript" name="fav_language" defaultValue="JavaScript" />
-        <label htmlFor="javascript">JavaScript</label>
-      </fieldset>
-
-      <fieldset>
-        <legend>Checkboxes</legend>
-        <input type="checkbox" id="vehicle1" name="vehicles" defaultValue="Bike" defaultChecked />
-        <label htmlFor="vehicle1"> I have a bike</label><br />
-        <input type="checkbox" id="vehicle2" name="vehicles" defaultValue="Car" defaultChecked />
-        <label htmlFor="vehicle2"> I have a car</label><br />
-        <input type="checkbox" id="vehicle3" name="vehicles" defaultValue="Boat" />
-        <label htmlFor="vehicle3"> I have a boat</label>
-      </fieldset>
-
-      <fieldset>
-        <legend>Text inputs</legend>
-        <label htmlFor="fname">First name - readonly:</label><br />
-        <input type="text" id="fname" name="user" defaultValue="John" readOnly /><br />
-        <label htmlFor="age">age:</label><br />
-        <input type="number" id="age" name="user" defaultValue="35" />
-      </fieldset>
-
-      <fieldset>
-        <legend>Select</legend>
-        <label htmlFor="cars">Choose a car:</label><br />
-        <select id="cars" name="cars" size="3" multiple defaultValue={['Volvo', 'Fiat']}>
-          <option>Volvo</option>
-          <option>Saab</option>
-          <option>Fiat</option>
-          <option>Audi</option>
-        </select>
-      </fieldset>
-
-      <button>Submit button</button>
-      <input type="submit" defaultValue="Submit input" />
-      <input type="reset" defaultValue="Reset to default values" />
-
-    </form>
+    <>
+      <input type="text" name="first" value={values.first} onChange={updateValues} placeholder='first name' /> <br />
+      <input type="text" name="last" value={values.last} onChange={updateValues} placeholder='last name' /> <br />
+      <input type="number" name="age" value={values.age} onChange={updateValues} placeholder='age' /> <br />
+      <div><h5>{'values state object: '}</h5>{JSON.stringify(values)}</div>
+    </>
   )
 }
 
@@ -65,8 +24,28 @@ const postObj = {
     <>
       <H>one useState for multiple inputs</H>
 
-      <Component />
+      <p>
+        Good <Lnk url="https://www.pluralsight.com/guides/handling-multiple-inputs-with-single-onchange-handler-react">article</Lnk>{' '}
+        how to control multiple inputs with React without creating state variable for every input field.
+      </p>
 
+      <Code block jsx>{`
+      function Component() {
+        const [values, setValues] = useState({ first: '', last: '', age: '' })
+        const updateValues = (e) => setValues({ ...values, [e.target.name]: e.target.value })
+
+        return (
+          <>
+            <input type="text" name="first" value={values.first} onChange={updateValues} placeholder='first name' /> <br />
+            <input type="text" name="last" value={values.last} onChange={updateValues} placeholder='last name' /> <br />
+            <input type="number" name="age" value={values.age} onChange={updateValues} placeholder='age' /> <br />
+            <div><h5>{'values state object: '}</h5>{JSON.stringify(values)}</div>
+          </>
+        )
+      }
+      `}</Code>
+
+      <Component />
     </>
   )
 }

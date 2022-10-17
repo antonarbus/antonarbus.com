@@ -127,6 +127,10 @@ const postObj = {
         <li><Code>git commit -am <i>"message"</i></Code> stage (add) all modified files and commit. The <Code bash>-a</Code> flag will not add any new files.</li>
       </ul>
 
+      <Hs>Commit message</Hs>
+
+      <p>Good commit message may look like "<span css={{ color: 'grey' }}>this commit will</span> <b>fix the margin issue on windows</b>" without "<span css={{ color: 'grey' }}>this commit will</span>" statement.</p>
+
       <H>Amend</H>
 
       <ul>

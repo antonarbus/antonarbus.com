@@ -11,7 +11,7 @@ const postObj = {
 
       <ul>
         <li>To open a folder in VSCode from the terminal need to add PATH. </li>
-        <li>Find command <Lnk path='https://code.visualstudio.com/docs/setup/mac#_launching-from-the-command-line'>command</Lnk> <Code>Install 'code' command in PATH </Code> in vs Code Command Palette <kbd>Cmd+Shift+P</kbd></li>
+        <li>Find command <Lnk path='https://code.visualstudio.com/docs/setup/mac#_launching-from-the-command-line'>command</Lnk> <Code>Install 'code' command in PATH </Code> in vs Code Command Palette <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd></li>
         <li><Code>code .</Code> opens current folder in a new VS Code instance</li>
         <li><Code>code -r</Code> opens current folder in an opened VS Code instance</li>
         <li><Code>code file_name.txt</Code> opens or creates the file</li>

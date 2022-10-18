@@ -11,15 +11,11 @@ const postObj = {
 
       <H>Homebrew</H>
 
-      <p>Install package manager for mac <Lnk path='https://brew.sh/'>Homebrew</Lnk> if you did't before <Code bash>{'/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"'}</Code>.</p>
-
-      <H>ZSH</H>
-
-      <p>Install the Z shell (ZSH) - a unix shell that is built on top of bash - <Code bash>brew cask install iTerm2</Code>.</p>
+      <p>Install package manager for mac <Lnk path='https://brew.sh/'>Homebrew</Lnk> if you did't before <Code bash>{'/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'}</Code>.</p>
 
       <H>iTerm</H>
 
-      <p>Install <Lnk path='https://iterm2.com/downloads.html'>iTerm</Lnk> window for shell with brew <Code bash>brew cask install iTerm2</Code>.</p>
+      <p>Install <Lnk path='https://iterm2.com/downloads.html'>iTerm</Lnk>.</p>
 
       <H>Oh My Zsh</H>
 

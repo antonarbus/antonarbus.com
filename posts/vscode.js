@@ -1,4 +1,4 @@
-import { Code, H, jsxToStr } from '/components/post/reExport'
+import { Code, H, jsxToStr, Lnk } from '/components/post/reExport'
 
 const postObj = {
   title: 'VSCode',
@@ -7,6 +7,17 @@ const postObj = {
   desc: 'VSCode settings & suggestions disable',
   body: (
     <>
+      <H>Open folder in VSCode from terminal</H>
+
+      <ul>
+        <li>To open a folder in VSCode from the terminal need to add PATH. </li>
+        <li>Find command <Lnk path='https://code.visualstudio.com/docs/setup/mac#_launching-from-the-command-line'>command</Lnk> <Code>Install 'code' command in PATH </Code> in vs Code Command Palette <kbd>Cmd+Shift+P</kbd></li>
+        <li><Code>code .</Code> opens current folder in a new VS Code instance</li>
+        <li><Code>code -r</Code> opens current folder in an opened VS Code instance</li>
+        <li><Code>code file_name.txt</Code> opens or creates the file</li>
+        <li><Code>code -h</Code> help</li>
+      </ul>
+
       <H>VSCode settings</H>
 
       <Code block json>{`
@@ -164,6 +175,9 @@ const postObj = {
       withfig.fig
       `}</Code>
 
+      <H>Font</H>
+
+      <p>Install <Lnk path='https://github.com/tonsky/FiraCode'>FiraCode</Lnk> font.</p>
     </>
   )
 }

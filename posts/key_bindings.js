@@ -20,7 +20,8 @@ const postObj = {
         "global": {
           "check_for_updates_on_startup": true,
           "show_in_menu_bar": true,
-          "show_profile_name_in_menu_bar": false
+          "show_profile_name_in_menu_bar": false,
+          "unsafe_ui": false
         },
         "profiles": [
           {
@@ -42,7 +43,7 @@ const postObj = {
                       },
                       "to": [
                         {
-                          "shell_command": "osascript -e 'tell application \\"Music\\" to playpause'"
+                          "shell_command": "osascript -e 'tell application \"Music\" to playpause'"
                         }
                       ],
                       "type": "basic"
@@ -78,7 +79,7 @@ const postObj = {
                   "description": "my own shortcuts",
                   "manipulators": [
                     {
-                      "description": "Change caps_lock to command+control+option+shift.",
+                      "description": "Up",
                       "from": {
                         "modifiers": {
                           "mandatory": [
@@ -214,28 +215,6 @@ const postObj = {
                       "type": "basic"
                     },
                     {
-                      "description": "Right",
-                      "from": {
-                        "key_code": "semicolon",
-                        "modifiers": {
-                          "mandatory": [
-                            "left_command",
-                            "left_option",
-                            "left_shift"
-                          ],
-                          "optional": [
-                            "any"
-                          ]
-                        }
-                      },
-                      "to": [
-                        {
-                          "key_code": "right_arrow"
-                        }
-                      ],
-                      "type": "basic"
-                    },
-                    {
                       "description": "Backspace",
                       "from": {
                         "key_code": "u",
@@ -278,6 +257,50 @@ const postObj = {
                         }
                       ],
                       "type": "basic"
+                    },
+                    {
+                      "description": "Home",
+                      "from": {
+                        "key_code": "h",
+                        "modifiers": {
+                          "mandatory": [
+                            "left_command",
+                            "left_option",
+                            "left_shift"
+                          ],
+                          "optional": [
+                            "any"
+                          ]
+                        }
+                      },
+                      "to": [
+                        {
+                          "key_code": "home"
+                        }
+                      ],
+                      "type": "basic"
+                    },
+                    {
+                      "description": "End",
+                      "from": {
+                        "key_code": "semicolon",
+                        "modifiers": {
+                          "mandatory": [
+                            "left_command",
+                            "left_option",
+                            "left_shift"
+                          ],
+                          "optional": [
+                            "any"
+                          ]
+                        }
+                      },
+                      "to": [
+                        {
+                          "key_code": "end"
+                        }
+                      ],
+                      "type": "basic"
                     }
                   ]
                 }
@@ -295,7 +318,8 @@ const postObj = {
                 },
                 "ignore": false,
                 "manipulate_caps_lock_led": true,
-                "simple_modifications": []
+                "simple_modifications": [],
+                "treat_as_built_in_keyboard": false
               },
               {
                 "disable_built_in_keyboard_if_exists": false,
@@ -308,7 +332,200 @@ const postObj = {
                 },
                 "ignore": true,
                 "manipulate_caps_lock_led": true,
-                "simple_modifications": []
+                "simple_modifications": [],
+                "treat_as_built_in_keyboard": false
+              },
+              {
+                "disable_built_in_keyboard_if_exists": false,
+                "fn_function_keys": [],
+                "identifiers": {
+                  "is_keyboard": true,
+                  "is_pointing_device": false,
+                  "product_id": 671,
+                  "vendor_id": 76
+                },
+                "ignore": false,
+                "manipulate_caps_lock_led": true,
+                "simple_modifications": [],
+                "treat_as_built_in_keyboard": false
+              },
+              {
+                "disable_built_in_keyboard_if_exists": false,
+                "fn_function_keys": [],
+                "identifiers": {
+                  "is_keyboard": true,
+                  "is_pointing_device": false,
+                  "product_id": 834,
+                  "vendor_id": 1452
+                },
+                "ignore": false,
+                "manipulate_caps_lock_led": true,
+                "simple_modifications": [],
+                "treat_as_built_in_keyboard": false
+              },
+              {
+                "disable_built_in_keyboard_if_exists": false,
+                "fn_function_keys": [],
+                "identifiers": {
+                  "is_keyboard": false,
+                  "is_pointing_device": true,
+                  "product_id": 834,
+                  "vendor_id": 1452
+                },
+                "ignore": true,
+                "manipulate_caps_lock_led": false,
+                "simple_modifications": [],
+                "treat_as_built_in_keyboard": false
+              },
+              {
+                "disable_built_in_keyboard_if_exists": false,
+                "fn_function_keys": [],
+                "identifiers": {
+                  "is_keyboard": false,
+                  "is_pointing_device": true,
+                  "product_id": 617,
+                  "vendor_id": 76
+                },
+                "ignore": true,
+                "manipulate_caps_lock_led": false,
+                "simple_modifications": [],
+                "treat_as_built_in_keyboard": false
+              },
+              {
+                "disable_built_in_keyboard_if_exists": false,
+                "fn_function_keys": [],
+                "identifiers": {
+                  "is_keyboard": false,
+                  "is_pointing_device": true,
+                  "product_id": 613,
+                  "vendor_id": 76
+                },
+                "ignore": true,
+                "manipulate_caps_lock_led": false,
+                "simple_modifications": [],
+                "treat_as_built_in_keyboard": false
+              }
+            ],
+            "fn_function_keys": [
+              {
+                "from": {
+                  "key_code": "f1"
+                },
+                "to": [
+                  {
+                    "consumer_key_code": "display_brightness_decrement"
+                  }
+                ]
+              },
+              {
+                "from": {
+                  "key_code": "f2"
+                },
+                "to": [
+                  {
+                    "consumer_key_code": "display_brightness_increment"
+                  }
+                ]
+              },
+              {
+                "from": {
+                  "key_code": "f3"
+                },
+                "to": [
+                  {
+                    "apple_vendor_keyboard_key_code": "mission_control"
+                  }
+                ]
+              },
+              {
+                "from": {
+                  "key_code": "f4"
+                },
+                "to": [
+                  {
+                    "apple_vendor_keyboard_key_code": "spotlight"
+                  }
+                ]
+              },
+              {
+                "from": {
+                  "key_code": "f5"
+                },
+                "to": [
+                  {
+                    "consumer_key_code": "dictation"
+                  }
+                ]
+              },
+              {
+                "from": {
+                  "key_code": "f6"
+                },
+                "to": [
+                  {
+                    "key_code": "f6"
+                  }
+                ]
+              },
+              {
+                "from": {
+                  "key_code": "f7"
+                },
+                "to": [
+                  {
+                    "consumer_key_code": "rewind"
+                  }
+                ]
+              },
+              {
+                "from": {
+                  "key_code": "f8"
+                },
+                "to": [
+                  {
+                    "consumer_key_code": "play_or_pause"
+                  }
+                ]
+              },
+              {
+                "from": {
+                  "key_code": "f9"
+                },
+                "to": [
+                  {
+                    "consumer_key_code": "fast_forward"
+                  }
+                ]
+              },
+              {
+                "from": {
+                  "key_code": "f10"
+                },
+                "to": [
+                  {
+                    "consumer_key_code": "mute"
+                  }
+                ]
+              },
+              {
+                "from": {
+                  "key_code": "f11"
+                },
+                "to": [
+                  {
+                    "consumer_key_code": "volume_decrement"
+                  }
+                ]
+              },
+              {
+                "from": {
+                  "key_code": "f12"
+                },
+                "to": [
+                  {
+                    "consumer_key_code": "volume_increment"
+                  }
+                ]
               }
             ],
             "name": "Default profile",

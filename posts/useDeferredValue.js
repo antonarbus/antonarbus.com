@@ -52,7 +52,7 @@ const postObj = {
           <i>useDeferredValue</i> hook tells the application not to do any processing for this value
           until app is busy
         </li>
-        <li>it is kind of throttling function with some uncontrolled logic</li>
+        <li>it is kind of debouncing with some uncontrolled logic</li>
         <li>Type text in input and check in console that heavy function which depends on deferred value is updated only after actions associated with a non-deferred value. </li>
         <li>But unfortunately that is not 100% true and there is some sluggishness still</li>
       </ul>

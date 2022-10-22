@@ -1,6 +1,6 @@
-import { Code, LazyImg, jsxToStr } from '/components/post/reExport'
+import { Code, LazyImg, jsxToStr, H } from '/components/post/reExport'
 
-const style = { height: '200px', display: 'flex', justifyContent: 'center', alignItems: 'center' }
+const style = { height: '200px', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '50px' }
 
 function Cmpt(props) {
   return (
@@ -15,6 +15,22 @@ function Cmpt(props) {
   )
 }
 
+const MacBook = () => (
+  <div css={style}>
+    <h1
+      css={{
+        fontSize: '70px',
+        padding: '20px',
+        background: 'linear-gradient(to right, rgb(67, 124, 205), rgb(69, 214, 202))',
+        WebkitBackgroundClip: 'text',
+        WebkitTextFillColor: 'transparent'
+      }}
+    >
+      MacBook
+    </h1>
+  </div>
+)
+
 const postObj = {
   title: 'gradients',
   date: '2021.11.18',
@@ -22,6 +38,8 @@ const postObj = {
   desc: 'Gradients in CSS',
   body: (
     <>
+      <H>Linear gradient</H>
+
       <ul>
         <p>We will speak only about linear gradient here, but there are more:</p>
         <li>Linear gradient (goes down/up/left/right/diagonally)</li>
@@ -35,6 +53,8 @@ const postObj = {
 
       <p>CSS is smart enough to understand if you declare gradient to a shorthand <Code css>background: linear-gradient(red, green)</Code>.</p>
 
+      <H>From top to bottom</H>
+
       <p>By default the gradient line goes from the top to the bottom. Prev. example looks like.</p>
 
       <Code block css>{`
@@ -43,6 +63,8 @@ const postObj = {
 
       <Cmpt styles='background: linear-gradient(red, green)'></Cmpt>
 
+      <H>From top to right</H>
+
       <p>We can specify the direction of the gradient line.</p>
 
       <Code block css>{`
@@ -50,6 +72,8 @@ const postObj = {
       `}</Code>
 
       <Cmpt styles='background: linear-gradient(to top right, red, green)'></Cmpt>
+
+      <H>Angle direction</H>
 
       <p>Or use an angle.</p>
 
@@ -73,6 +97,8 @@ const postObj = {
 
       <Cmpt styles='background: linear-gradient(45deg, red, green)' />
 
+      <H>Multiple colors</H>
+
       <p>We can have multiple comma separated colors.</p>
 
       <Code block css>{`
@@ -80,6 +106,8 @@ const postObj = {
       `}</Code>
 
       <Cmpt styles='background: linear-gradient(red, white, green)' />
+
+      <H>Color start point</H>
 
       <p>You can set a start point for a color.</p>
 
@@ -89,11 +117,36 @@ const postObj = {
 
       <Cmpt styles='background: linear-gradient(to right, red 0%, white 10%, green 50%)' />
 
+      <H>Fixed background</H>
+
       <p>Background image can span across the whole container or can be fixed. Check the difference.</p>
 
       <Cmpt styles='height: 600px !important; background: linear-gradient(red, green);' />
       <br />
       <Cmpt styles='height: 600px !important; background: linear-gradient(red, green); background-attachment: fixed;' />
+
+      <H>Text gradient</H>
+
+      <Code block jsx>{`
+      const MacBook = () => (
+        <div css={style}>
+          <h1
+            css={{
+              fontSize: '70px',
+              padding: '20px',
+              background: 'linear-gradient(to right, rgb(67, 124, 205), rgb(69, 214, 202))',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent'
+            }}
+          >
+            MacBook
+          </h1>
+        </div>
+      )
+      `}</Code>
+
+      <MacBook />
+
     </>
   )
 }

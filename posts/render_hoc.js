@@ -1,4 +1,94 @@
-import { Code, H, jsxToStr } from '/components/post/reExport'
+import { Code, H, jsxToStr, useRef, useState } from '/components/post/reExport'
+import { gsap } from 'gsap'
+import { useUpdateEffect } from 'react-use'
+
+const Render = ({ when, children }) => when ? children : null
+
+const RenderImproved = ({ when, children, withAnimation }) => {
+  const ref = useRef(null)
+  const [shouldRender, setShouldRender] = useState(when)
+
+  function slideIn() {
+    gsap.fromTo(
+      ref.current,
+      { scaleY: 0, height: 0, opacity: 0, transformOrigin: '0 0' },
+      { duration: 0.3, scaleY: 1, opacity: 1, height: 'auto', onComplete: () => null }
+    )
+  }
+
+  function slideOut() {
+    gsap.fromTo(
+      ref.current,
+      { scaleY: 1, opacity: 1, transformOrigin: '0 0' },
+      { duration: 0.3, scaleY: 0, opacity: 0, height: 0, onComplete: () => setShouldRender(false) }
+    )
+  }
+
+  useUpdateEffect(() => {
+    if (!withAnimation) setShouldRender(when)
+  }, [when])
+
+  useUpdateEffect(() => {
+    if (!withAnimation) return
+    when ? setShouldRender(true) : slideOut()
+  }, [when])
+
+  useUpdateEffect(() => {
+    if (!withAnimation) return
+    if (!shouldRender) return
+    slideIn()
+  }, [shouldRender])
+
+  if (!withAnimation) {
+    return shouldRender ? children : null
+  }
+
+  if (withAnimation) {
+    return shouldRender ? <div ref={ref} style={{ border: '0px solid grey', boxSizing: 'border-box' }}>{children}</div> : null
+  }
+}
+
+function RenderBasic() {
+  const [show, setShow] = useState(true)
+  return (
+    <div>
+      <div>
+        <button onClick={() => setShow(!show)}>Show: {show.toString()}</button>{' '}
+      </div>
+      <Render when={show} >
+        <div css={{ fontSize: '2rem' }}>Render basic</div>
+      </Render>
+    </div>
+  )
+}
+
+function RenderWithAnimation() {
+  const [show, setShow] = useState(true)
+  return (
+    <div>
+      <div>
+        <button onClick={() => setShow(!show)}>Show: {show.toString()}</button>{' '}
+      </div>
+      <RenderImproved when={show} withAnimation >
+        <div css={{ fontSize: '2rem' }}>Render with animation</div>
+      </RenderImproved>
+    </div>
+  )
+}
+
+function RenderWithoutAnimation() {
+  const [show, setShow] = useState(true)
+  return (
+    <div>
+      <div>
+        <button onClick={() => setShow(!show)}>Show: {show.toString()}</button>{' '}
+      </div>
+      <RenderImproved when={show} >
+        <div css={{ fontSize: '2rem' }}>Render without animation</div>
+      </RenderImproved>
+    </div>
+  )
+}
 
 const postObj = {
   title: 'render hoc',
@@ -34,23 +124,111 @@ const postObj = {
       export const Render = ({ when, children }: Props) => when ? children : null
       `}</Code>
 
-      <H>Example</H>
-
-      <p>This is...</p>
-
       <Code block jsx>{`
-      (httpStatus === 'loading') && <CircularProgress />
+      function RenderBasic() {
+        const [show, setShow] = useState(true)
+        return (
+          <div>
+            <div>
+              <button onClick={() => setShow(!show)}>Show: {show.toString()}</button>{' '}
+            </div>
+            <Render when={show} >
+              <div css={{ fontSize: '2rem' }}>Render basic</div>
+            </Render>
+          </div>
+        )
+      }
       `}</Code>
 
-      <p>Same as</p>
+      <RenderBasic />
+
+      <H>Render with animation</H>
+
+      <p>That is my stupid creation</p>
 
       <Code block jsx>{`
-      <Render when={httpStatus === 'loading'}>
-        <CircularProgress />
-      </Render>
+        const RenderImproved = ({ when, children, withAnimation }) => {
+        const ref = useRef(null)
+        const [shouldRender, setShouldRender] = useState(when)
+
+        function slideIn() {
+          gsap.fromTo(
+            ref.current,
+            { scaleY: 0, height: 0, opacity: 0, transformOrigin: '0 0' },
+            { duration: 0.3, scaleY: 1, opacity: 1, height: 'auto', onComplete: () => null }
+          )
+        }
+
+        function slideOut() {
+          gsap.fromTo(
+            ref.current,
+            { scaleY: 1, opacity: 1, transformOrigin: '0 0' },
+            { duration: 0.3, scaleY: 0, opacity: 0, height: 0, onComplete: () => setShouldRender(false) }
+          )
+        }
+
+        useUpdateEffect(() => {
+          if (!withAnimation) setShouldRender(when)
+        }, [when])
+
+        useUpdateEffect(() => {
+          if (!withAnimation) return
+          when ? setShouldRender(true) : slideOut()
+        }, [when])
+
+        useUpdateEffect(() => {
+          if (!withAnimation) return
+          if (!shouldRender) return
+          slideIn()
+        }, [shouldRender])
+
+        if (!withAnimation) {
+          return shouldRender ? children : null
+        }
+
+        if (withAnimation) {
+          return shouldRender ? <div ref={ref} style={{ border: '0px solid grey', boxSizing: 'border-box' }}>{children}</div> : null
+        }
+      }
       `}</Code>
 
-      <p>It may look as unnecessary, which is true, but in some cases with complex conditions it may be more structural and maintainable.</p>
+      <Code block jsx>{`
+      function RenderWithAnimation() {
+      const [show, setShow] = useState(true)
+      return (
+        <div>
+          <div>
+            <button onClick={() => setShow(!show)}>Show: {show.toString()}</button>{' '}
+          </div>
+          <RenderImproved when={show} withAnimation >
+            <div css={{ fontSize: '2rem' }}>Render with animation</div>
+          </RenderImproved>
+        </div>
+      )
+      `}</Code>
+
+      <RenderWithAnimation />
+
+      <H>Render with animation but without animation</H>
+
+      <Code block jsx>{`
+      function RenderWithoutAnimation() {
+        const [show, setShow] = useState(true)
+        return (
+          <div>
+            <div>
+              <button onClick={() => setShow(!show)}>Show: {show.toString()}</button>{' '}
+            </div>
+            <RenderImproved when={show} >
+              <div css={{ fontSize: '2rem' }}>Render without animation</div>
+            </RenderImproved>
+          </div>
+        )
+      }
+      `}</Code>
+
+      <RenderWithoutAnimation />
+
     </>
   )
 }

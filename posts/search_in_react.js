@@ -1,4 +1,6 @@
 import { useEffect, useState, jsxToStr, H, Code } from '/components/post/reExport'
+import { useDeferredValue } from 'react'
+import syncWait from '/functions/syncWait'
 
 export const getJsxWithBoldSubstr = (text, subString) => {
   const regExp = new RegExp(`(${subString})`, 'gi')
@@ -9,12 +11,15 @@ const countriesAll = ['Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola', 
 
 function Component() {
   const [inputValue, setInputValue] = useState('')
+  const deferredInputValue = useDeferredValue(inputValue)
   const [countries, setCountries] = useState(countriesAll)
 
   useEffect(() => {
+    console.log(deferredInputValue)
     const foundCountries = countriesAll.filter(country => country.toLowerCase().includes(inputValue.toLocaleLowerCase().trim()))
+    syncWait(500)
     setCountries(foundCountries)
-  }, [inputValue])
+  }, [deferredInputValue])
 
   return (
     <>
@@ -48,7 +53,11 @@ const postObj = {
       <H>Search in react</H>
 
       <Code block jsx>{`
-      const getJsxWithBoldSubstr = (text, subString) => {
+      import { useEffect, useState, jsxToStr, H, Code } from '/components/post/reExport'
+      import { useDeferredValue } from 'react'
+      import syncWait from '/functions/syncWait'
+
+      export const getJsxWithBoldSubstr = (text, subString) => {
         const regExp = new RegExp(\`(\${subString})\`, 'gi')
         return text.split(regExp).map((str, index) => regExp.test(str) ? <b key={\`char-\${index}\`}>{str}</b> : str)
       }
@@ -57,12 +66,15 @@ const postObj = {
 
       function Component() {
         const [inputValue, setInputValue] = useState('')
+        const deferredInputValue = useDeferredValue(inputValue)
         const [countries, setCountries] = useState(countriesAll)
 
         useEffect(() => {
+          console.log(deferredInputValue)
           const foundCountries = countriesAll.filter(country => country.toLowerCase().includes(inputValue.toLocaleLowerCase().trim()))
+          syncWait(500)
           setCountries(foundCountries)
-        }, [inputValue])
+        }, [deferredInputValue])
 
         return (
           <>
@@ -85,6 +97,15 @@ const postObj = {
         )
       }
       `}</Code>
+
+      <ul>
+        <li>we put some 500ms delay before ui update via <code>syncWait</code> function</li>
+        <li>in case <code>useEffect</code> depends directly on <code>inputValue</code> we will experience sluggishness</li>
+        <li>because every key stroke will trigger a delay</li>
+        <li>that is how we simulate heavy computation, like sorting huge array of objects</li>
+        <li>as soon as our <code>useEffect</code> depends on <code>deferredInputValue</code> we have less ui freezes</li>
+        <li><code>deferredInputValue</code> signals the react that this state has low priority and should be rendered only after main important renders, like input values update</li>
+      </ul>
 
       <Component />
     </>

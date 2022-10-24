@@ -44,7 +44,7 @@ const RenderImproved = ({ when, children, withAnimation }) => {
   }
 
   if (withAnimation) {
-    return shouldRender ? <div ref={ref} style={{ border: '0px solid grey', boxSizing: 'border-box' }}>{children}</div> : null
+    return shouldRender ? <div ref={ref}>{children}</div> : null
   }
 }
 
@@ -187,7 +187,7 @@ const postObj = {
         }
 
         if (withAnimation) {
-          return shouldRender ? <div ref={ref} style={{ border: '0px solid grey', boxSizing: 'border-box' }}>{children}</div> : null
+          return shouldRender ? <div ref={ref}>{children}</div> : null
         }
       }
       `}</Code>

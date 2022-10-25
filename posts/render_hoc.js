@@ -1,10 +1,11 @@
 import { Code, H, jsxToStr, useRef, useState } from '/components/post/reExport'
 import { gsap } from 'gsap'
 import { useUpdateEffect } from 'react-use'
+import { Collapse } from '@mui/material'
 
 const Render = ({ when, children }) => when ? children : null
 
-const RenderImproved = ({ when, children, withAnimation }) => {
+const RenderWithGsap = ({ when, children, withAnimation }) => {
   const ref = useRef(null)
   const [shouldRender, setShouldRender] = useState(when)
 
@@ -48,6 +49,14 @@ const RenderImproved = ({ when, children, withAnimation }) => {
   }
 }
 
+const RenderWithCollapse = ({ when, children }) => {
+  return (
+    <Collapse in={when}>
+      {children}
+    </Collapse>
+  )
+}
+
 function RenderBasic() {
   const [show, setShow] = useState(true)
   return (
@@ -62,30 +71,44 @@ function RenderBasic() {
   )
 }
 
-function RenderWithAnimation() {
+function RenderWithAnimationWithGsap() {
   const [show, setShow] = useState(true)
   return (
     <div>
       <div>
         <button onClick={() => setShow(!show)}>Show: {show.toString()}</button>{' '}
       </div>
-      <RenderImproved when={show} withAnimation >
-        <div css={{ fontSize: '2rem' }}>Render with animation</div>
-      </RenderImproved>
+      <RenderWithGsap when={show} withAnimation >
+        <div css={{ fontSize: '2rem' }}>Render with animation with GSAP</div>
+      </RenderWithGsap>
     </div>
   )
 }
 
-function RenderWithoutAnimation() {
+function RenderWithoutAnimationWithGsap() {
   const [show, setShow] = useState(true)
   return (
     <div>
       <div>
         <button onClick={() => setShow(!show)}>Show: {show.toString()}</button>{' '}
       </div>
-      <RenderImproved when={show} >
-        <div css={{ fontSize: '2rem' }}>Render without animation</div>
-      </RenderImproved>
+      <RenderWithGsap when={show} >
+        <div css={{ fontSize: '2rem' }}>Render without animation with GSAP</div>
+      </RenderWithGsap>
+    </div>
+  )
+}
+
+function RenderWithAnimationWithCollapse() {
+  const [show, setShow] = useState(true)
+  return (
+    <div>
+      <div>
+        <button onClick={() => setShow(!show)}>Show: {show.toString()}</button>{' '}
+      </div>
+      <RenderWithCollapse when={show} >
+        <div css={{ fontSize: '2rem' }}>Render with animation with MUI collapse</div>
+      </RenderWithCollapse>
     </div>
   )
 }
@@ -142,12 +165,12 @@ const postObj = {
 
       <RenderBasic />
 
-      <H>Render with animation</H>
+      <H>Render with animation via GSAP</H>
 
       <p>That is my stupid creation</p>
 
       <Code block jsx>{`
-        const RenderImproved = ({ when, children, withAnimation }) => {
+        const RenderWithGsap = ({ when, children, withAnimation }) => {
         const ref = useRef(null)
         const [shouldRender, setShouldRender] = useState(when)
 
@@ -193,42 +216,71 @@ const postObj = {
       `}</Code>
 
       <Code block jsx>{`
-      function RenderWithAnimation() {
+      function RenderWithAnimationWithGsap() {
       const [show, setShow] = useState(true)
       return (
         <div>
           <div>
             <button onClick={() => setShow(!show)}>Show: {show.toString()}</button>{' '}
           </div>
-          <RenderImproved when={show} withAnimation >
-            <div css={{ fontSize: '2rem' }}>Render with animation</div>
-          </RenderImproved>
+          <RenderWithGsap when={show} withAnimation >
+            <div css={{ fontSize: '2rem' }}>Render with animation via GSAP</div>
+          </RenderWithGsap>
         </div>
       )
       `}</Code>
 
-      <RenderWithAnimation />
+      <RenderWithAnimationWithGsap />
 
-      <H>Render with animation but without animation</H>
+      <H>Render without animation via GSAP</H>
 
       <Code block jsx>{`
-      function RenderWithoutAnimation() {
+      function RenderWithoutAnimationWithGsap() {
         const [show, setShow] = useState(true)
         return (
           <div>
             <div>
               <button onClick={() => setShow(!show)}>Show: {show.toString()}</button>{' '}
             </div>
-            <RenderImproved when={show} >
-              <div css={{ fontSize: '2rem' }}>Render without animation</div>
-            </RenderImproved>
+            <RenderWithGsap when={show} >
+              <div css={{ fontSize: '2rem' }}>Render without animation via GSAP</div>
+            </RenderWithGsap>
           </div>
         )
       }
       `}</Code>
 
-      <RenderWithoutAnimation />
+      <RenderWithoutAnimationWithGsap />
 
+      <H>Render with MUI Collapse</H>
+
+      <Code block jsx>{`
+      const RenderWithCollapse = ({ when, children }) => {
+        return (
+          <Collapse in={when}>
+            {children}
+          </Collapse>
+        )
+      }
+      `}</Code>
+
+      <Code block jsx>{`
+      function RenderWithAnimationWithCollapse() {
+        const [show, setShow] = useState(true)
+        return (
+          <div>
+            <div>
+              <button onClick={() => setShow(!show)}>Show: {show.toString()}</button>{' '}
+            </div>
+            <RenderWithCollapse when={show} >
+              <div css={{ fontSize: '2rem' }}>Render with animation via MUI Collapse</div>
+            </RenderWithCollapse>
+          </div>
+        )
+      }
+      `}</Code>
+
+      <RenderWithAnimationWithCollapse />
     </>
   )
 }

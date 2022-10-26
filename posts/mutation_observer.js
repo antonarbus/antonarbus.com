@@ -3,11 +3,11 @@ import { Code, H, LazyImg, jsxToStr, Lnk } from '/components/post/reExport'
 const postObj = {
   title: 'mutation observer',
   date: '2022.10.04',
-  tags: ['JavaScript', 'development'],
+  tags: ['JavaScript', 'basics'],
   imgUrl: 'https://antonarbus.com/imgs/mutationObserver.png',
   desc: 'Mutation observer for dev tools',
   body: (
-    <H>
+    <>
       <H>Syntax</H>
 
       <p><Lnk path='https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver'>MutationObserver</Lnk> - built-in object that observes a DOM and fires a callback when it changes</p>

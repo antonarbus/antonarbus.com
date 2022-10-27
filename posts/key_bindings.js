@@ -558,24 +558,22 @@ const postObj = {
       </ul>
 
       <Code block none>{`
-        #If GetKeyState("CapsLock", "P")
-        j::Left
-        k::Down
-        ,::Down
-        i::Up
-        l::Right
-        ö::Right
-        SC027::Right 
-        u::Send, {BackSpace}
-        o::Send, {Delete}
-        p::Send, {Delete}
-        y::Send, {PgUp}
-        h::Send, {PgDn}
+      #If GetKeyState("CapsLock", "P")
+      j::Left
+      k::Down
+      i::Up
+      l::Right
+      h::Home
+      ö::End
+      u::Send, {BackSpace}
+      o::Send, {Delete}
+      ; Disable Alt+Space
+      !Space::Return
 
-        #If
+      #If
 
-        *CapsLock::
-        KeyWait, CapsLock
+      *CapsLock::
+      KeyWait, CapsLock
       `}</Code>
 
       <p>Add the script file to the startup folder <Code>C:\Users\John\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup</Code>, folder can be opened by <kbd>Win</kbd>+<kbd>R</kbd> and <code>shell:startup</code></p>

@@ -43,7 +43,7 @@ const postObj = {
                       },
                       "to": [
                         {
-                          "shell_command": "osascript -e 'tell application \"Music\" to playpause'"
+                          "shell_command": "osascript -e 'tell application \\"Music\\" to playpause'"
                         }
                       ],
                       "type": "basic"

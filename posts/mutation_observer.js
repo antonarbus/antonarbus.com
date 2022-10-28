@@ -113,11 +113,11 @@ const postObj = {
           for (const mutation of mutationList) {
             if (mutation.type === 'childList') {
               console.log('A child node has been added or removed.')
-              return console.log(mutation)
+              return console.log(mutation.target)
             }
             if (mutation.type === 'attributes') {
               console.log(\`The \${mutation.attributeName} attribute was modified.\`)
-              return console.log(mutation)
+              return console.log(mutation.target)
             }
           }
         }

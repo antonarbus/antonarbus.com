@@ -91,17 +91,28 @@ const postObj = {
       <ul>
         <li>Login and go to <Lnk path='https://aws.amazon.com/sqs/'>SQS</Lnk></li>
         <li>In the top left corder click a <Lnk path='https://eu-west-1.console.aws.amazon.com/sqs/v2/home?region=eu-west-1#/create-queue'>create queue</Lnk> button</li>
-        <li>Choose type and create a name for the queue</li>
-        <li>Set <b>visibility timeout</b> - ones a consumer takes the msg from the queue, other consumers do not see this msg during timeout, msg becomes invisible for them</li>
-        <li>Set <b>message retention period</b> - time that msg stays in the queue</li>
+        <li>Choose type and create a name for the queue. Can not be modified later.</li>
+        <li>Set <b>visibility timeout</b> - ones a consumer takes the msg from the queue, other consumers do not see this msg during timeout (30s), msg becomes invisible for them. If it will not be processed during the timeout, it will become visible back.</li>
+        <li>Set <b>message retention period</b> - time during which a msg stays in the queue (4d)</li>
         <li>Set <b>delivery delay</b> - msg can be put in a queue, but may not be visible for some duration (usually not used)</li>
         <li>Set <b>maximum message size</b> - self explanatory</li>
-        <li>Set <b>receive message wait time</b> - configuration for long-polling, in case a msg is not available, connection will be opened and wait if msg appeared. Good for cost reduction.</li>
-        <li>Enable (or not) <b>d</b>ead-<b>l</b>etter <b>q</b>ueue - if msg was failed to be processed, it will be sent to the 2nd queue. 1st time a msg is failed to be processed, it is returned into the queue after visibility timeout elapsed. Then it may happen 2nd, 3rd... times. After several attempts a msg can be put into a DLQ. If our main queue is called "demo", then convention for DLQ is "demo-dlq". You can specify the number of msg process fails after it goes to dlq at <b>maximum receives</b> box.</li>
+        <li>Set <b>receive message wait time</b> - configuration for long-polling. In case a msg is not available, connection will be opened and wait for 0...20s to give away a new msg. In case wait time is not set a consumer may ask repeatedly for a msg over and over again. Good for cost reduction. Set to 10s.</li>
+        <li>Enable (or not) <b>d</b>ead-<b>l</b>etter <b>q</b>ueue - if msg was failed to be processed, it will be sent to the 2nd queue. 1st time a msg is failed to be processed, it is returned into the queue after visibility timeout elapsed. Then it may happen 2nd, 3rd... times. After several attempts a msg can be put into a DLQ. If our main queue is called "demo", then convention for DLQ is "demo-dlq". DLQ can be processed at a later times, we can set logs, alarms, emails for failures. </li>
+        <li>You can specify the number of msg process fails after it goes to dlq at <b>maximum receives</b> box.</li>
+        <li>Every queue has a unique id <b>ARN</b> and it can be referenced in Lambda consumer.</li>
+        <li>Important queue tabs are available for the queue: SNS subscriptions, lambda triggers, dead-letter queue, monitoring, tagging etc...</li>
         <li>After queue is created they can be found <Lnk path='https://eu-west-1.console.aws.amazon.com/sqs/v2/home?region=eu-west-1#/queues'>here</Lnk></li>
         <li>Inside the queue we can test it with <i>Send and receive messages</i> <Lnk path='https://eu-west-1.console.aws.amazon.com/sqs/v2/home?region=eu-west-1#/queues/https%3A%2F%2Fsqs.eu-west-1.amazonaws.com%2F360117275238%2Fdemo/send-receive'>button</Lnk></li>
         <li>Provide a body in json format, push <i>Send message</i> button.</li>
         <li>Bellow we can retrieve a message by <i>Poll for messages</i></li>
+      </ul>
+
+      <H>Lambda as a queue consumer</H>
+
+      <ul>
+        <li>Go to <Lnk path='https://eu-west-1.console.aws.amazon.com/lambda/home?region=eu-west-1#/functions'>AWS lambdas</Lnk> and click on <i>Create function</i></li>
+        <li>Use a blueprint and search for the <i>sqs</i> <Lnk path='https://eu-west-1.console.aws.amazon.com/lambda/home?region=eu-west-1#/create/function/configure/blueprint?blueprint=sqs-poller'>template</Lnk></li>
+
       </ul>
     </>
   )

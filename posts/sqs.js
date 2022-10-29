@@ -112,7 +112,27 @@ const postObj = {
       <ul>
         <li>Go to <Lnk path='https://eu-west-1.console.aws.amazon.com/lambda/home?region=eu-west-1#/functions'>AWS lambdas</Lnk> and click on <i>Create function</i></li>
         <li>Use a blueprint and search for the <i>sqs</i> <Lnk path='https://eu-west-1.console.aws.amazon.com/lambda/home?region=eu-west-1#/create/function/configure/blueprint?blueprint=sqs-poller'>template</Lnk></li>
+        <li>Give it a name, for ex. <i>sqsDemoHandler</i></li>
+        <li>Create a new role from AWS policy template, give it a name (sqsRole), choose <i>Amazon SQS poller permissions</i> role from the policy templates.</li>
+        <li>Choose the SQS trigger ARN for our demo queue <i>arn:aws:sqs:eu-west-1:360117275238:demo</i></li>
+        <li>Batch size (10) is the number of messages the function will read at ones. Higher number leads to more cost.</li>
+        <li>At the edn we can see the body of the lambda function, which just logs the message out.</li>
+        <Code block jsx>{`
+        console.log('Loading function');
 
+        exports.handler = async (event) => {
+          //console.log('Received event:', JSON.stringify(event, null, 2))
+          for (const { messageId, body } of event.Records) {
+            console.log('SQS message %s: %j', messageId, body)
+          }
+          return \`Successfully processed \${event.Records.length} messages.\`
+        }
+        `}</Code>
+
+        <li>Hit the <i>create</i> button and let it some time to spin up</li>
+        <li>Then go to the queue and send some messages</li>
+        <li>Go to lambda and check <i>monitor</i> tab to see if lambda has been invoked</li>
+        <li>Go to <Lnk path='https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#'>AWS Cloudwatch</Lnk> to check console logged messages.</li>
       </ul>
     </>
   )

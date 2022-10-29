@@ -29,6 +29,7 @@ const postObj = {
       <ul>
         <li>relative from root(html) font-size</li>
         <li>1rem, 0.8rem</li>
+        <li>default html font size is 16px</li>
         <li>do not depend on other elements</li>
         <li>good for zooming</li>
       </ul>
@@ -64,11 +65,11 @@ const postObj = {
 
       <H>ex & ch</H>
 
-      <p>Smth like <code>em</code>, just forget it.</p>
+      <p>Smth like <code>em</code>, not used widely, just forget it.</p>
 
       <H>mm, cm, pt, pc</H>
 
-      <p>Outdated</p>
+      <p>Outdated, also forget it.</p>
     </>
   )
 }

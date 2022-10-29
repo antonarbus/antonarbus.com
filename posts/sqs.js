@@ -1,4 +1,4 @@
-import { Code, H, Hs, LazyImg, Lnk, React, useEffect, useState, useRef, useCallback, useMemo, jsxToStr } from '/components/post/reExport'
+import { Code, H, Hs, Lnk, jsxToStr } from '/components/post/reExport'
 
 const postObj = {
   title: 'sqs',
@@ -27,7 +27,7 @@ const postObj = {
         <li>Processor/consumer get a message from queue (deque)</li>
         <li>Queue has a name</li>
         <li>Consumer periodically polls the queue</li>
-        <li>So it is 2 way communication, opposed to an api calls</li>
+        <li>So it is 2 way communication, opposed to an API calls</li>
         <li>As soon as consumer get a message it is not visible in the queue</li>
         <li>In case the message is processed it is completely deleted from the queue</li>
         <li>Many threads/processes can poll a queue at once (it is done behind the scene and makes it scalable)</li>

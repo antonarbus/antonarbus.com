@@ -353,11 +353,52 @@ const postObj = {
       import Container from './Container'
       `}</Code>
 
-      <H>Run on device</H>
+      <H>Style</H>
+
+      <Hs>style prop</Hs>
+
+      <p>That is inline styles.</p>
+
+      <Code block jsx>{`
+      // App.js
+      import React from 'react'
+      import {Text, View} from 'react-native'
+
+      const HelloWorldApp = () => (
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Text style={{ fontSize: 20}}>Hello, world!</Text>
+        </View>
+      )
+      export default HelloWorldApp
+      `}</Code>
+
+      <Hs>StyleSheet.create</Hs>
 
       <ul>
-        <li></li>
+        <li>Use <code>StyleSheet.create</code> to create multiple styles at ones</li>
       </ul>
+
+      <Code block jsx>{`
+      import React from 'react'
+      import { StyleSheet, Text, View } from 'react-native'
+
+      const LotsOfStyles = () => (
+        <View style={styles.container}>
+          <Text style={styles.red}>just red</Text>
+          <Text style={styles.bigBlue}>just bigBlue</Text>
+          <Text style={[styles.bigBlue, styles.red]}>bigBlue, then red</Text>
+          <Text style={[styles.red, styles.bigBlue]}>red, then bigBlue</Text>
+        </View>
+      )
+
+      const styles = StyleSheet.create({
+        container: { marginTop: 50 },
+        bigBlue: { color: 'blue', fontWeight: 'bold', fontSize: 30 },
+        red: { color: 'red' }
+      })
+
+      export default LotsOfStyles
+      `}</Code>
     </>
   )
 }

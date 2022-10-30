@@ -26,7 +26,7 @@ const postObj = {
       <ul>
         <li><b>S</b>imple <b>N</b>otification <b>S</b>ervice</li>
         <li>Also an old service from AWS</li>
-        <li>Messages are published to a <i>Topic</i> and this topic delivers identical message to a different subscribers of that topic</li>
+        <li>Messages are published to a <i>topic</i> and this topic delivers identical message to a different subscribers of that topic</li>
         <li>Messages are also JSON messages</li>
         <li>There are publishers and subscribers (aka PubSub) of messages</li>
         <li>Contrary to SQS, in SNS we publish messages to a topic and can have multiple subscribers to that topic</li>

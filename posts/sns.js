@@ -8,11 +8,13 @@ const postObj = {
   desc: 'sns',
   body: (
     <>
+      <p>Notes from <Lnk path='https://www.youtube.com/watch?v=fhimXdoAF2Q'>video series</Lnk>.</p>
+
       <H>What is it?</H>
 
       <ul>
         <li><b>S</b>imple <b>N</b>otification <b>S</b>ervice</li>
-        <li>Message publishing and processing service (PubSub)</li>
+        <li>Message publishing and processing service (Pub/Sub)</li>
         <li>Old service from AWS</li>
         <li>Messages are published to a <i>topic</i> and this topic delivers identical message to a different subscribers of that topic</li>
         <li>Allows fanout to millions of consumers (Email, HTTP Endpoint, SQS, Texting)</li>
@@ -25,11 +27,16 @@ const postObj = {
         <li>As a subscribers we can have an application (AWS Lambda, NodeJs app, SQS queue) or a person (for ex. phone)</li>
       </ul>
 
-      <H>Configuration</H>
+      <H>Create topic</H>
 
       <ul>
         <li>Go to <Lnk path='https://aws.amazon.com/sns/'>AWS SNS</Lnk> and login</li>
-        <li></li>
+        <li>Click on <Lnk path='https://us-east-1.console.aws.amazon.com/sns/v3/home?region=us-east-1#/create-topic'>create topic</Lnk></li>
+        <li>Give a name to a topic, for ex. 'TopicDemo'</li>
+        <li>Define who can publish and subscribe to the topic by setting the <i>access policy</i>. You can allow only yourself or specific aws accounts or everyone to publish messages into the topic.</li>
+        <li>Btw, your account number is shown under your user name in the right top corner when you click on it</li>
+        <li>With <i>delivery retry policy</i> we can set the number of retries if message delivery fails</li>
+        <li><i>Delivery status logging </i></li>
       </ul>
     </>
   )

@@ -10,10 +10,7 @@ const postObj = {
     <>
       <p>Notes are based on <Lnk path='https://www.youtube.com/playlist?list=PL4cUxeGkcC9gm4_-5UsNmLqMosM-dzuvQ'>this</Lnk> tutorial.</p>
 
-      <p>
-        <Lnk path="https://testing-library.com/">Testing Library</Lnk> is built on to of <Lnk path='https://jestjs.io/'>Jest</Lnk> and
-        gives api to test react UI.
-      </p>
+      <p><Lnk path="https://testing-library.com/">Testing Library</Lnk> is built on to of <Lnk path='https://jestjs.io/'>Jest</Lnk> and gives api to test react UI.</p>
 
       <H>Install</H>
 
@@ -521,10 +518,7 @@ const postObj = {
       }
       `}</Code>
 
-      <p>
-        To test the existence of first follower item we need to use async method{' '}
-        <code>findByTestId()</code>.
-      </p>
+      <p>To test the existence of first follower item we need to use async method<code>findByTestId()</code>.</p>
 
       <Code block jsx>{`
       import { render, screen, fireEvent } from '@testing-library/react'
@@ -572,6 +566,77 @@ const postObj = {
         it('should run test', () => console.log('test'))
         it('should run test', () => console.log('test'))
         it('should run test', () => console.log('test'))
+      })
+      `}</Code>
+
+      <H>Redux</H>
+
+      <p>To test a component that uses redux we may provide custom render function, which will have pre-configured store and can accept additional store values as a parameter.</p>
+
+      <Hs>Custom render function</Hs>
+
+      <Code block jsx>{`
+      // renderWithProvider.js
+      import { render } from '@testing-library/react'
+      import { configureStore } from '@reduxjs/toolkit'
+      import { Provider } from 'react-redux'
+      import { ThemeProvider } from '@mui/styles'
+      import themes from '../themes'
+      import rootReducer from '../store/reducers'
+      import { history } from '../store'
+
+      export const renderWithProvider = (
+        ui,
+        reducers,
+        {
+          preloadedState,
+          store = configureStore({ reducer: rootReducer(history), preloadedState }),
+          ...renderOptions
+        } = {}
+      ) => {
+        const Wrapper = ({ children }) => (
+          <ThemeProvider theme={themes}>
+            <Provider store={store}>
+              {children}
+            </Provider>
+          </ThemeProvider>
+        )
+
+        return render(ui, { wrapper: Wrapper, ...renderOptions })
+      }
+      `}</Code>
+
+      <Code block jsx>{`
+      // App.test.js
+      import { App } from './App'
+      import { renderWithProvider } from '../../testUtils/renderWithProvider'
+      import { screen } from '@testing-library/react'
+
+      describe('App root component', () => {
+        it('should render loader', () => {
+          const store = {
+            app: {
+              isLoading: true,
+              locale: 'fi-FI'
+            }
+          }
+          renderWithProvider(<App routes={<div>I am route</div>} />, {}, { preloadedState: store })
+          expect(screen.getByRole('progressbar', { hidden: true })).toBeInTheDocument()
+        })
+
+        it('should load "I am route"', () => {
+          const store = {
+            app: {
+              isLoading: false,
+              locale: 'fi-FI'
+            },
+            user: {
+              authorities: []
+            }
+          }
+          renderWithProvider(<App routes={<div>I am route</div>} />, {}, { preloadedState: store })
+          expect(screen.getByText(/I am route/i)).toBeInTheDocument()
+        })
       })
       `}</Code>
     </>

@@ -472,6 +472,25 @@ const postObj = {
       })
       `}</Code>
 
+      <H>Mock Redux</H>
+
+      <Code block jsx>{`
+      jest.mock('react-redux', () => {
+        const originalModule = jest.requireActual('react-redux')
+
+        return {
+          __esModule: true,
+          ...originalModule,
+          useSelector: jest.fn().mockReturnValue({
+            title: 'some title',
+            message: 'some message',
+            isOpen: true
+          }),
+          useDispatch: jest.fn()
+        }
+      })
+      `}</Code>
+
       <H>spyOn</H>
 
       <p>Same as previous, but a bit different way.</p>

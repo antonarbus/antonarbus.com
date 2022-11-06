@@ -60,7 +60,12 @@ const postObj = {
         <li>Can also ass message attributes for filtering purposes</li>
       </ul>
 
-      <H>Push notification</H>
+      <H>Connect SNS to Lambda</H>
+
+      <ul>
+        <li></li>
+
+      </ul>
 
     </>
   )

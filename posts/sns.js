@@ -36,8 +36,32 @@ const postObj = {
         <li>Define who can publish and subscribe to the topic by setting the <i>access policy</i>. You can allow only yourself or specific aws accounts or everyone to publish messages into the topic.</li>
         <li>Btw, your account number is shown under your user name in the right top corner when you click on it</li>
         <li>With <i>delivery retry policy</i> we can set the number of retries if message delivery fails</li>
-        <li><i>Delivery status logging </i></li>
+        <li><i>Delivery status logging</i> allows to see logs in CloudWatch if message has been delivered. This may affect on price. Added <i>AWS Lambda</i> & <i>Amazon SQS</i> protocols. Also created default IAM roles. <span css={{ color: 'grey' }}>arn:aws:iam::360117275238:role/SNSSuccessFeedback + arn:aws:iam::360117275238:role/SNSFailureFeedback</span></li>
+        <li>At <Lnk path='https://us-east-1.console.aws.amazon.com/sns/v3/home?region=us-east-1#/topics'>Topics</Lnk> menu we now can see our Topic with <span css={{ color: 'grey' }}>arn:aws:sns:us-east-1:360117275238:TopicDemo</span></li>
       </ul>
+
+      <H>Set subscription</H>
+
+      <ul>
+        <li>You can <Lnk path='https://us-east-1.console.aws.amazon.com/sns/v3/home?region=us-east-1#/create-subscription'>Create subscription</Lnk> from the menu</li>
+        <li>But easier to go to your Topic and create subscription from inside</li>
+        <li>Topic ARN is already pre-populated</li>
+        <li>Choose endpoint you want to subscribe, for ex. AWS Lambda</li>
+        <li>By default all topic subscribers get the message, until <i>subscription filter policy</i> is enabled. Message will be accepted only if it contains attributes that match specified in the filter policy. Need to assign attributes also at message publishing. Great way to reduce expenses.</li>
+        <li>At <b>d</b>ead-<b>l</b>etter <b>q</b>ueue we can configure a queue where undelivered messages are dropped. If we do not enable DLQ, SNS will retry to deliver a message for 48h and then message is gone.</li>
+      </ul>
+
+      <H>Send a topic</H>
+
+      <ul>
+        <li>Can send a topic right from the console with <i>Publish message</i> button or programmatically knowing its ARN and using AWS SNS SDK</li>
+        <li>Do it from <Lnk path='https://us-east-1.console.aws.amazon.com/sns/v3/home?region=us-east-1#/publish/topic/arn:aws:sns:us-east-1:360117275238:TopicDemo'>console</Lnk></li>
+        <li>Put the JSON message</li>
+        <li>Can also ass message attributes for filtering purposes</li>
+      </ul>
+
+      <H>Push notification</H>
+
     </>
   )
 }

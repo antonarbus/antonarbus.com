@@ -59,9 +59,6 @@ const postObj = {
         <li>Put the JSON message</li>
         <li>Can also ass message attributes for filtering purposes</li>
       </ul>
-
-      <H>Push notification</H>
-
     </>
   )
 }

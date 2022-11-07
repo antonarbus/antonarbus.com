@@ -59,6 +59,14 @@ const postObj = {
         <li>Put the JSON message</li>
         <li>Can also ass message attributes for filtering purposes</li>
       </ul>
+
+      <H>Connect SNS to Lambda</H>
+
+      <ul>
+        <li></li>
+
+      </ul>
+
     </>
   )
 }

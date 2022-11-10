@@ -486,7 +486,7 @@ const postObj = {
             message: 'some message',
             isOpen: true
           }),
-          useDispatch: jest.fn()
+          useDispatch: () => jest.fn()
         }
       })
       `}</Code>

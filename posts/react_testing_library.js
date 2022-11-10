@@ -200,6 +200,26 @@ const postObj = {
       })
       `}</Code>
 
+      <H>within</H>
+
+      <p>Can query element inside another one.</p>
+
+      <Code block jsx>{`
+      import { fireEvent, screen, waitFor, within } from '@testing-library/react'
+
+      it('3 checkboxes should render, active attachment checkbox should be disabled, others enabled', () => {
+        renderWithProvider(<AttachmentsPopover />, {}, { preloadedState: store })
+        const openAttachmentButton = screen.getByTestId('open-attachments-button')
+        fireEvent.click(openAttachmentButton)
+        const popOver = screen.getByTestId('open-attachments-list')
+        const checkboxes = within(popOver).getAllByRole('checkbox')
+        expect(checkboxes.length).toBe(3)
+        expect(checkboxes[0]).toHaveProperty('disabled', true)
+        expect(checkboxes[1]).toHaveProperty('disabled', false)
+        expect(checkboxes[2]).toHaveProperty('disabled', false)
+      })
+      `}</Code>
+
       <H>Render wrapped element</H>
 
       <p>

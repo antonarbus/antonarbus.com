@@ -276,8 +276,9 @@ const postObj = {
       <ul>
         <li><Code>git rebase <i>branch_name</i></Code> branch is added before the current branch</li>
         <li>When I updated my local branch with updates from the master i did <code>git merge master</code> and got a mix of commits in their chronological order, but better to do <code>git rebase master</code> and it bring all changes from the master, but put all my commits in front.</li>
-        <li>Try <code>git rebase origin/master</code> (team mates use it)</li>
-        <li><Code>git rebase -i HEAD~<i>4</i></Code> change 4 commits history in text editor</li>
+        <li><Code>git rebase origin/master</Code> from the branch (team mates use it)</li> and then <Code>git push origin -f BRANCH_NAME</Code>
+        <li><Code>git rebase -i HEAD~<i></i></Code> change 4 commits history in text editor</li>
+        <li><Code>git rebase -i <i>hash</i></Code> change all commits after commit with hash</li>
       </ul>
       <p>History is modified, but commits are linear and beautiful, <Code bash>push -f</Code> is needed.</p>
 

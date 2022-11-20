@@ -3,34 +3,15 @@ import { Provider, useSelector, useDispatch } from 'react-redux'
 import { store } from './redux-toolkit-demo/store'
 import { increment, decrement } from './redux-toolkit-demo/slices/counterSlice.js'
 import { login } from './redux-toolkit-demo/slices/loginSlice.js'
-import { changeGreeting } from './redux-toolkit-demo/slices/greetingsSlice.js'
 import { fetchUsers } from './redux-toolkit-demo/slices/usersSlice.js'
-
-// #region SUBSCRIBE, GETSTATE(), DISPATCH(), UNSUBSCRIBE()
-// console.log('init state', store.getState())
-const someStoreActions = () => {
-  const unsubscribe = store.subscribe(() => {
-    console.log('updated state', store.getState())
-  })
-  store.dispatch(increment())
-  store.dispatch(increment(2))
-  store.dispatch(decrement({ num: 3 }))
-  store.dispatch(login())
-  store.dispatch(changeGreeting())
-  store.dispatch(fetchUsers())
-  // unsubscribe() // commented to see delayed result from async action
-}
-// #endregion
 
 // #region COMPONENT with useSelector() & useDispatch()
 const style = { border: '2px solid grey', padding: '10px', margin: '10px', maxWidth: '500px' }
 
 function Component() {
-  someStoreActions()
-
-  const counter = useSelector(state => state.counter.counter)
-  const isLogged = useSelector(state => state.login.isLogged)
-  const users = useSelector(state => state.users)
+  const { counter } = useSelector(state => state.counter)
+  const { isLogged } = useSelector(state => state.login)
+  const { users } = useSelector(state => state)
   const dispatch = useDispatch()
 
   return (
@@ -73,7 +54,7 @@ const postObj = {
 
       <H>Install</H>
 
-      <p> <Code bash>npm install @reduxjs/toolkit react-redux</Code> </p>
+      <Code bash>npm install @reduxjs/toolkit react-redux</Code>
 
       <H>Redux basics</H>
 
@@ -181,40 +162,6 @@ const postObj = {
       export const { login } = loginSlice.actions
       `}</Code>
 
-      <Hs>Greetings slice</Hs>
-
-      <p>{'Greetings slice can say "hi" and "bye".'}</p>
-
-      <Code block jsx>{`
-      // redux-toolkit-demo/slices/greetingsSlice.js
-      import { createSlice } from '@reduxjs/toolkit'
-
-      const initialState = {
-        greeting: 'no greetings yet'
-      }
-
-      const greetingsSlice = createSlice({
-        name: 'greetingsSlice',
-        initialState,
-        reducers: {
-          hi: (state, action) => {
-            state.greeting = 'hi'
-          },
-          bye: (state, action) => {
-            state.greeting = 'bye'
-          },
-          changeGreeting: (state, action) => {
-            if (state.greeting === 'bye') state.greeting = 'hi'
-            if (state.greeting === 'hi') state.greeting = 'bye'
-            if (state.greeting === 'no greetings yet') state.greeting = 'hi'
-          }
-        }
-      })
-
-      export default greetingsSlice.reducer
-      export const { hi, bye, changeGreeting } = greetingsSlice.actions
-      `}</Code>
-
       <Hs>Users slice</Hs>
 
       <p>This is async thunk middleware, which fetches data from the api.</p>
@@ -291,110 +238,6 @@ const postObj = {
       })
       `}</Code>
 
-      <H>subscribe getState, dispatch()</H>
-
-      <p>At the beginning we manually dispatch actions and log the state in console</p>
-
-      <Code block jsx>{`
-      // #region SUBSCRIBE, GETSTATE(), DISPATCH(), UNSUBSCRIBE()
-      console.log('init state', store.getState())
-      const unsubscribe = store.subscribe(() => {
-        console.log('updated state', store.getState())
-      })
-      store.dispatch(increment())
-      store.dispatch(increment(2))
-      store.dispatch(decrement({ num: 3 }))
-      store.dispatch(login())
-      store.dispatch(changeGreeting())
-      store.dispatch(fetchUsers())
-      // unsubscribe() // commented out because of previous async action
-      `}</Code>
-
-      <p>Console output</p>
-
-      <Code block jsx>{`
-      console.log('init state', store.getState())
-      /*
-      init state {counter: {…}, login: {…}, greetings: {…}, users: {…}}
-      counter: {counter: 0}
-      greetings: {greeting: 'no greetings yet'}
-      login: {isLogged: false}
-      users: {loading: false, users: Array(0), err: ''}
-      */
-
-      const unsubscribe = store.subscribe(() => {
-        console.log('updated state', store.getState())
-      })
-
-      store.dispatch(increment())
-      /*
-      updated state {counter: {…}, login: {…}, greetings: {…}, users: {…}}
-      counter: {counter: 1}
-      greetings: {greeting: 'no greetings yet'}
-      login: {isLogged: false}
-      users: {loading: false, users: Array(0), err: ''}
-      */
-
-      store.dispatch(increment(2))
-      /*
-      updated state {counter: {…}, login: {…}, greetings: {…}, users: {…}}
-      counter: {counter: 3}
-      greetings: {greeting: 'no greetings yet'}
-      login: {isLogged: false}
-      users: {loading: false, users: Array(0), err: ''}
-      */
-      
-      store.dispatch(decrement({ num: 3 }))
-      /*
-      updated state {counter: {…}, login: {…}, greetings: {…}, users: {…}}
-      counter: {counter: 0}
-      greetings: {greeting: 'no greetings yet'}
-      login: {isLogged: false}
-      users: {loading: false, users: Array(0), err: ''}
-      */
-      
-      store.dispatch(login())
-      /*
-      updated state {counter: {…}, login: {…}, greetings: {…}, users: {…}}
-      counter: {counter: 0}
-      greetings: {greeting: 'no greetings yet'}
-      login: {isLogged: true}
-      users: {loading: false, users: Array(0), err: ''}
-      */
-      
-      store.dispatch(changeGreeting())
-      /*
-      updated state {counter: {…}, login: {…}, greetings: {…}, users: {…}}
-      counter: {counter: 0}
-      greetings: {greeting: 'hi'}
-      login: {isLogged: true}
-      users: {loading: false, users: Array(0), err: ''}
-
-      I can respond to changeGreeting() action of greetingsSlice from counterSlice
-      
-      I can respond to changeGreeting() action of greetingsSlice from loginSlice
-      */
-      
-      store.dispatch(fetchUsers())
-      /*
-      updated state {counter: {…}, login: {…}, greetings: {…}, users: {…}}
-      counter: {counter: 0}
-      greetings: {greeting: 'hi'}
-      login: {isLogged: true}
-      users: {loading: true, users: Array(0), err: ''}
-      
-      
-      updated state {counter: {…}, login: {…}, greetings: {…}, users: {…}}
-      counter: {counter: 0}
-      greetings: {greeting: 'hi'}
-      login: {isLogged: true}
-      users: {loading: false, users: Array(10), err: '', error: ''}
-      */
-      
-      // commented out because of previous async action
-      // unsubscribe() 
-      `}</Code>
-
       <H>Component</H>
 
       <Code block jsx>{`
@@ -405,20 +248,6 @@ const postObj = {
       import { login } from '/redux-toolkit-demo/slices/loginSlice.js'
       import { changeGreeting } from '../redux-toolkit-demo/slices/greetingsSlice.js'
       import { fetchUsers } from '/redux-toolkit-demo/slices/usersSlice.js'
-
-      // #region SUBSCRIBE, GETSTATE(), DISPATCH(), UNSUBSCRIBE()
-      console.log('init state', store.getState())
-      const unsubscribe = store.subscribe(() => {
-        console.log('updated state', store.getState())
-      })
-      store.dispatch(increment())
-      store.dispatch(increment(2))
-      store.dispatch(decrement({ num: 3 }))
-      store.dispatch(login())
-      store.dispatch(changeGreeting())
-      store.dispatch(fetchUsers())
-      // unsubscribe() // commented to see delayed result from async action
-      // #endregion
 
       // #region COMPONENT with useSelector() & useDispatch()
       const style = { border: '2px solid grey', padding: '10px', margin: '10px', maxWidth: '500px' }

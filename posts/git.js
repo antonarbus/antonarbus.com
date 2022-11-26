@@ -300,6 +300,7 @@ const postObj = {
         <li><Code>git reset <i>hash</i></Code> undo changes (just move HEAD to some  commit), all further modification are available, but not staged, commits are not deleted. We undo add + commit commands.</li>
         <li><Code>git reset --mixed <i>hash</i></Code> same</li>
         <li>we can reset back to the same commit knowing its hash, because commit is not deleted, even it is not visible in logs.</li>
+        <li><Code>git reset --hard origin/main</Code> if master is out of order and asks to push commits</li>
       </ul>
 
       <Hs>Soft</Hs>

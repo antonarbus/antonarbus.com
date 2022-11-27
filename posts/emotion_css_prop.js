@@ -47,7 +47,12 @@ const postObj = {
             \`}
           >
             <div>div1</div>
-            <div css={{ background: 'red' }}>div2</div>
+            <div 
+              css={{ 
+                background: 'red' 
+                }}>
+              div2
+            </div>
           </div>
         )
       }
@@ -148,6 +153,25 @@ const postObj = {
       /** @jsxImportSource @emotion/react */
       `}</Code>
 
+      <H>Array of object styles</H>
+
+      <Code block jsx>{`
+          <div 
+            css={[
+              {
+                backgroundColor: 'hotpink',
+                '&:hover': {
+                  color
+                }
+              },
+              isDanger && {
+                color: 'red'
+              }
+            ]}
+          >
+            div2
+          </div>
+      `}</Code>
     </>
   )
 }

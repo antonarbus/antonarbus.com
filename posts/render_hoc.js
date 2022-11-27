@@ -114,24 +114,31 @@ function RenderWithAnimationWithCollapse() {
 }
 
 function ExperimentWithRenderComponent() {
+  const divCss = { background: '#e6c0c0', margin: '5px', padding: '5px', cursor: 'pointer' }
+
   return (
     <>
-      Below is the render gate with falsy condition, which still executes the code inside:
-      <Render when={false}>
-        <div>
-          Some text
-          {window.alert('you still see me')}
-        </div>
-      </Render>
-      But normal condition does not execute the component function:
-      {
-        false && (
+      <div style={divCss}>
+        Below is the render gate with falsy condition, which still executes the code inside:
+        <Render when={false}>
           <div>
             Some text
-            {window.alert('you do not see me')}
+            {window.alert('you still see me')}
           </div>
-        )
-      }
+        </Render>
+      </div>
+
+      <div style={divCss}>
+        But normal condition does not execute the component function:
+        {
+          false && (
+            <div>
+              Some text
+              {window.alert('you do not see me')}
+            </div>
+          )
+        }
+      </div>
     </>
   )
 }

@@ -37,27 +37,27 @@ console.log(output)
 
 i++
 console.log(i + ': removing folders on server')
-output = execSync('ssh sherb@35.209.92.93 "cd /var/www/html/antonarbus.com/ && rm -r archive.tar.gz .next package.json next.config.js public"', options)
+output = execSync('ssh sherb@35.217.12.143 "cd /var/www/html/antonarbus.com/ && rm -r archive.tar.gz .next package.json next.config.js public"', options)
 console.log(output)
 
 i++
 console.log(i + ': sending files to server')
-output = execSync('scp -r ~/Git/antonarbus.com/archive.tar.gz sherb@35.209.92.93:/var/www/html/antonarbus.com/', options)
+output = execSync('scp -r ~/Git/antonarbus.com/archive.tar.gz sherb@35.217.12.143:/var/www/html/antonarbus.com/', options)
 console.log(output)
 
 i++
 console.log(i + ': extracting files from the archive')
-output = execSync('ssh sherb@35.209.92.93 "cd /var/www/html/antonarbus.com/ && tar -xf archive.tar.gz"', options)
+output = execSync('ssh sherb@35.217.12.143 "cd /var/www/html/antonarbus.com/ && tar -xf archive.tar.gz"', options)
 console.log(output)
 
 i++
 console.log(i + ': installing packages')
-output = execSync('ssh sherb@35.209.92.93 "source ~/.nvm/nvm.sh && cd /var/www/html/antonarbus.com/ && npm i -f"', options)
+output = execSync('ssh sherb@35.217.12.143 "source ~/.nvm/nvm.sh && cd /var/www/html/antonarbus.com/ && npm i -f"', options)
 console.log(output)
 
 i++
 console.log(i + ': restarting the app')
-output = execSync('ssh sherb@35.209.92.93 "source ~/.nvm/nvm.sh && pm2 restart app"', options)
+output = execSync('ssh sherb@35.217.12.143 "source ~/.nvm/nvm.sh && pm2 restart app"', options)
 console.log(output)
 
 i++

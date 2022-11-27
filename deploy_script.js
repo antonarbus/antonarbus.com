@@ -36,6 +36,11 @@ output = execSync('tar czvf archive.tar.gz .next package.json next.config.js pub
 console.log(output)
 
 i++
+console.log(i + ': stopping the app')
+output = execSync('ssh sherb@35.217.12.143 "source ~/.nvm/nvm.sh && pm2 stop app"', options)
+console.log(output)
+
+i++
 console.log(i + ': removing folders on server')
 output = execSync('ssh sherb@35.217.12.143 "cd /var/www/html/antonarbus.com/ && rm -r archive.tar.gz .next package.json next.config.js public"', options)
 console.log(output)
@@ -57,7 +62,7 @@ console.log(output)
 
 i++
 console.log(i + ': restarting the app')
-output = execSync('ssh sherb@35.217.12.143 "source ~/.nvm/nvm.sh && pm2 restart app"', options)
+output = execSync('ssh sherb@35.217.12.143 "source ~/.nvm/nvm.sh && pm2 start app"', options)
 console.log(output)
 
 i++

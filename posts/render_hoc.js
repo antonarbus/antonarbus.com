@@ -113,6 +113,29 @@ function RenderWithAnimationWithCollapse() {
   )
 }
 
+function ExperimentWithRenderComponent() {
+  return (
+    <>
+      Below is the render gate with falsy condition, which still executes the code inside:
+      <Render when={false}>
+        <div>
+          Some text
+          {window.alert('you still see me')}
+        </div>
+      </Render>
+      But normal condition does not execute the component function:
+      {
+        false && (
+          <div>
+            Some text
+            {window.alert('you do not see me')}
+          </div>
+        )
+      }
+    </>
+  )
+}
+
 const postObj = {
   title: 'render hoc',
   date: '2022.09.07',
@@ -281,6 +304,31 @@ const postObj = {
       `}</Code>
 
       <RenderWithAnimationWithCollapse />
+
+      <H>Render component is not the same as if statement</H>
+
+      <ExperimentWithRenderComponent />
+
+      <Code block jsx>{`
+      <>
+        Below is the render gate with falsy condition, which still executes the code inside:
+        <Render when={false}>
+          <div>
+            Some text
+            {window.alert('you still see me')}
+          </div>
+        </Render>
+        But normal condition does not execute the component function:
+        {
+          false && (
+            <div>
+              Some text
+              {window.alert('you do not see me')}
+            </div>
+          )
+        }
+      </>
+      `}</Code>
     </>
   )
 }

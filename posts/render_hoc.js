@@ -336,6 +336,16 @@ const postObj = {
         }
       </>
       `}</Code>
+
+      <p>Explanation for such behavior...</p>
+
+      <ul>
+        <li>Function arguments are evaluated inside round braces before function body execution.</li>
+        <li><code>func(1 + 2)</code> will be <code>func(3)</code></li>
+        <li>When we provide JSX into our {'<Render />'} function, this JSX is evaluated as a parameter</li>
+        <li>Because JSX it is a callable function itself <Code>React.createElement()</Code>behind its html-looking syntax</li>
+        <li>Use basic <code>if</code> statement where possible, instead of <code>{'<Render />'}</code></li>
+      </ul>
     </>
   )
 }

@@ -578,6 +578,55 @@ const postObj = {
       )
       `}</Code>
 
+      <H>Array of objects</H>
+
+      <Code block jsx>{`
+        type MenuType = {
+          id: string
+          name: string
+          link?: any
+          func?: () => void,
+        }
+
+        type Props = {
+          navStructure: MenuType[],
+          id: string,
+        }
+      `}</Code>
+
+      <H>Object of objects</H>
+
+      <Code block jsx>{`
+        type ObjectOfObjectsType = {
+          [key: string]: {
+            name: string
+            age: number
+          }
+        }
+      `}</Code>
+
+      <H>Rest of props</H>
+
+      <Code block jsx>{`
+        type Props = {
+          children?: React.ReactNode
+          httpStatus?: 'loading' | 'error' | 'success' | ''
+          [x:string]: any // all other ...props
+        }
+      `}</Code>
+
+      <H>Function returning <code>undefined</code></H>
+
+      <Code block jsx>{`
+        type Props = {
+          children?: React.ReactNode
+          color?: string
+          onSlideIn?: (value: string) => void
+          onSlideOut?: () => void
+          otherFunc: (() => void) | null
+        }
+      `}</Code>
+
       <H>Comments for types</H>
 
       <LazyImg src="/imgs/ts/commentsInTs.png" />
@@ -1093,6 +1142,17 @@ const postObj = {
       <H>useRef as mutable container</H>
 
       <Code block jsx>{`
+      type Props = {
+        children?: React.ReactNode
+        cssProps?: React.CSSProperties
+        reference?: React.MutableRefObject<HTMLDivElement>
+        ref2?: React.MutableRefObject<HTMLDivElement>
+        title?: string | React.ReactNode
+        logo?: React.ReactNode
+      }
+      `}</Code>
+
+      <Code block jsx>{`
       const Timer = () => {
         const [timer, setTimer] = React.useState(0)
         const interValRef = React.useRef<number | null>(null)
@@ -1311,6 +1371,39 @@ const postObj = {
         <Text size='md' as='p'>Paragraph</Text>
         <Text size='sm' color='secondary' as='label' htmlFor='someId'>Label</Text>
       </>
+
+      <H>Redux</H>
+
+      <Hs>Payload in reducer</Hs>
+
+      <Code block jsx>{`
+        incrementByAmount: (state, action: PayloadAction<number>) => {
+          state.value += action.payload
+        }
+      `}</Code>
+
+      <Hs>Thunk</Hs>
+
+      <Code block jsx>{`
+        export const incrementIfOdd =(amount: number): AppThunk => (dispatch, getState) => {
+          const currentValue = selectCount(getState())
+          if (currentValue % 2 === 1) {
+            dispatch(incrementByAmount(amount))
+          }
+        }
+      `}</Code>
+
+      <Hs>Redux config types</Hs>
+
+      <Code block jsx>{`
+        export type RootState = ReturnType<typeof store.getState>
+        export type AppDispatch = typeof store.dispatch
+        export type AppThunk<ReturnType = void> = ThunkAction< ReturnType, RootState, unknown, Action<string> >
+        
+        // hooks to let types work
+        export const useSelectorTyped: TypedUseSelectorHook<RootState> = useSelector
+        export const useDispatchTyped = () => useDispatch<AppDispatch>()
+      `}</Code>
 
     </>
   )

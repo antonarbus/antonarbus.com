@@ -147,13 +147,14 @@ const postObj = {
 
       <p><Code bash>code ~/.fig/settings.json</Code> open settings file.</p>
 
-      <H>Ruby version in right corner</H>
+      <H>Ruby & python version in right corner</H>
 
       <p>After React Native installation I got annoying ruby logo with version at the end of every line in terminal. To remove it...</p>
 
       <ul>
         <li><Code>code ~/.p10k.zsh</Code></li>
-        <li>Comment out following line <code>rvm # ruby version from rvm (https://rvm.io)</code></li>
+        <li>Comment out following line <code># rvm # ruby version from rvm (https://rvm.io)</code></li>
+        <li>To remove python version probably comment out <code># .python-version</code></li>
       </ul>
     </>
   )

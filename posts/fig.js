@@ -153,8 +153,7 @@ const postObj = {
 
       <ul>
         <li><Code>code ~/.p10k.zsh</Code></li>
-        <li>Comment out following line <code># rvm # ruby version from rvm (https://rvm.io)</code></li>
-        <li>To remove python version probably comment out <code># typeset -g POWERLEVEL9K_PYENV_FOREGROUND=37</code></li>
+        <li>Just play with configurations using as minimal options as possible</li>
       </ul>
     </>
   )

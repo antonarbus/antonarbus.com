@@ -56,7 +56,6 @@ export default function Index() {
           }
         `}</style>
       </div>
-
     </>
   )
 }

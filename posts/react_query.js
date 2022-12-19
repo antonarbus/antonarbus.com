@@ -8,6 +8,10 @@ const postObj = {
   desc: 'react query example',
   body: (
     <>
+      <H>Installation</H>
+
+      <Code>npm i @tanstack/react-query</Code>
+
       <H>Example</H>
 
       <ul>

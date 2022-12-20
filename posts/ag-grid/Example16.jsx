@@ -1,10 +1,9 @@
 /** @jsxImportSource @emotion/react */
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import { css } from '@emotion/react'
-import { useQuery } from 'react-query'
 import { useData } from './useData'
 
 let editableYear = 2012

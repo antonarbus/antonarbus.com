@@ -1,8 +1,6 @@
-import { useCallback, useEffect, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
-import { useQuery } from 'react-query'
 import { useData } from './useData'
 
 const columnDefs = [

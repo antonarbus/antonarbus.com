@@ -1,11 +1,9 @@
 /** @jsxImportSource @emotion/react */
-
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import 'ag-grid-enterprise'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
-import { useQuery } from 'react-query'
 import { useData } from './useData'
 
 const checkboxSelection = function (params) {

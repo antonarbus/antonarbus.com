@@ -4,6 +4,7 @@ import { nanoid } from 'nanoid'
 
 const UuidExample = () => (
   <>
+    <div>Math.random().toString(): <strong>{Math.random().toString()}</strong></div>
     <div>uuidv1(): <strong>{uuidv1()}</strong></div>
     <div>uuidv4(): <strong>{uuidv4()}</strong></div>
     <div>nanoid(): <strong>{nanoid()}</strong></div>
@@ -23,8 +24,6 @@ const postObj = {
 
       <UuidExample />
 
-      <H>Example</H>
-
       <Code block js>{`
       import { v1 as uuidv1, v4 as uuidv4 } from 'uuid'
       import { nanoid } from 'nanoid'
@@ -40,7 +39,7 @@ const postObj = {
       )
       `}</Code>
 
-      <H>Math.random</H>
+      <H>Math.random()</H>
 
       <ul>
         <li>There is a usual need to generate a unique string as a <b>u</b>niversally <b>u</b>nique <b>id</b>entifier (UUID)</li>
@@ -49,14 +48,14 @@ const postObj = {
         <li>But a better way to use existing libraries</li>
       </ul>
 
-      <H>nanoid</H>
+      <H>nanoid()</H>
 
       <ul>
         <li><Lnk path={'https://www.npmjs.com/package/nanoid'}>nanoid</Lnk> package</li>
         <li>Install a package with <Code bash>npm i nanoid</Code></li>
       </ul>
 
-      <H>uuid</H>
+      <H>uuid()</H>
 
       <ul>
         <li><Lnk path={'https://www.npmjs.com/package/uuid'}>uuid</Lnk> package</li>

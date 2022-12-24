@@ -28,7 +28,7 @@ const postObj = {
         </li>
 
         <li>
-          Client stores <i>access</i> token in the local storage and attaches it inside request
+          Client stores <i>access</i> token in the local storage or memory and attaches it inside request
           headers for private api requests. Token is attached by 'request' interceptor in{' '}
           <i>axiosWithAuth</i>.
         </li>

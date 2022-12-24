@@ -5,19 +5,19 @@ const postObj = {
   date: '2022.12.21',
   tags: ['JavaScript'],
   imgUrl: 'https://antonarbus.com/imgs/js.png',
-  desc: 'destructure and rename',
+  desc: 'Destructure and rename',
   body: (
     <>
-      <H>destructure and rename</H>
+      <H>Destructure and rename</H>
 
       <Code block jsx>{`
       const bio = {
-        firstName: 'Anton',
-        lastName: 'Arbus',
+        firstName: 'Bruce',
+        lastName: 'Lee',
       }
 
-      const {firstName: first} = bio
-      console.log(first) // Anton
+      const {firstName: first, lastName: last} = bio
+      console.log(first, last) // Bruce Lee
       `}</Code>
     </>
   )

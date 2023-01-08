@@ -48,7 +48,7 @@ const postObj = {
 
         <li>
           <i>Refresh</i> token is stored in secured cookies on the login and also kept in database.
-          If <i>refresh</i> token is valid and available in database, then refreshed <i>access</i>{' '}
+          If <i>refresh</i> token is valid and available in database, then updated <i>access</i>{' '}
           and refreshed <i>refresh</i> tokens are issued.
         </li>
 

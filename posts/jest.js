@@ -570,6 +570,19 @@ const postObj = {
         expect(1 + 1).toBe(2)
       })
       `}</Code>
+
+      <H>Suppress jest warning</H>
+
+      <Code block jsx>{`
+      describe('<Invoices />', () => {
+        it('should render the component', () => {
+          jest.spyOn(console, 'error').mockImplementation(() => {})
+          renderWithProvider(<Invoices />)
+          const invoices = screen.getByTestId('invoices')
+          expect(invoices).toBeInTheDocument()
+        })
+      })
+      `}</Code>
     </>
   )
 }

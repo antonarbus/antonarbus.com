@@ -1,4 +1,4 @@
-import { Code, H, Hs, Lnk, jsxToStr } from '/components/post/reExport'
+import { Code, H, Hs, Lnk, jsxToStr, LazyImg } from '/components/post/reExport'
 
 async function fetchPage() {
   const response = await fetch('/posts/fetch') // resolves with response headers
@@ -540,6 +540,16 @@ const postObj = {
       
       subscribe()
       `}</Code>
+
+      <H>Fetch not catching some errors</H>
+
+      <p>For ex. it does not throw an 403 error and you need to manually check the response.</p>
+
+      <LazyImg path='/imgs/network_error_with_fetch.jpg' />
+
+      <p>Axios just throws an error.</p>
+
+      <LazyImg path='/imgs/network_error_with_axios.jpg'/>
     </>
   )
 }

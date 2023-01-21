@@ -1,4 +1,4 @@
-import { Code, H, jsxToStr } from '/components/post/reExport'
+import { Code, H, jsxToStr, Lnk } from '/components/post/reExport'
 
 const postObj = {
   title: 'paths config',
@@ -18,6 +18,28 @@ const postObj = {
       </ul>
 
       <H>jsconfig.json</H>
+
+      <p><Lnk path='https://create-react-app.dev/docs/importing-a-component/#absolute-imports'>https://create-react-app.dev/docs/importing-a-component/#absolute-imports</Lnk></p>
+
+      <Code block json>{`
+      {
+        "compilerOptions": {
+          "baseUrl": "src"
+        },
+        "include": ["src"]
+      }
+      `}</Code>
+
+      <ul>
+        <li>Component at <code>srs/components/Button.js</code> can be imported from anywhere</li>
+        <li>With following <code>import Button from 'components/Button'</code></li>
+      </ul>
+
+      <H>Alias</H>
+
+      <ul>
+        <li>In typescript projects we can even make aliases to folders</li>
+      </ul>
 
       <Code block json>{`
       {

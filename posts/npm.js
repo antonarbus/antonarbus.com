@@ -33,6 +33,13 @@ const postObj = {
         <li><Code bash>npm run script_name</Code> run a script</li>
         <li><Code bash>npm -v</Code> npm version</li>
       </ul>
+
+      <H>depcheck</H>
+
+      <ul>
+        <li><Code bash>npx depcheck —oneline</Code> check for packages not used in the project</li>
+        <li><Lnk path='https://www.npmjs.com/package/depcheck'>https://www.npmjs.com/package/depcheck</Lnk></li>
+      </ul>
     </>
   )
 }

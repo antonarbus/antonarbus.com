@@ -687,6 +687,15 @@ const postObj = {
       const body = html.match(bodyPattern)[0] // <span>Hi</span><span>Bye</span>
       const text = body.replace(textContentPattern, '') // HiBye
       `}</Code>
+
+      <Hs>startsWith...endsWith</Hs>
+
+      <Code block jsx>{`
+        (?<=beginsWith)(.*)(?=endsWith)
+      `}</Code>
+
+      <p><code>Television</code> can be selected by <Code inline jsx>{'(?<=Te)(.*)(?=ion)'}</Code></p>
+
     </>
   )
 }

@@ -688,13 +688,21 @@ const postObj = {
       const text = body.replace(textContentPattern, '') // HiBye
       `}</Code>
 
-      <Hs>startsWith...endsWith</Hs>
+      <Hs>Text between 2 strings</Hs>
 
       <Code block jsx>{`
         (?<=beginsWith)(.*)(?=endsWith)
       `}</Code>
 
-      <p><code>Television</code> can be selected by <Code inline jsx>{'(?<=Te)(.*)(?=ion)'}</Code></p>
+      <p><code>levis</code> can be selected from <code>Television</code> by <Code inline jsx>{'(?<=Te)(.*)(?=ion)'}</Code></p>
+
+      <Hs>Text between 2 strings including them</Hs>
+
+      <Code block jsx>{`
+        beginsWith(.*)endsWith
+      `}</Code>
+
+      <p><code>Television</code> can be selected from <code>Television</code> by <Code inline jsx>{'Te(.*)on'}</Code></p>
 
     </>
   )

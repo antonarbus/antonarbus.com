@@ -191,6 +191,7 @@ const postObj = {
 
       <ul>
         <li><Code bash>nano ~/.bashrc</Code></li>
+        <li><Code bash>code  ~/.zshrc</Code></li>
         <li>Add some shortcuts</li>
 
         <Code block bash>{`
@@ -199,6 +200,7 @@ const postObj = {
 
         # Long format list
         alias ll="ls -la"
+        alias cl="clear && printf '\\e[3J'" # clear with history
 
         # Print my public IP
         alias myip='curl ipinfo.io/ip'

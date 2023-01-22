@@ -201,6 +201,9 @@ const postObj = {
         # Long format list
         alias ll="ls -la"
         alias cl="clear && printf '\\e[3J'" # clear with history
+        alias start="npm run start"
+        alias test="npm run test"
+        alias lint="npm run lint"
 
         # Print my public IP
         alias myip='curl ipinfo.io/ip'

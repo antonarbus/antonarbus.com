@@ -583,6 +583,73 @@ const postObj = {
         })
       })
       `}</Code>
+
+      <H>Mock exported function which is used in tested function</H>
+
+      <ul>
+        <li>I am testing a component which uses react-query functions to fetch a data on mount</li>
+        <li>In test we do not want to fetch the data and need to mock it</li>
+        <li>Component acts always the same no matter <code>useUserQuery()</code> returns</li>
+        <li>So we need to mock it ones for all tests</li>
+        <li>Component renders differently depending on <code>useInvoicesQuery()</code> return value</li>
+        <li>Here we need to control the return value</li>
+      </ul>
+
+      <Code block jsx>{`
+        export const InvoicesTable = () => {
+        const dispatch = useDispatch()
+        const { data: user } = useUserQuery()
+        const { data, isLoading } = useInvoicesQuery()
+        const isServiceCenter = selectIsServiceCenter(user)
+
+        return (
+          ....
+        )
+      }
+      `}</Code>
+
+      <Code block jsx>{`
+      import { screen } from '@testing-library/react'
+      import { getDefaultStore } from 'testUtils/defaultStore'
+      import { renderWithProvider } from 'testUtils/renderWithProvider'
+      import { InvoicesTable } from './InvoicesTable'
+      import { useInvoicesQuery } from 'api/useInvoicesQuery'
+
+      const store = getDefaultStore()
+      store.query.searchInputValue = 'some search input value'
+
+      // return value will be static in all test
+      jest.mock('api/useUserQuery', () => ({
+        useUserQuery: () => ({ data: { username: 'Jack Russell' } })
+      }))
+
+      // return value can be controlled in different tests
+      jest.mock('api/useInvoicesQuery', () => ({
+        useInvoicesQuery: jest.fn()
+      }))
+
+      describe('<InvoicesTable />', () => {
+        it('should render tables content', () => {
+          useInvoicesQuery.mockReturnValue({ isLoading: false, data: {} })
+
+          renderWithProvider(<InvoicesTable />, {}, { preloadedState: store })
+
+          expect(screen.queryByTestId('spinner')).not.toBeInTheDocument()
+          expect(screen.getByText('14:27:21', { exact: false })).toBeInTheDocument()
+        })
+      })
+
+      describe('<InvoicesTable />', () => {
+        it('should show spinner', () => {
+          useInvoicesQuery.mockReturnValue({ isLoading: true, data: {} })
+
+          renderWithProvider(<InvoicesTable />, {}, { preloadedState: store })
+
+          expect(screen.queryByTestId('spinner')).toBeInTheDocument()
+        })
+      })
+      `}</Code>
+
     </>
   )
 }

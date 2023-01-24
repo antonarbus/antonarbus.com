@@ -584,7 +584,7 @@ const postObj = {
       })
       `}</Code>
 
-      <H>Mock exported function which is used in tested function</H>
+      <H>Mock imported function</H>
 
       <ul>
         <li>I am testing a component which uses react-query functions to fetch a data on mount</li>

@@ -610,20 +610,20 @@ const postObj = {
 
       <Code block jsx>{`
       import { screen } from '@testing-library/react'
-      import { getDefaultStore } from 'testUtils/defaultStore'
       import { renderWithProvider } from 'testUtils/renderWithProvider'
+      import { getDefaultStore } from 'testUtils/defaultStore'
       import { InvoicesTable } from './InvoicesTable'
       import { useInvoicesQuery } from 'api/useInvoicesQuery'
 
       const store = getDefaultStore()
       store.query.searchInputValue = 'some search input value'
 
-      // return value will be static in all test
+      // returned value will be static in all test
       jest.mock('api/useUserQuery', () => ({
         useUserQuery: () => ({ data: { username: 'Jack Russell' } })
       }))
 
-      // return value can be controlled in different tests
+      // returned value can be controlled in different tests
       jest.mock('api/useInvoicesQuery', () => ({
         useInvoicesQuery: jest.fn()
       }))

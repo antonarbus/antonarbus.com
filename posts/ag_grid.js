@@ -113,7 +113,7 @@ const postObj = {
             { make: 'BMW', model: '3', price: 37000 },
             { make: 'Nissan', model: 'X-trail', price: 66000 }
           ]
-          for (let i = 0; i < 99; i++) {
+          for (let i = 0; i < 999999; i++) {
             array.push({
               make: 'make ' + i, model: 'model ' + i, price: i
             })

@@ -1,5 +1,5 @@
 import { Code, H, Hs, LazyImg, Lnk, React, useEffect, useState, useRef, useCallback, useMemo, jsxToStr } from '/components/post/reExport'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@mui/material'
 
 const Example1 = () => (
@@ -72,6 +72,97 @@ const Example6 = ({ children }) => (
   </motion.div>
 )
 
+const parentVariants = {
+  hidden: { x: '-100vw' },
+  visible: { x: 0, transition: { type: 'spring', delay: 1, when: 'beforeChildren' } }
+}
+
+const childVariants = {
+  hidden: { y: '100%' },
+  visible: { y: 0 }
+}
+
+const Example7 = ({ children }) => (
+  <motion.div
+    variants={parentVariants}
+    initial='hidden'
+    animate='visible'
+    css={{ fontSize: '30px', overflow: 'hidden' }}
+  >
+    Parent motion
+    <motion.div
+      variants={childVariants}
+      css={{ color: 'grey', fontSize: '16px' }}
+    >
+      Child motion
+    </motion.div>
+  </motion.div>
+)
+
+const parentVariants2 = {
+  hidden: { x: '-100vw' },
+  visible: {
+    x: 0,
+    transition: {
+      type: 'spring',
+      delay: 1,
+      when: 'beforeChildren',
+      staggerChildren: 0.5
+    }
+  }
+}
+
+const childVariants2 = {
+  hidden: { y: 100 },
+  visible: { y: 0 }
+}
+
+const Example8 = ({ children }) => (
+  <motion.div
+    variants={parentVariants2}
+    initial='hidden'
+    animate='visible'
+    css={{ fontSize: '30px', overflow: 'hidden' }}
+  >
+    Parent motion
+    <motion.div
+      variants={childVariants2}
+      css={{ color: 'grey', fontSize: '16px' }}
+    >
+      Child motion 1
+    </motion.div>
+    <motion.div
+      variants={childVariants2}
+      css={{ color: 'grey', fontSize: '16px' }}
+    >
+      Child motion 2
+    </motion.div>
+    <motion.div
+      variants={childVariants2}
+      css={{ color: 'grey', fontSize: '16px' }}
+    >
+      Child motion 3
+    </motion.div>
+  </motion.div>
+)
+
+const Example9 = () => (
+  <motion.button
+    whileHover={{ scale: [1.2, 1, 1.2, 1, 1.2, 1, 1.2, 1, 1.2, 1, 1.2] }}
+  >
+    Animated hover with keyframes
+  </motion.button>
+)
+
+const Example10 = () => (
+  <motion.button
+    whileHover={{ scale: 1.2 }}
+    transition={{ repeat: Infinity }}
+  >
+    Animated hover with yo-yo
+  </motion.button>
+)
+
 const postObj = {
   title: 'framer motion',
   date: '2023.02.04',
@@ -138,7 +229,7 @@ const postObj = {
       <H>Variants</H>
 
       <ul>
-        <li>Variants allows to extract <code>initial</code>, <code>animate</code> & <code>transition</code> props into an external object and reference it.</li>
+        <li>Variants allows to extract <code>initial</code>, <code>animate</code> & <code>transition</code> props into an external object and reference it in multiple components.</li>
         <li>It makes code cleaner</li>
       </ul>
 
@@ -205,6 +296,135 @@ const postObj = {
       <Example5>
         <Example6 />
       </Example5>
+
+      <H>beforeChildren</H>
+
+      <ul>
+        <li>We have animated parent and children</li>
+        <li>By default animations starts at the same time everywhere</li>
+        <li>Usually we want parent to animate and only after start children animation</li>
+        <li>We may play with delays, but that is not elegant</li>
+        <li>With <code>variants</code> we can use <Code>when</Code> prop of <code>transition</code> with <Code>beforeChildren</Code> value to achieve it</li>
+      </ul>
+
+      <Code block jsx>{`
+      const parentVariants = {
+        hidden: { x: '-100vw' },
+        visible: { x: 0, transition: { type: 'spring', delay: 1, when: 'beforeChildren' } }
+      }
+
+      const childVariants = {
+        hidden: { y: '100%' },
+        visible: { y: 0 }
+      }
+
+      const Example7 = ({ children }) => (
+        <motion.div
+          variants={parentVariants}
+          initial='hidden'
+          animate='visible'
+          css={{ fontSize: '30px', overflow: 'hidden' }}
+        >
+          Parent motion
+          <motion.div
+            variants={childVariants}
+            css={{ color: 'grey', fontSize: '16px' }}
+          >
+            Child motion
+          </motion.div>
+        </motion.div>
+      )
+      `}</Code>
+
+      <Example7 />
+
+      <H>Stagger children</H>
+
+      <Code block jsx>{`
+      const parentVariants2 = {
+        hidden: { x: '-100vw' },
+        visible: {
+          x: 0,
+          transition: {
+            type: 'spring',
+            delay: 1,
+            when: 'beforeChildren',
+            staggerChildren: 0.5
+          }
+        }
+      }
+
+      const childVariants2 = {
+        hidden: { y: 100 },
+        visible: { y: 0 }
+      }
+
+      const Example8 = ({ children }) => (
+        <motion.div
+          variants={parentVariants2}
+          initial='hidden'
+          animate='visible'
+          css={{ fontSize: '30px', overflow: 'hidden' }}
+        >
+          Parent motion
+          <motion.div
+            variants={childVariants2}
+            css={{ color: 'grey', fontSize: '16px' }}
+          >
+            Child motion 1
+          </motion.div>
+          <motion.div
+            variants={childVariants2}
+            css={{ color: 'grey', fontSize: '16px' }}
+          >
+            Child motion 2
+          </motion.div>
+          <motion.div
+            variants={childVariants2}
+            css={{ color: 'grey', fontSize: '16px' }}
+          >
+            Child motion 3
+          </motion.div>
+        </motion.div>
+      )
+      `}</Code>
+
+      <Example8 />
+
+      <H>Keyframe</H>
+
+      <Code block jsx>{`
+      const Example9 = () => (
+        <motion.button
+          whileHover={{ scale: [1.2, 1, 1.2, 1, 1.2, 1, 1.2, 1, 1.2, 1, 1.2] }}
+        >
+          Animated hover with keyframes
+        </motion.button>
+      )
+      `}</Code>
+
+      <Example9 />
+
+      <H>Repeating animation</H>
+
+      <Code block jsx>{`
+      const Example10 = () => (
+        <motion.button
+          whileHover={{ scale: 1.2 }}
+          transition={{ repeat: Infinity }}
+        >
+          Animated hover with yo-yo
+        </motion.button>
+      )
+      `}</Code>
+
+      <Example10 />
+
+      <H>Animate unmount</H>
+
+      <ul>
+        <li></li>
+      </ul>
 
     </>
   )

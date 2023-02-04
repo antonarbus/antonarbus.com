@@ -30,6 +30,7 @@
     "cookies-next": "^2.0.4",
     "create-next-app": "^12.2.5",
     "formidable": "^2.0.1",
+    "framer-motion": "^9.0.1",
     "gsap": "^3.10.4",
     "immer": "^9.0.14",
     "lint": "^1.1.2",

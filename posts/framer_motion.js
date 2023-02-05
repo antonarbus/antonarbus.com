@@ -163,6 +163,27 @@ const Example10 = () => (
   </motion.button>
 )
 
+const Example11 = () => {
+  const [isShow, setIsShow] = useState(false)
+
+  return (
+    <>
+      <AnimatePresence>
+        {isShow && (
+          <motion.h2
+            initial={{ x: '-100vw' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100vw' }}
+          >
+            Animated text
+          </motion.h2>
+        )}
+      </AnimatePresence>
+      <button onClick={() => setIsShow(!isShow)}>Toggle text</button>
+    </>
+  )
+}
+
 const postObj = {
   title: 'framer motion',
   date: '2023.02.04',
@@ -423,8 +444,36 @@ const postObj = {
       <H>Animate unmount</H>
 
       <ul>
-        <li></li>
+        <li>Before we just animated a component's appetence </li>
+        <li>With <Code>AnimatePresence</Code> can animate also removal of a component</li>
       </ul>
+
+      <Code block jsx>{`
+      import { motion, AnimatePresence } from 'framer-motion'
+
+      const Example11 = () => {
+        const [isShow, setIsShow] = useState(false)
+
+        return (
+          <>
+            <AnimatePresence>
+              {isShow && (
+                <motion.h2
+                  initial={{ x: '-100vw' }}
+                  animate={{ x: 0 }}
+                  exit={{ x: '100vw' }}
+                >
+                  Animated text
+                </motion.h2>
+              )}
+            </AnimatePresence>
+            <button onClick={() => setIsShow(!isShow)}>Toggle text</button>
+          </>
+        )
+      }
+      `}</Code>
+
+      <Example11 />
 
     </>
   )

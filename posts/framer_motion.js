@@ -1,5 +1,5 @@
 import { Code, H, Hs, LazyImg, Lnk, React, useEffect, useState, useRef, useCallback, useMemo, jsxToStr } from '/components/post/reExport'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useCycle } from 'framer-motion'
 import { Button } from '@mui/material'
 
 const Example1 = () => (
@@ -180,6 +180,126 @@ const Example11 = () => {
         )}
       </AnimatePresence>
       <button onClick={() => setIsShow(!isShow)}>Toggle text</button>
+    </>
+  )
+}
+
+const Example12 = () => {
+  return (
+    <svg
+      viewBox="0 0 100 20"
+      xmlns="http://www.w3.org/2000/svg"
+      css={{
+        fill: 'none',
+        stroke: 'black',
+        strokeWidth: 2,
+        strokeDasharray: 10
+      }}
+    >
+      <motion.path
+        d="M 0,10 h100"
+        initial={{ pathLength: 0 }}
+        animate={{ pathLength: 1 }}
+        transition={{ duration: 2, ease: 'easeInOut', delay: 2 }}
+      />
+    </svg>
+  )
+}
+
+const Example13 = () => {
+  return (
+    <motion.div
+      css={{
+        width: '10px',
+        height: '10px',
+        margin: '40px auto',
+        borderRadius: '50%',
+        background: 'grey'
+      }}
+      animate={{
+        x: [-20, 20],
+        y: [0, -30]
+      }}
+      transition={{
+        x: {
+          duration: 0.6,
+          repeat: Infinity,
+          repeatType: 'mirror'
+        },
+        y: {
+          duration: 0.3,
+          repeat: Infinity,
+          repeatType: 'mirror',
+          ease: 'easeInOut'
+        }
+      }}
+    >
+    </motion.div>
+  )
+}
+
+const Example14 = () => {
+  const [x, cycleX] = useCycle(0, 50, 100)
+
+  return (
+    <>
+      <motion.div
+        css={{
+          width: '10px',
+          height: '10px',
+          background: 'red',
+          borderRadius: '50%'
+        }}
+        animate={{ x }}
+      />
+      <button onClick={() => cycleX()}>Change position</button>
+    </>
+  )
+}
+
+const variants = {
+  animationOne: {
+    x: [-20, 20],
+    y: 0,
+    transition: {
+      x: {
+        duration: 0.6,
+        repeat: Infinity,
+        repeatType: 'mirror'
+      }
+    }
+  },
+  animationTwo: {
+    x: 0,
+    y: [-20, 20],
+    transition: {
+      y: {
+        duration: 0.6,
+        repeat: Infinity,
+        repeatType: 'mirror'
+      }
+    }
+  }
+}
+
+const Example15 = () => {
+  const [animation, cycleAnimation] = useCycle('animationOne', 'animationTwo')
+
+  return (
+    <>
+      <motion.div
+        css={{
+          width: '10px',
+          height: '10px',
+          margin: '40px auto',
+          borderRadius: '50%',
+          background: 'green'
+        }}
+        variants={variants}
+        animate={animation}
+      >
+      </motion.div>
+      <button onClick={() => cycleAnimation()}>Change animation variant</button>
     </>
   )
 }
@@ -474,6 +594,223 @@ const postObj = {
       `}</Code>
 
       <Example11 />
+
+      <H>onAnimationComplete</H>
+
+      <p>That is how I made a slide effect between invoices at my work.</p>
+
+      <Code block jsx>{`
+      import { motion, AnimatePresence } from 'framer-motion'
+
+      export const Invoice = () => {
+        const dispatch = useDispatch()
+        const { data: user } = useUserQuery()
+        const closeDialog = () => dispatch(handleCloseInvoice(user))
+        const { id } = useParams()
+
+        // disable scroll on body due to custom backdrop
+        //! extract into a custom hook
+        useEffectOnce(() => {
+          document.body.style.overflow = 'hidden'
+          return () => {
+            document.body.style.overflow = 'auto'
+          }
+        })
+
+        useUnmount(() => {
+          queryClient.invalidateQueries({ queryKey: ['invoices'] })
+          setTimeout(() => { queryClient.invalidateQueries({ queryKey: ['invoices'] }) }, 5000)
+        })
+
+        return (
+          <Backdrop
+            open={!!id}
+            sx={{
+              background: '#00000080',
+              zIndex: 666
+            }}
+          >
+            <AnimatePresence
+              initial={false}
+              mode='wait'
+            >
+              <motion.div
+                key={id}
+                initial={{ x: '100vw' }}
+                animate={{ x: 0 }}
+                exit={{ x: '-100vw' }}
+                transition={{ ease: 'linear' }}
+                onAnimationComplete={(definition) => {
+                  // triggered twice on exit and enter animation completion
+                  if (definition.x === 0) dispatch(handleInvoiceOpened(id, user))
+                }}
+              >
+                <Box
+                  data-testid='invoice-container'
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    width: '95vw',
+                    height: '95vh',
+                    maxWidth: '95vw',
+                    maxHeight: '95vh',
+                    zIndex: 1000
+                  }}
+                >
+                  <InvoiceTitle closeDialog={closeDialog} />
+                  <InvoiceContent />
+                  <InvoiceFooter closeDialog={closeDialog} />
+                </Box>
+              </motion.div>
+            </AnimatePresence>
+          </Backdrop>
+        )
+      }
+      `}</Code>
+
+      <H>Animate svg</H>
+
+      <Code block jsx>{`
+      const Example12 = () => {
+        return (
+          <svg
+            viewBox="0 0 100 20"
+            xmlns="http://www.w3.org/2000/svg"
+            css={{
+              fill: 'none',
+              stroke: 'black',
+              strokeWidth: 2,
+              strokeDasharray: 10
+            }}
+          >
+            <motion.path
+              d="M 0,10 h100"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: 2, ease: 'easeInOut', delay: 2 }}
+            />
+          </svg>
+        )
+      }
+      `}</Code>
+
+      <Example12 />
+
+      <H>Loader</H>
+
+      <Code block jsx>{`
+      const Example13 = () => {
+        return (
+          <motion.div
+            css={{
+              width: '10px',
+              height: '10px',
+              margin: '40px auto',
+              borderRadius: '50%',
+              background: 'grey'
+            }}
+            animate={{
+              x: [-20, 20],
+              y: [0, -30]
+            }}
+            transition={{
+              x: {
+                duration: 0.6,
+                repeat: Infinity,
+                repeatType: 'mirror'
+              },
+              y: {
+                duration: 0.3,
+                repeat: Infinity,
+                repeatType: 'mirror',
+                ease: 'easeInOut'
+              }
+            }}
+          >
+          </motion.div>
+        )
+      }
+      `}</Code>
+
+      <Example13 />
+
+      <H>Change between animation properties</H>
+
+      <Code block jsx>{`
+      const Example14 = () => {
+        const [x, cycleX] = useCycle(0, 50, 100)
+
+        return (
+          <>
+            <motion.div
+              css={{
+                width: '10px',
+                height: '10px',
+                background: 'red',
+                borderRadius: '50%'
+              }}
+              animate={{ x }}
+            />
+            <button onClick={() => cycleX()}>Change position</button>
+          </>
+        )
+      }
+      `}</Code>
+
+      <Example14 />
+
+      <H>Change between animation variants</H>
+
+      <Code block jsx>{`
+      const variants = {
+        animationOne: {
+          x: [-20, 20],
+          y: 0,
+          transition: {
+            x: {
+              duration: 0.6,
+              repeat: Infinity,
+              repeatType: 'mirror'
+            }
+          }
+        },
+        animationTwo: {
+          x: 0,
+          y: [-20, 20],
+          transition: {
+            y: {
+              duration: 0.6,
+              repeat: Infinity,
+              repeatType: 'mirror'
+            }
+          }
+        }
+      }
+
+      const Example15 = () => {
+        const [animation, cycleAnimation] = useCycle('animationOne', 'animationTwo')
+
+        return (
+          <>
+            <motion.div
+              css={{
+                width: '10px',
+                height: '10px',
+                margin: '40px auto',
+                borderRadius: '50%',
+                background: 'green'
+              }}
+              variants={variants}
+              animate={animation}
+            >
+            </motion.div>
+            <button onClick={() => cycleAnimation()}>Change animation variant</button>
+          </>
+        )
+      }
+      `}</Code>
+
+      <Example15 />
 
     </>
   )

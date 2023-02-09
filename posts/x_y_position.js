@@ -196,6 +196,58 @@ const postObj = {
         initInnerCss={'background: lightyellow; \nwidth: 80%;'}
       />
 
+      <H>Position with grid</H>
+
+      <Component
+        initOuterCss={ 'display: grid; \nplace-items: start; \nheight: 50px; \nbackground: lightblue;' }
+        initInnerCss={ 'background: lightyellow;' }
+      />
+
+      <Component
+        initOuterCss={ 'display: grid; \nplace-items: center; \nheight: 50px; \nbackground: lightblue;' }
+        initInnerCss={ 'background: lightyellow;' }
+      />
+
+      <Component
+        initOuterCss={ 'display: grid; \nplace-items: end; \nheight: 50px; \nbackground: lightblue;' }
+        initInnerCss={ 'background: lightyellow;' }
+      />
+
+      <Component
+        initOuterCss={ 'display: grid; \nplace-items: normal start; \nheight: 50px; \nbackground: lightblue;' }
+        initInnerCss={ 'background: lightyellow;' }
+      />
+
+      <Component
+        initOuterCss={ 'display: grid; \nplace-items: normal center; \nheight: 50px; \nbackground: lightblue;' }
+        initInnerCss={ 'background: lightyellow;' }
+      />
+
+      <Component
+        initOuterCss={ 'display: grid; \nplace-items: normal end; \nheight: 50px; \nbackground: lightblue;' }
+        initInnerCss={ 'background: lightyellow;' }
+      />
+
+      <Component
+        initOuterCss={ 'display: grid; \nplace-items: start normal; \nheight: 50px; \nbackground: lightblue;' }
+        initInnerCss={ 'background: lightyellow;' }
+      />
+
+      <Component
+        initOuterCss={ 'display: grid; \nplace-items: center normal; \nheight: 50px; \nbackground: lightblue;' }
+        initInnerCss={ 'background: lightyellow;' }
+      />
+
+      <Component
+        initOuterCss={ 'display: grid; \nplace-items: end normal; \nheight: 50px; \nbackground: lightblue;' }
+        initInnerCss={ 'background: lightyellow;' }
+      />
+
+      <Component
+        initOuterCss={ 'display: grid; \nplace-items: stretch legacy; \nheight: 50px; \nbackground: lightblue;' }
+        initInnerCss={ 'background: lightyellow;' }
+      />
+
       <H>Horizontal position with float</H>
 
       <Hs>Default</Hs>

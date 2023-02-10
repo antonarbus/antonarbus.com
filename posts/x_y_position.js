@@ -214,6 +214,21 @@ const postObj = {
       />
 
       <Component
+        initOuterCss={ 'display: grid; \nplace-items: start start; \nheight: 50px; \nbackground: lightblue;' }
+        initInnerCss={ 'background: lightyellow;' }
+      />
+
+      <Component
+        initOuterCss={ 'display: grid; \nplace-items: start center; \nheight: 50px; \nbackground: lightblue;' }
+        initInnerCss={ 'background: lightyellow;' }
+      />
+
+      <Component
+        initOuterCss={ 'display: grid; \nplace-items: start end; \nheight: 50px; \nbackground: lightblue;' }
+        initInnerCss={ 'background: lightyellow;' }
+      />
+
+      <Component
         initOuterCss={ 'display: grid; \nplace-items: normal start; \nheight: 50px; \nbackground: lightblue;' }
         initInnerCss={ 'background: lightyellow;' }
       />

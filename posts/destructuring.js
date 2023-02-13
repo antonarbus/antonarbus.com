@@ -114,6 +114,26 @@ const postObj = {
             title, width, height, item1, item2 // Menu 100 200 Cake Donut
       `}</Code>
 
+      <Hs>Destructure and rename</Hs>
+
+      <Code block jsx>{`
+      const bio = {
+        firstName: 'Bruce',
+        lastName: 'Lee',
+      }
+
+      const {firstName: first, lastName: last} = bio
+      console.log(first, last) // Bruce Lee
+      `}</Code>
+
+      <Hs>Destructure with default values</Hs>
+
+      <Code block jsx>{`
+      const settings = { speed: 100}
+      const { speed = 750, width = 500 } = settings
+      console.log(speed, width) // 100, 500
+      `}</Code>
+
       <Hs> Smart function parameters</Hs>
 
       <Code block jsx>{`

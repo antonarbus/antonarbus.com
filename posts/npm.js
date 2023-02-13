@@ -40,6 +40,23 @@ const postObj = {
         <li><Code bash>npx depcheck —oneline</Code> check for packages not used in the project</li>
         <li><Lnk path='https://www.npmjs.com/package/depcheck'>https://www.npmjs.com/package/depcheck</Lnk></li>
       </ul>
+
+      <H>npm-check-updates</H>
+
+      <ul>
+        <li><Code bash>npm install -g npm-check-updates</Code> install globally</li>
+        <li><Code bash>npx npm-check-updates</Code> get details of packages updates</li>
+        <li><Lnk path='https://www.npmjs.com/package/npm-check-updates'>https://www.npmjs.com/package/npm-check-updates</Lnk></li>
+      </ul>
+
+      <H>Check for circular references</H>
+
+      <ul>
+        <li><Lnk path='https://www.npmjs.com/package/dpdm'>https://www.npmjs.com/package/dpdm</Lnk></li>
+        <li><Code bash>npm i -g dpdm</Code>  install globally</li>
+        <li><Code bash>npx dpdm ./src/index.tsx</Code> check for circular reference</li>
+      </ul>
+
     </>
   )
 }

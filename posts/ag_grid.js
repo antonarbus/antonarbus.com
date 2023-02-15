@@ -2331,6 +2331,29 @@ const postObj = {
       }
       `}</Code>
       <Example19 />
+
+      <H>Limit number of characters in cell</H>
+
+      <Code block jsx>{`
+        const columnDefs = [
+          ...
+          {
+            field: 'value.name',
+            headerName: 'Name',
+            width: 250,
+            minWidth: 250,
+            wrapText: true,
+            autoHeight: true,
+            flex: 2,
+            cellStyle: { justifyContent: 'center', textAlign: 'center' }
+
+            // here we limit number of characters in editable cell
+            editable: true,
+            cellEditor: 'agTextCellEditor',
+            cellEditorParams: { maxLength: 10 },
+          },
+        ]
+      `}</Code>
     </>
   )
 }

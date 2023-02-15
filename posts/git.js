@@ -140,14 +140,6 @@ const postObj = {
         <li><Code bash>git commit --amend --no-edit</Code> add changes to the last commit with same commit details</li>
       </ul>
 
-      <H>Restore</H>
-
-      <ul>
-        <li><Code>git restore <i>read.me</i></Code> discard local changes in a file, i.e. restore to its last committed state</li>
-        <li><Code bash>git restore .</Code> discard local changes in all files</li>
-        <li><Code>git restore --staged <i>read.me</i></Code> undo the git stage (add) operation</li>
-      </ul>
-
       <H>Diff</H>
 
       <ul>
@@ -293,6 +285,30 @@ const postObj = {
 
       <LazyImg src='/imgs/git/rebase interactive flags.png'></LazyImg>
 
+      <H>Restore vs Reset</H>
+
+      <ul>
+        <li><Code bash>git restore .</Code> undo unstaged changes (no <Code>git add .</Code> done)</li>
+        <li><Code bash>git reset .</Code> unstage staged but not committed changes, then you need to <Code bash>git restore .</Code></li>
+        <li><Code bash>git reset HEAD~1</Code> unstage last commit and then <Code bash>git restore .</Code> to undo local changes</li>
+        <li><Code bash>git reset --hard HEAD~1</Code> unstage and last commit and undo changes (same as above)</li>
+      </ul>
+
+      <H>Restore</H>
+
+      <ul>
+        <li><Code>git restore <i>read.me</i></Code> discard local changes in a file, i.e. restore to its last committed state</li>
+        <li><Code bash>git restore .</Code> discard local changes in all files</li>
+        <li><Code>git restore --staged <i>read.me</i></Code> undo the git stage (add) operation</li>
+      </ul>
+
+      <H>Revert</H>
+
+      <ul>
+        <li><Code>git revert <i>hash</i></Code> undos changes in commit and puts the output as a new commit</li>
+        <p>Used if error is found in some commit.</p>
+      </ul>
+
       <H>Reset</H>
 
       <Hs>Mixed</Hs>
@@ -326,13 +342,6 @@ const postObj = {
         <li><Code bash>git clean -n -d</Code> show untracked files & folders to be removed</li>
         <li><Code bash>git clean -f</Code> remove untracked files</li>
         <li><Code bash>git clean -f -d</Code> remove untracked files & folders</li>
-      </ul>
-
-      <H>Revert</H>
-
-      <ul>
-        <li><Code>git revert <i>hash</i></Code> undos changes in commit and puts the output as a new commit</li>
-        <p>Used if error is found in some commit.</p>
       </ul>
 
       <H>Remote</H>

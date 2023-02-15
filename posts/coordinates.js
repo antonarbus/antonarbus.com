@@ -67,8 +67,6 @@ const postObj = {
         rect.y // 371.296875 // no support by IE
       `}</Code>
 
-      <H>Element's coordinates</H>
-
       <Code block jsx>{`
       function getCoords(el) {
         let box = el.getBoundingClientRect();
@@ -96,8 +94,6 @@ const postObj = {
       }
       `}</Code>
 
-      <p>Usage...</p>
-
       <Code block jsx>{`
       let elem = document.getElementById("innerDiv2")
       let message = createMessageUnder(elem, 'Hello, world!')
@@ -122,6 +118,41 @@ const postObj = {
       
       // element may be different depending on the current scroll position
       // For out-of-window coordinates the elementFromPoint returns null
+      `}</Code>
+
+      <H>Coordinates relative to element</H>
+
+      <ul>
+        <li>Ones I needed to get distance (coordinates) of cursor from top & bottom of container</li>
+        <li>At first we need to know the coordinates of our container relative to the screen with <Code>getBoundingClientRect()</Code> </li>
+        <li>And then we need to know the cursor coordinates relative to the screen with <Code>e.clientY</Code></li>
+        <li>And just calculate the distance</li>
+      </ul>
+
+      <Code block jsx>{`
+      function movePasteTextAfterCursor(e: MouseEvent) {
+        const item = (e.target as Element).closest('.item')
+        if (!item) return
+        const { height, top } = item.getBoundingClientRect()
+        const yWithinElement = e.clientY - top
+        const distToTop = yWithinElement
+        const distToBottom = height - yWithinElement
+        let pastePlace
+
+        if (distToTop / height < 0.1) {
+          pastePlace = { pastePos: 'top', itemId: item.id }
+        } else if (distToBottom / height < 0.1) {
+          pastePlace = { pastePos: 'bottom', itemId: item.id }
+        } else {
+          pastePlace = { pastePos: 'middle', itemId: item.id }
+        }
+
+        if (hash(prevPastePlace) === hash(pastePlace)) return
+
+        store.dispatch(addPasteText(pastePlace))
+        store.dispatch(savePastePlace(pastePlace))
+        prevPastePlace = structuredClone(pastePlace)
+      }
       `}</Code>
     </>
   )

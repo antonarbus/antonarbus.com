@@ -720,6 +720,19 @@ const postObj = {
         [] === [] // false
         (() => 0) === (() => 0) // false
       `}</Code>
+
+      <H>Conditionally add a property into an object</H>
+
+      <Code block jsx>{`
+      const didIPassExam = true
+      
+      const study = {
+        monday : 'writing',
+        tuesday : 'reading',
+        ...(didIPassExam && {wednesday : 'sleep happily'})
+      }
+      `}</Code>
+
     </>
   )
 }

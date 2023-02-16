@@ -3,12 +3,12 @@ import { Code, H, Hs, LazyImg, Lnk, React, useEffect, useState, useRef, useCallb
 const postObj = {
   title: 'table',
   date: '2023.02.16',
-  tags: ['html'],
+  tags: ['html', 'JavaScript'],
   imgUrl: 'https://antonarbus.com/imgs/html.png',
-  desc: 'xxx',
+  desc: 'table',
   body: (
     <>
-      <H>Fill whole cell</H>
+      <H>Fill cell area</H>
 
       <ul>
         <li>Needed table cells to be links </li>

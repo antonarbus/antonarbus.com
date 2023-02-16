@@ -11,12 +11,15 @@ const postObj = {
       <H>Fill whole cell</H>
 
       <ul>
-        <li>Needed to make a link inside table cell</li>
-        <li>Only link was clickable, but area around it within a sell was not clickable</li>
-        <li>That is how I fixed that</li>
+        <li>Needed table cells to be links </li>
+        <li>Only link content was clickable, but area around it not</li>
+        <li>That is how I expended the link area to fit the table cell</li>
       </ul>
 
+      <p>How it was...</p>
       <LazyImg path='/imgs/link_original.png' />
+
+      <p>I became...</p>
       <LazyImg path='/imgs/link_fixed.png'/>
 
       <Code block html>{`

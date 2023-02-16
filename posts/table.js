@@ -51,7 +51,7 @@ const postObj = {
             ....
       `}</Code>
 
-      <H>traversal with javascript</H>
+      <H>Traversal with javascript</H>
 
       <Code js>let tbl = document.querySelector('table')</Code>
       <ul>

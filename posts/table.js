@@ -19,7 +19,7 @@ const postObj = {
       <p>How it was...</p>
       <LazyImg path='/imgs/link_original.png' />
 
-      <p>I became...</p>
+      <p>Became...</p>
       <LazyImg path='/imgs/link_fixed.png'/>
 
       <Code block html>{`

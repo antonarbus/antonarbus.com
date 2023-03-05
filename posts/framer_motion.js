@@ -304,6 +304,76 @@ const Example15 = () => {
   )
 }
 
+const itemsStackVariants = {
+  hidden: {
+    y: -100,
+    opacity: 0,
+    transition: {
+      duration: 0.3
+    }
+  },
+  visible: (num) => ({
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.3,
+      delay: 0.05 * num
+    }
+  })
+}
+
+function Example16() {
+  const [items, setItems] = useState([5, 4, 3, 2, 1])
+
+  return (
+    <>
+      <button
+        onClick={() => {
+          setItems([items[0] + 1, ...items])
+        }}
+      >
+        add
+      </button>
+      <button
+        onClick={() => {
+          if (items.length < 2) return
+          setItems(items.slice(1))
+        }}
+      >
+        remove
+      </button>
+      <div>{JSON.stringify(items)}</div>
+
+      <div style={{ marginTop: 50 }}>
+        <AnimatePresence initial={true}>
+          {items.map((num) => (
+            <motion.div
+              key={num}
+              variants={itemsStackVariants}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              layoutId={num}
+              custom={num}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              style={{
+                padding: '10px 20px',
+                marginBottom: 2,
+                border: '1px solid firebrick',
+                whiteSpace: 'nowrap',
+                cursor: 'pointer'
+              }}
+            >
+              item {num}
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </div>
+    </>
+  )
+}
+
 const postObj = {
   title: 'framer motion',
   date: '2023.02.04',
@@ -318,6 +388,14 @@ const postObj = {
         <li><Lnk path='https://www.framer.com/motion/introduction/#quick-start'>https://www.framer.com/motion/introduction/#quick-start</Lnk></li>
         <li><Code bash>npm i framer-motion</Code> - install</li>
         <li><Code>{'import { motion } from "framer-motion"'}</Code> - import</li>
+      </ul>
+
+      <H>Some info</H>
+
+      <ul>
+        <li><Lnk path='https://egghead.io/lessons/react-create-micro-interactions-with-framer-motion-gesture-props'>https://egghead.io/lessons/react-create-micro-interactions-with-framer-motion-gesture-props</Lnk></li>
+        <li><Lnk path='https://www.youtube.com/playlist?list=PLNG2YBDrzK-yhlQtfsrzzQvaLDVj-pMXI'>https://www.youtube.com/playlist?list=PLNG2YBDrzK-yhlQtfsrzzQvaLDVj-pMXI</Lnk></li>
+        <li><Lnk path='https://www.youtube.com/playlist?list=PL4cUxeGkcC9iHDnQfTHEVVceOEBsOf07i'>https://www.youtube.com/playlist?list=PL4cUxeGkcC9iHDnQfTHEVVceOEBsOf07i</Lnk></li>
       </ul>
 
       <H>Simple animation</H>
@@ -811,6 +889,87 @@ const postObj = {
       `}</Code>
 
       <Example15 />
+
+      <H>Layout & Custom prop</H>
+
+      <ul>
+        <li>with <code>custom</code> prop we may send data to variants for dynamic animation</li>
+        <li>with <code>layoutId</code> prop we may animate movements of siblings when this element is added or removed</li>
+      </ul>
+
+      <Code block jsx>{`
+      const itemsStackVariants = {
+        hidden: {
+          y: -100,
+          opacity: 0,
+          transition: {
+            duration: 0.3
+          }
+        },
+        visible: (num) => ({
+          y: 0,
+          opacity: 1,
+          transition: {
+            duration: 0.3,
+            delay: 0.05 * num
+          }
+        })
+      }
+
+      function Example16() {
+        const [items, setItems] = useState([5, 4, 3, 2, 1])
+
+        return (
+          <>
+            <button
+              onClick={() => {
+                setItems([items[0] + 1, ...items])
+              }}
+            >
+              add
+            </button>
+            <button
+              onClick={() => {
+                if (items.length < 2) return
+                setItems(items.slice(1))
+              }}
+            >
+              remove
+            </button>
+            <div>{JSON.stringify(items)}</div>
+
+            <div style={{ marginTop: 50 }}>
+              <AnimatePresence initial={true}>
+                {items.map((num) => (
+                  <motion.div
+                    key={num}
+                    variants={itemsStackVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="hidden"
+                    layoutId={num}
+                    custom={num}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    style={{
+                      padding: '10px 20px',
+                      marginBottom: 2,
+                      border: '1px solid firebrick',
+                      whiteSpace: 'nowrap',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    item {num}
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
+          </>
+        )
+      }
+      `}</Code>
+
+      <Example16 />
 
     </>
   )

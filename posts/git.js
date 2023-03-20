@@ -1,4 +1,4 @@
-import { Code, H, Hs, LazyImg, jsxToStr } from '/components/post/reExport'
+import { Code, H, Hs, LazyImg, jsxToStr, Lnk } from '/components/post/reExport'
 
 const postObj = {
   title: 'git',
@@ -147,6 +147,20 @@ const postObj = {
         <li><Code>git diff <i>read.me</i></Code> changes in file from the last commit</li>
         <li><Code>git diff --staged</Code> changes in staged files (added) (regardless commits)</li>
       </ul>
+
+      <H>Patch diff</H>
+
+      <ul>
+        <li>situation - you need to make a branch from the difference between 2 branches</li>
+        <li>for some reason you can not simply merge/rebase, due to some crap about in commit history, it happened to me</li>
+        <li><Lnk path='https://stackoverflow.com/questions/16675766/get-the-difference-between-two-branches-in-git'>https://stackoverflow.com/questions/16675766/get-the-difference-between-two-branches-in-git</Lnk></li>
+        <li>from the branch <Code>{'git diff origin/master > patchfile'}</Code> save differences to file</li>
+        <li><Code>git checkout -b new_branch</Code> go to new branch</li>
+        <li><Code>git apply patchfile</Code> paste data from the file</li>
+        <li>do not include <i>patchfile</i> into commit</li>
+      </ul>
+
+      <p>probably this will not add patch file in git <Code>{'git diff master Branch1 > ../patchfile'}</Code></p>
 
       <H>Rename</H>
 

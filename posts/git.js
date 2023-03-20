@@ -151,8 +151,8 @@ const postObj = {
       <H>Patch diff</H>
 
       <ul>
-        <li>situation - you need to make a branch from the difference between 2 branches</li>
-        <li>for some reason you can not simply merge/rebase, due to some crap about in commit history, it happened to me</li>
+        <li>situation - you need to make a new branch from the differences between 2 branches</li>
+        <li>for some reason you can not simply merge/rebase, due to for ex. problems in commit history, it happened to me</li>
         <li><Lnk path='https://stackoverflow.com/questions/16675766/get-the-difference-between-two-branches-in-git'>https://stackoverflow.com/questions/16675766/get-the-difference-between-two-branches-in-git</Lnk></li>
         <li>from the branch <Code>{'git diff origin/master > patchfile'}</Code> save differences to file</li>
         <li><Code>git checkout -b new_branch</Code> go to new branch</li>

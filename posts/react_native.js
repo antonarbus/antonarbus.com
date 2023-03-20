@@ -18,8 +18,8 @@ const postObj = {
         <li><Code>{'\\curl -sSL https://get.rvm.io | bash -s stable'}</Code> install ruby version manager</li>
         <li>reboot terminal</li>
         <li><Code>rvm install 2.7.5</Code> install specific ruby version, same as <Lnk path='https://github.com/facebook/react-native/blob/main/template/_ruby-version'>here</Lnk></li>
-        <li><Lnk path='https://apps.apple.com/us/app/xcode/id497799835?mt=12'>xcode</Lnk> to be installed</li>
-        <li>Choose latest version in Xcode - File - Settings - Location - Command line tools</li>
+        <li><Lnk path='https://apps.apple.com/us/app/xcode/id497799835?mt=12'>XCode</Lnk> to be installed</li>
+        <li>Choose latest version in <code>Xcode</code> - <code>File</code> - <code>Settings</code> - <code>Location</code> - <code>Command line tools</code></li>
         <li>Instal an iOS Simulator in Xcode</li>
         <li><Code>npm uninstall -g react-native-cli @react-native-community/cli</Code> uninstall perv versions</li>
         <li><Code>npx react-native init appName</Code></li>
@@ -42,6 +42,43 @@ const postObj = {
         <li><Code>npx react-native start --port=8088</Code> configure port</li>
         <li>Also change port in file <code>ios/__App_Name__.xcodeproj/project.pbxproj</code></li>
       </ul>
+
+      <H>Expo</H>
+
+      <ul>
+        <li>Despite on common environment setup above provided by react native team we can use <Lnk path='https://expo.dev/'>Expo CLI</Lnk></li>
+        <li>It is easier</li>
+        <li><Lnk path='https://reactnative.dev/docs/environment-setup?guide=quickstart'>https://reactnative.dev/docs/environment-setup?guide=quickstart</Lnk></li>
+        <li><Code bash>npx create-expo-app react_native_heeros_learning_week</Code> create project with Expo cli </li>
+        <li><Code>cd react_native_heeros_learning_week</Code></li>
+        <li><Code>npx expo start</Code></li>
+      </ul>
+
+      <Hs>With phone</Hs>
+
+      <ul>
+        <li>Install for your phone<Lnk path='https://apps.apple.com/us/app/expo-go/id982107779'>https://apps.apple.com/us/app/expo-go/id982107779</Lnk></li>
+        <li>With phone just redirect from the terminal to the link by barcode photo app to open the app directly on the phone</li>
+      </ul>
+
+      <Hs>With Android simulator</Hs>
+
+      <ul>
+        <li>Install <Lnk path='https://developer.android.com/studio'>https://developer.android.com/studio</Lnk></li>
+        <li>There you can create an emulator under <code>projects</code> --> <code>more actions</code> --> <code>virtual device manager</code> </li>
+        <li>From the terminal just press <kbd>A</kbd> to open the app in android simulator</li>
+      </ul>
+
+      <Hs>With iOS simulator</Hs>
+
+      <ul>
+        <li>Install <Lnk path='https://apps.apple.com/us/app/xcode/id497799835?mt=12'>Xcode</Lnk></li>
+        <li>Choose latest version in <code>Xcode</code> - <code>File</code> - <code>Settings</code> - <code>Location</code> - <code>Command line tools</code></li>
+        <li>Instal an iOS Simulator in Xcode</li>
+        <li>From the terminal just press <kbd>I</kbd> to open the app in iOS simulator</li>
+      </ul>
+
+
       <H>Docs</H>
 
       <p><Lnk path='https://reactnative.dev/docs/getting-started'>React Native docs</Lnk></p>
@@ -118,8 +155,12 @@ const postObj = {
         <li><Code>{'<View>'}</Code> a container that supports layout with flexbox, style, some touch handling</li>
         <li><Code>{'<Text>'}</Code> displays, styles, and nests strings of text and even handles touch events</li>
         <li><Code>{'<Image>'}</Code> displays different types of images</li>
+        <li><Code>{'<Button>'}</Code> button</li>
         <li><Code>{'<ScrollView>'}</Code> scrolling container that can contain multiple components and views</li>
         <li><Code>{'<TextInput>'}</Code> allows to enter text</li>
+        <li><Code>{'<FlatList>'}</Code> for long list data</li>
+        <li><Code>{'<Pressable>'}</Code> allows to press on item</li>
+        <li><Code>{'<Modal>'}</Code> modal container with built-in animation</li>
       </ul>
 
       <Code block jsx>{`
@@ -145,6 +186,13 @@ const postObj = {
 
       export default App
       `}</Code>
+
+      <H>View</H>
+
+      <ul>
+        <li>Should have other components inside, can not have just a pure text</li>
+        <li>It is kind of div element where we can group other things</li>
+      </ul>
 
       <H>TextInput</H>
 
@@ -175,6 +223,100 @@ const postObj = {
       }
 
       export default PizzaTranslator
+      `}</Code>
+
+      <H>Image</H>
+
+      <ul>
+        <li>image to be put into <code>assets/images</code></li>
+        <li>path to an image should be done with <code>require</code> function</li>
+      </ul>
+
+      <Code block jsx>{`
+      import { useState } from 'react';
+      import { View, TextInput, Button, StyleSheet, Modal, Image, } from 'react-native';
+
+      function GoalInput(props) {
+        const [enteredGoalText, setEnteredGoalText] = useState('');
+
+        function goalInputHandler(enteredText) {
+          setEnteredGoalText(enteredText);
+        }
+
+        function addGoalHandler() {
+          props.onAddGoal(enteredGoalText);
+          setEnteredGoalText('');
+        }
+
+        return (
+          <Modal visible={props.visible} animationType="slide">
+            <View style={styles.inputContainer}>
+              <Image
+                style={styles.image}
+                source={require('../assets/images/goal.png')}
+              />
+              <TextInput
+                style={styles.textInput}
+                placeholder="Your course goal!"
+                onChangeText={goalInputHandler}
+                value={enteredGoalText}
+              />
+              <View style={styles.buttonContainer}>
+                <View style={styles.button}>
+                  <Button title="Cancel" onPress={props.onCancel} color="#f31282" />
+                </View>
+                <View style={styles.button}>
+                  <Button title="Add Goal" onPress={addGoalHandler} color="#b180f0" />
+                </View>
+              </View>
+            </View>
+          </Modal>
+        );
+      }
+
+      export default GoalInput;
+
+      const styles = StyleSheet.create({
+        inputContainer: {
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: 16,
+          backgroundColor: '#311b6b',
+        },
+        image: {
+          width: 100,
+          height: 100,
+          margin: 20,
+        },
+        textInput: {
+          borderWidth: 1,
+          borderColor: '#e4d0ff',
+          backgroundColor: '#e4d0ff',
+          color: '#120438',
+          borderRadius: 6,
+          width: '100%',
+          padding: 16,
+        },
+        buttonContainer: {
+          marginTop: 16,
+          flexDirection: 'row',
+        },
+        button: {
+          width: 100,
+          marginHorizontal: 8,
+        },
+      });
+      `}</Code>
+
+      <H>Button</H>
+
+      <ul>
+        <li><Code>onPress</Code> same as on onClick in dom</li>
+      </ul>
+
+      <Code block jsx>{`
+      <Button onPress={() => setCount(count + 1)} title="Click me!" />
       `}</Code>
 
       <H>ScrollView</H>
@@ -268,6 +410,73 @@ const postObj = {
       export default SectionListBasics
       `}</Code>
 
+      <H>Pressable</H>
+
+      <ul>
+        <li>Button component is not much customizable</li>
+        <li>Better to make a pressable component with text inside</li>
+      </ul>
+
+      <Code block jsx>{`
+      <Pressable onPress={props.onDeleteItem.bind(this, props.id)}>
+        <View style={styles.goalItem}>
+          <Text style={styles.goalText}>{props.text}</Text>
+        </View>
+      </Pressable>
+      `}</Code>
+
+      <H>Pressable with ripple effect</H>
+
+      <ul>
+        <li>for android there is just a prop</li>
+        <li>for iOS we do it manually providing a callback to the <code>style</code> prop</li>
+      </ul>
+
+      <Code block jsx>{`
+      import { StyleSheet, View, Text, Pressable } from 'react-native';
+
+      function GoalItem(props) {
+        return (
+          <View style={styles.goalItem}>
+            <Pressable
+              android_ripple={{ color: '#210644' }}
+              onPress={props.onDeleteItem.bind(this, props.id)}
+              style={({ pressed }) => pressed && styles.pressedItem}
+            >
+              <Text style={styles.goalText}>{props.text}</Text>
+            </Pressable>
+          </View>
+        );
+      }
+
+      export default GoalItem;
+
+      const styles = StyleSheet.create({
+        goalItem: {
+          margin: 8,
+          borderRadius: 6,
+          backgroundColor: '#5e0acc',
+        },
+        pressedItem: {
+          opacity: 0.5,
+        },
+        goalText: {
+          color: 'white',
+          padding: 8,
+        },
+      });
+      `}</Code>
+
+      <H>Modal</H>
+
+      <Code block jsx>{`
+      <Modal visible={props.visible} animationType="slide">
+        <View style={styles.inputContainer}>
+          ...
+        </View>
+      </Modal>
+      `}</Code>
+
       <H>Platform specific code</H>
 
       <p><Lnk path='https://reactnative.dev/docs/platform-specific-code'>https://reactnative.dev/docs/platform-specific-code</Lnk></p>
@@ -355,9 +564,18 @@ const postObj = {
 
       <H>Style</H>
 
+      <ul>
+        <li>There is no CSS in React Native</li>
+        <li>Styling does not cascade</li>
+      </ul>
+
       <Hs>style prop</Hs>
 
-      <p>That is inline styles.</p>
+      <ul>
+        <li>That is inline styles</li>
+        <li>Not all elements supports it</li>
+      </ul>
+
 
       <Code block jsx>{`
       // App.js
@@ -398,6 +616,73 @@ const postObj = {
       })
 
       export default LotsOfStyles
+      `}</Code>
+
+      <H>App background</H>
+
+      <ul>
+        <li>we may manually put background color for all main views</li>
+        <li>but that is annoying</li>
+        <li>with <i>expo</i> just may add <code>backgroundColor</code> into the <code>app.json</code> file and it will be applied to all components except modals</li>
+      </ul>
+
+      <Code block json>{`
+      {
+        "expo": {
+          "name": "RNCourse",
+          "slug": "RNCourse",
+          "version": "1.0.0",
+          "orientation": "portrait",
+          "icon": "./assets/icon.png",
+          "backgroundColor": "#1e085a",
+          "splash": {
+            "image": "./assets/splash.png",
+            "resizeMode": "contain",
+            "backgroundColor": "#ffffff"
+          },
+          "updates": {
+            "fallbackToCacheTimeout": 0
+          },
+          "assetBundlePatterns": [
+            "**/*"
+          ],
+          "ios": {
+            "supportsTablet": true
+          },
+          "android": {
+            "adaptiveIcon": {
+              "foregroundImage": "./assets/adaptive-icon.png",
+              "backgroundColor": "#FFFFFF"
+            }
+          },
+          "web": {
+            "favicon": "./assets/favicon.png"
+          }
+        }
+      }
+      `}</Code>
+
+      <H>Status bar</H>
+
+      <ul>
+        <li>we can change the color of statusbar elements with a special <i>expo</i> component {'<StatusBar />'}</li>
+      </ul>
+
+      <Code block jsx>{`
+      import { StyleSheet, View, FlatList, Button } from 'react-native';
+      import { StatusBar } from 'expo-status-bar';
+
+      export default function App() {
+
+        return (
+          <>
+            <StatusBar style="light" />
+            <View style={styles.appContainer}>
+              ...
+            </View>
+          </>
+        );
+      }
       `}</Code>
     </>
   )

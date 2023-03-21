@@ -154,11 +154,11 @@ const postObj = {
       <ul>
         <li><Code>{'<View>'}</Code> a container that supports layout with flexbox, style, some touch handling</li>
         <li><Code>{'<Text>'}</Code> displays, styles, and nests strings of text and even handles touch events</li>
+        <li><Code>{'<TextInput>'}</Code> allows to enter text</li>
         <li><Code>{'<Image>'}</Code> displays different types of images</li>
         <li><Code>{'<ImageBackground>'}</Code> same as image, but renders in the background instead of foreground</li>
         <li><Code>{'<Button>'}</Code> button</li>
         <li><Code>{'<ScrollView>'}</Code> scrolling container that can contain multiple components and views</li>
-        <li><Code>{'<TextInput>'}</Code> allows to enter text</li>
         <li><Code>{'<FlatList>'}</Code> for long list data</li>
         <li><Code>{'<Pressable>'}</Code> allows to press on item</li>
         <li><Code>{'<Modal>'}</Code> modal container with built-in animation</li>
@@ -466,6 +466,12 @@ const postObj = {
 
       export default FlatListBasics
       `}</Code>
+
+      <ul>
+        <li>In react we usually provide a <code>key</code> prop in map function</li>
+        <li>In FlatList key should be integrated into the <code>data</code> items</li>
+        <li>Or special <Code>keyExtractor</Code> prop should be used with callback returning something unique, see ex. below</li>
+      </ul>
 
       <Code block jsx>{`
       import React from 'react'

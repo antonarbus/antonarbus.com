@@ -1095,7 +1095,83 @@ const postObj = {
         },
       });
       `}</Code>
-    
+
+      <H>Responsive dimensions</H>
+
+      <ul>
+        <li>Instead of using <code>width</code> with numbers</li>
+        <li>Use <code>minWidth</code>, <code>maxWidth</code> and <code>width</code> with percents like <code>{"'80%"}</code></li>
+        <li>We can set values dynamically based on device screen dimensions with <code>Dimensions</code> api</li>
+      </ul>
+
+      <Code block jsx>{`
+      import { View, StyleSheet, Dimensions } from 'react-native';
+
+      function Card({ children }) {
+        return <View style={styles.card}>{children}</View>;
+      }
+
+      export default Card;
+
+      const deviceWidth = Dimensions.get('window').width;
+
+      const styles = StyleSheet.create({
+        card: {
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginTop: deviceWidth < 380 ? 18 : 36,
+          marginHorizontal: 24,
+          padding: 16,
+        },
+      });
+      `}</Code>
+
+      <H>Rotation</H>
+
+      <ul>
+        <li>to lock the vertical rotation add <code>"orientation": "portrait"</code> prop into <code>app.json</code> file</li>
+        <li><code>"orientation": "landscape"</code> for horizontal view</li>
+        <li><code>"orientation": "default"</code> to make it rotatable</li>
+        <li>but design might be broken if we flip the device and we need to fix it manually</li>
+        <li>we may use <Code>Dimensions.get('window').height</Code> but as I understood it will not response to the rotation</li>
+        <li>for that reason there is a <Code>useWindowDimensions()</Code> hook</li>
+      </ul>
+
+      <H>useWindowDimensions</H>
+
+      <ul>
+        <li><Code>useWindowDimensions()</Code> hook does respond to the phone rotations</li>  
+      </ul>
+
+      <Code block jsx>{`
+      import { useWindowDimensions } from 'react-native';
+
+      function StartGameScreen({ onPickNumber }) {
+        const [enteredNumber, setEnteredNumber] = useState('');
+
+        const { width, height } = useWindowDimensions();
+        const marginTopDistance = height < 380 ? 30 : 100;
+
+        return (
+          <ScrollView style={styles.screen}>
+            <KeyboardAvoidingView style={styles.screen} behavior="position">
+              <View style={[styles.rootContainer, { marginTop: marginTopDistance }]}>
+                ...
+              </View>
+            </KeyboardAvoidingView>
+          </ScrollView>
+        );
+      }
+
+      export default StartGameScreen;
+      `}</Code>
+
+      <H>KeyboardAvoidingView</H>
+
+      <ul>
+        <li></li>
+      </ul>
+  
     </>
   )
 }

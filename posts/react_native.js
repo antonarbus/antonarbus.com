@@ -162,6 +162,7 @@ const postObj = {
         <li><Code>{'<FlatList>'}</Code> for long list data</li>
         <li><Code>{'<Pressable>'}</Code> allows to press on item</li>
         <li><Code>{'<Modal>'}</Code> modal container with built-in animation</li>
+        <li><Code>{'<SafeAreaView>'}</Code> provides usable phone area which does not include notch</li>
       </ul>
 
       <Code block jsx>{`
@@ -215,6 +216,7 @@ const postObj = {
               placeholder="Type here"
               onChangeText={newText => setText(newText)}
               defaultValue={text}
+              value={text}
             />
             <Text style={{padding: 10}}>
               Number of chars: {text.length}
@@ -229,18 +231,22 @@ const postObj = {
       <H>TextInput with numbers keyboard</H>
 
       <Code block jsx>{`
-      <InstructionText>
-          Enter a Number
-        </InstructionText>
-        <TextInput
-          style={styles.numberInput}
-          maxLength={2}
-          keyboardType="number-pad"
-          autoCapitalize="none"
-          autoCorrect={false}
-          onChangeText={numberInputHandler}
-          value={enteredNumber}
+        const [enteredNumber, setEnteredNumber] = useState('');
+        function numberInputHandler(val) {
+          setEnteredNumber(val)
+        }
+
+        return (
+          <TextInput
+            style={styles.numberInput}
+            maxLength={2}
+            keyboardType="number-pad"
+            autoCapitalize="none"
+            autoCorrect={false}
+            value={enteredNumber}
+            onChangeText={numberInputHandler}
         />
+        )
       `}</Code>
 
       <H>Image</H>
@@ -251,42 +257,15 @@ const postObj = {
       </ul>
 
       <Code block jsx>{`
-      import { useState } from 'react';
       import { View, TextInput, Button, StyleSheet, Modal, Image, } from 'react-native';
-
-      function GoalInput(props) {
-        const [enteredGoalText, setEnteredGoalText] = useState('');
-
-        function goalInputHandler(enteredText) {
-          setEnteredGoalText(enteredText);
-        }
-
-        function addGoalHandler() {
-          props.onAddGoal(enteredGoalText);
-          setEnteredGoalText('');
-        }
-
+      ...
         return (
           <Modal visible={props.visible} animationType="slide">
             <View style={styles.inputContainer}>
               <Image
                 style={styles.image}
                 source={require('../assets/images/goal.png')}
-              />
-              <TextInput
-                style={styles.textInput}
-                placeholder="Your course goal!"
-                onChangeText={goalInputHandler}
-                value={enteredGoalText}
-              />
-              <View style={styles.buttonContainer}>
-                <View style={styles.button}>
-                  <Button title="Cancel" onPress={props.onCancel} color="#f31282" />
-                </View>
-                <View style={styles.button}>
-                  <Button title="Add Goal" onPress={addGoalHandler} color="#b180f0" />
-                </View>
-              </View>
+              />              
             </View>
           </Modal>
         );
@@ -306,24 +285,7 @@ const postObj = {
           width: 100,
           height: 100,
           margin: 20,
-        },
-        textInput: {
-          borderWidth: 1,
-          borderColor: '#e4d0ff',
-          backgroundColor: '#e4d0ff',
-          color: '#120438',
-          borderRadius: 6,
-          width: '100%',
-          padding: 16,
-        },
-        buttonContainer: {
-          marginTop: 16,
-          flexDirection: 'row',
-        },
-        button: {
-          width: 100,
-          marginHorizontal: 8,
-        },
+        }
       });
       `}</Code>
 
@@ -582,6 +544,46 @@ const postObj = {
           ...
         </View>
       </Modal>
+      `}</Code>
+
+      <H>SafeAreaView</H>
+
+      <ul>
+        <li><Code>{'<SafeAreaView>'}</Code> provides usable phone area which does not include notch</li>
+        <li>Should wrap the app content</li>
+      </ul>
+
+      <Code block jsx>{`
+      import { StyleSheet, ImageBackground, SafeAreaView } from 'react-native';
+      import { LinearGradient } from 'expo-linear-gradient';
+  
+      export default function App() {
+        return (
+          <LinearGradient
+            colors={[Colors.primary700, Colors.accent500]}
+            style={styles.rootScreen}
+          >
+            <ImageBackground
+              source={require('./assets/images/background.png')}
+              resizeMode="cover"
+              style={styles.rootScreen}
+              imageStyle={styles.backgroundImage}
+            >
+              <SafeAreaView style={styles.rootScreen}>{screen}</SafeAreaView>
+            </ImageBackground>
+          </LinearGradient>
+        );
+      }
+
+      const styles = StyleSheet.create({
+        rootScreen: {
+          flex: 1,
+        },
+        backgroundImage: {
+          opacity: 0.15,
+        },
+      });
+
       `}</Code>
 
       <H>Platform specific code</H>
@@ -916,7 +918,59 @@ const postObj = {
         <li>may require to reload the app with <kbd>r</kbd> key</li>
       </ul>
 
-     
+      <H>Alert, prompt</H>
+
+      <ul>
+        <li>alert and prompt can be invoked from the special object provided by react-native <code>Alert</code></li>
+      </ul>
+
+      <Code block jsx>{`
+      import { TextInput, View, StyleSheet, Alert } from 'react-native';
+      ...
+      if (isNaN(chosenNumber) || chosenNumber <= 0 || chosenNumber > 99) {
+        Alert.alert(
+          'Invalid number!',
+          'Number has to be a number between 1 and 99.',
+          [{ text: 'Okay', style: 'destructive', onPress: resetInputHandler }]
+        );
+        return;
+      }
+      `}</Code>
+
+      <H>Icons</H>
+
+      <ul>
+        <li>Expo comes with <Lnk path='https://docs.expo.dev/guides/icons/'>icons set</Lnk></li>
+        <li>No need to install, just import it</li>
+        <li>may find a proper icon here <Lnk path='https://icons.expo.fyi/'>https://icons.expo.fyi/</Lnk></li>
+      </ul>
+
+      <Code block jsx>{`
+      import { View, StyleSheet, Alert, Text, FlatList } from 'react-native';
+      import { Ionicons } from '@expo/vector-icons';
+
+      function GameScreen() {
+
+        return (
+          <View style={styles.buttonContainer}>
+            <PrimaryButton onPress={nextGuessHandler.bind(this, 'greater')}>
+              <Ionicons name="md-add" size={24} color="white" />
+            </PrimaryButton>
+          </View>
+              
+        );
+      }
+
+      export default GameScreen;
+
+      const styles = StyleSheet.create({
+        buttonContainer: {
+          flex: 1,
+        },
+      });
+
+      `}</Code>
+    
     </>
   )
 }

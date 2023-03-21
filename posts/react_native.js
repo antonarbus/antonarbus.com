@@ -196,6 +196,34 @@ const postObj = {
         <li>It is kind of div element where we can group other things</li>
       </ul>
 
+      <H>Text</H>
+
+      <ul>
+        <li>Text component can contain another Text</li>
+        <li>But not View for ex.</li>
+      </ul>
+
+      <Code block jsx>{`
+      <Text style={styles.summaryText}>
+        Your phone needed <Text style={styles.highlight}>{roundsNumber}</Text>{' '}
+        rounds to guess the number{' '}
+        <Text style={styles.highlight}>{userNumber}</Text>.
+      </Text>
+      ...
+      const styles = StyleSheet.create({
+        summaryText: {
+          fontFamily: 'open-sans',
+          fontSize: 24,
+          textAlign: 'center',
+          marginBottom: 24,
+        },
+        highlight: {
+          fontFamily: 'open-sans-bold',
+          color: Colors.primary500,
+        },
+      });
+      `}</Code>
+
       <H>TextInput</H>
 
       <ul>
@@ -942,7 +970,7 @@ const postObj = {
       <ul>
         <li>Expo comes with <Lnk path='https://docs.expo.dev/guides/icons/'>icons set</Lnk></li>
         <li>No need to install, just import it</li>
-        <li>may find a proper icon here <Lnk path='https://icons.expo.fyi/'>https://icons.expo.fyi/</Lnk></li>
+        <li>for ex. may find a proper icon here <Lnk path='https://icons.expo.fyi/'>https://icons.expo.fyi/</Lnk></li>
       </ul>
 
       <Code block jsx>{`
@@ -969,6 +997,97 @@ const postObj = {
         },
       });
 
+      `}</Code>
+
+      <H>Fonts</H>
+
+      <ul>
+        <li>custom fonts can be installed from Expo <Code bash>npm i expo-font</Code></li>
+        <li>to utilize a font we need to bring a hook <Code bash>{"import { useFonts } from 'expo-font'"}</Code></li>
+        <li>google fonts usage guide can be found <Lnk path='https://docs.expo.dev/guides/using-custom-fonts/#using-a-google-font'>here</Lnk></li>
+        <li>also may add any font manually</li>
+        <li>put font <code>.ttf</code> file into for ex. <code>assets/fonts/OpenSans-Regular.ttf</code></li>
+        <li>then include it via hook as</li>
+        <Code block jsx>{`
+          useFonts({
+            'open-sans': include('./assets/fonts/OpenSans-Regular.ttf')
+            'open-sans-bold': include('./assets/fonts/OpenSans-Regular-Bold.ttf')
+          })
+        `}</Code>
+        <li>fonts need some time to be loaded and we need to show some loading screen meanwhile</li>
+        <li>add another package for that <Code bash>expo install expo-app-loading </Code></li>
+        <li>check how to use a loading package in snippet below</li>
+        <li>to use a font put its name property as a value for <code>fontFamily</code> prop of a style</li>
+      </ul>
+
+      <Code block jsx>{`
+      // App.js
+      import { StyleSheet, ImageBackground, SafeAreaView } from 'react-native';
+      import { LinearGradient } from 'expo-linear-gradient';
+      import { useFonts } from 'expo-font';
+      import AppLoading from 'expo-app-loading';
+
+      export default function App() {
+        const [fontsLoaded] = useFonts({
+          'open-sans': require('./assets/fonts/OpenSans-Regular.ttf'),
+          'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf'),
+        });
+
+        if (!fontsLoaded) {
+          return <AppLoading />;
+        }
+
+        return (
+          <LinearGradient
+            colors={[Colors.primary700, Colors.accent500]}
+            style={styles.rootScreen}
+          >
+            <ImageBackground
+              source={require('./assets/images/background.png')}
+              resizeMode="cover"
+              style={styles.rootScreen}
+              imageStyle={styles.backgroundImage}
+            >
+              <SafeAreaView style={styles.rootScreen}>{screen}</SafeAreaView>
+            </ImageBackground>
+          </LinearGradient>
+        );
+      }
+
+      const styles = StyleSheet.create({
+        rootScreen: {
+          flex: 1,
+        },
+        backgroundImage: {
+          opacity: 0.15,
+        },
+      });
+      `}</Code>
+
+      <Code block jsx>{`
+      // NumberContainer.js
+      import { View, Text, StyleSheet } from 'react-native';
+            
+      function NumberContainer({ children }) {
+        return (
+          <View style={styles.container}>
+            <Text style={styles.numberText}>{children}</Text>
+          </View>
+        );
+      }
+
+      export default NumberContainer;
+
+      const styles = StyleSheet.create({
+        container: {
+          ...
+        },
+        numberText: {
+          color: Colors.accent500,
+          fontSize: 36,
+          fontFamily: 'open-sans-bold'
+        },
+      });
       `}</Code>
     
     </>

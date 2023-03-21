@@ -155,6 +155,7 @@ const postObj = {
         <li><Code>{'<View>'}</Code> a container that supports layout with flexbox, style, some touch handling</li>
         <li><Code>{'<Text>'}</Code> displays, styles, and nests strings of text and even handles touch events</li>
         <li><Code>{'<Image>'}</Code> displays different types of images</li>
+        <li><Code>{'<ImageBackground>'}</Code> same as image, but renders in the background instead of foreground</li>
         <li><Code>{'<Button>'}</Code> button</li>
         <li><Code>{'<ScrollView>'}</Code> scrolling container that can contain multiple components and views</li>
         <li><Code>{'<TextInput>'}</Code> allows to enter text</li>
@@ -223,6 +224,23 @@ const postObj = {
       }
 
       export default PizzaTranslator
+      `}</Code>
+
+      <H>TextInput with numbers keyboard</H>
+
+      <Code block jsx>{`
+      <InstructionText>
+          Enter a Number
+        </InstructionText>
+        <TextInput
+          style={styles.numberInput}
+          maxLength={2}
+          keyboardType="number-pad"
+          autoCapitalize="none"
+          autoCorrect={false}
+          onChangeText={numberInputHandler}
+          value={enteredNumber}
+        />
       `}</Code>
 
       <H>Image</H>
@@ -309,6 +327,41 @@ const postObj = {
       });
       `}</Code>
 
+      <H>ImageBackground</H>
+
+      <Code block jsx>{`
+      import { StyleSheet, ImageBackground, SafeAreaView } from 'react-native';
+      import { LinearGradient } from 'expo-linear-gradient';
+
+      export default function App() {
+
+        return (
+          <LinearGradient
+            colors={[Colors.primary700, Colors.accent500]}
+            style={styles.rootScreen}
+          >
+            <ImageBackground
+              source={require('./assets/images/background.png')}
+              resizeMode="cover"
+              style={styles.rootScreen}
+              imageStyle={styles.backgroundImage}
+            >
+              <SafeAreaView style={styles.rootScreen}>{screen}</SafeAreaView>
+            </ImageBackground>
+          </LinearGradient>
+        );
+      }
+
+      const styles = StyleSheet.create({
+        rootScreen: {
+          flex: 1,
+        },
+        backgroundImage: {
+          opacity: 0.15,
+        },
+      });
+      `}</Code>
+
       <H>Button</H>
 
       <ul>
@@ -317,6 +370,60 @@ const postObj = {
 
       <Code block jsx>{`
       <Button onPress={() => setCount(count + 1)} title="Click me!" />
+      `}</Code>
+
+      <H>Custom button</H>
+
+      <ul>
+        <li>for ripple effect for android we provide <Code>android_ripple</Code> prop</li>
+        <li>for iOS we apply <code>pressed</code> styles in callback function at <code>style</code> prop</li>
+        <li>note that styles are combined in array when button is pressed</li>
+      </ul>
+
+      <Code block jsx>{`
+      import { View, Text, Pressable, StyleSheet } from 'react-native';
+      import Colors from '../../constants/colors';
+
+      function PrimaryButton({ children, onPress }) {
+        return (
+          <View style={styles.buttonOuterContainer}>
+            <Pressable
+              style={({ pressed }) =>
+                pressed
+                  ? [styles.buttonInnerContainer, styles.pressed]
+                  : styles.buttonInnerContainer
+              }
+              onPress={onPress}
+              android_ripple={{ color: Colors.primary600 }}
+            >
+              <Text style={styles.buttonText}>{children}</Text>
+            </Pressable>
+          </View>
+        );
+      }
+
+      export default PrimaryButton;
+
+      const styles = StyleSheet.create({
+        buttonOuterContainer: {
+          borderRadius: 28,
+          margin: 4,
+          overflow: 'hidden',
+        },
+        buttonInnerContainer: {
+          backgroundColor: Colors.primary500,
+          paddingVertical: 8,
+          paddingHorizontal: 16,
+          elevation: 2,
+        },
+        buttonText: {
+          color: 'white',
+          textAlign: 'center',
+        },
+        pressed: {
+          opacity: 0.75,
+        },
+      });
       `}</Code>
 
       <H>ScrollView</H>
@@ -621,10 +728,30 @@ const postObj = {
       <H>App background</H>
 
       <ul>
-        <li>we may manually put background color for all main views</li>
+        <li>we may manually put background color for main views</li>
         <li>but that is annoying</li>
         <li>with <i>expo</i> just may add <code>backgroundColor</code> into the <code>app.json</code> file and it will be applied to all components except modals</li>
       </ul>
+
+      <Code block jsx>{`
+      export default function App() {
+
+        return (
+          <>
+            <View style={styles.appContainer}>
+              ...
+            </View>
+          </>
+        );
+      }
+
+      const styles = StyleSheet.create({
+        appContainer: { 
+          flex: 1,
+          backgroundColor: '#ddb52f' 
+        },
+      })
+      `}</Code>
 
       <Code block json>{`
       {
@@ -662,10 +789,40 @@ const postObj = {
       }
       `}</Code>
 
+      <H>Linear gradient image</H>
+
+      <ul>
+        <li>expo provides the package for <Lnk path='https://docs.expo.dev/versions/latest/sdk/linear-gradient/'>linear gradient colors</Lnk></li>
+        <li>install it with <Code bash>expo install expo-linear-gradient</Code></li>
+      </ul>
+
+      <Code block jsx>{`
+      import { StyleSheet, ImageBackground, SafeAreaView } from 'react-native';
+      import { LinearGradient } from 'expo-linear-gradient';
+
+      export default function App() {
+        return (
+          <LinearGradient
+            colors={['#4e0329', '#ddb52f']}
+            style={styles.rootScreen}
+          >
+            ...
+          </LinearGradient>
+        );
+      }
+
+      const styles = StyleSheet.create({
+        rootScreen: {
+          flex: 1,
+        }
+      });
+      `}</Code>
+
       <H>Status bar</H>
 
       <ul>
-        <li>we can change the color of statusbar elements with a special <i>expo</i> component {'<StatusBar />'}</li>
+        <li>in the upper part of phone we have battery icon, provider name, etc...</li>
+        <li>we can change the color of elements with a special <i>expo</i> component {'<StatusBar />'}</li>
       </ul>
 
       <Code block jsx>{`
@@ -684,6 +841,82 @@ const postObj = {
         );
       }
       `}</Code>
+
+      <H>Shadow</H>
+
+      <ul>
+        <li>For android use <Code>elevation</Code> prop</li>
+        <li>For iOS use variety of <Code>shadow...</Code> props</li>
+      </ul>
+
+      <Code block jsx>{`
+      import { View, Text, StyleSheet } from 'react-native';
+      import Colors from '../../constants/colors';
+
+      function GuessLogItem({ roundNumber, guess }) {
+        return (
+          <View style={styles.listItem}>
+            <Text style={styles.itemText}>#{roundNumber}</Text>
+            <Text style={styles.itemText}>Opponent's Guess: {guess}</Text>
+          </View>
+        );
+      }
+
+      export default GuessLogItem;
+
+      const styles = StyleSheet.create({
+        listItem: {
+          borderColor: Colors.primary800,
+          borderWidth: 1,
+          borderRadius: 40,
+          padding: 12,
+          marginVertical: 8,
+          backgroundColor: Colors.accent500,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          width: '100%',
+          elevation: 4, // for android
+          shadowColor: 'black', // for iOS
+          shadowOffset: { width: 0, height: 0 }, // for iOS
+          shadowOpacity: 0.25, // for iOS
+          shadowRadius: 3, // for iOS
+        },
+        itemText: {
+          fontFamily: 'open-sans'
+        }
+      });
+      `}</Code>
+
+      <H>Debugging</H>
+
+      <p>Some info can be found <Lnk path='https://reactnative.dev/docs/debugging#accessing-the-in-app-developer-menu'>here</Lnk></p>
+
+      <Hs>Terminal</Hs>
+
+      <ul>
+        <li>there are different options</li>
+        <li>error comes automatically to the terminal</li>
+        <li>console logging also comes to the terminal</li>
+        <li>expo shows some error messages at the bottom of the emulator</li>
+      </ul>
+
+      <Hs>JS dev tools</Hs>
+
+      <ul>
+        <li>we can also open Chrome like console with expo by <kbd>j</kbd> in the terminal, there we also can see network requests</li>
+        <li>can do the same by opening the menu by <kbd>m</kbd> (or <kbd>Cmd + D</kbd> in emulator) and the press <i>Open JS debugger</i></li>
+      </ul>
+
+      <Hs>React dev tools</Hs>
+
+      <ul>
+        <li>to see the component tree and monitor state values we may use react dev tools</li>
+        <li>install it globally with <Code bash>npm i -g react-devtools</Code></li>
+        <li>open dev tools by <Code>react-devtools</Code> in a separate terminal window</li>
+        <li>may require to reload the app with <kbd>r</kbd> key</li>
+      </ul>
+
+     
     </>
   )
 }

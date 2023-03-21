@@ -46,6 +46,8 @@ const postObj = {
       <ul>
         <li><Code bash>npm install -g npm-check-updates</Code> install globally</li>
         <li><Code bash>npx npm-check-updates</Code> get details of packages updates</li>
+        <li><Code bash>npx npm-check-updates -u</Code> to upgrade package.json</li>
+        <li><Code bash>npm i</Code> install updates</li>
         <li><Lnk path='https://www.npmjs.com/package/npm-check-updates'>https://www.npmjs.com/package/npm-check-updates</Lnk></li>
       </ul>
 

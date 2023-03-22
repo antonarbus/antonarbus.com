@@ -1390,6 +1390,122 @@ const postObj = {
       }
       `}</Code>
 
+      <H>Pass data via navigation</H>
+
+      <ul>
+        <li>With <Code>navigation.navigate('name_of_the_screen', {});</Code> we can pass data in second parameter</li> 
+      </ul>
+
+      <Code block jsx>{`
+      import { FlatList } from 'react-native';
+      import CategoryGridTile from '../components/CategoryGridTile';
+      import { CATEGORIES } from '../data/dummy-data';
+
+      function CategoriesScreen({ navigation }) {
+        function renderCategoryItem(itemData) {
+          function pressHandler() {
+            navigation.navigate('MealsOverview', {
+              categoryId: itemData.item.id,
+            });
+          }
+
+          return (
+            <CategoryGridTile
+              title={itemData.item.title}
+              color={itemData.item.color}
+              onPress={pressHandler}
+            />
+          );
+        }
+
+        return (
+          <FlatList
+            data={CATEGORIES}
+            keyExtractor={(item) => item.id}
+            renderItem={renderCategoryItem}
+            numColumns={2}
+          />
+        );
+      }
+
+      export default CategoriesScreen;
+      `}</Code>
+
+      <ul>
+        <li>to extract data we may use passed <Code>route</Code> object</li>
+        <li>same data can be get with <Code>useRoute()</Code> hook</li>
+      </ul>
+
+      <Code block jsx>{`
+      import { useLayoutEffect } from 'react';
+      import { View, FlatList, StyleSheet } from 'react-native';
+      import MealItem from '../components/MealItem';
+      import { MEALS, CATEGORIES } from '../data/dummy-data';
+
+      function MealsOverviewScreen({ route, navigation }) {
+        const catId = route.params.categoryId;
+
+        const displayedMeals = MEALS.filter((mealItem) => {
+          return mealItem.categoryIds.indexOf(catId) >= 0;
+        });
+
+        useLayoutEffect(() => {
+          const categoryTitle = CATEGORIES.find(
+            (category) => category.id === catId
+          ).title;
+
+          navigation.setOptions({
+            title: categoryTitle,
+          });
+        }, [catId, navigation]);
+
+        function renderMealItem(itemData) {
+          const item = itemData.item;
+
+          const mealItemProps = {
+            id: item.id,
+            title: item.title,
+            imageUrl: item.imageUrl,
+            affordability: item.affordability,
+            complexity: item.complexity,
+            duration: item.duration,
+          };
+          return <MealItem {...mealItemProps} />;
+        }
+
+        return (
+          <View style={styles.container}>
+            <FlatList
+              data={displayedMeals}
+              keyExtractor={(item) => item.id}
+              renderItem={renderMealItem}
+            />
+          </View>
+        );
+      }
+
+      export default MealsOverviewScreen;
+
+      const styles = StyleSheet.create({
+        container: {
+          flex: 1,
+          padding: 16,
+        },
+      });
+
+      `}</Code>
+
+      <p>or...</p>
+
+      <Code block jsx>{`
+      import { useRoute } from '@react-navigation/native';
+      
+      function MealsOverviewScreen({ navigation }) {
+        const route = useRoute()
+        ...
+      }
+      `}</Code>
+
   
     </>
   )

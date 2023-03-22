@@ -286,6 +286,8 @@ const postObj = {
         <li>path to an image should be done with <code>require</code> function</li>
       </ul>
 
+      <p>Local image...</p>
+
       <Code block jsx>{`
       import { View, TextInput, Button, StyleSheet, Modal, Image, } from 'react-native';
       ...
@@ -317,6 +319,18 @@ const postObj = {
           margin: 20,
         }
       });
+      `}</Code>
+
+      <ul>
+        <li>for network image we do not use <code>require</code></li>
+        <li>for web images should provide width / height styles</li>
+      </ul>
+
+      <Code block jsx>{`
+      <Image
+        style={styles.image}
+        source={{uri: 'https://...'}}
+      />
       `}</Code>
 
       <H>ImageBackground</H>
@@ -1351,6 +1365,43 @@ const postObj = {
       }
 
       export default CategoriesScreen;
+      `}</Code>
+
+      <H>Stack.Screen option</H>
+
+      <ul>
+        <li>At the of the screen we have a header, which takes the <code>name</code> prop value by default</li>
+        <li>It can be configured inside <code>options</code> prop</li>
+        <li>All options can be found <Lnk path='https://reactnavigation.org/docs/native-stack-navigator#options'>here</Lnk></li>
+        <li>Also default navigation screens options can be set on the <code>Stack.Navigator</code> component</li>
+      </ul>
+
+      <Code block jsx>{`
+      <NavigationContainer>
+        <Stack.Navigator
+          screenOptions={{
+            headerStyle: { backgroundColor: '#351401' },
+            headerTintColor: 'white',
+            contentStyle: { backgroundColor: '#3f2f25' },
+          }}
+        >
+          <Stack.Screen
+            name="Drawer"
+            component={DrawerNavigator}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen name="MealsOverview" component={MealsOverviewScreen} />
+          <Stack.Screen
+            name="MealDetail"
+            component={MealDetailScreen}
+            options={{
+              title: 'About the Meal',
+            }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
       `}</Code>
 
       <H>useNavigation</H>

@@ -1276,7 +1276,120 @@ const postObj = {
         <li>For Expo also install this <Code bash>npx expo install react-native-screens react-native-safe-area-context</Code></li>
         <li>There are different navigator components, for ex. native-stack <Lnk path='https://reactnavigation.org/docs/native-stack-navigator'>https://reactnavigation.org/docs/native-stack-navigator</Lnk></li>
         <li>Install it also <Code bash>npm install @react-navigation/native-stack</Code></li>
+        <li>We wrap content into <Code>NavigationContainer</Code> and <Code>Stack.Navigator</Code>component</li>
+        <li>First <Code>Stack.Screen</Code> inside <Code>Stack.Navigator</Code> will be the initial screen</li>
+        <li>Or init screen can be set by <Code>{'<Stack.Navigator initialRouteName="ProductDetails">'}</Code></li>
       </ul>
+
+      <Code block jsx>{`
+      // App.js
+      import { StatusBar } from 'expo-status-bar';
+      import { StyleSheet } from 'react-native';
+      import { NavigationContainer } from '@react-navigation/native';
+      import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+      import CategoriesScreen from './screens/CategoriesScreen';
+      import MealsOverviewScreen from './screens/MealsOverviewScreen';
+
+      const Stack = createNativeStackNavigator();
+
+      export default function App() {
+        return (
+          <>
+            <StatusBar style="dark" />
+            <NavigationContainer>
+              <Stack.Navigator>
+                <Stack.Screen name="MealsCategories" component={CategoriesScreen} />
+                <Stack.Screen name="MealsOverview" component={MealsOverviewScreen} />
+              </Stack.Navigator>
+            </NavigationContainer>
+          </>
+        );
+      }
+
+      const styles = StyleSheet.create({
+        container: {},
+      });
+
+      `}</Code>
+
+      <ul>
+        <li>Components at <Code>Stack.Navigator</Code> automatically receives <Code>navigation</Code> prop</li>
+        <li>With <Code>navigation.navigate('name_of_the_screen');</Code> we do navigation</li>
+      </ul>
+
+      <Code block jsx>{`
+      // CategoriesScreen.js
+      import { FlatList } from 'react-native';
+      import CategoryGridTile from '../components/CategoryGridTile';
+
+      import { CATEGORIES } from '../data/dummy-data';
+
+      function CategoriesScreen({ navigation }) {
+        function renderCategoryItem(itemData) {
+          function pressHandler() {
+            navigation.navigate('MealsOverview');
+          }
+
+          return (
+            <CategoryGridTile
+              title={itemData.item.title}
+              color={itemData.item.color}
+              onPress={pressHandler}
+            />
+          );
+        }
+
+        return (
+          <FlatList
+            data={CATEGORIES}
+            keyExtractor={(item) => item.id}
+            renderItem={renderCategoryItem}
+            numColumns={2}
+          />
+        );
+      }
+
+      export default CategoriesScreen;
+      `}</Code>
+
+      <H>useNavigation</H>
+
+      <ul>
+        <li>If navigation action is required outside of a component at <Code>Stack.Navigator</Code> </li>
+        <li>We may use <Code>useNavigation()</Code> hook at any component</li>
+      </ul>
+
+      <Code block jsx>{`
+      import { View, Pressable, Text, Image, StyleSheet, Platform, } from 'react-native';
+      import { useNavigation } from '@react-navigation/native';
+
+      import MealDetails from './MealDetails';
+
+      function MealItem({ id, title, imageUrl, duration, complexity, affordability, }) {
+        const navigation = useNavigation();
+
+        function selectMealItemHandler() {
+          navigation.navigate('MealDetail', {
+            mealId: id,
+          });
+        }
+
+        return (
+          <View style={styles.mealItem}>
+            <Pressable
+              android_ripple={{ color: '#ccc' }}
+              style={({ pressed }) => (pressed ? styles.buttonPressed : null)}
+              onPress={selectMealItemHandler}
+            >
+              ...
+              </View>
+            </Pressable>
+          </View>
+        );
+      }
+      `}</Code>
+
   
     </>
   )

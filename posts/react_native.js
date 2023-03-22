@@ -10,6 +10,8 @@ const postObj = {
     <>
       <H>Installation</H>
 
+      <p>Notes are based primarily on <Lnk path='https://www.udemy.com/course/react-native-the-practical-guide/'>https://www.udemy.com/course/react-native-the-practical-guide/</Lnk></p>
+
       <ul>
         <li>Follow official <Lnk path='https://reactnative.dev/docs/environment-setup'>instructions</Lnk></li>
         <li>Install <Lnk path='https://brew.sh/'>Homebrew</Lnk></li>
@@ -442,6 +444,7 @@ const postObj = {
 
       <ul>
         <li>Common use is displaying list data that you fetch from a server</li>
+        <li>Advantage is that it is lazy loaded</li>
         <li><Code>{'<FlatList>'}</Code> component displays a scrolling list of changing data</li>
         <li><Code>{'<SectionList>'}</Code> is the same, but broken into logical sections</li>
       </ul>
@@ -511,6 +514,45 @@ const postObj = {
       }
 
       export default SectionListBasics
+      `}</Code>
+
+      <p>Flatlist supports columns view with help of <Code>numColumns</Code> prop</p>
+
+      <Code block jsx>{`
+      import { FlatList } from 'react-native';
+      import CategoryGridTile from '../components/CategoryGridTile';
+
+      import { CATEGORIES } from '../data/dummy-data';
+
+      function CategoriesScreen({ navigation }) {
+        function renderCategoryItem(itemData) {
+          function pressHandler() {
+            navigation.navigate('MealsOverview', {
+              categoryId: itemData.item.id,
+            });
+          }
+
+          return (
+            <CategoryGridTile
+              title={itemData.item.title}
+              color={itemData.item.color}
+              onPress={pressHandler}
+            />
+          );
+        }
+
+        return (
+          <FlatList
+            data={CATEGORIES}
+            keyExtractor={(item) => item.id}
+            renderItem={renderCategoryItem}
+            numColumns={2}
+          />
+        );
+      }
+
+      export default CategoriesScreen;
+
       `}</Code>
 
       <H>Pressable</H>
@@ -618,91 +660,6 @@ const postObj = {
         },
       });
 
-      `}</Code>
-
-      <H>Platform specific code</H>
-
-      <p><Lnk path='https://reactnative.dev/docs/platform-specific-code'>https://reactnative.dev/docs/platform-specific-code</Lnk></p>
-
-      <Code block jsx>{`
-      import { Platform, StyleSheet } from 'react-native'
-
-      const styles = StyleSheet.create({
-        height: Platform.OS === 'ios' ? 200 : 100
-      })
-      `}</Code>
-
-      <p>There is also a <code>Platform.select</code> method available, that given an object where keys can be one of 'ios' | 'android' | 'native' | 'default', returns the most fitting value for the platform you are currently running on. </p>
-
-      <Code block jsx>{`
-      import { Platform, StyleSheet } from 'react-native'
-
-      const styles = StyleSheet.create({
-        container: {
-          flex: 1,
-          ...Platform.select({
-            ios: {
-              backgroundColor: 'red'
-            },
-            android: {
-              backgroundColor: 'green'
-            },
-            default: {
-              // other platforms, web for example
-              backgroundColor: 'blue'
-            }
-          })
-        }
-      })
-      `}</Code>
-
-      <Code block jsx>{`
-      const Component = Platform.select({
-        ios: () => require('ComponentIOS'),
-        android: () => require('ComponentAndroid')
-      })()
-
-      <Component />
-      `}</Code>
-
-      <H>Detecting the os version</H>
-
-      <Code block jsx>{`
-      import { Platform } from 'react-native';
-
-      if (Platform.Version === 25) {
-        console.log('Running on Nougat!');
-      }
-      `}</Code>
-
-      <Code block jsx>{`
-      import { Platform } from 'react-native';
-
-      const majorVersionIOS = parseInt(Platform.Version, 10);
-      if (majorVersionIOS <= 9) {
-        console.log('Work around a change in behavior');
-      }
-      `}</Code>
-
-      <H>Platform-specific components</H>
-
-      <ul>
-        <li>Consider splitting the code out into separate files for ios and android if needed</li>
-        <li>React Native will detect when a file has a <code>.ios.</code> or <code>.android.</code> extension</li>
-        <li>Or even platform specific components</li>
-      </ul>
-
-      <Code block jsx>{`
-      // files
-      Container.js # picked up by Webpack, Rollup or any other Web bundler
-      Container.native.js # picked up by the React Native bundler for both Android and iOS (Metro)
-      BigButton.ios.js
-      BigButton.android.js
-      `}</Code>
-
-      <Code block jsx>{`
-      import BigButton from './BigButton'
-      import Container from './Container'
       `}</Code>
 
       <H>Style</H>
@@ -883,6 +840,7 @@ const postObj = {
       <ul>
         <li>For android use <Code>elevation</Code> prop</li>
         <li>For iOS use variety of <Code>shadow...</Code> props</li>
+        <li>do not forget to provide <code>backgroundColor</code> for iOS</li>
       </ul>
 
       <Code block jsx>{`
@@ -1096,7 +1054,7 @@ const postObj = {
       });
       `}</Code>
 
-      <H>Responsive dimensions</H>
+      <H>Dimensions</H>
 
       <ul>
         <li>Instead of using <code>width</code> with numbers</li>
@@ -1144,12 +1102,49 @@ const postObj = {
       </ul>
 
       <Code block jsx>{`
-      import { useWindowDimensions } from 'react-native';
+      import { TextInput, View, StyleSheet, Alert, KeyboardAvoidingView, ScrollView, } from 'react-native';
 
       function StartGameScreen({ onPickNumber }) {
         const [enteredNumber, setEnteredNumber] = useState('');
 
+        return (
+          <ScrollView style={styles.screen}>
+            <KeyboardAvoidingView style={styles.screen} behavior="position">
+              <View style={[styles.rootContainer, { marginTop: marginTopDistance }]}>
+                <TextInput
+                style={styles.numberInput}
+                  maxLength={2}
+                  keyboardType="number-pad"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  onChangeText={numberInputHandler}
+                  value={enteredNumber}
+                />
+                ...
+              </View>
+            </KeyboardAvoidingView>
+          </ScrollView>
+        );
+      }
+
+      export default StartGameScreen;
+      `}</Code>
+
+      <H>KeyboardAvoidingView</H>
+
+      <ul>
+        <li>with input interaction the keyboard appears and may break the style</li>
+        <li>app style can be configured for the keyboard with conjunction of 3 components: <code>ScrollView</code>, <code></code></li>
+      </ul>
+
+      <Code block jsx>{`
+      import { useState } from 'react';
+      import { TextInput, View, StyleSheet, Alert, useWindowDimensions, KeyboardAvoidingView, ScrollView, } from 'react-native';
+
+      function StartGameScreen({ onPickNumber }) {
+        const [enteredNumber, setEnteredNumber] = useState('');
         const { width, height } = useWindowDimensions();
+
         const marginTopDistance = height < 380 ? 30 : 100;
 
         return (
@@ -1164,12 +1159,123 @@ const postObj = {
       }
 
       export default StartGameScreen;
+
+      const styles = StyleSheet.create({
+        screen: {
+          flex: 1,
+        },
+        rootContainer: {
+          flex: 1,
+          // marginTop: deviceHeight < 380 ? 30 : 100,
+          alignItems: 'center',
+        },
+        numberInput: {
+          height: 50,
+          width: 50,
+          fontSize: 32,
+          borderBottomColor: Colors.accent500,
+          borderBottomWidth: 2,
+          color: Colors.accent500,
+          marginVertical: 8,
+          fontWeight: 'bold',
+          textAlign: 'center',
+        },
+        buttonsContainer: {
+          flexDirection: 'row',
+        },
+        buttonContainer: {
+          flex: 1,
+        },
+      });
       `}</Code>
 
-      <H>KeyboardAvoidingView</H>
+      <H>Platform specific code</H>
 
       <ul>
+        <li>We can target not only the device screen dimensions with <code>useWindowDimensions</code> / <code>Dimensions</code></li>
+        <li>but also the device models itself with <Lnk path='https://reactnative.dev/docs/platform-specific-code'>platform api</Lnk></li>
         <li></li>
+      </ul>
+
+      <Code block jsx>{`
+      import { Platform, StyleSheet } from 'react-native'
+
+      const styles = StyleSheet.create({
+        height: Platform.OS === 'ios' ? 200 : 100
+      })
+      `}</Code>
+
+      <p>There is also a <code>Platform.select</code> method available, that gives an object where keys can be one of 'ios' | 'android' | 'native' | 'default', returns the most fitting value for the platform you are currently running on. </p>
+
+      <Code block jsx>{`
+      import { Platform, StyleSheet } from 'react-native'
+
+      const styles = StyleSheet.create({
+        height: Platform.select({ ios: 200, android: 100 })
+      })
+      `}</Code>
+
+      <Code block jsx>{`
+      const Component = Platform.select({
+        ios: () => require('ComponentIOS'),
+        android: () => require('ComponentAndroid')
+      })()
+
+      <Component />
+      `}</Code>
+
+      <H>Detecting the os version</H>
+
+      <Code block jsx>{`
+      import { Platform } from 'react-native';
+
+      if (Platform.Version === 25) {
+        console.log('Running on Nougat!');
+      }
+      `}</Code>
+
+      <Code block jsx>{`
+      import { Platform } from 'react-native';
+
+      const majorVersionIOS = parseInt(Platform.Version, 10);
+      if (majorVersionIOS <= 9) {
+        console.log('Work around a change in behavior');
+      }
+      `}</Code>
+
+      <H>Platform-specific components</H>
+
+      <ul>
+        <li>Consider splitting the code into separate files for ios and android if needed</li>
+        <li>React Native will detect when a file has a <code>.ios.</code> or <code>.android.</code> extension</li>
+        <li>Or even platform specific components</li>
+        <li>applies not only to components, but to any javascript files, like constants, utils, styles etc...</li>
+      </ul>
+
+      <Code block jsx>{`
+      // files
+      Container.js # picked up by Webpack, Rollup or any other Web bundler
+      Container.native.js # picked up by the React Native bundler for both Android and iOS (Metro)
+      BigButton.ios.js
+      BigButton.android.js
+      `}</Code>
+
+      <p>Not that imports does not have <i>.ios</i> or <i>.android</i> extensions in the file names.</p>
+
+      <Code block jsx>{`
+      import BigButton from './BigButton'
+      import Container from './Container'
+      `}</Code>
+
+      <H>Navigation</H>
+
+      <ul>
+        <li>We may use conditional rendering for the navigation, that is fine</li>
+        <li>But there is a better animated way via <Lnk path='https://reactnavigation.org/'>https://reactnavigation.org/</Lnk></li>
+        <li>Install with <Code bash>npm install @react-navigation/native</Code></li>
+        <li>For Expo also install this <Code bash>npx expo install react-native-screens react-native-safe-area-context</Code></li>
+        <li>There are different navigator components, for ex. native-stack <Lnk path='https://reactnavigation.org/docs/native-stack-navigator'>https://reactnavigation.org/docs/native-stack-navigator</Lnk></li>
+        <li>Install it also <Code bash>npm install @react-navigation/native-stack</Code></li>
       </ul>
   
     </>

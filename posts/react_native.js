@@ -150,46 +150,6 @@ const postObj = {
       export default LotsOfGreetings
       `}</Code>
 
-      <H>Core components</H>
-
-      <ul>
-        <li><Code>{'<View>'}</Code> a container that supports layout with flexbox, style, some touch handling</li>
-        <li><Code>{'<Text>'}</Code> displays, styles, and nests strings of text and even handles touch events</li>
-        <li><Code>{'<TextInput>'}</Code> allows to enter text</li>
-        <li><Code>{'<Image>'}</Code> displays different types of images</li>
-        <li><Code>{'<ImageBackground>'}</Code> same as image, but renders in the background instead of foreground</li>
-        <li><Code>{'<Button>'}</Code> button</li>
-        <li><Code>{'<ScrollView>'}</Code> scrolling container that can contain multiple components and views</li>
-        <li><Code>{'<FlatList>'}</Code> for long list data</li>
-        <li><Code>{'<Pressable>'}</Code> allows to press on item</li>
-        <li><Code>{'<Modal>'}</Code> modal container with built-in animation</li>
-        <li><Code>{'<SafeAreaView>'}</Code> provides usable phone area which does not include notch</li>
-      </ul>
-
-      <Code block jsx>{`
-      import React from 'react'
-      import { View, Text, Image, ScrollView, TextInput } from 'react-native'
-
-      const App = () => (
-        <ScrollView>
-          <Text>Some text</Text>
-          <View>
-            <Text>Some more text</Text>
-            <Image
-              source={{ uri: 'https://reactnative.dev/docs/assets/p_cat2.png' }}
-              style={{ width: 200, height: 200 }}
-            />
-          </View>
-          <TextInput
-            style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-            defaultValue="You can type in me"
-          />
-        </ScrollView>
-      )
-
-      export default App
-      `}</Code>
-
       <H>View</H>
 
       <ul>
@@ -671,6 +631,55 @@ const postObj = {
       const styles = StyleSheet.create({
         pressed: {
           opacity: 0.7,
+        },
+      });
+      `}</Code>
+
+      <H>Outlined button</H>
+
+      <Code block jsx>{`
+      import { Pressable, StyleSheet, Text } from 'react-native';
+      import { Ionicons } from '@expo/vector-icons';
+      import { Colors } from '../../constants/colors';
+
+      function OutlinedButton({ onPress, icon, children }) {
+        return (
+          <Pressable
+            style={({ pressed }) => [styles.button, pressed && styles.pressed]}
+            onPress={onPress}
+          >
+            <Ionicons
+              style={styles.icon}
+              name={icon}
+              size={18}
+              color={Colors.primary500}
+            />
+            <Text style={styles.text}>{children}</Text>
+          </Pressable>
+        );
+      }
+
+      export default OutlinedButton;
+
+      const styles = StyleSheet.create({
+        button: {
+          paddingHorizontal: 12,
+          paddingVertical: 6,
+          margin: 4,
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+          borderWidth: 1,
+          borderColor: Colors.primary500,
+        },
+        pressed: {
+          opacity: 0.7,
+        },
+        icon: {
+          marginRight: 6,
+        },
+        text: {
+          color: Colors.primary500,
         },
       });
       `}</Code>
@@ -2118,7 +2127,806 @@ const postObj = {
 
       `}</Code>
 
-  
+      <H>Camera</H>
+
+      <ul>
+        <li><Lnk path='https://docs.expo.dev/versions/latest/sdk/camera/'>https://docs.expo.dev/versions/latest/sdk/camera/</Lnk></li>
+      </ul>
+
+      <H>Image picker</H>
+
+      <ul>
+        <li>allows to pick or take an image</li>
+        <li><Lnk path='https://docs.expo.dev/versions/v48.0.0/sdk/imagepicker/'>https://docs.expo.dev/versions/v48.0.0/sdk/imagepicker/</Lnk></li>
+        <li><Code bash>npx expo install expo-image-picker</Code></li>
+        <li>Add permission request via <code>app.json</code> (see link above)</li>
+
+        <Code block jsx>{`
+        {
+          "expo": {
+            "plugins": [
+              [
+                "expo-image-picker",
+                {
+                  "photosPermission": "The app accesses your photos to let you share them with your friends."
+                }
+              ]
+            ]
+          }
+        }
+        `}</Code>
+
+        <li>for android permission logic is done automatically, but for iOS we need to make in on our own with <code>useCameraPermissions</code> and <code>PermissionStatus</code> utilities</li>
+        <li>photo details object will be returned by <code>const image = await launchCameraAsync()</code> function </li>
+        <li><code>image.uri</code> can be used with <Code>{'<Image style={styles.image} source={{ uri: pickedImage }} />'}</Code></li>
+        <li>do not forget to provide dimensions in image styles</li>
+      </ul>
+
+      <Code block jsx>{`
+      import { Alert, Button, Image, StyleSheet, Text, View } from 'react-native';
+      import { launchCameraAsync, useCameraPermissions, PermissionStatus, } from 'expo-image-picker';
+      import { useState } from 'react';
+
+      import { Colors } from '../../constants/colors';
+
+      function ImagePicker() {
+        const [pickedImage, setPickedImage] = useState();
+
+        const [cameraPermissionInformation, requestPermission] =
+          useCameraPermissions();
+
+        async function verifyPermissions() {
+          if (cameraPermissionInformation.status === PermissionStatus.UNDETERMINED) {
+            const permissionResponse = await requestPermission();
+
+            return permissionResponse.granted;
+          }
+
+          if (cameraPermissionInformation.status === PermissionStatus.DENIED) {
+            Alert.alert(
+              'Insufficient Permissions!',
+              'You need to grant camera permissions to use this app.'
+            );
+            return false;
+          }
+
+          return true;
+        }
+
+        async function takeImageHandler() {
+          const hasPermission = await verifyPermissions();
+
+          if (!hasPermission) {
+            return;
+          }
+
+          const image = await launchCameraAsync({
+            allowsEditing: true,
+            aspect: [16, 9],
+            quality: 0.5,
+          });
+
+          setPickedImage(image.uri);
+        }
+
+        let imagePreview = <Text>No image taken yet.</Text>;
+
+        if (pickedImage) {
+          imagePreview = <Image style={styles.image} source={{ uri: pickedImage }} />;
+        }
+
+        return (
+          <View>
+            <View style={styles.imagePreview}>{imagePreview}</View>
+            <Button title="Take Image" onPress={takeImageHandler} />
+          </View>
+        );
+      }
+
+      export default ImagePicker;
+
+      const styles = StyleSheet.create({
+        imagePreview: {
+          width: '100%',
+          height: 200,
+          marginVertical: 8,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: Colors.primary100,
+          borderRadius: 4,
+        },
+        image: {
+          width: '100%',
+          height: '100%',
+        },
+      });
+      `}</Code>
+
+      <H>Geo location + Google Maps image</H>
+
+      <ul>
+        <li><Lnk path='https://docs.expo.dev/versions/v48.0.0/sdk/location/'>https://docs.expo.dev/versions/v48.0.0/sdk/location/</Lnk></li>
+        <li><Code bash>npx expo install expo-location</Code></li>
+      </ul>
+
+      <Code block jsx>{`
+      import { useState } from 'react';
+      import { Alert, View, StyleSheet, Image, Text } from 'react-native';
+      import { getCurrentPositionAsync, useForegroundPermissions, PermissionStatus, } from 'expo-location';
+      import { Colors } from '../../constants/colors';
+      import OutlinedButton from '../UI/OutlinedButton';
+
+      const GOOGLE_API_KEY = 'AIzaSyCTCDNDtYPCpAD0FaKgHgdzCjMN1QUHnt4';
+      function getMapPreview(lat, lng) {
+        const imagePreviewUrl = \`https://maps.googleapis.com/maps/api/staticmap?center=\${lat},\${lng}&zoom=14&size=400x200&maptype=roadmap&markers=color:red%7Clabel:S%7C\${lat},\${lng}&key=\${GOOGLE_API_KEY}\`;
+        return imagePreviewUrl;
+      }
+
+      function LocationPicker() {
+        const [pickedLocation, setPickedLocation] = useState();
+
+        const [locationPermissionInformation, requestPermission] =
+          useForegroundPermissions();
+
+        async function verifyPermissions() {
+          if (
+            locationPermissionInformation.status === PermissionStatus.UNDETERMINED
+          ) {
+            const permissionResponse = await requestPermission();
+
+            return permissionResponse.granted;
+          }
+
+          if (locationPermissionInformation.status === PermissionStatus.DENIED) {
+            Alert.alert(
+              'Insufficient Permissions!',
+              'You need to grant location permissions to use this app.'
+            );
+            return false;
+          }
+
+          return true;
+        }
+
+        async function getLocationHandler() {
+          const hasPermission = await verifyPermissions();
+
+          if (!hasPermission) {
+            return;
+          }
+
+          const location = await getCurrentPositionAsync();
+          setPickedLocation({
+            lat: location.coords.latitude,
+            lng: location.coords.longitude,
+          });
+        }
+
+        function pickOnMapHandler() {}
+
+        let locationPreview = <Text>No location picked yet.</Text>;
+
+        if (pickedLocation) {
+          locationPreview = (
+            <Image
+              style={styles.image}
+              source={{
+                uri: getMapPreview(pickedLocation.lat, pickedLocation.lng),
+              }}
+            />
+          );
+        }
+
+        return (
+          <View>
+            <View style={styles.mapPreview}>{locationPreview}</View>
+            <View style={styles.actions}>
+              <OutlinedButton icon="location" onPress={getLocationHandler}>
+                Locate User
+              </OutlinedButton>
+              <OutlinedButton icon="map" onPress={pickOnMapHandler}>
+                Pick on Map
+              </OutlinedButton>
+            </View>
+          </View>
+        );
+      }
+
+      export default LocationPicker;
+
+      const styles = StyleSheet.create({
+        mapPreview: {
+          width: '100%',
+          height: 200,
+          marginVertical: 8,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: Colors.primary100,
+          borderRadius: 4,
+          overflow: 'hidden'
+        },
+        actions: {
+          flexDirection: 'row',
+          justifyContent: 'space-around',
+          alignItems: 'center',
+        },
+        image: {
+          width: '100%',
+          height: '100%',
+          // borderRadius: 4
+        },
+      });
+      `}</Code>
+
+      <H>Interactive device map</H>
+
+      <ul>
+        <li><Code bash>npx expo install react-native-maps</Code></li>
+        <li><Lnk path='https://docs.expo.dev/versions/v48.0.0/sdk/map-view/'>https://docs.expo.dev/versions/v48.0.0/sdk/map-view/</Lnk></li>
+        <li>in the example below we open an interactive map on a separate screen</li>
+        <li>on press put a picker</li>
+        <li>on save button return to previous screen and pass coordinates to show it on the map</li>
+        <li>one interesting note: when we return to the previous screen the <code>useEffect</code> is not firing, because the stack screen is not mounted, but simply unhides</li>
+        <li>to let <code>useEffect</code> kicks in we add additional <code>useIsFocused()</code> hook</li>
+      </ul>
+
+      <Code block jsx>{`
+      import { useEffect, useState } from 'react';
+      import { Alert, View, StyleSheet, Image, Text } from 'react-native';
+      import { getCurrentPositionAsync, useForegroundPermissions, PermissionStatus, } from 'expo-location';
+      import { useNavigation, useRoute, useIsFocused, } from '@react-navigation/native';
+
+      import { Colors } from '../../constants/colors';
+      import OutlinedButton from '../UI/OutlinedButton';
+
+      const GOOGLE_API_KEY = 'AIzaSyCTCDNDtYPCpAD0FaKgHgdzCjMN1QUHnt4';
+      function getMapPreview(lat, lng) {
+        const imagePreviewUrl = \`https://maps.googleapis.com/maps/api/staticmap?center=\${lat},\${lng}&zoom=14&size=400x200&maptype=roadmap&markers=color:red%7Clabel:S%7C\${lat},\${lng}&key=\${GOOGLE_API_KEY}\`;
+        return imagePreviewUrl;
+      }
+
+      function LocationPicker() {
+        const [pickedLocation, setPickedLocation] = useState();
+        const isFocused = useIsFocused();
+
+        const navigation = useNavigation();
+        const route = useRoute();
+
+        const [locationPermissionInformation, requestPermission] =
+          useForegroundPermissions();
+
+        useEffect(() => {
+          if (isFocused && route.params) {
+            const mapPickedLocation = {
+              lat: route.params.pickedLat,
+              lng: route.params.pickedLng,
+            };
+            setPickedLocation(mapPickedLocation);
+          }
+        }, [route, isFocused]);
+
+        async function verifyPermissions() {
+          if (
+            locationPermissionInformation.status === PermissionStatus.UNDETERMINED
+          ) {
+            const permissionResponse = await requestPermission();
+
+            return permissionResponse.granted;
+          }
+
+          if (locationPermissionInformation.status === PermissionStatus.DENIED) {
+            Alert.alert(
+              'Insufficient Permissions!',
+              'You need to grant location permissions to use this app.'
+            );
+            return false;
+          }
+
+          return true;
+        }
+
+        async function getLocationHandler() {
+          const hasPermission = await verifyPermissions();
+
+          if (!hasPermission) {
+            return;
+          }
+
+          const location = await getCurrentPositionAsync();
+          setPickedLocation({
+            lat: location.coords.latitude,
+            lng: location.coords.longitude,
+          });
+        }
+
+        function pickOnMapHandler() {
+          navigation.navigate('Map');
+        }
+
+        let locationPreview = <Text>No location picked yet.</Text>;
+
+        if (pickedLocation) {
+          locationPreview = (
+            <Image
+              style={styles.image}
+              source={{
+                uri: getMapPreview(pickedLocation.lat, pickedLocation.lng),
+              }}
+            />
+          );
+        }
+
+        return (
+          <View>
+            <View style={styles.mapPreview}>{locationPreview}</View>
+            <View style={styles.actions}>
+              <OutlinedButton icon="location" onPress={getLocationHandler}>
+                Locate User
+              </OutlinedButton>
+              <OutlinedButton icon="map" onPress={pickOnMapHandler}>
+                Pick on Map
+              </OutlinedButton>
+            </View>
+          </View>
+        );
+      }
+
+      export default LocationPicker;
+
+      const styles = StyleSheet.create({
+        mapPreview: {
+          width: '100%',
+          height: 200,
+          marginVertical: 8,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: Colors.primary100,
+          borderRadius: 4,
+          overflow: 'hidden',
+        },
+        actions: {
+          flexDirection: 'row',
+          justifyContent: 'space-around',
+          alignItems: 'center',
+        },
+        image: {
+          width: '100%',
+          height: '100%',
+          // borderRadius: 4
+        },
+      });
+      `}</Code>
+
+      <Code block jsx>{`
+      import { useCallback, useLayoutEffect, useState } from 'react';
+      import { Alert, StyleSheet } from 'react-native';
+      import MapView, { Marker } from 'react-native-maps';
+
+      import IconButton from '../components/UI/IconButton';
+
+      function Map({ navigation }) {
+        const [selectedLocation, setSelectedLocation] = useState();
+
+        const region = {
+          latitude: 37.78,
+          longitude: -122.43,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        };
+
+        function selectLocationHandler(event) {
+          const lat = event.nativeEvent.coordinate.latitude;
+          const lng = event.nativeEvent.coordinate.longitude;
+
+          setSelectedLocation({ lat: lat, lng: lng });
+        }
+
+        const savePickedLocationHandler = useCallback(() => {
+          if (!selectedLocation) {
+            Alert.alert(
+              'No location picked!',
+              'You have to pick a location (by tapping on the map) first!'
+            );
+            return;
+          }
+
+          navigation.navigate('AddPlace', {
+            pickedLat: selectedLocation.lat,
+            pickedLng: selectedLocation.lng,
+          });
+        }, [navigation, selectedLocation]);
+
+        useLayoutEffect(() => {
+          navigation.setOptions({
+            headerRight: ({ tintColor }) => (
+              <IconButton
+                icon="save"
+                size={24}
+                color={tintColor}
+                onPress={savePickedLocationHandler}
+              />
+            ),
+          });
+        }, [navigation, savePickedLocationHandler]);
+
+        return (
+          <MapView
+            style={styles.map}
+            initialRegion={region}
+            onPress={selectLocationHandler}
+          >
+            {selectedLocation && (
+              <Marker
+                title="Picked Location"
+                coordinate={{
+                  latitude: selectedLocation.lat,
+                  longitude: selectedLocation.lng,
+                }}
+              />
+            )}
+          </MapView>
+        );
+      }
+
+      export default Map;
+
+      const styles = StyleSheet.create({
+        map: {
+          flex: 1,
+        },
+      });
+      `}</Code>
+
+      <H>SQLite</H>
+
+      <ul>
+        <li>for data storage on device</li>
+        <li><Code bash>https://docs.expo.dev/versions/latest/sdk/sqlite/</Code></li>
+        <li><Lnk path='https://docs.expo.dev/versions/latest/sdk/sqlite/'>https://docs.expo.dev/versions/latest/sdk/sqlite/</Lnk></li>
+        <li>Below how we interact with database</li>
+      </ul>
+
+      <Code block jsx>{`
+      import * as SQLite from 'expo-sqlite';
+      import { Place } from '../models/place';
+
+      const database = SQLite.openDatabase('places.db');
+
+      export function init() {
+        const promise = new Promise((resolve, reject) => {
+          database.transaction((tx) => {
+            tx.executeSql(
+              \`CREATE TABLE IF NOT EXISTS places (
+                id INTEGER PRIMARY KEY NOT NULL,
+                title TEXT NOT NULL,
+                imageUri TEXT NOT NULL,
+                address TEXT NOT NULL,
+                lat REAL NOT NULL,
+                lng REAL NOT NULL
+              )\`,
+              [],
+              () => {
+                resolve();
+              },
+              (_, error) => {
+                reject(error);
+              }
+            );
+          });
+        });
+
+        return promise;
+      }
+
+      export function insertPlace(place) {
+        const promise = new Promise((resolve, reject) => {
+          database.transaction((tx) => {
+            tx.executeSql(
+              \`INSERT INTO places (title, imageUri, address, lat, lng) VALUES (?, ?, ?, ?, ?)\`,
+              [
+                place.title,
+                place.imageUri,
+                place.address,
+                place.location.lat,
+                place.location.lng,
+              ],
+              (_, result) => {
+                resolve(result);
+              },
+              (_, error) => {
+                reject(error);
+              }
+            );
+          });
+        });
+
+        return promise;
+      }
+
+      export function fetchPlaces() {
+        const promise = new Promise((resolve, reject) => {
+          database.transaction((tx) => {
+            tx.executeSql(
+              'SELECT * FROM places',
+              [],
+              (_, result) => {
+                const places = [];
+
+                for (const dp of result.rows._array) {
+                  places.push(
+                    new Place(
+                      dp.title,
+                      dp.imageUri,
+                      {
+                        address: dp.address,
+                        lat: dp.lat,
+                        lng: dp.lng,
+                      },
+                      dp.id
+                    )
+                  );
+                }
+                resolve(places);
+              },
+              (_, error) => {
+                reject(error);
+              }
+            );
+          });
+        });
+
+        return promise;
+      }
+
+      export function fetchPlaceDetails(id) {
+        const promise = new Promise((resolve, reject) => {
+          database.transaction((tx) => {
+            tx.executeSql(
+              'SELECT * FROM places WHERE id = ?',
+              [id],
+              (_, result) => {
+                const dbPlace = result.rows._array[0];
+                const place = new Place(
+                  dbPlace.title,
+                  dbPlace.imageUri,
+                  { lat: dbPlace.lat, lng: dbPlace.lng, address: dbPlace.address },
+                  dbPlace.id
+                );
+                resolve(place);
+              },
+              (_, error) => {
+                reject(error);
+              }
+            );
+          });
+        });
+
+        return promise;
+      }
+      `}</Code>
+
+      <ul>
+        <li>Database is initialized in App component after the load</li>
+      </ul>
+
+      <Code block jsx>{`
+      import { useEffect, useState } from 'react';
+      import { StatusBar } from 'expo-status-bar';
+      import { NavigationContainer } from '@react-navigation/native';
+      import { createNativeStackNavigator } from '@react-navigation/native-stack';
+      import AppLoading from 'expo-app-loading';
+
+      import AllPlaces from './screens/AllPlaces';
+      import AddPlace from './screens/AddPlace';
+      import IconButton from './components/UI/IconButton';
+      import { Colors } from './constants/colors';
+      import Map from './screens/Map';
+      import { init } from './util/database';
+      import PlaceDetails from './screens/PlaceDetails';
+
+      const Stack = createNativeStackNavigator();
+
+      export default function App() {
+        const [dbInitialized, setDbInitialized] = useState(false);
+
+        useEffect(() => {
+          init()
+            .then(() => {
+              setDbInitialized(true);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }, []);
+
+        if (!dbInitialized) {
+          return <AppLoading />;
+        }
+
+        return (
+          <>
+            <StatusBar style="dark" />
+            <NavigationContainer>
+              <Stack.Navigator
+                screenOptions={{
+                  headerStyle: { backgroundColor: Colors.primary500 },
+                  headerTintColor: Colors.gray700,
+                  contentStyle: { backgroundColor: Colors.gray700 },
+                }}
+              >
+                <Stack.Screen
+                  name="AllPlaces"
+                  component={AllPlaces}
+                  options={({ navigation }) => ({
+                    title: 'Your Favorite Places',
+                    headerRight: ({ tintColor }) => (
+                      <IconButton
+                        icon="add"
+                        size={24}
+                        color={tintColor}
+                        onPress={() => navigation.navigate('AddPlace')}
+                      />
+                    ),
+                  })}
+                />
+                <Stack.Screen
+                  name="AddPlace"
+                  component={AddPlace}
+                  options={{
+                    title: 'Add a new Place',
+                  }}
+                />
+                <Stack.Screen name="Map" component={Map} />
+                <Stack.Screen
+                  name="PlaceDetails"
+                  component={PlaceDetails}
+                  options={{
+                    title: 'Loading Place...',
+                  }}
+                />
+              </Stack.Navigator>
+            </NavigationContainer>
+          </>
+        );
+      }
+      `}</Code>
+
+      <p>That is how we use inserting into DB function</p>
+
+      <Code block jsx>{`
+      import PlaceForm from '../components/Places/PlaceForm';
+      import { insertPlace } from '../util/database';
+
+      function AddPlace({ navigation }) {
+        async function createPlaceHandler(place) {
+          await insertPlace(place);
+          navigation.navigate('AllPlaces');
+        }
+
+        return <PlaceForm onCreatePlace={createPlaceHandler} />;
+      }
+
+      export default AddPlace;
+      `}</Code>
+
+      <p>That is how we get data</p>
+
+      <Code block jsx>{`
+      import { useEffect, useState } from 'react';
+      import { useIsFocused } from '@react-navigation/native';
+
+      import PlacesList from '../components/Places/PlacesList';
+      import { fetchPlaces } from '../util/database';
+
+      function AllPlaces({ route }) {
+        const [loadedPlaces, setLoadedPlaces] = useState([]);
+
+        const isFocused = useIsFocused();
+
+        useEffect(() => {
+          async function loadPlaces() {
+            const places = await fetchPlaces();
+            setLoadedPlaces(places);
+          }
+
+          if (isFocused) {
+            loadPlaces();
+            // setLoadedPlaces((curPlaces) => [...curPlaces, route.params.place]);
+          }
+        }, [isFocused]);
+
+        return <PlacesList places={loadedPlaces} />;
+      }
+
+      export default AllPlaces;
+      `}</Code>
+
+      <p>That is how we fetch specific item from the db</p>
+
+      <Code block jsx>{`
+      import { useEffect, useState } from 'react';
+      import { ScrollView, Image, View, Text, StyleSheet } from 'react-native';
+
+      import OutlinedButton from '../components/UI/OutlinedButton';
+      import { Colors } from '../constants/colors';
+      import { fetchPlaceDetails } from '../util/database';
+
+      function PlaceDetails({ route, navigation }) {
+        const [fetchedPlace, setFetchedPlace] = useState();
+
+        function showOnMapHandler() {
+          navigation.navigate('Map', {
+            initialLat: fetchedPlace.location.lat,
+            initialLng: fetchedPlace.location.lng,
+          });
+        }
+
+        const selectedPlaceId = route.params.placeId;
+
+        useEffect(() => {
+          async function loadPlaceData() {
+            const place = await fetchPlaceDetails(selectedPlaceId);
+            setFetchedPlace(place);
+            navigation.setOptions({
+              title: place.title,
+            });
+          }
+
+          loadPlaceData();
+        }, [selectedPlaceId]);
+
+        if (!fetchedPlace) {
+          return (
+            <View style={styles.fallback}>
+              <Text>Loading place data...</Text>
+            </View>
+          );
+        }
+
+        return (
+          <ScrollView>
+            <Image style={styles.image} source={{ uri: fetchedPlace.imageUri }} />
+            <View style={styles.locationContainer}>
+              <View style={styles.addressContainer}>
+                <Text style={styles.address}>{fetchedPlace.address}</Text>
+              </View>
+              <OutlinedButton icon="map" onPress={showOnMapHandler}>
+                View on Map
+              </OutlinedButton>
+            </View>
+          </ScrollView>
+        );
+      }
+
+      export default PlaceDetails;
+
+      const styles = StyleSheet.create({
+        fallback: {
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        },
+        image: {
+          height: '35%',
+          minHeight: 300,
+          width: '100%',
+        },
+        locationContainer: {
+          justifyContent: 'center',
+          alignItems: 'center',
+        },
+        addressContainer: {
+          padding: 20,
+        },
+        address: {
+          color: Colors.primary500,
+          textAlign: 'center',
+          fontWeight: 'bold',
+          fontSize: 16,
+        },
+      });
+      `}</Code>
+
     </>
   )
 }

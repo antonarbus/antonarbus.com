@@ -80,7 +80,6 @@ const postObj = {
         <li>From the terminal just press <kbd>I</kbd> to open the app in iOS simulator</li>
       </ul>
 
-
       <H>Docs</H>
 
       <p><Lnk path='https://reactnative.dev/docs/getting-started'>React Native docs</Lnk></p>
@@ -258,7 +257,225 @@ const postObj = {
       export default PizzaTranslator
       `}</Code>
 
-      <H>TextInput with numbers keyboard</H>
+      <H>Custom TextInput</H>
+
+      <Code block jsx>{`
+      import { StyleSheet, Text, TextInput, View } from 'react-native';
+
+      import { GlobalStyles } from '../../constants/styles';
+
+      function Input({ label, invalid, style, textInputConfig }) {
+
+        const inputStyles = [styles.input];
+
+        if (textInputConfig && textInputConfig.multiline) {
+          inputStyles.push(styles.inputMultiline)
+        }
+
+        if (invalid) {
+          inputStyles.push(styles.invalidInput);
+        }
+
+        return (
+          <View style={[styles.inputContainer, style]}>
+            <Text style={[styles.label, invalid && styles.invalidLabel]}>{label}</Text>
+            <TextInput style={inputStyles} {...textInputConfig} />
+          </View>
+        );
+      }
+
+      export default Input;
+
+      const styles = StyleSheet.create({
+        inputContainer: {
+          marginHorizontal: 4,
+          marginVertical: 8
+        },
+        label: {
+          fontSize: 12,
+          color: GlobalStyles.colors.primary100,
+          marginBottom: 4,
+        },
+        input: {
+          backgroundColor: GlobalStyles.colors.primary100,
+          color: GlobalStyles.colors.primary700,
+          padding: 6,
+          borderRadius: 6,
+          fontSize: 18,
+        },
+        inputMultiline: {
+          minHeight: 100,
+          textAlignVertical: 'top'
+        },
+        invalidLabel: {
+          color: GlobalStyles.colors.error500
+        },
+        invalidInput: {
+          backgroundColor: GlobalStyles.colors.error50
+        }
+      });
+      `}</Code>
+
+      <Code block jsx>{`
+      import { useState } from 'react';
+      import { StyleSheet, Text, View } from 'react-native';
+
+      import Input from './Input';
+      import Button from '../UI/Button';
+      import { getFormattedDate } from '../../util/date';
+      import { GlobalStyles } from '../../constants/styles';
+
+      function ExpenseForm({ submitButtonLabel, onCancel, onSubmit, defaultValues }) {
+        const [inputs, setInputs] = useState({
+          amount: {
+            value: defaultValues ? defaultValues.amount.toString() : '',
+            isValid: true,
+          },
+          date: {
+            value: defaultValues ? getFormattedDate(defaultValues.date) : '',
+            isValid: true,
+          },
+          description: {
+            value: defaultValues ? defaultValues.description : '',
+            isValid: true,
+          },
+        });
+
+        function inputChangedHandler(inputIdentifier, enteredValue) {
+          setInputs((curInputs) => {
+            return {
+              ...curInputs,
+              [inputIdentifier]: { value: enteredValue, isValid: true },
+            };
+          });
+        }
+
+        function submitHandler() {
+          const expenseData = {
+            amount: +inputs.amount.value,
+            date: new Date(inputs.date.value),
+            description: inputs.description.value,
+          };
+
+          const amountIsValid = !isNaN(expenseData.amount) && expenseData.amount > 0;
+          const dateIsValid = expenseData.date.toString() !== 'Invalid Date';
+          const descriptionIsValid = expenseData.description.trim().length > 0;
+
+          if (!amountIsValid || !dateIsValid || !descriptionIsValid) {
+            // Alert.alert('Invalid input', 'Please check your input values');
+            setInputs((curInputs) => {
+              return {
+                amount: { value: curInputs.amount.value, isValid: amountIsValid },
+                date: { value: curInputs.date.value, isValid: dateIsValid },
+                description: {
+                  value: curInputs.description.value,
+                  isValid: descriptionIsValid,
+                },
+              };
+            });
+            return;
+          }
+
+          onSubmit(expenseData);
+        }
+
+        const formIsInvalid =
+          !inputs.amount.isValid ||
+          !inputs.date.isValid ||
+          !inputs.description.isValid;
+
+        return (
+          <View style={styles.form}>
+            <Text style={styles.title}>Your Expense</Text>
+            <View style={styles.inputsRow}>
+              <Input
+                style={styles.rowInput}
+                label="Amount"
+                invalid={!inputs.amount.isValid}
+                textInputConfig={{
+                  keyboardType: 'decimal-pad',
+                  onChangeText: inputChangedHandler.bind(this, 'amount'),
+                  value: inputs.amount.value,
+                }}
+              />
+              <Input
+                style={styles.rowInput}
+                label="Date"
+                invalid={!inputs.date.isValid}
+                textInputConfig={{
+                  placeholder: 'YYYY-MM-DD',
+                  maxLength: 10,
+                  onChangeText: inputChangedHandler.bind(this, 'date'),
+                  value: inputs.date.value,
+                }}
+              />
+            </View>
+            <Input
+              label="Description"
+              invalid={!inputs.description.isValid}
+              textInputConfig={{
+                multiline: true,
+                // autoCapitalize: 'none'
+                // autoCorrect: false // default is true
+                onChangeText: inputChangedHandler.bind(this, 'description'),
+                value: inputs.description.value,
+              }}
+            />
+            {formIsInvalid && (
+              <Text style={styles.errorText}>
+                Invalid input values - please check your entered data!
+              </Text>
+            )}
+            <View style={styles.buttons}>
+              <Button style={styles.button} mode="flat" onPress={onCancel}>
+                Cancel
+              </Button>
+              <Button style={styles.button} onPress={submitHandler}>
+                {submitButtonLabel}
+              </Button>
+            </View>
+          </View>
+        );
+      }
+
+      export default ExpenseForm;
+
+      const styles = StyleSheet.create({
+        form: {
+          marginTop: 40,
+        },
+        title: {
+          fontSize: 24,
+          fontWeight: 'bold',
+          color: 'white',
+          marginVertical: 24,
+          textAlign: 'center',
+        },
+        inputsRow: {
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+        },
+        rowInput: {
+          flex: 1,
+        },
+        errorText: {
+          textAlign: 'center',
+          color: GlobalStyles.colors.error500,
+          margin: 8,
+        },
+        buttons: {
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+        },
+        button: {
+          minWidth: 120,
+          marginHorizontal: 8,
+        },
+      });
+      `}</Code>
+
+      <H>Numbers keyboard</H>
 
       <Code block jsx>{`
         const [enteredNumber, setEnteredNumber] = useState('');
@@ -714,6 +931,7 @@ const postObj = {
       <ul>
         <li>That is inline styles</li>
         <li>Not all elements supports it</li>
+        <li>Multiple styles can be combined in array, with this approach we also can apply styles conditionally</li>
       </ul>
 
 
@@ -722,9 +940,12 @@ const postObj = {
       import React from 'react'
       import {Text, View} from 'react-native'
 
+      const someStyles = { marin: 5}
+
       const HelloWorldApp = () => (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
           <Text style={{ fontSize: 20}}>Hello, world!</Text>
+          <Text style={[{ fontSize: 20}, someStyles]}>Hello, world!</Text>
         </View>
       )
       export default HelloWorldApp
@@ -734,6 +955,7 @@ const postObj = {
 
       <ul>
         <li>Use <code>StyleSheet.create</code> to create multiple styles at ones</li>
+        <li>Good thing is that VSCode autocompletion works in <code>StyleSheet.create</code></li>
       </ul>
 
       <Code block jsx>{`
@@ -1804,6 +2026,96 @@ const postObj = {
       const styles = StyleSheet.create({
         container: {},
       });
+      `}</Code>
+
+      <H>Loading sinner</H>
+
+      <Code block jsx>{`
+      import { View, ActivityIndicator, StyleSheet } from 'react-native';
+
+      import { GlobalStyles } from '../../constants/styles';
+
+      function LoadingOverlay() {
+        return (
+          <View style={styles.container}>
+            <ActivityIndicator size="large" color="white" />
+          </View>
+        );
+      }
+
+      export default LoadingOverlay;
+
+      const styles = StyleSheet.create({
+        container: {
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: 24,
+          backgroundColor: GlobalStyles.colors.primary700,
+        },
+      });
+
+      `}</Code>
+
+      <p>Overlay is used here during http request.</p>
+
+      <Code block jsx>{`
+      import { useContext, useEffect, useState } from 'react';
+
+      import ExpensesOutput from '../components/ExpensesOutput/ExpensesOutput';
+      import ErrorOverlay from '../components/UI/ErrorOverlay';
+      import LoadingOverlay from '../components/UI/LoadingOverlay';
+      import { ExpensesContext } from '../store/expenses-context';
+      import { getDateMinusDays } from '../util/date';
+      import { fetchExpenses } from '../util/http';
+
+      function RecentExpenses() {
+        const [isFetching, setIsFetching] = useState(true);
+        const [error, setError] = useState();
+
+        const expensesCtx = useContext(ExpensesContext);
+
+        useEffect(() => {
+          async function getExpenses() {
+            setIsFetching(true);
+            try {
+              const expenses = await fetchExpenses();
+              expensesCtx.setExpenses(expenses);
+            } catch (error) {
+              setError('Could not fetch expenses!');
+            }
+            setIsFetching(false);
+          }
+
+          getExpenses();
+        }, []);
+
+        if (error && !isFetching) {
+          return <ErrorOverlay message={error} />;
+        }
+
+        if (isFetching) {
+          return <LoadingOverlay />;
+        }
+
+        const recentExpenses = expensesCtx.expenses.filter((expense) => {
+          const today = new Date();
+          const date7DaysAgo = getDateMinusDays(today, 7);
+
+          return expense.date >= date7DaysAgo && expense.date <= today;
+        });
+
+        return (
+          <ExpensesOutput
+            expenses={recentExpenses}
+            expensesPeriod="Last 7 Days"
+            fallbackText="No expenses registered for the last 7 days."
+          />
+        );
+      }
+
+      export default RecentExpenses;
+
       `}</Code>
 
   

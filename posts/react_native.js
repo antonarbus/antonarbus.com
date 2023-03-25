@@ -2927,6 +2927,42 @@ const postObj = {
       });
       `}</Code>
 
+      <H>Without Expo</H>
+
+      <ul>
+        <li>Expo provides us a development service which has a client for all devices to run the code</li>
+        <li>So far we used <i>Expo <Lnk path='https://docs.expo.dev/introduction/managed-vs-bare/#managed-workflow'>Managed</Lnk> workflow</i> with minimum configuration and where we can mix JS with native code</li>
+        <li>We can use also <i>Expo <Lnk path='https://docs.expo.dev/introduction/managed-vs-bare/#bare-workflow'>Bare</Lnk> workflow</i> which is more configurable</li>
+        <li>Or use just React Native CLI without Expo</li>
+        <li>For Bare workflow you need to setup basic React Native <Lnk path='https://reactnative.dev/docs/environment-setup'>environment</Lnk></li>
+        <li><Code bash>expo init</Code> and choose <i>bare</i> options</li>
+        <li>Looks the same, but more files and folders</li>
+        <li>To run the development emulator execute the npm script from the package.json, for ex. <Code bash>npm run ios</Code></li>
+        <li>You may need to make additional configuration to use Expo services with bare workflow, for <Lnk path='https://docs.expo.dev/versions/latest/sdk/location/'>location</Lnk> service some <Lnk path='https://github.com/expo/expo/tree/sdk-48/packages/expo-location#installation-in-bare-react-native-projects'>steps</Lnk> are needed</li>
+        <li>We can go from <i>managed</i> to <i>bare</i> workflow by <Code>expo eject</Code></li>
+        <li>if you initialized a project with native cli and want to use expo packages you can do that</li>
+        <li><Lnk path='https://docs.expo.dev/bare/installing-expo-modules/'>https://docs.expo.dev/bare/installing-expo-modules/</Lnk></li>
+      </ul>
+
+      <H>Publish</H>
+
+      <ul>
+        <li><Lnk path='https://expo.dev/eas'>https://expo.dev/eas</Lnk> - service from expo for building and publishing apps in app stores</li>
+        <li><code>app.json</code> to be configured, details config can be found <Lnk path='https://docs.expo.dev/versions/v48.0.0/config/app/'>here</Lnk></li>
+        <li>for environment variables check <Lnk path='https://docs.expo.dev/build-reference/variables/'>here</Lnk></li>
+        <li>for icons and splashscreen go <Lnk path='https://docs.expo.dev/tutorial/configuration/'>here</Lnk></li>
+        <li>read <Lnk path='https://docs.expo.dev/build/introduction/'>this</Lnk> to build an app with expo service</li>
+        <li>check <Lnk path='https://www.udemy.com/course/react-native-the-practical-guide/learn/lecture/31404688'>this video</Lnk> about app distribution with Expo, quite long and boring process</li>
+        <li>to publish ios version without expo follow <Lnk path='https://reactnative.dev/docs/publishing-to-app-store'>this link</Lnk></li>
+        <li>to publish android version without expo follow <Lnk path='https://reactnative.dev/docs/signed-apk-android'>this link</Lnk></li>
+      </ul>
+
+      <H>Push notifications</H>
+
+      <ul>
+        <li></li>
+      </ul>
+
     </>
   )
 }

@@ -67,7 +67,7 @@ const postObj = {
 
       <ul>
         <li>Install <Lnk path='https://developer.android.com/studio'>https://developer.android.com/studio</Lnk></li>
-        <li>There you can create an emulator under <code>projects</code> --> <code>more actions</code> --> <code>virtual device manager</code> </li>
+        <li>There you can create an emulator under <code>projects</code>{' --> '}<code>more actions</code>{' --> '}<code>virtual device manager</code> </li>
         <li>From the terminal just press <kbd>A</kbd> to open the app in android simulator</li>
       </ul>
 
@@ -943,7 +943,6 @@ const postObj = {
         <li>Multiple styles can be combined in array, with this approach we also can apply styles conditionally</li>
       </ul>
 
-
       <Code block jsx>{`
       // App.js
       import React from 'react'
@@ -1369,7 +1368,7 @@ const postObj = {
       <H>useWindowDimensions</H>
 
       <ul>
-        <li><Code>useWindowDimensions()</Code> hook does respond to the phone rotations</li>  
+        <li><Code>useWindowDimensions()</Code> hook does respond to the phone rotations</li>
       </ul>
 
       <Code block jsx>{`
@@ -1745,7 +1744,6 @@ const postObj = {
       });
       `}</Code>
 
-
       <H>useNavigation</H>
 
       <ul>
@@ -1786,7 +1784,7 @@ const postObj = {
       <H>Pass data via navigation</H>
 
       <ul>
-        <li>With <Code>navigation.navigate('name_of_the_screen', {});</Code> we can pass data in second parameter</li> 
+        <li>With <Code>navigation.navigate('name_of_the_screen', {});</Code> we can pass data in second parameter</li>
       </ul>
 
       <Code block jsx>{`

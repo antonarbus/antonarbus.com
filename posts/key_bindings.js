@@ -11,7 +11,7 @@ const postObj = {
 
       <ul>
         <li>Download and install <Lnk path='https://karabiner-elements.pqrs.org'>Karabiner-Elements</Lnk> key binding app for Mac </li>
-        <li>Modify its configuration json file  at <Code>~/.config/karabiner/karabiner.json</Code></li>
+        <li>Modify its configuration json file  at <Code>code ~/.config/karabiner/karabiner.json</Code></li>
         <li>Here is the example of my file where I added arrow keys shortcuts for <kbd>i</kbd> <kbd>k</kbd> <kbd>j</kbd> <kbd>l</kbd> keys</li>
       </ul>
 

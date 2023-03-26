@@ -70,6 +70,7 @@ const postObj = {
         <li>Selector can be extracted into a separate selector function, can be used in case the same selector is used in multiple places</li>
         <li>With <Lnk path='https://www.npmjs.com/package/reselect'>createSelector</Lnk> we can pass several selectors into it and return new modified cached selector</li>
         <li>Good <Lnk path='https://daveceddia.com/redux-selectors/'>article</Lnk> about <i>reselect</i></li>
+        <li>Official <Lnk path='https://react-redux.js.org/api/hooks#equality-comparisons-and-updates'>explanation</Lnk> how comparison in selectors work</li>
         <li>Also good <Lnk path='https://stackoverflow.com/a/74491857/7239778'>explanation</Lnk> how selectors work</li>
       </ul>
 

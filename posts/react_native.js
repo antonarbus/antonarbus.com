@@ -2957,6 +2957,16 @@ const postObj = {
         <li>to publish android version without expo follow <Lnk path='https://reactnative.dev/docs/signed-apk-android'>this link</Lnk></li>
       </ul>
 
+      <H>Local notifications</H>
+
+      <ul>
+        <li>Local notifications are sent from this device to this device</li>
+        <li>Such notifications can be scheduled</li>
+        <li>Can be utilized for ex. in alarm, reminder or to-do apps, etc...</li>
+        <li><Lnk path='https://docs.expo.dev/versions/latest/sdk/notifications/'>https://docs.expo.dev/versions/latest/sdk/notifications/</Lnk></li>
+        <li><Code>npx expo install expo-notifications</Code></li>
+      </ul>
+
       <H>Push notifications</H>
 
       <ul>

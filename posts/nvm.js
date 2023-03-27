@@ -3,7 +3,7 @@ import { Code, H, Lnk, jsxToStr } from '/components/post/reExport'
 const postObj = {
   title: 'nvm',
   date: '2022.06.18',
-  tags: ['xxx', 'xxx'],
+  tags: ['node', 'tools'],
   imgUrl: 'https://antonarbus.com/imgs/nvm.png',
   desc: 'install multiple node versions and switch between them',
   body: (
@@ -14,9 +14,11 @@ const postObj = {
 
       <H>Installation</H>
 
-      <ul><li><Code bash>curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash</Code></li></ul>
-
-      <p>Check if it is installed by <Code bash>command -v nvm</Code> and get the <code>nvm</code> output.</p>
+      <ul>
+        <li><Code bash>curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash</Code></li>
+        <li>Reboot the terminal</li>
+        <li>Check if it is installed by <Code bash>command -v nvm</Code> and get the <code>nvm</code> output.</li>
+      </ul>
 
       <H>Available Node versions</H>
 

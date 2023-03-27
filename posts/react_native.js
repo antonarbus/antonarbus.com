@@ -19,8 +19,8 @@ const postObj = {
         <li><Code>brew install watchman</Code></li>
         <li><Code>{'\\curl -sSL https://get.rvm.io | bash -s stable'}</Code> install ruby version manager</li>
         <li>reboot terminal</li>
-        <li><Code>rvm install 2.7.5</Code> install specific ruby version, same as <Lnk path='https://github.com/facebook/react-native/blob/main/template/_ruby-version'>here</Lnk></li>
-        <li><Code>rvm use 2.7.5</Code> switch ruby version</li>
+        <li><Code>rvm install 2.7.6</Code> install specific ruby version with <Lnk path='https://github.com/rvm/rvm'>RVM</Lnk>, same version as <Lnk path='https://github.com/facebook/react-native/blob/main/template/_ruby-version'>here</Lnk></li>
+        <li><Code>rvm use 2.7.6</Code> switch ruby version</li>
         <li><Lnk path='https://apps.apple.com/us/app/xcode/id497799835?mt=12'>XCode</Lnk> to be installed</li>
         <li>Choose latest version in <code>Xcode</code> - <code>File</code> - <code>Settings</code> - <code>Location</code> - <code>Command line tools</code></li>
         <li>Instal an iOS Simulator in Xcode</li>

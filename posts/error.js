@@ -35,6 +35,27 @@ const postObj = {
       }
       `}</Code>
 
+      <H>Finally and return</H>
+
+      <ul>
+        <li>be careful with return statement in <code>try</code> & <code>finally</code> blocks</li>
+        <li>return value in <code>finally</code> block overwrites a value in <code>try</code> block</li>
+      </ul>
+
+      <Code block jsx>{`
+      function example() {
+        try {
+          return true;
+        }
+        finally {
+          console.log('finally')
+          return false
+        }
+      }
+      // finally
+      // false
+      `}</Code>
+
       <H>Scheduled function</H>
 
       <Code block jsx>{`

@@ -97,6 +97,30 @@ const postObj = {
         <li><b>Function URLs</b> - you can assign a dedicated HTTP endpoint to your Lambda function and it will be invoked through a web browser, curl, Postman, or any HTTP client.</li>
       </ul>
 
+      <H>Lambda with url</H>
+
+      <ul>
+        <li>lambda is usually associated with api gateway</li>
+        <li>api gateway has 30 sec timeout restriction</li>
+        <li>sometimes it is not an option</li>
+        <li>we can call lambda function directly assigning a <Lnk path='https://docs.aws.amazon.com/lambda/latest/dg/lambda-urls.html?icmpid=docs_lambda_help'>URL</Lnk> to it</li>
+        <li>lambda function itself has 15 min timeout restriction, which is a lot</li>
+        <li>with this approach we convert a lambda function into an api</li>
+      </ul>
+
+      <H>Return a value from lambda function with url API</H>
+
+      <ul>
+        <li>to return smth from an api we just need to return a value from the <code>exports.handler</code></li>
+        <li><code>await</code> is not needed</li>
+      </ul>
+
+      <Code block jsx>{`
+      exports.handler = async (event, context) => {
+        return someFunc()
+      }
+      `}</Code>
+
       <H>Hints</H>
 
       <ul>

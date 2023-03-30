@@ -96,6 +96,12 @@ const postObj = {
         <li><b>Concurrency</b> - number of requests that your function is serving at any given time</li>
         <li><b>Function URLs</b> - you can assign a dedicated HTTP endpoint to your Lambda function and it will be invoked through a web browser, curl, Postman, or any HTTP client.</li>
       </ul>
+
+      <H>Hints</H>
+
+      <ul>
+        <li>Always return smth from the lambda function, otherwise it may be unstable acc. to Jari</li>
+      </ul>
     </>
   )
 }

@@ -32,6 +32,7 @@ export function Code(props) {
   if (props.typescript) lang = 'typescript'
   if (props.ignore) lang = 'ignore'
   if (props.markup) lang = 'markup'
+  if (props.yaml) lang = 'yaml'
   if (props.none) lang = 'none'
 
   const block = !!(false || props.block)

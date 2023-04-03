@@ -27,16 +27,46 @@ const postObj = {
       <H>Structure</H>
 
       <ul>
+        <li>Template follows <Lnk path='https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-specification-template-anatomy.html'>AWS SAM template anatomy</Lnk></li>
+        <li><Code>Transform</Code> (required) set a macro to process the template </li>
+        <li><Code>Resources</Code> (required) list of resource objects, like Lambda function, S3 buckets, API Gateways etc... The only mandatory field</li>
         <li><Code>AWSTemplateFormatVersion</Code> capabilities of the template based on a version</li>
         <li><Code>Description</Code> arbitrary comments</li>
         <li><Code>Metadata</Code> additional details of the resources in the template</li>
-        <li><Code>Resources</Code> list of resource objects, like Lambda function, S3 buckets, API Gateways etc... The only mandatory field</li>
         <li><Code>Parameters</Code> customized values for template or resources (not clear)</li>
         <li><Code>Mappings</Code> key-value dictionaries from which a value can be looked up and used in the template</li>
         <li><Code>Conditions</Code> condition to created a resource or set a parameter</li>
-        <li><Code>Transform</Code> set a macro to process the template </li>
         <li><Code>Outputs</Code> set a value which can be imported into other stacks or show on cloudformation console</li>
       </ul>
+
+      <Code block yaml>{`
+      Transform: AWS::Serverless-2016-10-31
+
+      Globals:
+        set of globals
+
+      Description:
+        String
+
+      Metadata:
+        template metadata
+
+      Parameters:
+        set of parameters
+
+      Mappings:
+        set of mappings
+
+      Conditions:
+        set of conditions
+
+      Resources:
+        set of resources
+
+      Outputs:
+        set of outputs
+
+      `}</Code>
 
       <H>AWSTemplateFormatVersion</H>
 
@@ -136,6 +166,12 @@ const postObj = {
       <ul>
         <li><Lnk path='https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/parameters-section-structure.html'>Details are here</Lnk></li>
         <li>Adds custom values to your template each time you create or update a stack</li>
+        <li>to point to the parameter use <Code>Ref</Code> function</li>
+        <li>can reference parameters from the <code>Resources</code> & <code>Outputs</code> sections of the same template.</li>
+        <li>maximum of 200 parameters in a template</li>
+        <li>Each parameter must be given a logical name </li>
+        <li>A parameter must have a <Lnk path='https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/parameters-section-structure.html#parameters-section-structure-properties-type'>type</Lnk></li>
+        <li>Following props are available: <code>AllowedPattern</code> <code>AllowedValues</code> <code>ConstraintDescription</code> <code>Default</code> <code>Description</code> <code>MaxLength</code> <code>MaxValue</code> <code>MinLength</code> <code>MinValue</code> <code>NoEcho</code> <code>Type</code> </li>
       </ul>
 
       <Code block yaml>{`
@@ -150,11 +186,6 @@ const postObj = {
           Description: Enter t2.micro, m1.small, or m1.large. Default is t2.micro.
       `}</Code>
 
-      <ul>
-        <li>to point to the parameter use <Code>Ref</Code> function</li>
-        <li>can reference parameters from the <code>Resources</code> & <code>Outputs</code> sections of the same template.</li>
-      </ul>
-
       <Code block yaml>{`
       Resources:
         Ec2Instance:
@@ -164,13 +195,6 @@ const postObj = {
               Ref: InstanceTypeParameter
             ImageId: ami-0ff8a91507f77f867
       `}</Code>
-
-      <ul>
-        <li>maximum of 200 parameters in a template</li>
-        <li>Each parameter must be given a logical name </li>
-        <li>A parameter must have a <Lnk path='https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/parameters-section-structure.html#parameters-section-structure-properties-type'>type</Lnk></li>
-        <li>Following props are available: <code>AllowedPattern</code> <code>AllowedValues</code> <code>ConstraintDescription</code> <code>Default</code> <code>Description</code> <code>MaxLength</code> <code>MaxValue</code> <code>MinLength</code> <code>MinValue</code> <code>NoEcho</code> <code>Type</code> </li>
-      </ul>
 
       <Code block jsx>{`
       Parameters: 
@@ -241,7 +265,8 @@ const postObj = {
       <ul>
         <li><Lnk path='https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/mappings-section-structure.html'>Details are here</Lnk></li>
         <li>matches a key to a corresponding set of named values</li>
-        <li>use the <code>Fn::FindInMap</code> function to return a named value based on a specified key.</li>
+        <li>can use to specify conditional parameter values, similar to a lookup table</li>
+        <li>match a key to a corresponding value by using the <code>Fn::FindInMap</code> function which returns a named value based on a specified key.</li>
       </ul>
 
       <p>Example template contains an Amazon EC2 resource whose <code>ImageId</code> property is assigned by the <code>FindInMap</code> function. The <code>FindInMap</code> function specifies key as the region where the stack is created and HVM64 as the name of the value to map to.</p>
@@ -277,9 +302,9 @@ const postObj = {
 
       <ul>
         <li><Lnk path='https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/conditions-section-structure.html'>Details are here</Lnk></li>
-        <li>Conditions section contains statements that define the circumstances under which entities are created or configured</li>
-        <li>For ex. may create a condition when to create the resource or output or set a property</li>
-        <li>Function to be used: <code>Fn::And</code>, <code>Fn::Equals</code>, <code>Fn::If</code>, <code>Fn::Not</code>, <code>Fn::Or</code></li>
+        <li>controls whether certain resources are created or whether certain resource properties are assigned a value during stack creation or update</li>
+        <li>for ex. may create a condition when to create the resource or output or set a property</li>
+        <li>function to be used: <code>Fn::And</code>, <code>Fn::Equals</code>, <code>Fn::If</code>, <code>Fn::Not</code>, <code>Fn::Or</code></li>
       </ul>
 
       <p>In the example we have <code>EnvType</code> input parameter, where you can specify <code>prod</code> or <code>test</code> to create a stack. For a prod env we create an EC2 instance and attache a volume to the instance. For a test env just create the EC2 instance.</p>
@@ -361,6 +386,25 @@ const postObj = {
       <ul>
         <li><Lnk path='https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-section-structure.html'>Details are here</Lnk></li>
         <li>Specifies a <Lnk path='https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-macros.html'>macros</Lnk> to process the template</li>
+        <li>Must include this section with a value of <Code>AWS::Serverless-2016-10-31</Code></li>
+        <li>Additional transforms are optional. </li>
+        <li>Let's skip it for now...</li>
+      </ul>
+
+      <H>Globals</H>
+
+      <ul>
+        <li><Lnk path='https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-specification-template-anatomy-globals.html'>Details are here</Lnk></li>
+        <li>Defines properties that are common to all your serverless functions and APIs.</li>
+        <li>This section is unique to AWS SAM.</li>
+      </ul>
+
+      <H>Transform</H>
+
+      <ul>
+        <li><Lnk path='https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-section-structure.html'>Details are here</Lnk></li>
+        <li>Specifies a <Lnk path='https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-macros.html'>macros</Lnk> to process the template</li>
+        <li>Must include this section with a value of <Code>AWS::Serverless-2016-10-31</Code></li>
         <li>Let's skip it for now...</li>
       </ul>
 

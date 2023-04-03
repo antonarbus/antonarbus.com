@@ -11,7 +11,7 @@ console.log(i + ': starting...')
 let path
 path = '.next'
 if (fs.existsSync(path)) {
-  output = execSync('rm -r ' + path, options)
+  output = execSync('rm -rf ' + path, options)
   console.log(output)
   i++
   console.log(i + ' removed .next')
@@ -21,7 +21,7 @@ path = 'archive.tar.gz'
 if (fs.existsSync(path)) {
   i++
   console.log(i + ': removing archive.tar.gz')
-  output = execSync('rm -r ' + path, options)
+  output = execSync('rm -rf ' + path, options)
   console.log(output)
 }
 
@@ -42,7 +42,7 @@ console.log(output)
 
 i++
 console.log(i + ': removing folders on server')
-output = execSync('ssh sherb@35.217.12.143 "cd /var/www/html/antonarbus.com/ && rm -r archive.tar.gz .next package.json next.config.js public"', options)
+output = execSync('ssh sherb@35.217.12.143 "cd /var/www/html/antonarbus.com/ && rm -rf archive.tar.gz .next package.json next.config.js public"', options)
 console.log(output)
 
 i++

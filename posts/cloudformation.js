@@ -147,6 +147,163 @@ const postObj = {
           Type: "List<AWS::EC2::Subnet::Id>"
       `}</Code>
 
+      <H>Rules</H>
+
+      <ul>
+        <li><Lnk path='https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/rules-section-structure.html'>Details are here</Lnk></li>
+        <li><code>Rules</code> validates parameter values during a stack creation</li>
+        <li>CloudFormation evaluates the assertions to verify whether an assertion for a parameter value is true</li>
+        <li>If a parameter value is invalid, AWS CloudFormation does not create or update the stack</li>
+        <li>Following function can be used: You can use the following rule-specific intrinsic functions to define rule conditions and assertions: <code>Fn::And</code>, <code>Fn::Contains</code>, <code>Fn::EachMemberEquals</code>, <code>Fn::EachMemberIn</code>, <code>Fn::Equals</code>, <code>Fn::If</code>, <code>Fn::Not</code>, <code>Fn::Or</code>, <code>Fn::RefAll</code>, <code>Fn::ValueOf</code>, <code>Fn::ValueOfAll</code></li>
+      </ul>
+
+      <p>Two rules check the value of the <code>InstanceType</code> parameter. Depending on the value of the environment parameter (<code>test</code> or <code>prod</code>), the user must specify <code>a1.medium</code> or <code>a1.large</code> for the <code>InstanceType</code> parameter. The <code>InstanceType</code> and <code>Environment</code> parameters must be declared in the <code>Parameters</code> section of the same template.</p>
+
+      <Code block yaml>{`
+      Rules:
+        testInstanceType:
+          RuleCondition: !Equals 
+            - !Ref Environment
+            - test
+          Assertions:
+            - Assert:
+                'Fn::Contains':
+                  - - a1.medium
+                  - !Ref InstanceType
+              AssertDescription: 'For a test environment, the instance type must be a1.medium'
+        prodInstanceType:
+          RuleCondition: !Equals 
+            - !Ref Environment
+            - prod
+          Assertions:
+            - Assert:
+                'Fn::Contains':
+                  - - a1.large
+                  - !Ref InstanceType
+              AssertDescription: 'For a production environment, the instance type must be a1.large'
+
+      `}</Code>
+
+      <H>Mappings</H>
+
+      <ul>
+        <li><Lnk path='https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/mappings-section-structure.html'>Details are here</Lnk></li>
+        <li>matches a key to a corresponding set of named values</li>
+        <li>use the <code>Fn::FindInMap</code> function to return a named value based on a specified key.</li>
+      </ul>
+
+      <p>Example template contains an Amazon EC2 resource whose <code>ImageId</code> property is assigned by the <code>FindInMap</code> function. The <code>FindInMap</code> function specifies key as the region where the stack is created and HVM64 as the name of the value to map to.</p>
+
+      <Code block jsx>{`
+      AWSTemplateFormatVersion: "2010-09-09"
+      Mappings: 
+        RegionMap: 
+          us-east-1:
+            HVM64: ami-0ff8a91507f77f867
+            HVMG2: ami-0a584ac55a7631c0c
+          us-west-1:
+            HVM64: ami-0bdb828fd58c52235
+            HVMG2: ami-066ee5fd4a9ef77f1
+          eu-west-1:
+            HVM64: ami-047bb4163c506cd98
+            HVMG2: ami-0a7c483d527806435
+          ap-northeast-1:
+            HVM64: ami-06cd52961ce9f0d85
+            HVMG2: ami-053cdd503598e4a9d
+          ap-southeast-1:
+            HVM64: ami-08569b978cc4dfa10
+            HVMG2: ami-0be9df32ae9f92309
+      Resources: 
+        myEC2Instance: 
+          Type: "AWS::EC2::Instance"
+          Properties: 
+            ImageId: !FindInMap [RegionMap, !Ref "AWS::Region", HVM64]
+            InstanceType: m1.small
+      `}</Code>
+
+      <H>Conditions</H>
+
+      <ul>
+        <li><Lnk path='https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/conditions-section-structure.html'>Details are here</Lnk></li>
+        <li>Conditions section contains statements that define the circumstances under which entities are created or configured</li>
+        <li>For ex. may create a condition when to create the resource or output or set a property</li>
+        <li>Function to be used: <code>Fn::And</code>, <code>Fn::Equals</code>, <code>Fn::If</code>, <code>Fn::Not</code>, <code>Fn::Or</code></li>
+      </ul>
+
+      <p>In the example we have <code>EnvType</code> input parameter, where you can specify <code>prod</code> or <code>test</code> to create a stack. For a prod env we create an EC2 instance and attache a volume to the instance. For a test env just create the EC2 instance.</p>
+
+      <Code block yaml>{`
+      AWSTemplateFormatVersion: 2010-09-09
+      Parameters:
+        EnvType:
+          Description: Environment type.
+          Default: test
+          Type: String
+          AllowedValues:
+            - prod
+            - test
+          ConstraintDescription: must specify prod or test.
+      Conditions:
+        CreateProdResources: !Equals 
+          - !Ref EnvType
+          - prod
+      Resources:
+        EC2Instance:
+          Type: 'AWS::EC2::Instance'
+          Properties:
+            ImageId: ami-0ff8a91507f77f867
+        MountPoint:
+          Type: 'AWS::EC2::VolumeAttachment'
+          Condition: CreateProdResources
+          Properties:
+            InstanceId: !Ref EC2Instance
+            VolumeId: !Ref NewVolume
+            Device: /dev/sdh
+        NewVolume:
+          Type: 'AWS::EC2::Volume'
+          Condition: CreateProdResources
+          Properties:
+            Size: 100
+            AvailabilityZone: !GetAtt 
+              - EC2Instance
+              - AvailabilityZone
+      `}</Code>
+
+      <p>Nested condition.  For a stack deployed in a production environment, AWS CloudFormation creates a policy for the S3 bucket.</p>
+
+      <Code block yaml>{`
+      Parameters:
+        EnvType:
+          Type: String
+          AllowedValues:
+            - prod
+            - test
+        BucketName:
+          Default: ''
+          Type: String
+      Conditions:
+        IsProduction: !Equals 
+          - !Ref EnvType
+          - prod
+        CreateBucket: !Not 
+          - !Equals 
+            - !Ref BucketName
+            - ''
+        CreateBucketPolicy: !And 
+          - !Condition IsProduction
+          - !Condition CreateBucket
+      Resources:
+        Bucket:
+          Type: 'AWS::S3::Bucket'
+          Condition: CreateBucket
+        Policy:
+          Type: 'AWS::S3::BucketPolicy'
+          Condition: CreateBucketPolicy
+          Properties:
+            Bucket: !Ref Bucket
+            PolicyDocument: ...
+      `}</Code>
+
     </>
   )
 }

@@ -1430,7 +1430,6 @@ const postObj = {
           description: "throw out trash",
         });
       `}</Code>
-
     </>
   )
 }

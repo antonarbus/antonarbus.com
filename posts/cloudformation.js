@@ -418,6 +418,15 @@ const postObj = {
           Value: !Ref "AWS::Region"
       `}</Code>
 
+      <H>Built-in functions</H>
+
+      <ul>
+        <li><Lnk path='https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference.html'>Details are here</Lnk></li>
+        <li>Can use intrinsic functions in resource properties, outputs, metadata attributes, and update policy attributes. You can also use intrinsic functions to conditionally create stack resources.</li>
+        <li><code>Fn::Base64</code>, <code>Fn::Cidr</code>, <code>Condition functions</code>, <code>Fn::FindInMap</code>, <code>Fn::GetAtt</code>, <code>Fn::GetAZs</code>, <code>Fn::ImportValue</code>, <code>Fn::Join</code>, <code>Fn::Length</code>, <code>Fn::Select</code>, <code>Fn::Split</code>, <code>Fn::Sub</code>, <code>Fn::ToJsonString</code>, <code>Fn::Transform</code>, <code>Ref</code></li>
+        <li>condition functions: <code>Fn::And</code>, <code>Fn::Equals</code>, <code>Fn::If</code>, <code>Fn::Not</code>, <code>Fn::Or</code></li>
+      </ul>
+
       <H>Ref</H>
 
       <ul>

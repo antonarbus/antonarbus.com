@@ -26,16 +26,15 @@ const postObj = {
       <H>Structure</H>
 
       <ul>
-        <li>May include 9 main top objects</li>
-        <li><Code>AWSTemplateFormatVersion</Code> identifies capabilities of the template based on a version</li>
-        <li><Code>Description</Code> arbitrary comments, purpose of service infrastructure</li>
-        <li><Code>Metadata</Code> details of the resources in the template</li>
-        <li><Code>Resources</Code> list of resource objects (the only mandatory field). Lambda function, S3 buckets, API Gateways etc... are listed here</li>
-        <li><Code>Parameters</Code> values to customize template or resources (not clear)</li>
-        <li><Code>Mappings</Code> not clear</li>
-        <li><Code>Conditions</Code> define a condition when a resource is created or when a parameter is defined</li>
-        <li><Code>Transform</Code> not clear</li>
-        <li><Code>Outputs</Code> can declare the output which can be imported into other stacks or show on cloudformation console (not clear)</li>
+        <li><Code>AWSTemplateFormatVersion</Code> capabilities of the template based on a version</li>
+        <li><Code>Description</Code> arbitrary comments</li>
+        <li><Code>Metadata</Code> additional details of the resources in the template</li>
+        <li><Code>Resources</Code> list of resource objects, like Lambda function, S3 buckets, API Gateways etc... The only mandatory field</li>
+        <li><Code>Parameters</Code> customized values for template or resources (not clear)</li>
+        <li><Code>Mappings</Code> key-value dictionaries from which a value can be looked up and used in the template</li>
+        <li><Code>Conditions</Code> condition to created a resource or set a parameter</li>
+        <li><Code>Transform</Code> set a macro to process the template </li>
+        <li><Code>Outputs</Code> set a value which can be imported into other stacks or show on cloudformation console</li>
       </ul>
 
       <H>AWSTemplateFormatVersion</H>
@@ -77,6 +76,58 @@ const postObj = {
           Description: "Information about the instances"
         Databases: 
           Description: "Information about the databases"
+      `}</Code>
+
+      <H>Resources</H>
+
+      <ul>
+        <li><Lnk path='https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/resources-section-structure.html'>Details are here</Lnk></li>
+        <li>Resources list included in the stack</li>
+        <li>All resources <Lnk path='https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html'>properties</Lnk></li>
+      </ul>
+
+      <Code block yaml>{`
+      Resources:
+        MyEC2Instance:
+          Type: "AWS::EC2::Instance"
+          Properties:
+            ImageId: "ami-0ff8a91507f77f867"
+      `}</Code>
+
+      <p>Example of different property types</p>
+
+      <Code block jsx>{`
+      Properties:
+        String: OneStringValue
+        String: A longer string value 
+        Number: 123
+        LiteralList:
+          - "[first]-string-value with a special characters"
+          - "[second]-string-value with a special characters"
+        Boolean: true
+        ReferenceForOneValue:
+          Ref: MyLogicalResourceName
+        ReferenceForOneValueShortCut: !Ref MyLogicalResourceName
+        FunctionResultWithFunctionParams: !Sub |
+          Key=%\${MyParameter}
+      `}</Code>
+
+      <p>Example defines two resources. The <code>MyInstance</code> resource includes the <code>MyQueue</code> resource as part of its <code>UserData</code> property.</p>
+
+      <Code block yaml>{`
+      Resources: 
+        MyInstance: 
+          Type: "AWS::EC2::Instance"
+          Properties: 
+            UserData: 
+              "Fn::Base64":
+                !Sub |
+                  Queue=\${MyQueue}
+            AvailabilityZone: "us-east-1a"
+            ImageId: "ami-0ff8a91507f77f867"
+        MyQueue: 
+          Type: "AWS::SQS::Queue"
+          Properties: {}
       `}</Code>
 
       <H>Parameters</H>
@@ -302,6 +353,47 @@ const postObj = {
           Properties:
             Bucket: !Ref Bucket
             PolicyDocument: ...
+      `}</Code>
+
+      <H>Transform</H>
+
+      <ul>
+        <li><Lnk path='https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-section-structure.html'>Details are here</Lnk></li>
+        <li>Specifies a <Lnk path='https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-macros.html'>macros</Lnk> to process the template</li>
+        <li>Let's skip it for now...</li>
+      </ul>
+
+      <H>Outputs</H>
+
+      <ul>
+        <li><Lnk path='https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/outputs-section-structure.html'>Details are here</Lnk></li>
+        <li>declares output values that you can import into other stacks, return in response (to describe stack calls), or view on the AWS CloudFormation console.</li>
+        <li>For ex, can output the S3 bucket name to make the bucket easier to find.</li>
+        <li>Max 200 outputs per template</li>
+      </ul>
+
+      <p><code>BackupLoadBalancerDNSName</code> output returns the DNS name for the resource with the logical ID <code>BackupLoadBalancer</code> only when the <code>CreateProdResources</code> condition is true. (The second output shows how to specify multiple outputs.)</p>
+
+      <Code block yaml>{`
+      Outputs:
+        BackupLoadBalancerDNSName:
+          Description: The DNSName of the backup load balancer
+          Value: !GetAtt BackupLoadBalancer.DNSName
+          Condition: CreateProdResources
+        InstanceID:
+          Description: The Instance ID
+          Value: !Ref EC2Instance
+      `}</Code>
+
+      <p>Output named <code>StackVPC</code> returns the ID of a VPC, and then exports the value for cross-stack referencing with the name <code>VPCID</code> appended to the stack's name.</p>
+
+      <Code block yaml>{`
+      Outputs:
+        StackVPC:
+          Description: The ID of the VPC
+          Value: !Ref MyVPC
+          Export:
+            Name: !Sub "\${AWS::StackName}-VPCID"
       `}</Code>
 
     </>

@@ -28,8 +28,8 @@ const postObj = {
 
       <ul>
         <li>Template follows <Lnk path='https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-specification-template-anatomy.html'>AWS SAM template anatomy</Lnk></li>
-        <li><Code>Transform</Code> (required) set a macro to process the template </li>
-        <li><Code>Resources</Code> (required) list of resource objects, like Lambda function, S3 buckets, API Gateways etc... The only mandatory field</li>
+        <li><Code>Transform</Code> (<b>required</b>) set a macro to process the template </li>
+        <li><Code>Resources</Code> (<b>required</b>) list of resource objects, like Lambda function, S3 buckets, API Gateways etc... The only mandatory field</li>
         <li><Code>AWSTemplateFormatVersion</Code> capabilities of the template based on a version</li>
         <li><Code>Description</Code> arbitrary comments</li>
         <li><Code>Metadata</Code> additional details of the resources in the template</li>

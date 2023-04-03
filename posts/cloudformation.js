@@ -21,6 +21,7 @@ const postObj = {
         <li><Lnk path='https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/gettingstarted.templatebasics.html'>Basics about templates</Lnk></li>
         <li>A template is a text file which declare your AWS resources that make up a stack</li>
         <li>Can be written in JSON or YAML (preferable) formats</li>
+        <li>Find multiple template <Lnk path='https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/CHAP_TemplateQuickRef.html'>snippets</Lnk></li>
       </ul>
 
       <H>Structure</H>
@@ -394,6 +395,55 @@ const postObj = {
           Value: !Ref MyVPC
           Export:
             Name: !Sub "\${AWS::StackName}-VPCID"
+      `}</Code>
+
+      <H>Pseudo parameters</H>
+
+      <ul>
+        <li>Parameters that are predefined by AWS CloudFormation</li>
+        <li>Used as a parameter</li>
+        <li><Code>AWS::AccountId</Code> returns the AWS account ID of the account in which the stack is being created, such as <i>123456789012</i></li>
+        <li><Code>AWS::NotificationARNs</Code> returns the list of notification Amazon Resource Names (ARNs) for the current stack</li>
+        <li><Code>AWS::NoValue</Code> removes the resource property when specified as a return value in the <code>Fn::If</code> function</li>
+        <li><Code>AWS::Partition</Code> returns the partition that the resource is in</li>
+        <li><Code>AWS::Region</Code> returns a string representing the Region in which the encompassing resource is being created</li>
+        <li><Code>AWS::StackId</Code> returns the ID of the stack</li>
+        <li><Code>AWS::StackName</Code> returns the name of the stack</li>
+        <li><Code>AWS::URLSuffix</Code> returns the suffix for a domain. The suffix is typically <i>amazonaws.com</i></li>
+      </ul>
+
+      <Code block yaml>{`
+      Outputs:
+        MyStacksRegion:
+          Value: !Ref "AWS::Region"
+      `}</Code>
+
+      <H>Ref</H>
+
+      <ul>
+        <li>The function Ref returns the value of the specified <i>parameter</i> or <i>resource</i></li>
+        <li>When specify a parameter's logical name, it returns the value of the parameter</li>
+        <li>When specify a resource's logical name, it returns a value that you can typically use to refer to that resource, such as a physical ID</li>
+        <li>Find what <code>Ref</code> returns for every resource or parameter <Lnk path='https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html'>here</Lnk></li>
+      </ul>
+
+      <Code block yaml>{`
+      Ref: logicalName_of_the_resource_or_parameter
+      `}</Code>
+
+      <p>Or shorter way</p>
+
+      <Code block yaml>{`
+      !Ref logicalName_of_the_resource_or_parameter
+      `}</Code>
+
+      <p>Elastic IP address gets the instance ID of an EC2 MyEC2Instance resource</p>
+
+      <Code block yaml>{`
+      MyEIP:
+        Type: "AWS::EC2::EIP"
+        Properties:
+          InstanceId: !Ref MyEC2Instance
       `}</Code>
 
     </>

@@ -455,6 +455,13 @@ const postObj = {
           InstanceId: !Ref MyEC2Instance
       `}</Code>
 
+      <H>AWS CDK</H>
+
+      <ul>
+        <li><Lnk path='https://docs.aws.amazon.com/cdk/index.html'>https://docs.aws.amazon.com/cdk/index.html</Lnk></li>
+        <li>If you do not like to deal with <i>template.yaml</i> you may manage your CloudFormation infrastructure through programming code using AWS CDK </li>
+      </ul>
+
     </>
   )
 }

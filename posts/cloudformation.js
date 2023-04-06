@@ -27,16 +27,17 @@ const postObj = {
       <H>Structure</H>
 
       <ul>
-        <li>Template follows <Lnk path='https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-specification-template-anatomy.html'>AWS SAM template anatomy</Lnk></li>
+        <li>AWS template follows <Lnk path='https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-specification-template-anatomy.html'>AWS SAM template anatomy</Lnk></li>
+        <li>SAM template has almost the same original CloudFormation template structure, but with special <Lnk path='https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-specification-resources-and-properties.html'>additional resources and properties</Lnk></li>
         <li><Code>Transform</Code> (<b>required</b>) set a macro to process the template </li>
-        <li><Code>Resources</Code> (<b>required</b>) list of resource objects, like Lambda function, S3 buckets, API Gateways etc... The only mandatory field</li>
+        <li><Code>Resources</Code> (<b>required</b>) list of resource objects, like Lambda function, S3 buckets, API Gateways etc...</li>
         <li><Code>AWSTemplateFormatVersion</Code> capabilities of the template based on a version</li>
         <li><Code>Description</Code> arbitrary comments</li>
         <li><Code>Metadata</Code> additional details of the resources in the template</li>
-        <li><Code>Parameters</Code> customized values for template or resources (not clear)</li>
+        <li><Code>Parameters</Code> customized values for template or resources</li>
         <li><Code>Mappings</Code> key-value dictionaries from which a value can be looked up and used in the template</li>
         <li><Code>Conditions</Code> condition to created a resource or set a parameter</li>
-        <li><Code>Outputs</Code> set a value which can be imported into other stacks or show on cloudformation console</li>
+        <li><Code>Outputs</Code> set a value which can be imported into other stacks or show on CloudFormation console</li>
       </ul>
 
       <Code block yaml>{`
@@ -505,6 +506,259 @@ const postObj = {
         <li><Lnk path='https://docs.aws.amazon.com/cdk/index.html'>https://docs.aws.amazon.com/cdk/index.html</Lnk></li>
         <li>If you do not like to deal with <i>template.yaml</i> you may manage your CloudFormation infrastructure through programming code using AWS CDK </li>
       </ul>
+
+      <H>AWS SAM</H>
+
+      <ul>
+        <li><Lnk path='https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html'>AWS Serverless Application Model</Lnk> is the framework on top of CloudFormation</li>
+        <li>can use both the AWS CloudFormation and AWS SAM syntax within the same template</li>
+        <li>SAM template has almost the same original CloudFormation template structure, but with special <Lnk path='https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-specification-resources-and-properties.html'>additional resources and properties</Lnk></li>
+        <li>fewer lines of code for the same result, SAM transforms your template into real CloudFormation template</li>
+        <li>SAM CLI has CLI for initialize a project, deploy, debug, test, Configure CI/CD pipeline, monitor, sync local changes</li>
+      </ul>
+
+      <p>SAM template</p>
+
+      <Code block yaml>{`
+      AWSTemplateFormatVersion: 2010-09-09
+      Transform: AWS::Serverless-2016-10-31
+      Resources:
+        getAllItemsFunction:
+          Type: AWS::Serverless::Function
+          Properties:
+            Handler: src/get-all-items.getAllItemsHandler
+            Runtime: nodejs12.x
+            Events:
+              Api:
+                Type: HttpApi
+                Properties:
+                  Path: /
+                  Method: GET
+          Connectors:
+            MyConn:
+              Properties:
+              Destination:
+                Id: SampleTable
+                Permissions:
+                  - Read
+        SampleTable:
+          Type: AWS::Serverless::SimpleTable
+      `}</Code>
+
+      <p>Vs same AWS CloudFormation template</p>
+
+      <Code block json>{`
+      {
+        "AWSTemplateFormatVersion": "2010-09-09",
+        "Resources": {
+          "getAllItemsFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Metadata": {
+              "SamResourceId": "getAllItemsFunction"
+            },
+            "Properties": {
+              "Code": {
+                "S3Bucket": "aws-sam-cli-managed-default-samclisourcebucket-1a4x26zbcdkqr",
+                "S3Key": "what-is-app/a6f856abf1b2c4f7488c09b367540b5b"
+              },
+              "Handler": "src/get-all-items.getAllItemsHandler",
+              "Role": {
+                "Fn::GetAtt": [
+                  "getAllItemsFunctionRole",
+                  "Arn"
+                ]
+              },
+              "Runtime": "nodejs12.x",
+              "Tags": [
+                {
+                  "Key": "lambda:createdBy",
+                  "Value": "SAM"
+                }
+              ]
+            }
+          },
+          "getAllItemsFunctionRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+              "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Action": [
+                      "sts:AssumeRole"
+                    ],
+                    "Effect": "Allow",
+                    "Principal": {
+                      "Service": [
+                        "lambda.amazonaws.com"
+                      ]
+                    }
+                  }
+                ]
+              },
+              "ManagedPolicyArns": [
+                "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ],
+              "Tags": [
+                {
+                  "Key": "lambda:createdBy",
+                  "Value": "SAM"
+                }
+              ]
+            }
+          },
+          "getAllItemsFunctionApiPermission": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "Action": "lambda:InvokeFunction",
+              "FunctionName": {
+                "Ref": "getAllItemsFunction"
+              },
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Sub": [
+                  "arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${__ApiId__}/${__Stage__}/GET/",
+                  {
+                    "__ApiId__": {
+                      "Ref": "ServerlessHttpApi"
+                    },
+                    "__Stage__": "*"
+                  }
+                ]
+              }
+            }
+          },
+          "ServerlessHttpApi": {
+            "Type": "AWS::ApiGatewayV2::Api",
+            "Properties": {
+              "Body": {
+                "info": {
+                  "version": "1.0",
+                  "title": {
+                    "Ref": "AWS::StackName"
+                  }
+                },
+                "paths": {
+                  "/": {
+                    "get": {
+                      "x-amazon-apigateway-integration": {
+                        "httpMethod": "POST",
+                        "type": "aws_proxy",
+                        "uri": {
+                          "Fn::Sub": "arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${getAllItemsFunction.Arn}/invocations"
+                        },
+                        "payloadFormatVersion": "2.0"
+                      },
+                      "responses": {}
+                    }
+                  }
+                },
+                "openapi": "3.0.1",
+                "tags": [
+                  {
+                    "name": "httpapi:createdBy",
+                    "x-amazon-apigateway-tag-value": "SAM"
+                  }
+                ]
+              }
+            }
+          },
+          "ServerlessHttpApiApiGatewayDefaultStage": {
+            "Type": "AWS::ApiGatewayV2::Stage",
+            "Properties": {
+              "ApiId": {
+                "Ref": "ServerlessHttpApi"
+              },
+              "StageName": "$default",
+              "Tags": {
+                "httpapi:createdBy": "SAM"
+              },
+              "AutoDeploy": true
+            }
+          },
+          "SampleTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "Metadata": {
+              "SamResourceId": "SampleTable"
+            },
+            "Properties": {
+              "AttributeDefinitions": [
+                {
+                  "AttributeName": "id",
+                  "AttributeType": "S"
+                }
+              ],
+              "KeySchema": [
+                {
+                  "AttributeName": "id",
+                  "KeyType": "HASH"
+                }
+              ],
+              "BillingMode": "PAY_PER_REQUEST"
+            }
+          },
+          "getAllItemsFunctionMyConnPolicy": {
+            "Type": "AWS::IAM::ManagedPolicy",
+            "Metadata": {
+              "aws:sam:connectors": {
+                "getAllItemsFunctionMyConn": {
+                  "Source": {
+                    "Type": "AWS::Serverless::Function"
+                  },
+                  "Destination": {
+                    "Type": "AWS::Serverless::SimpleTable"
+                  }
+                }
+              }
+            },
+            "Properties": {
+              "PolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Action": [
+                      "dynamodb:GetItem",
+                      "dynamodb:Query",
+                      "dynamodb:Scan",
+                      "dynamodb:BatchGetItem",
+                      "dynamodb:ConditionCheckItem",
+                      "dynamodb:PartiQLSelect"
+                    ],
+                    "Resource": [
+                      {
+                        "Fn::GetAtt": [
+                          "SampleTable",
+                          "Arn"
+                        ]
+                      },
+                      {
+                        "Fn::Sub": [
+                          "${DestinationArn}/index/*",
+                          {
+                            "DestinationArn": {
+                              "Fn::GetAtt": [
+                                "SampleTable",
+                                "Arn"
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "Roles": [
+                {
+                  "Ref": "getAllItemsFunctionRole"
+                }
+              ]
+            }
+          }
+        }
+      }
+      `}</Code>
     </>
   )
 }

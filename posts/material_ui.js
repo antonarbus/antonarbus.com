@@ -1,4 +1,4 @@
-import { React, jsxToStr, H, Code } from '/components/post/reExport'
+import { React, jsxToStr, H, Code, Lnk } from '/components/post/reExport'
 import Button from '@mui/material/Button'
 
 import Dialog from '@mui/material/Dialog'
@@ -16,7 +16,7 @@ const postObj = {
   desc: 'material ui',
   body: (
     <>
-      <H>Component</H>
+      <H>Component prop</H>
 
       <ul>
         <li>We can use <Code html>{'<Box />'}</Code> element as a div element</li>
@@ -25,6 +25,28 @@ const postObj = {
         <li>If we want to change the element tag we need to pass it in <code>component</code> prop</li>
         <li><Code html>{'<Box component="footer" />'}</Code> will be a footer element</li>
       </ul>
+
+      <H>Custom css props</H>
+
+      <ul>
+        <li><Lnk path='https://mui.com/system/properties/'>https://mui.com/system/properties/</Lnk></li>
+        <li>Can set some css properties as a component props or inside <code>sx</code> prop</li>
+      </ul>
+
+      <Code block jsx>{`
+      <Button sx={{ mb: 3 }}>
+      // or
+      <Box mb={3}>
+      // or
+      <Box marginBottom={3}>
+      `}</Code>
+
+      <Code block css>{`
+      .my-class {
+        margin-bottom: Xpx;
+      }
+      `}</Code>
+
     </>
   )
 }

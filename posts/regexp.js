@@ -696,13 +696,19 @@ const postObj = {
 
       <p><code>levis</code> can be selected from <code>Television</code> by <Code inline jsx>{'(?<=Te)(.*)(?=ion)'}</Code></p>
 
-      <Hs>Text between 2 strings including them</Hs>
+      <Hs>Text between 2 strings including them (greedy mode)</Hs>
 
       <Code block jsx>{`
         beginsWith(.*)endsWith
       `}</Code>
 
       <p><code>Television</code> can be selected from <code>Television</code> by <Code inline jsx>{'Te(.*)on'}</Code></p>
+
+      <Hs>Text between 2 strings including them (lazy mode)</Hs>
+
+      <Code block jsx>{`
+        beginsWith(.*?)endsWith
+      `}</Code>
 
     </>
   )

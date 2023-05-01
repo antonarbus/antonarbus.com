@@ -617,7 +617,7 @@ const postObj = {
               "Principal": "apigateway.amazonaws.com",
               "SourceArn": {
                 "Fn::Sub": [
-                  "arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${__ApiId__}/${__Stage__}/GET/",
+                  "arn:\${AWS::Partition}:execute-api:\${AWS::Region}:\${AWS::AccountId}:\${__ApiId__}/\${__Stage__}/GET/",
                   {
                     "__ApiId__": {
                       "Ref": "ServerlessHttpApi"
@@ -645,7 +645,7 @@ const postObj = {
                         "httpMethod": "POST",
                         "type": "aws_proxy",
                         "uri": {
-                          "Fn::Sub": "arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${getAllItemsFunction.Arn}/invocations"
+                          "Fn::Sub": "arn:\${AWS::Partition}:apigateway:\${AWS::Region}:lambda:path/2015-03-31/functions/\${getAllItemsFunction.Arn}/invocations"
                         },
                         "payloadFormatVersion": "2.0"
                       },
@@ -734,7 +734,7 @@ const postObj = {
                       },
                       {
                         "Fn::Sub": [
-                          "${DestinationArn}/index/*",
+                          "\${DestinationArn}/index/*",
                           {
                             "DestinationArn": {
                               "Fn::GetAtt": [

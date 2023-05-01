@@ -59,6 +59,15 @@ const postObj = {
         <li><Code bash>npx dpdm ./src/index.tsx</Code> check for circular reference</li>
       </ul>
 
+      <H>ERESOLVE unable to resolve dependency tree while installing a package</H>
+
+      <ul>
+        <li><Lnk path='https://stackoverflow.com/questions/71582397/eresolve-unable-to-resolve-dependency-tree-while-installing-a-pacakge'>https://stackoverflow.com/questions/71582397/eresolve-unable-to-resolve-dependency-tree-while-installing-a-pacakge</Lnk></li>
+        <li><Code>rm -rf node_modules</Code></li>
+        <li><Code>npm config set legacy-peer-deps true</Code></li>
+        <li><Code>npm install</Code></li>
+      </ul>
+
     </>
   )
 }

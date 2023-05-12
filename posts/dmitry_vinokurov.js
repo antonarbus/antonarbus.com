@@ -1,7 +1,7 @@
 import { Code, H, jsxToStr } from '/components/post/reExport'
 
 const postObj = {
-  title: 'terminal',
+  title: 'dmitry vinokurov',
   date: '2023.15.12',
   tags: ['terminal'],
   desc: 'Dmitry Vinokurov',

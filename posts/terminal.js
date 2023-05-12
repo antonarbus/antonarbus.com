@@ -324,32 +324,6 @@ const postObj = {
         <li><Code bash>pm2 stop app</Code> stop server</li>
         <li><Code bash>pm2 delete app</Code> delete server</li>
       </ul>
-
-      <Hs>DV</Hs>
-
-      <ul>
-        <li><Code bash>scp -r sherb@35.209.92.93:/var/www/html/dmitryvinokurov.com ./</Code> copy DV's folder to current folder</li>
-        <li>
-          Copy files to DV's folder
-          <Code block bash>{`
-            scp -r about.html audio.html contact.html cv.html index.html photographs.html videos.html style.css sherb@35.209.92.93:/var/www/html/dmitryvinokurov.com/
-          `}</Code>
-        </li>
-        <li>
-          Copy files from DV's folder
-          <Code block bash>{`
-            scp -r sherb@35.209.92.93:/var/www/html/dmitryvinokurov.com/about.html ./ &&
-            scp -r sherb@35.209.92.93:/var/www/html/dmitryvinokurov.com/audio.html ./ &&
-            scp -r sherb@35.209.92.93:/var/www/html/dmitryvinokurov.com/contact.html ./ &&
-            scp -r sherb@35.209.92.93:/var/www/html/dmitryvinokurov.com/cv.html ./ &&
-            scp -r sherb@35.209.92.93:/var/www/html/dmitryvinokurov.com/index.html ./ &&
-            scp -r sherb@35.209.92.93:/var/www/html/dmitryvinokurov.com/photographs.html ./ &&
-            scp -r sherb@35.209.92.93:/var/www/html/dmitryvinokurov.com/videos.html ./ &&
-            scp -r sherb@35.209.92.93:/var/www/html/dmitryvinokurov.com/style.css ./
-          `}</Code>
-        </li>
-      </ul>
-
     </>
   )
 }

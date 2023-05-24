@@ -132,11 +132,14 @@ const postObj = {
           element.style.zoom = ''
         `}</Code>
         <li>Or via function <code>setProperty</code></li>
-        <li>it is cool, coz you do not have to use kebab case and use same keys as in css</li>
         <Code block jsx>{`
           element.style.setProperty('zoom', '2')
-          element.style.setProperty( 'background-color', '#fafafa' )
+          element.style.getPropertyValue('zoom')
           element.style.removeProperty('zoom')
+        `}</Code>
+        <li>it is cool, coz you do not have to use kebab case and use same keys as in css</li>
+        <Code block jsx>{`
+          element.style.setProperty( 'background-color', '#fafafa' )
         `}</Code>
       </ul>
     </>

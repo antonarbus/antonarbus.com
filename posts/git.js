@@ -465,6 +465,28 @@ const postObj = {
         <li><Code bash>git add . && git commit -m "comment" && git push</Code></li>
       </ul>
 
+      <H>Minimize merge conflicts</H>
+
+      <ul>
+        <li>We have many commits in a branch</li>
+        <li>It is possible that a conflict should resolved for every commit instead of just resolving it just ones for the final code</li>
+        <li>Pull the latest version of main/master and checkout a new branch based on it</li>
+        <li><Code bash>git checkout master</Code></li>
+        <li><Code bash>git pull</Code></li>
+        <li><Code bash>git checkout -b temp_work</Code></li>
+        <li>Pull & squash changes from your messy branch</li>
+        <li>Changes are staged without creating a commit</li>
+        <li><Code bash>git merge --squash messy_branch</Code></li>
+        <li>At this point, you might be getting a smaller number of unavoidable merge conflicts</li>
+        <li>Make a commit after resolving conflicts</li>
+        <li><Code bash>git commit</Code></li>
+        <li>If you'd like to re-use your old branch, you can now reset it to your temporary branch created above</li>
+        <li>Force-push the changes up to GitHub before deleting my temporary work branch</li>
+        <li><Code bash>git checkout messy_branch</Code></li>
+        <li><Code bash>git reset --hard temp_work</Code></li>
+        <li><Code bash>git push -f</Code></li>
+        <li><Code bash>git branch -D temp_work</Code></li>
+      </ul>
     </>
   )
 }

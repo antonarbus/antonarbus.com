@@ -469,7 +469,7 @@ const postObj = {
 
       <ul>
         <li>We have many commits in a branch</li>
-        <li>It is possible that a conflict should resolved for every commit instead of just resolving it just ones for the final code</li>
+        <li>It is possible that a conflict should resolved for every commit instead of just resolving it ones for the final code</li>
         <li>Pull the latest version of main/master and checkout a new branch based on it</li>
         <li><Code bash>git checkout master</Code></li>
         <li><Code bash>git pull</Code></li>

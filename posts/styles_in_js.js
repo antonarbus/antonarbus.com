@@ -118,11 +118,27 @@ const postObj = {
       </ul>
 
       <Code block jsx>{`
-
       getComputedStyle(document.body) // object with styles, like elem.style, but with respect to all CSS classes
       getComputedStyle(document.body).font // "300 14px Roboto, sans-serif"
       getComputedStyle(document.body).color // "rgb(0, 0, 0)"
       `}</Code>
+
+      <H>setProperty / removeProperty</H>
+
+      <ul>
+        <li>You may add and delete css prop directly in styles object</li>
+        <Code block jsx>{`
+          element.style.zoom = '2'
+          element.style.zoom = ''
+        `}</Code>
+        <li>Or via function <code>setProperty</code></li>
+        <li>it is cool, coz you do not have to use kebab case and use same keys as in css</li>
+        <Code block jsx>{`
+          element.style.setProperty('zoom', '2')
+          element.style.setProperty( 'background-color', '#fafafa' )
+          element.style.removeProperty('zoom')
+        `}</Code>
+      </ul>
     </>
   )
 }

@@ -63,7 +63,7 @@ export async function getStaticProps({ req, res, params }) {
   if (!ext && fs.existsSync(`posts/${fileName}.js`)) ext = 'js'
   if (!ext && fs.existsSync(`posts/${fileName}.jsx`)) ext = 'jsx'
   if (!ext && fs.existsSync(`posts/${fileName}.ts`)) ext = 'ts'
-  if (!ext && fs.existsSync(`posts/${fileName}.tsx`)) ext = 'tsx';
+  if (!ext && fs.existsSync(`posts/${fileName}.tsx`)) ext = 'tsx'
   const postExists = !!ext
 
   const path = `posts/${fileName}.${ext}`

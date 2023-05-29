@@ -1,5 +1,4 @@
 import * as module from '/exportAllPosts.js'
-import { getCookie } from 'cookies-next'
 
 export default function handler(req, res) {
   const fileNames = Object.keys(module)

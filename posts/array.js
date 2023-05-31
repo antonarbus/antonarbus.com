@@ -37,14 +37,16 @@ const postObj = {
         arr.at(-1)() // hello
       `}</Code>
 
-      <H>Add - mutates!</H>
+      <H>Change via brackets</H>
+
+      <p>MUTATES!</p>
 
       <Code block jsx>{`
         fruits[2] = 'Pear' // now ["Apple", "Orange", "Pear"]
         fruits[3] = 'Lemon' // now ["Apple", "Orange", "Pear", "Lemon"]
       `}</Code>
 
-      <H>with()</H>
+      <H>Change via with()</H>
 
       <Code block jsx>{`
       const correctionNeeded = [1, 1, 3]
@@ -52,7 +54,9 @@ const postObj = {
       correctionNeeded // => [1, 1, 3]
       `}</Code>
 
-      <H>Delete - mutates!</H>
+      <H>Delete</H>
+
+      <p>MUTATES!</p>
 
       <Code block jsx>{`
         let arr = ["I", "study", "JavaScript", "right", "now"]
@@ -197,6 +201,8 @@ const postObj = {
 
       <H>push()</H>
 
+      <p>MUTATES!</p>
+
       <Code block jsx>{`
         let arr = ["Apple", "Orange", "Pear"]
         arr.push("Lemon") // 4 // arr = ["Apple", "Orange", "Pear", "Lemon"]
@@ -206,6 +212,8 @@ const postObj = {
 
       <H>pop()</H>
 
+      <p>MUTATES!</p>
+
       <Code block jsx>{`
         let arr = ["Apple", "Orange", "Pear"]
         arr.pop() // "Pear" 
@@ -213,6 +221,8 @@ const postObj = {
       `}</Code>
 
       <H>unshift()</H>
+
+      <p>MUTATES!</p>
 
       <Code block jsx>{`
         // SLOW!
@@ -223,7 +233,9 @@ const postObj = {
         arr // ["Orange", "Peach", "Lemon", "Apple", "Orange", "Pear"]
       `}</Code>
 
-      <H>shift() </H>
+      <H>shift()</H>
+
+      <p>MUTATES!</p>
 
       <Code block jsx>{`
         // SLOW!
@@ -255,7 +267,9 @@ const postObj = {
         arr.toLocaleString('en', { timeZone: 'UTC' }); // "1,a,12/21/1997, 2:12:00 PM"
       `}</Code>
 
-      <H>splice() - mutates!</H>
+      <H>splice()</H>
+
+      <p>MUTATES!</p>
 
       <Code>{'arr.splice(startIndex, [deleteCount], [elemToInsert1], [elemToInsert2])'}</Code>
 
@@ -398,6 +412,18 @@ const postObj = {
         [NaN].includes(NaN) // true
       `}</Code>
 
+      <H>reverse()</H>
+
+      <p>MUTATES!</p>
+
+      <Code block jsx>{`
+      const items = [1, 2, 3];
+      console.log(items); // [1, 2, 3]
+
+      items.reverse();
+      console.log(items); // [3, 2, 1]
+      `}</Code>
+
       <H>toReversed()</H>
 
       <Code block jsx>{`
@@ -405,8 +431,6 @@ const postObj = {
       sequence.toReversed(); // => [3, 2, 1]
       sequence; // => [1, 2, 3]
       `}</Code>
-
-      <H>reverse() - mutates!</H>
 
       <H>split()</H>
 
@@ -424,7 +448,9 @@ const postObj = {
         str; // Bilbo;Gandalf;Nazgul
       `}</Code>
 
-      <p><Hs style={{ display: 'inline' }}>fill()</Hs> - mutates!</p>
+      <H>fill()</H>
+
+      <p>MUTATES!</p>
 
       <Code>{'arr.fill(value, [startIndex], [endIndex])'}</Code>
 
@@ -505,7 +531,9 @@ const postObj = {
         arr // [1, 2, 3, 4]
       `}</Code>
 
-      <H>sort() - mutates!</H>
+      <H>sort()</H>
+
+      <p>MUTATES!</p>
 
       <ul>
         <li>returns sorted modified array</li>

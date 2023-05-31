@@ -1,4 +1,4 @@
-import { Code, Hs, jsxToStr } from '/components/post/reExport'
+import { Code, Hs, H, jsxToStr } from '/components/post/reExport'
 
 const postObj = {
   title: 'array',
@@ -8,7 +8,7 @@ const postObj = {
   desc: 'Arrays in JavaScript',
   body: (
     <>
-      <Hs>Declaration</Hs>
+      <H>Declaration</H>
 
       <Code block jsx>{`
         let fruits = new Array("Apple", "Pear", "etc")
@@ -17,7 +17,7 @@ const postObj = {
         let arr = [ 'Apple', { name: 'John' }, true, function() { alert('hello') }, ]
       `}</Code>
 
-      <Hs>Access</Hs>
+      <H>Access via brackets []</H>
 
       <Code block jsx>{`
         fruits[0] // Apple
@@ -26,7 +26,7 @@ const postObj = {
         arr[arr.length - 1]() // hello
       `}</Code>
 
-      <Hs>at()</Hs>
+      <H>Access via .at()</H>
 
       <p>Accepts negative numbers.</p>
 
@@ -37,14 +37,22 @@ const postObj = {
         arr.at(-1)() // hello
       `}</Code>
 
-      <Hs>Add</Hs>
+      <H>Add - mutates!</H>
 
       <Code block jsx>{`
         fruits[2] = 'Pear' // now ["Apple", "Orange", "Pear"]
         fruits[3] = 'Lemon' // now ["Apple", "Orange", "Pear", "Lemon"]
       `}</Code>
 
-      <Hs>Delete</Hs>
+      <H>with()</H>
+
+      <Code block jsx>{`
+      const correctionNeeded = [1, 1, 3]
+      correctionNeeded.with(1, 2) // => [1, 2, 3]
+      correctionNeeded // => [1, 1, 3]
+      `}</Code>
+
+      <H>Delete - mutates!</H>
 
       <Code block jsx>{`
         let arr = ["I", "study", "JavaScript", "right", "now"]
@@ -57,7 +65,7 @@ const postObj = {
         arr // []
       `}</Code>
 
-      <Hs>Arrays is reference type</Hs>
+      <H>Arrays is reference type</H>
 
       <Code block jsx>{`
         let fruits = ["Banana"]
@@ -66,7 +74,7 @@ const postObj = {
         fruits // Banana, Pear - 2 items now
       `}</Code>
 
-      <Hs>Arrays is an ordered collection</Hs>
+      <H>Arrays is an ordered collection</H>
 
       <p>Arrays is an ordered collection & we can destroy array speed if:</p>
       <ul>
@@ -75,7 +83,7 @@ const postObj = {
         <li>Fill an array in the reverse order, like <code>arr[1000]</code>, <code>arr[999]</code> and so on.</li>
       </ul>
 
-      <Hs>Keys, values, entries</Hs>
+      <H>Keys, values, entries</H>
 
       <Code block jsx>{`
         let arr = ['a', 'b', 'c']
@@ -96,7 +104,7 @@ const postObj = {
         for (const entry of iterator) console.log(entry); // [0, "a"] // [1, "b"] // [2, "c"]
       `}</Code>
 
-      <Hs>Length</Hs>
+      <H>Length</H>
 
       <Code block jsx>{`
         let arr = [1, 2, 3, 4, 5]
@@ -118,7 +126,7 @@ const postObj = {
         arr // []
       `}</Code>
 
-      <Hs>Multidimensional arrays</Hs>
+      <H>Multidimensional arrays</H>
 
       <Code block jsx>{`
         let matrix = [
@@ -129,9 +137,9 @@ const postObj = {
         matrix[1][1] // 5
       `}</Code>
 
-      <Hs>Loops</Hs>
+      <H>Loops</H>
 
-      <b>For</b>
+      <Hs>For</Hs>
 
       <Code block jsx>{`
         for (let i = 0; i < arr.length; i++) {
@@ -139,7 +147,7 @@ const postObj = {
         }
       `}</Code>
 
-      <b>for..of</b>
+      <Hs>for..of</Hs>
 
       <Code block jsx>{`
         for (let fruit of arr) {
@@ -147,7 +155,9 @@ const postObj = {
         }
       `}</Code>
 
-      <p><b>for..in</b> (DO NOT USE!!!)</p>
+      <Hs>for..in</Hs>
+
+      <p>DO NOT USE!!!</p>
 
       <Code block jsx>{`
         // came from object, 100 times slower 
@@ -156,7 +166,7 @@ const postObj = {
         }
       `}</Code>
 
-      <b>forEach</b>
+      <Hs>forEach</Hs>
 
       <Code block jsx>{`
           arr.forEach(function(item, index, array) {
@@ -164,7 +174,7 @@ const postObj = {
           });
       `}</Code>
 
-      <Hs>Array.isArray()</Hs>
+      <H>Array.isArray()</H>
 
       <Code block jsx>{`
         typeof {} // object
@@ -173,7 +183,7 @@ const postObj = {
         Array.isArray([]) // true
       `}</Code>
 
-      <Hs>Array.from()</Hs>
+      <H>Array.from()</H>
 
       <p>Returns a new shallow-copied array instance from iterable object</p>
 
@@ -185,7 +195,7 @@ const postObj = {
         let arr = Array.from(arrayLike); // [#word-textarea, #tranalstion-textarea, #example-textarea, #category-textarea]
       `}</Code>
 
-      <Hs>push()</Hs>
+      <H>push()</H>
 
       <Code block jsx>{`
         let arr = ["Apple", "Orange", "Pear"]
@@ -194,7 +204,7 @@ const postObj = {
         arr // ["Apple", "Orange", "Pear", "Lemon", "Orange", "Peach"]
       `}</Code>
 
-      <Hs>pop()</Hs>
+      <H>pop()</H>
 
       <Code block jsx>{`
         let arr = ["Apple", "Orange", "Pear"]
@@ -202,7 +212,7 @@ const postObj = {
         arr // ["Apple", "Orange"]
       `}</Code>
 
-      <Hs>unshift()</Hs>
+      <H>unshift()</H>
 
       <Code block jsx>{`
         // SLOW!
@@ -213,7 +223,7 @@ const postObj = {
         arr // ["Orange", "Peach", "Lemon", "Apple", "Orange", "Pear"]
       `}</Code>
 
-      <Hs>shift() </Hs>
+      <H>shift() </H>
 
       <Code block jsx>{`
         // SLOW!
@@ -222,7 +232,7 @@ const postObj = {
         arr // ["Orange", "Pear"]
       `}</Code>
 
-      <Hs>String()</Hs>
+      <H>String()</H>
 
       <Code block jsx>{`
         // returns a comma-separated list of elements
@@ -230,7 +240,7 @@ const postObj = {
         String(arr); // "Apple,Orange,Pear"
       `}</Code>
 
-      <Hs>toString()</Hs>
+      <H>toString()</H>
 
       <Code block jsx>{`
         const arr = [1, 2, 'a', '1a']
@@ -238,14 +248,14 @@ const postObj = {
         arr // [1, 2, 'a', '1a']
       `}</Code>
 
-      <Hs>toLocaleString()</Hs>
+      <H>toLocaleString()</H>
 
       <Code block jsx>{`
         const  arr = [1, 'a', new Date('21 Dec 1997 14:12:00 UTC')];
         arr.toLocaleString('en', { timeZone: 'UTC' }); // "1,a,12/21/1997, 2:12:00 PM"
       `}</Code>
 
-      <p><Hs style={{ display: 'inline' }}>splice()</Hs> - mutates!</p>
+      <H>splice() - mutates!</H>
 
       <Code>{'arr.splice(startIndex, [deleteCount], [elemToInsert1], [elemToInsert2])'}</Code>
 
@@ -282,7 +292,28 @@ const postObj = {
         arr // [1, 2, 3, 4, 5]
       `}</Code>
 
-      <Hs>slice()</Hs>
+      <H>toSpliced()</H>
+
+      <Code block jsx>{`
+      const months = ["Jan", "Mar", "Apr", "May"];
+
+      // Inserting an element at index 1
+      const months2 = months.toSpliced(1, 0, "Feb");
+      console.log(months2); // ["Jan", "Feb", "Mar", "Apr", "May"]
+
+      // Deleting two elements starting from index 2
+      const months3 = months2.toSpliced(2, 2);
+      console.log(months3); // ["Jan", "Feb", "May"]
+
+      // Replacing one element at index 1 with two new elements
+      const months4 = months3.toSpliced(1, 1, "Feb", "Mar");
+      console.log(months4); // ["Jan", "Feb", "Mar", "May"]
+
+      // Original array is not modified
+      console.log(months); // ["Jan", "Mar", "Apr", "May"]
+      `}</Code>
+
+      <H>slice()</H>
 
       <Code>{'arr.slice([beginIndex], [endIndex])'}</Code>
 
@@ -303,7 +334,7 @@ const postObj = {
         arr // ["t", "e", "s", "t"]
       `}</Code>
 
-      <Hs>concat()</Hs>
+      <H>concat()</H>
 
       <Code>{'arr.concat(arg1, arg2)'}</Code>
 
@@ -336,7 +367,7 @@ const postObj = {
           arr.concat(arrayLike) //[1, 2, "something", "else"]
       `}</Code>
 
-      <Hs>indexOf(), lastIndexOf()</Hs>
+      <H>indexOf(), lastIndexOf()</H>
 
       <Code>{'arr.indexOf(item, [fromIndex])'}</Code>
 
@@ -354,7 +385,7 @@ const postObj = {
         arr.lastIndexOf(1) // 3
       `}</Code>
 
-      <Hs>includes()</Hs>
+      <H>includes()</H>
 
       <Code>{'arr.includes(item, [fromIndex])'}</Code>
 
@@ -367,16 +398,17 @@ const postObj = {
         [NaN].includes(NaN) // true
       `}</Code>
 
-      <p><Hs style={{ display: 'inline' }}>reverse()</Hs> - mutates!</p>
+      <H>toReversed()</H>
 
       <Code block jsx>{`
-        // returns reversed modified array
-        let arr = [1, 2, 3, 4, 5]
-        arr.reverse() // [5, 4, 3, 2, 1]
-        arr // [5,4,3,2,1]
+      const sequence = [1, 2, 3];
+      sequence.toReversed(); // => [3, 2, 1]
+      sequence; // => [1, 2, 3]
       `}</Code>
 
-      <Hs>split()</Hs>
+      <H>reverse() - mutates!</H>
+
+      <H>split()</H>
 
       <Code block jsx>{`
         let arr = 'Bilbo, Gandalf, Nazgul, Saruman'.split(', ', 2);
@@ -384,7 +416,7 @@ const postObj = {
         "test".split('') // ["t", "e", "s", "t"]
       `}</Code>
 
-      <Hs>join()</Hs>
+      <H>join()</H>
 
       <Code block jsx>{`
         let arr = ['Bilbo', 'Gandalf', 'Nazgul'];
@@ -405,7 +437,7 @@ const postObj = {
         arr.fill(6); // [6, 6, 6, 6] // fill all with 6
       `}</Code>
 
-      <Hs>copyWithin()</Hs>
+      <H>copyWithin()</H>
 
       <ul>
         <li><Code>{'arr.copyWithin(targetIndex, [startIndex], [endIndex])'}</Code></li>
@@ -423,7 +455,7 @@ const postObj = {
         arr.copyWithin(1, 3); // ["d", "d", "e", "d", "e"] // copy to index 1 els from index 3 to the end
       `}</Code>
 
-      <Hs>flat()</Hs>
+      <H>flat()</H>
 
       <ul>
         <li><Code>{'arr.flat([depth])'}</Code></li>
@@ -443,7 +475,7 @@ const postObj = {
         [1, 2, [3, 4, [5, 6, [7, 8, [9, 10]]]]].flat(Infinity); // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
       `}</Code>
 
-      <Hs>map()</Hs>
+      <H>map()</H>
 
       <ul>
         <li><Code>{'let result = arr.map(function(item, [index], [array]) {...}, [thisArg]);'}</Code></li>
@@ -458,7 +490,7 @@ const postObj = {
         arr // ["Bilbo", "Gandalf", "Nazgul"]
       `}</Code>
 
-      <Hs>flatMap()</Hs>
+      <H>flatMap()</H>
 
       <ul>
         <li><Code>{'arr.flatMap(function callbackFn(currentValue, [index], [array]) {...}, [thisArg]) '}</Code></li>
@@ -473,7 +505,7 @@ const postObj = {
         arr // [1, 2, 3, 4]
       `}</Code>
 
-      <p><Hs style={{ display: 'inline' }}>sort()</Hs> - mutates!</p>
+      <H>sort() - mutates!</H>
 
       <ul>
         <li>returns sorted modified array</li>
@@ -505,7 +537,15 @@ const postObj = {
         ['Österreich', 'Andorra', 'Vietnam'].sort( (a, b) => a.localeCompare(b) ); // ["Andorra", "Österreich", "Vietnam"]
       `}</Code>
 
-      <Hs>filter()</Hs>
+      <H>toSorted()</H>
+
+      <Code block jsx>{`
+      const outOfOrder = new Uint8Array([3, 1, 2]);
+      outOfOrder.toSorted(); // => Uint8Array [1, 2, 3]
+      outOfOrder; // => Uint8Array [3, 1, 2]
+      `}</Code>
+
+      <H>filter()</H>
 
       <ul>
         <li><Code>{'arr.filter(function(element, [index], [array]) {...}, [thisArg]) '}</Code></li>
@@ -515,13 +555,13 @@ const postObj = {
       </ul>
 
       <Code block jsx>{`
-              // returns array of the first two users
-              const users = [{id: 1, name: "John"},{id: 2, name: "Pete"}, {id: 3, name: "Felix"}]
-              let someUsers = users.filter(item => item.id < 3); 
-              someUsers // [{id: 1, name: "John"},{id: 2, name: "Pete"}]
-            `}</Code>
+        // returns array of the first two users
+        const users = [{id: 1, name: "John"},{id: 2, name: "Pete"}, {id: 3, name: "Felix"}]
+        let someUsers = users.filter(item => item.id < 3); 
+        someUsers // [{id: 1, name: "John"},{id: 2, name: "Pete"}]
+      `}</Code>
 
-      <Hs>some()</Hs>
+      <H>some()</H>
 
       <ul>
         <li><Code>{'arr.some(function(element, [index], [array]) {...}, [thisArg]) '}</Code></li>
@@ -535,7 +575,7 @@ const postObj = {
         array.some(even) // true
       `}</Code>
 
-      <Hs>every()</Hs>
+      <H>every()</H>
 
       <ul>
         <li><Code>{'arr.every(function(element, [index], [array]) {...}, [thisArg]) '}</Code></li>
@@ -549,7 +589,7 @@ const postObj = {
         arr.every(isBelowThreshold); // true
       `}</Code>
 
-      <Hs>find()</Hs>
+      <H>find()</H>
 
       <ul>
         <li><Code>{'let result = arr.find(function(item, index, array) {}, thisArg)'}</Code></li>
@@ -572,7 +612,7 @@ const postObj = {
         // item argument is used, other arguments of this function are rarely used
       `}</Code>
 
-      <Hs>findIndex()</Hs>
+      <H>findIndex()</H>
 
       <ul>
         <li><Code>{'arr.findIndex(function(item, index, array) {...}, thisArg);'}</Code></li>
@@ -583,7 +623,7 @@ const postObj = {
         let index = users.findIndex(item => item.id == 3); // index = 2
       `}</Code>
 
-      <Hs>findLast & findLastIndex</Hs>
+      <H>findLast() & findLastIndex()</H>
 
       <Code block jsx>{`
       const arr = [1, 2, 3, 1, 2, 3, 1, 2]
@@ -595,7 +635,7 @@ const postObj = {
       const lastThreeIndex = arr.findLastIndex(num => num === 3) // 5
       `}</Code>
 
-      <Hs>reduce()</Hs>
+      <H>reduce()</H>
 
       <ul>
         <li><Code>{'let value = arr.reduce(function(previousValue, currentValue, [currentIndex], [array]) {...}, [initial]);'}</Code></li>

@@ -1,7 +1,6 @@
 import { useContext } from 'react'
 import { LinkBox } from './LinkBox'
 import { PostsContext } from '/pages/posts/index'
-import { setCookie } from '/functions/cookies.js'
 
 export function PostLinks(props) {
   const { foundPostsState, tabPosPost, postsOrdered, setPostsOrdered } = useContext(PostsContext)

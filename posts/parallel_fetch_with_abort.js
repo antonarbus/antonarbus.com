@@ -1,4 +1,4 @@
-import { Code, H, Hs, jsxToStr } from '/components/post/reExport'
+import { Code, H, Hs, Lnk, jsxToStr } from '/components/post/reExport'
 
 const postObj = {
   title: 'parallel fetch & abort',
@@ -93,6 +93,123 @@ const postObj = {
         }).catch(error => {
           console.log(error)
         })
+      `}</Code>
+
+      <H>Parallel queries with </H>
+
+      <ul>
+        <li><Lnk path='https://tanstack.com/query/v4/docs/react/guides/parallel-queries'>https://tanstack.com/query/v4/docs/react/guides/parallel-queries</Lnk></li>
+        <li>We can make parallel queries with tanstack</li>
+        <li>Nice thing to me is that queries in tanstack has retry mechanism, we do not have to take care of it</li>
+      </ul>
+
+      <Code block jsx>{`
+      import 'ag-grid-community/styles/ag-grid.css'
+      import 'ag-grid-community/styles/ag-theme-alpine.css'
+      import { AgGridReact } from 'ag-grid-react'
+      import { useEffect, useRef, useState } from 'react'
+      import { Box, LinearProgress } from '@mui/material'
+      import { columnDefs, defaultColDef } from './columnDefs'
+      import { layoutSlice } from 'shared/layouts'
+      import { AgGridCustomStyles } from './ui/AgGridCustomStyles'
+      import { dispatch } from 'shared/clients'
+      import type { JSX } from 'react'
+      import { type Receipt } from 'shared/types/Receipt'
+      import { useReceiptsQuery } from 'entities/receipts'
+      import { useQueries, type UseQueryResult } from '@tanstack/react-query'
+      import { url } from 'shared/url'
+
+      const queryFn = async ({ start, count }: { start: string, count: string }): Promise<Receipt[]> => {
+        const res = await fetch(url.receipts({ start, count }), { credentials: 'include' })
+        if (!res.ok) throw Error('Problem fetching receipts')
+        const data: Receipt[] = await res.json()
+        return data
+      }
+
+      const useLoad10kItems = (queryNumber: number): Array<UseQueryResult<Receipt[], unknown>> => {
+        const batchSize = 1000
+
+        const queries = useQueries({
+          queries: [...Array(10).keys()].map((number) => {
+            const start = String(10 * batchSize * (queryNumber - 1) + batchSize * number)
+            const count = String(batchSize)
+
+            return {
+              queryKey: ['receipts', { start, count }],
+              queryFn: async () => await queryFn({ start, count }),
+              staleTime: Infinity
+            }
+          })
+        })
+
+        return queries
+      }
+
+      export const ReceiptsTable = (): JSX.Element | null => {
+        const gridRef = useRef(null)
+        const { data: initReceipts, isLoading } = useReceiptsQuery({ start: '0', count: '10' })
+        const [attemptNum, setAttemptNum] = useState(1)
+        const queries = useLoad10kItems(attemptNum)
+        const [allReceipts, setAllReceipts] = useState<Receipt[]>([])
+        const areQueriesFetched = queries.every(query => query.isFetched)
+        const accumulatedReceipts = useRef<Receipt[]>([])
+
+        useEffect(() => {
+          if (!areQueriesFetched) return
+
+          const noMoreDataAvailable = queries.some(query => query.data !== undefined && query.data.length === 0)
+          const thereIsMoreDataAvailable = !noMoreDataAvailable
+
+          const receiptsFromQueries = queries.flatMap(query => query.data) as Receipt[]
+
+          if (noMoreDataAvailable) {
+            accumulatedReceipts.current.push(...receiptsFromQueries)
+            console.log(accumulatedReceipts.current.length)
+            setAllReceipts(accumulatedReceipts.current)
+            return
+          }
+
+          if (thereIsMoreDataAvailable) {
+            setAttemptNum(attemptNum + 1)
+            accumulatedReceipts.current.push(...receiptsFromQueries)
+          }
+        }, [areQueriesFetched])
+
+        return (
+          <Box
+            className='ag-theme-alpine ag-receipt-table'
+            sx={{ flexGrow: 1, position: 'relative', overflow: 'visible', height: '100%' }}
+          >
+            <AgGridCustomStyles />
+            {isLoading && <LinearProgress sx={{ height: '1px', top: '53px', zIndex: 2 }} />}
+            <AgGridReact<Receipt>
+              ref={gridRef}
+              rowData={allReceipts.length === 0 ? initReceipts : allReceipts}
+              animateRows
+              rowSelection='multiple'
+              suppressRowClickSelection
+              enableCellTextSelection
+              ensureDomOrder
+              suppressCellFocus
+              suppressContextMenu
+              columnDefs={columnDefs}
+              defaultColDef={defaultColDef}
+              suppressScrollOnNewData
+              onSelectionChanged={(params) => {
+                const selectedRows = params.api.getSelectedRows()
+                const isRowSelected = selectedRows.length > 0
+
+                if (isRowSelected) {
+                  dispatch(layoutSlice.actions.showFooter())
+                  return
+                }
+
+                dispatch(layoutSlice.actions.hideFooter())
+              }}
+            />
+          </Box>
+        )
+      }
       `}</Code>
     </>
   )

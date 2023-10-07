@@ -55,10 +55,10 @@ console.log(i + ': extracting files from the archive')
 output = execSync('ssh sherb@35.217.12.143 "cd /var/www/html/antonarbus.com/ && tar -xf archive.tar.gz"', options)
 console.log(output)
 
-i++
-console.log(i + ': installing packages')
-output = execSync('ssh sherb@35.217.12.143 "source ~/.nvm/nvm.sh && cd /var/www/html/antonarbus.com/ && npm i -f"', options)
-console.log(output)
+// i++
+// console.log(i + ': installing packages')
+// output = execSync('ssh sherb@35.217.12.143 "source ~/.nvm/nvm.sh && cd /var/www/html/antonarbus.com/ && npm i -f"', options)
+// console.log(output)
 
 i++
 console.log(i + ': restarting the app')

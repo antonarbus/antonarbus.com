@@ -11,19 +11,19 @@ const postObj = {
       <H>Parallel fetch & abort</H>
 
       <ul>
-        <li>Had a challenge, fetch thousands of items in batches</li>
+        <li>Had a challenge to fetch thousands of items in batches</li>
         <li>Every batch is 5k lines</li>
         <li>If we reach the end, then next returned batch from api is an empty array</li>
         <li>Loading to be done in parallel to save time</li>
       </ul>
 
-      <Hs>How solved</Hs>
+      <Hs>How to solved</Hs>
 
       <ul>
         <li>launch 20 fetch functions at the same time, which is more than enough for my situation</li>
         <li>associate every fetch with abort controller</li>
         <li>track order of fetches and abort controllers</li>
-        <li>as soon as fetch returns empty array all next fetches are aborted</li>
+        <li>as soon as fetch returns an empty array all next fetches are aborted</li>
       </ul>
 
       <Code block jsx>{`
@@ -95,12 +95,12 @@ const postObj = {
         })
       `}</Code>
 
-      <H>Parallel queries with </H>
+      <H>Parallel queries with useQueries</H>
 
       <ul>
         <li><Lnk path='https://tanstack.com/query/v4/docs/react/guides/parallel-queries'>https://tanstack.com/query/v4/docs/react/guides/parallel-queries</Lnk></li>
         <li>We can make parallel queries with tanstack</li>
-        <li>Nice thing to me is that queries in tanstack has retry mechanism, we do not have to take care of it</li>
+        <li>Nice thing is that queries in tanstack have a retry mechanism by default</li>
       </ul>
 
       <Code block jsx>{`

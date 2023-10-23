@@ -221,6 +221,7 @@ const postObj = {
 
       <ul>
         <li><Code>source <i>filename</i></Code> executes the content of the file passed as argument in the current shell</li>
+        <li><Code>. "/opt/nvm/nvm.sh" && nvm install 16</Code> dot is the alias for the <Code>source</Code> command</li>
       </ul>
 
       <H>SSH</H>

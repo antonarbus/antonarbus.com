@@ -76,6 +76,24 @@ const postObj = {
       require('./cars').m5
       require('./cars').model3
       `}</Code>
+
+      <H>Pass args via terminal to a script</H>
+
+      <ul>
+        <li>we may trigger a script like <code>node server.js</code></li>
+        <li>but how to pass arguments into that</li>
+        <li>we can do <code>node server.js one two=three four</code></li>
+        <li>ad get args with <Code>process.argv</Code></li>
+      </ul>
+
+      <Code block bash>{`
+        // $ node server.js one two=three four
+
+        const args = process.argv
+        console.log(args)
+
+        // ['node', '/home/server.js', 'one', 'two=three', 'four']
+      `}</Code>
     </>
   )
 }

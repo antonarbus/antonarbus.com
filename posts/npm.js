@@ -34,6 +34,13 @@ const postObj = {
         <li><Code bash>npm -v</Code> npm version</li>
       </ul>
 
+      <H>npm i</H>
+      <ul>
+        <li><i>npm i</i> produces the <i>package.lock.json</i>file</li>
+        <li><Code>{'npm install jquery@">=0.1.0 <3.0.0"'}</Code> install version within a range</li>
+        <li><Code>{'npm install jquery@"<3.0.0"'}</Code> install version below a specific version</li>
+      </ul>
+
       <H>depcheck</H>
 
       <ul>

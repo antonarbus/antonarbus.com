@@ -35,10 +35,18 @@ const postObj = {
       </ul>
 
       <H>npm i</H>
+
       <ul>
-        <li><i>npm i</i> produces the <i>package.lock.json</i>file</li>
+        <li><i>npm i</i> produces the <code>package.lock.json</code>file based on <code>package.json</code>file</li>
         <li><Code>{'npm install jquery@">=0.1.0 <3.0.0"'}</Code> install version within a range</li>
         <li><Code>{'npm install jquery@"<3.0.0"'}</Code> install version below a specific version</li>
+      </ul>
+
+      <H>npm ci</H>
+
+      <ul>
+        <li><i>npm ci</i> deletes the <code>node_modules</code> folder</li>
+        <li>and installs packages according to <code>package.lock.json</code>file</li>
       </ul>
 
       <H>depcheck</H>

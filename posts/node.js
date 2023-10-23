@@ -77,7 +77,7 @@ const postObj = {
       require('./cars').model3
       `}</Code>
 
-      <H>Pass args via terminal to a script</H>
+      <H>Pass args to a script</H>
 
       <ul>
         <li>we may trigger a script like <code>node server.js</code></li>

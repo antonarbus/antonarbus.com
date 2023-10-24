@@ -3,7 +3,7 @@ import { ExportedTypes } from '/types/types'
 import { UserContext, UserContextProvider } from '/types/UserContext'
 
 // #region main types
-function myFunc(
+function myFunc (
   arg1: string,
   arg2: number,
   arg3: boolean,
@@ -44,7 +44,7 @@ interface propsTypes1 {
   lastName?: string
   likesNum: string | number
 }
-function Msg1(props: propsTypes1): JSX.Element {
+function Msg1 (props: propsTypes1): JSX.Element {
   return (
     <div>
       Hello {props.name}
@@ -67,7 +67,7 @@ type propTypes2 = {
   }
   cars: string[]
 }
-function Msg2(props: propTypes2): JSX.Element {
+function Msg2 (props: propTypes2): JSX.Element {
   return (
     <>
       Hello {props.name} {props.company && `from ${props.company}`}
@@ -84,19 +84,19 @@ function Msg2(props: propTypes2): JSX.Element {
 // #endregion
 
 // #region prop.children as string
-function ComponentWithChildren(props: { children: string }) {
+function ComponentWithChildren (props: { children: string }) {
   return <h2> {props.children} </h2>
 }
 // #endregion
 
 // #region prop.children as React component
-function ComponentWithReactComponentAsChild(props: { children: React.ReactNode }) {
+function ComponentWithReactComponentAsChild (props: { children: React.ReactNode }) {
   return <h2> {props.children} </h2>
 }
 // #endregion
 
 // #region onClick event handler without return or event object
-function Button1(props: { handleClick: () => void }) {
+function Button1 (props: { handleClick: () => void }) {
   return (
     <button onClick={props.handleClick}> Click </button>
   )
@@ -104,7 +104,7 @@ function Button1(props: { handleClick: () => void }) {
 // #endregion
 
 // #region onClick event handler with event object
-function Button2(props: { handleClick: (e: React.MouseEvent<HTMLButtonElement>) => void }) {
+function Button2 (props: { handleClick: (e: React.MouseEvent<HTMLButtonElement>) => void }) {
   return (
     <button onClick={props.handleClick}> Click </button>
   )
@@ -112,7 +112,7 @@ function Button2(props: { handleClick: (e: React.MouseEvent<HTMLButtonElement>) 
 // #endregion
 
 // #region onClick event handler with event object & additional param
-function Button3(props: { handleClick: (e: React.MouseEvent<HTMLButtonElement>, id: number) => void }) {
+function Button3 (props: { handleClick: (e: React.MouseEvent<HTMLButtonElement>, id: number) => void }) {
   return (
     <button onClick={e => props.handleClick(e, 1)}>Click</button>
   )
@@ -124,7 +124,7 @@ type InputProps = {
   value: string
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
-function Input(props: InputProps) {
+function Input (props: InputProps) {
   return <input type="text" value={props.value} onChange={props.handleChange} />
 }
 // #endregion
@@ -133,7 +133,7 @@ function Input(props: InputProps) {
 type InputProps1 = {
   value: string
 }
-function Input1(props: InputProps1) {
+function Input1 (props: InputProps1) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => console.log(e)
   return <input type="text" value={props.value} onChange={handleChange} />
 }
@@ -143,7 +143,7 @@ function Input1(props: InputProps1) {
 type ContainerProps = {
   styles: React.CSSProperties
 }
-function SomeCmpt(props: ContainerProps) {
+function SomeCmpt (props: ContainerProps) {
   return (
     <div style={props.styles}> Some text </div>
   )
@@ -154,7 +154,7 @@ function SomeCmpt(props: ContainerProps) {
 type SomeProps = {
   styles: React.CSSProperties
 }
-function Cmpt({ styles }: SomeProps) {
+function Cmpt ({ styles }: SomeProps) {
   return (
     <div style={styles}> Some text </div>
   )
@@ -162,7 +162,7 @@ function Cmpt({ styles }: SomeProps) {
 // #endregion
 
 // #region exporting types
-function Cmpt2({ styles }: ExportedTypes) {
+function Cmpt2 ({ styles }: ExportedTypes) {
   return (
     <div style={styles}> Some text </div>
   )
@@ -177,7 +177,7 @@ type Name = {
 type PersonProp = {
   name: Name
 }
-function Person(props: PersonProp) {
+function Person (props: PersonProp) {
   return <h2>{props.name.first} {props.name.last}</h2>
 }
 // #endregion
@@ -190,7 +190,7 @@ type Nameee = {
 type PersonsListProps = {
   names: Nameee[]
 }
-function PersonList(props: PersonsListProps) {
+function PersonList (props: PersonsListProps) {
   return (
     <div>
       {props.names.map(name => {
@@ -215,7 +215,7 @@ type AuthType = {
   name: string
   mail: string
 }
-function User() {
+function User () {
   const [userState, setUserState] = React.useState<null | AuthType>(null)
   const handleLogin = () => setUserState({ name: 'John', mail: 'john@mail.com' })
   const handleLogout = () => setUserState(null)
@@ -233,7 +233,7 @@ type AuthType2 = {
   name: string
   mail: string
 }
-function User2() {
+function User2 () {
   const [userState, setUserState] = React.useState<AuthType>({} as AuthType2)
   const handleLogin = () => setUserState({ name: 'John', mail: 'john@mail.com' })
   return <div>
@@ -253,7 +253,7 @@ type UpdateActionType = {
   payload?: number
 }
 const initialState = { count: 0 }
-function reducer(state: CounterStateType, action: UpdateActionType) {
+function reducer (state: CounterStateType, action: UpdateActionType) {
   switch (action.type) {
     case 'increment': return { count: state.count + (action.payload || 0) }
     case 'decrement': return { count: state.count - (action.payload || 0) }
@@ -288,7 +288,7 @@ type ResetAction2 = {
 type CounterAction2 = UpdateAction2 | ResetAction2
 const initialState2 = { count: 0 }
 
-function reducer2(state: CounterState2, action: CounterAction2) {
+function reducer2 (state: CounterState2, action: CounterAction2) {
   switch (action.type) {
     case 'increment': return { count: state.count + action.payload }
     case 'decrement': return { count: state.count - action.payload }
@@ -377,7 +377,7 @@ type ListProps<T> = {
   onClick: (value: T) => void
 }
 
-const List = <T extends number>({ items, onClick }: ListProps<T>) => {
+const List = <T extends number> ({ items, onClick }: ListProps<T>) => {
   return (
     <div>
       <Hs>List of items</Hs>
@@ -479,7 +479,7 @@ type TextOwnProps<E extends React.ElementType> = {
 type TextProps<E extends React.ElementType> = TextOwnProps<E> &
   Omit<React.ComponentProps<E>, keyof TextOwnProps<E>>
 
-const Text = <E extends React.ElementType = 'div'>({
+const Text = <E extends React.ElementType = 'div'> ({
   size,
   color,
   children,
@@ -1037,7 +1037,7 @@ const postObj = {
       }
       type CounterAction2 = UpdateAction2 | ResetAction2
       const initialState2 = { count: 0 }
-      
+
       function reducer2(state: CounterState2, action: CounterAction2) {
         switch (action.type) {
           case 'increment': return { count: state.count + action.payload }
@@ -1046,7 +1046,7 @@ const postObj = {
           default: return state
         }
       }
-      
+
       const Counter2 = () => {
         const [state, dispatch] = React.useReducer(reducer2, initialState2)
         return (
@@ -1097,7 +1097,7 @@ const postObj = {
         // main.tsx
         import React from 'react'
         import { UserContext, UserContextProvider } from './UserContext'
-        
+
         export const Userrr = () => {
           const userContext = React.useContext(UserContext)
           const handleLogin = () => userContext.setUser({ name: 'John', email: 'john@mail.com' })
@@ -1166,7 +1166,7 @@ const postObj = {
           }, 1000)
           return () => stopTimer()
         }, [])
-      
+
         return (
           <div>
             HookTimer - {timer} -
@@ -1206,7 +1206,7 @@ const postObj = {
         items: T[]
         onClick: (value: T) => void
       }
-      
+
       const List = <T extends number>({ items, onClick }: ListProps<T>) => {
         return (
           <div>
@@ -1247,7 +1247,7 @@ const postObj = {
         isNegative?: never
       }
       type RandomNumberProps = PositiveNumber | NegativeNumber | Zero
-      
+
       const RandomNumber = ({
         value,
         isPositive,
@@ -1279,7 +1279,7 @@ const postObj = {
       type ToastProps = {
         position: \`\${HorizontalPosition}-\${VerticalPosition}\`
       }
-      
+
       const Toast = ({ position }: ToastProps) => <div>Position - {position}</div>;
       <Toast position='left-top'></Toast>
       `}</Code>
@@ -1299,7 +1299,7 @@ const postObj = {
         )
       }
       <CustomButton variant={'primary'} onClick={() => alert('clicked')}>Button text</CustomButton>
-      
+
       type InputPropsType = React.ComponentProps<'input'>
       const Inpt = (props: InputPropsType) => <input {...props} />;
       <Inpt onChange={() => alert('typed')}/>
@@ -1347,7 +1347,7 @@ const postObj = {
       }
       type TextProps<E extends React.ElementType> = TextOwnProps<E> &
         Omit<React.ComponentProps<E>, keyof TextOwnProps<E>>
-      
+
       const Text = <E extends React.ElementType = 'div'>({
         size,
         color,
@@ -1399,7 +1399,7 @@ const postObj = {
         export type RootState = ReturnType<typeof store.getState>
         export type AppDispatch = typeof store.dispatch
         export type AppThunk<ReturnType = void> = ThunkAction< ReturnType, RootState, unknown, Action<string> >
-        
+
         // hooks to let types work
         export const useSelectorTyped: TypedUseSelectorHook<RootState> = useSelector
         export const useDispatchTyped = () => useDispatch<AppDispatch>()
@@ -1429,6 +1429,19 @@ const postObj = {
         const todo2 = updateTodo(todo1, {
           description: "throw out trash",
         });
+      `}</Code>
+
+      <H>Any string with suggestions</H>
+
+      <ul>
+        <li>if we want to accept any string, but also want some suggests to be shown</li>
+        <li>can do following trick, taken from <Lnk path='https://stackoverflow.com/a/74467583/7239778'>here</Lnk></li>
+      </ul>
+
+      <Code block jsx>{`
+        type Props = {
+          lang: 'en' | 'fi' | 'nl' | 'sv' | Record<never, never> & string
+        }
       `}</Code>
     </>
   )

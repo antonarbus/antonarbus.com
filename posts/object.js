@@ -41,8 +41,8 @@ const postObj = {
       <Code block jsx>{`
             let user = {     // "user" object has 3 properties: 1st property has the name "name" and the value "John"
               name: "John",  // by key/name/identifier "name" the value "John" is stored
-              age: 30,       // by key "age" the value 30 is stored 
-              "likes birds": true,  // multi word property name must be quoted // can use trailing comma 
+              age: 30,       // by key "age" the value 30 is stored
+              "likes birds": true,  // multi word property name must be quoted // can use trailing comma
               a: {b: 666},
             };
       `}</Code>
@@ -164,12 +164,12 @@ const postObj = {
       <Code block jsx>{`
       let key = "likes birds";
       user[key] = true;
-  
+
       let fruit = "apple";
       let bag = {
         [fruit]: 5, // the name of the property is taken from the var "fruit"
       };
-  
+
       let fruit = 'apple';
       let bag = {
         [fruit + 'Computers']: 5 // bag.appleComputers = 5
@@ -207,7 +207,7 @@ const postObj = {
         age: 30,
         isAdmin: true
       };
-  
+
       // iterates over properties of an object
       for (let key in obj) {
         console.log( key, obj[key] );  // name John, age 30, isAdmin true
@@ -225,7 +225,7 @@ const postObj = {
         "44": "Great Britain",
         "1": "USA"
       };
-      
+
       for (let code in obj) {
         alert(code); // 1, 41, 44, 49
       }
@@ -252,7 +252,7 @@ const postObj = {
 
       <Code block jsx>{`
       let a = {};
-      let b = {}; 
+      let b = {};
       a == b ; // false
       `}</Code>
 
@@ -262,7 +262,7 @@ const postObj = {
 
       <Code block jsx>{`
       const user = { name: "John" };
-      user.name = "Pete"; 
+      user.name = "Pete";
       user.name; // Pete
       `}</Code>
 
@@ -272,10 +272,10 @@ const postObj = {
 
       <Code block jsx>{`
         let obj = { name: "John", age: 30 };
-        let clone = Object.assign({}, user); 
+        let clone = Object.assign({}, user);
 
         // or
-        clone = { ...obj } 
+        clone = { ...obj }
       `}</Code>
 
       <p>Nested cloning use existing library _.cloneDeep(obj) from the library < Lnk path="https://lodash.com/docs/4.17.15#cloneDeep" > lodash</Lnk ></p>
@@ -283,7 +283,7 @@ const postObj = {
       <Code block jsx>{`
         // npm i lodash.clonedeep
         const obj = [{ 'a': 1 }, { 'b': 2 }];
-        const deep = _.cloneDeep(obj); 
+        const deep = _.cloneDeep(obj);
       `}</Code>
 
       <H>Object.keys, values, entries</H>
@@ -297,7 +297,7 @@ const postObj = {
       for (let value of Object.values(user)) {
         alert(value); // John, then 30
       }
-  
+
       // loop over keys-and-values
       for (let [key, value] of Object.entries(obj)) {
         alert(\`\${key}:\${value}\`); // name:John, then age:30
@@ -323,7 +323,7 @@ const postObj = {
         orange: 2,
         meat: 4,
       };
-  
+
       // convert to array, map, and then fromEntries gives back the object
       let doublePrices = Object.fromEntries(
         Object.entries(prices).map(([key, value]) => [key, value * 2])
@@ -341,30 +341,30 @@ const postObj = {
         let user = {
           name: "John",
           age: 30,
-          showThisName() { alert(this.name) }, 
+          showThisName() { alert(this.name) },
         };
         user.showThisName(); // "John"
-        // same as alert(user.name); 
+        // same as alert(user.name);
       }
-  
+
       // example 2
       {
         let user = { name: "John" };
         let admin = { name: "Admin" };
         function sayHi() { alert( this.name ); }
-  
+
         // use the same function in two objects
         user.f = sayHi; // assign method to object
         admin.f = sayHi;
-  
+
         user.f(); // John  (this == user)
         admin.f(); // Admin  (this == admin)
       }
-  
+
       // "this" in function
       function x() { alert( this ); }
       x() // [object Window]
-  
+
       // arrow function has no “this”, it is taken from the outer “normal” function
       {
         let user = {
@@ -374,7 +374,7 @@ const postObj = {
             arrow();
           }
         };
-  
+
         user.sayHi(); // John
       }
       `}</Code>
@@ -394,12 +394,12 @@ const postObj = {
             this.step--;
             return this;
           },
-          showStep: function() { 
+          showStep: function() {
             // shows the current step
             alert( this.step );
           }
         }
-  
+
         ladder.up().up().down().showStep(); // 1
       `}</Code>
 
@@ -417,7 +417,7 @@ const postObj = {
       <Code block jsx>{`
         var gVar = 5
         window.gVar // 5 (became a property of the global object)
-    
+
         window.currentUser = {  name: "John"};
         window.currentUser.name // John
       `}</Code>
@@ -478,12 +478,12 @@ const postObj = {
       Object.defineProperty(user, "name", {
         value: "John",
         writable: false, // won't be able to change user.name or its flags
-        configurable: false, // delete user.name; // Error // can not change even flags // 
+        configurable: false, // delete user.name; // Error // can not change even flags //
         enumerable: false, // for (let key in user) alert(key); // toString ONLY!!!
         // + there are many more property settings
       })
 
-      user.name = "Anton" 
+      user.name = "Anton"
       user.name // "John"
       delete user.name // false
 
@@ -508,7 +508,7 @@ const postObj = {
 
       // method defines new or modifies existing properties directly on an object, returning the object
       // we can set many properties at once.
-      Object.getOwnPropertyDescriptors(user) 
+      Object.getOwnPropertyDescriptors(user)
       /*
         {
           name: {value: 'John', writable: false, enumerable: false, configurable: false}
@@ -536,8 +536,8 @@ const postObj = {
         }
       }
 
-      user.fullName // John Smith 
-      user.fullName = "Jane Musk" // not a method with parenthesis, but a property 
+      user.fullName // John Smith
+      user.fullName = "Jane Musk" // not a method with parenthesis, but a property
       user.name // Jane
       user.surname // Musk
       `}</Code>
@@ -619,12 +619,12 @@ const postObj = {
       let range = {
         from: 1,
         to: 5,
-      
+
         [Symbol.iterator]() {
           this.current = this.from;
           return this;
         },
-      
+
         next() {
           if (this.current <= this.to) {
             return { done: false, value: this.current++ };
@@ -633,7 +633,7 @@ const postObj = {
           }
         }
       };
-      
+
       for (let num of range) alert(num); // 1, then 2, 3, 4, 5
       `}</Code>
 
@@ -654,7 +654,7 @@ const postObj = {
         1: "World",
         length: 2
       };
-      
+
       for (let item of arrayLike) {}  // Error (no Symbol.iterator)
       `}</Code>
 
@@ -671,20 +671,20 @@ const postObj = {
         1: "World",
         length: 2
       };
-      
+
       let arr = Array.from(arrayLike);
       arr.pop(); // World (method works)
-  
+
       // optional args
       Array.from(obj[, mapFn, thisArg])
       let arr = Array.from(arrayLike, str => " - " + str); // [" - Hello", " - World"]
-  
+
       // string into array
       let str = "Hello"
       let strArr1 = Array.from(str)
       let strArr2 = str.split("")
       console.log(strArr1, strArr2) // ["H", "e", "l", "l", "o"] ["H", "e", "l", "l", "o"]
-  
+
       // we can convert jQuery collection into array with such method
       `}</Code>
 
@@ -725,12 +725,22 @@ const postObj = {
 
       <Code block jsx>{`
       const didIPassExam = true
-      
+
       const study = {
         monday : 'writing',
         tuesday : 'reading',
         ...(didIPassExam && {wednesday : 'sleep happily'})
       }
+      `}</Code>
+
+      <p>Without parentheses also works (but looks weird imho)</p>
+
+      <Code block jsx>{`
+        const obj = {
+          key1: 'value 1',
+          key2: 'value 2',
+          ...true && { key3: 'value 3' }
+        }
       `}</Code>
 
     </>

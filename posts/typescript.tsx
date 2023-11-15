@@ -827,6 +827,12 @@ const postObj = {
 
       <SomeCmpt styles={{ border: '1px solid black', padding: '1rem' }} />
 
+      <Hs>Specific css prop</Hs>
+
+      <Code block jsx>{`
+        const [visibility, setVisibility] = useState<CSSProperties['visibility']>('visible')
+      `}</Code>
+
       <H>Props destructuring</H>
 
       <Code block jsx>{`

@@ -605,6 +605,16 @@ const postObj = {
         }
       `}</Code>
 
+      <H>Record</H>
+
+      <Code block jsx>{`
+        const obj: Record<string, number> = {
+          'key 1': 1,
+          'key 2': 2
+          'key 3': 3
+        }
+      `}</Code>
+
       <H>Rest of props</H>
 
       <Code block jsx>{`

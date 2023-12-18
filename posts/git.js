@@ -67,6 +67,12 @@ const postObj = {
       npm run build
       `}</Code>
 
+      <p>For myvocab.org it looks like</p>
+
+      <Code block lang='bash'>{`
+      git --work-tree=/var/www/html/myvocab.org --git-dir=/var/www/myVocabGitRemoteRepo checkout -f
+      `}</Code>
+
       <H>Create repo</H>
 
       <ul>
@@ -188,7 +194,7 @@ const postObj = {
       <Code block lang='gitignore'>{`
       # dependencies
       /node_modules # folder
-      file.js # file 
+      file.js # file
       folder/file.txt # file within folder
       *.py # files with extension
       *.py[abc] # files with extension .pya .pyb .pyc

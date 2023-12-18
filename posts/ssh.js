@@ -10,7 +10,7 @@ const postObj = {
       <H>Basic actions on my server</H>
 
       <ul>
-        <li><Code bash>ssh sherb@35.209.92.93</Code> connect</li>
+        <li><Code bash>ssh sherb@35.217.12.143</Code> connect</li>
         <li><Code bash>cd /var/www/html/antonarbus.com</Code> go to this web page folder</li>
         <li><Code bash>npm i</Code> update packages</li>
         <li><Code bash>npm run build</Code></li>

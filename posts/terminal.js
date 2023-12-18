@@ -227,7 +227,7 @@ const postObj = {
       <H>SSH</H>
 
       <ul>
-        <li><Code bash>ssh sherb@35.209.92.93</Code> connect</li>
+        <li><Code bash>ssh sherb@35.217.12.143</Code> connect</li>
         <li><Code bash>cd /var/www/html/antonarbus.com</Code> go to this web page folder</li>
         <li><Code bash>npm i</Code> update packages</li>
         <li><Code bash>npm run build</Code></li>
@@ -397,7 +397,7 @@ const postObj = {
       <Hs>Deploy Anton Arbus on server</Hs>
 
       <ul>
-        <li><Code bash>ssh sherb@35.209.92.93</Code> connect</li>
+        <li><Code bash>ssh sherb@35.217.12.143</Code> connect</li>
         <li><Code bash>cd /var/www/html/antonarbus.com</Code> go to this web page folder</li>
         <li><Code bash>npm i</Code> update packages</li>
         <li><Code bash>npm run build</Code></li>
@@ -416,7 +416,7 @@ const postObj = {
         <li><Code bash>npm run build</Code> build production folder</li>
         <li><Code bash>tar -czf archive.tar.gz .next package.json next.config.js public</Code> compress build folder</li>
         <li><Code bash>scp -r ~/Git/antonarbus.com/archive.tar.gz sherb@35.209.92.93:/var/www/html/antonarbus.com/</Code> copy build archive from Win to server</li>
-        <li><Code bash>ssh sherb@35.209.92.93</Code> connect</li>
+        <li><Code bash>ssh sherb@35.217.12.143</Code> connect</li>
         <li><Code bash>cd /var/www/html/antonarbus.com</Code> go to this web page folder</li>
         <li><Code bash>rm -r /var/www/html/antonarbus.com/.next</Code> remove existing build folder</li>
         <li><Code bash>tar -xf archive.tar.gz</Code> extract archive</li>

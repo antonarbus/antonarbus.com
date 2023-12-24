@@ -68,7 +68,7 @@ const lookupKey = (mappings, name) => {
 const currencyFormatter = (params) => {
   const value = Math.floor(params.value)
   if (isNaN(value)) return ''
-  return '£' + value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+  return '£' + value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
 }
 
 const numberValueSetter = (params) => {

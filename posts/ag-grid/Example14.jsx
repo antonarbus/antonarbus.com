@@ -13,7 +13,7 @@ const formatNumber = (number) => {
   // i pulled this from stack overflow, i have no idea how it works
   return Math.floor(number)
     .toString()
-    .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+    .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
 }
 
 const createRowData = () => {

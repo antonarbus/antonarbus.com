@@ -17,7 +17,7 @@ export default function useAnimatedWrapper(args) {
       ...args?.animationCss,
     },
     animationEndFunc: args?.animationEndFunc || null,
-    wrapperCss: { ...args?.wrapperCss || '' },
+    wrapperCss: { ...(args?.wrapperCss || '') },
   }
 
   const [animationState, setAnimationState] = React.useState(false)

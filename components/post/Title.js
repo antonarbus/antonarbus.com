@@ -5,10 +5,10 @@ export function Title(props) {
   return (
     <H3Styled className="title">
       <Link href={`/post/${props.uriPostName}`} >
-        <a> {props.children} </a>
+         {props.children} 
       </Link>
     </H3Styled>
-  )
+  );
 }
 
 const H3Styled = styled.h3`

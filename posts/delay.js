@@ -4,7 +4,7 @@ import axios from 'axios'
 import sleeper from '/functions/sleeper'
 
 // #region SYNC delay
-function SynchDelay() {
+function SynchDelay () {
   const sayHiWithDelay = () => {
     syncWait(2000)
     alert('hi')
@@ -16,7 +16,7 @@ function SynchDelay() {
 // #endregion
 
 // #region promise with delay
-function PromiseWithDelayExample() {
+function PromiseWithDelayExample () {
   return (
     <>
       <button
@@ -29,7 +29,7 @@ function PromiseWithDelayExample() {
       >
         Get respond from server
       </button>
-      <br/>
+      <br />
       <button
         onClick={() => {
           alert('start request with 3s delay')
@@ -84,17 +84,15 @@ const postObj = {
 
       <Code block jsx>{`
       // sleeper.js
-      export default function sleeper(ms = 1000) {
-        return function(x) {
-          return new Promise(resolve => setTimeout(() => resolve(x), ms))
-        }
+      function sleeper(ms = 1000) {
+        return new Promise(resolve => setTimeout(() => resolve('done'), ms))
       }
       `}</Code>
 
       <Code block jsx>{`
       // the usage
       axios('https://jsonplaceholder.typicode.com/posts/1')
-        .then(sleeper(3000))
+        .then(() => sleeper(3000))
         .then(res => alert('Title: ' + res.data.title))
       `}</Code>
 
@@ -103,7 +101,7 @@ const postObj = {
       <Code block jsx>{`
       import axios from 'axios'
       import sleeper from '../../../../helpers/functions/sleeper'
-      
+
       function Component() {
         return (
           <>
@@ -135,6 +133,17 @@ const postObj = {
       `}</Code>
 
       <PromiseWithDelayExample />
+
+      <H>Delay an api response by 5 sec</H>
+
+      <Code block jsx>{`
+        app.get('/api', async (_req: Req, res: Res) => {
+          await new Promise(resolve => {
+            setTimeout(() => resolve('done'), 5000)
+          })
+          return res.json({ url: '/api', data: 'some data' })
+        })
+      `}</Code>
 
     </>
   )

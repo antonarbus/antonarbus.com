@@ -1,18 +1,15 @@
 import { Code, useState, jsxToStr } from '/components/post/reExport'
 import randomNumFromTo from '/functions/randomNumFromTo'
-import useAnimatedWrapper from '/functions/useAnimatedWrapper'
 import useInput from '/functions/useInput'
 
 const style = { width: '50px', marginRight: '10px' }
 
-function Component() {
+function Component () {
   const [valState, setValState] = useState(0)
-  const [AnimationWrapper, turnAnimationOn] = useAnimatedWrapper()
   const [inputFromState, bindInputFrom] = useInput()
   const [inputToState, bindInputTo] = useInput()
   const clickHandler = () => {
     setValState(randomNumFromTo(inputFromState, inputToState))
-    turnAnimationOn()
   }
 
   return (
@@ -20,7 +17,7 @@ function Component() {
       <input placeholder="from" style={style} {...bindInputFrom} />
       <input placeholder={'to'} style={style} {...bindInputTo} />
       <button onClick={clickHandler}>Get random integer</button>
-      <div>Random number: <AnimationWrapper>{valState}</AnimationWrapper></div>
+      <div>Random number: {valState}</div>
     </>
   )
 }
@@ -49,26 +46,24 @@ const postObj = {
       <Code block jsx>{`
       import React, { useState } from 'react';
       import randomNumFromTo from '../../../helpers/functions/randomNumFromTo';
-      import useAnimatedWrapper from '../../../helpers/functions/useAnimatedWrapper';
       import useInput from '../../../helpers/functions/useInput';
       const style = { width: '50px', marginRight: '10px' };
-      
+
       function Component() {
         const [valState, setValState] = useState(0);
-        const [AnimationWrapper, turnAnimationOn] = useAnimatedWrapper();
         const [inputFromState, bindInputFrom] = useInput()
         const [inputToState, bindInputTo] = useInput()
         const clickHandler = () => {
           setValState(randomNumFromTo(inputFromState, inputToState))
           turnAnimationOn()
         }
-      
+
         return (
           <>
             <input placeholder='from' style={style} {...bindInputFrom} />
             <input placeholder={'to'} style={style} {...bindInputTo} />
             <button onClick={clickHandler}>Get random integer</button>
-            <div> Random number: <AnimationWrapper>{valState}</AnimationWrapper></div>
+            <div> Random number: {valState}</div>
           </>
         )
       }

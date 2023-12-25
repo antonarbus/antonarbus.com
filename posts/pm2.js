@@ -4,7 +4,7 @@ const postObj = {
   title: 'pm2',
   date: '2022.04.25',
   tags: ['tools', 'devops'],
-  desc: 'yyy',
+  desc: 'pm2',
   body: (
     <>
       <p><Lnk path='https://pm2.keymetrics.io/'>PM2</Lnk> is a process manager for node.js</p>

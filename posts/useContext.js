@@ -8,7 +8,7 @@ const ContextParent = createContext()
 const ContextA = createContext()
 const ContextB = createContext()
 
-function Parent1() {
+function Parent1 () {
   return (
     <ContextParent.Provider value={{ data: 'data in context from context Parent' }}>
       <A data='data in props from Parent' />
@@ -17,36 +17,36 @@ function Parent1() {
 
   )
 }
-function A(props) {
+function A (props) {
   return (
     <ContextA.Provider value={'context A'}>
       <div style={style}>
         A
-        <B data={props.data}/>
+        <B data={props.data} />
       </div>
     </ContextA.Provider>
   )
 }
-function B(props) {
+function B (props) {
   return (
     <ContextB.Provider value={'context B'}>
       <div style={style}>
         B
-        <C data={props.data}/>
+        <C data={props.data} />
       </div>
     </ContextB.Provider>
 
   )
 }
-function C(props) {
+function C (props) {
   return (
     <div style={style}>
       C
-      <D data={props.data}/>
+      <D data={props.data} />
     </div>
   )
 }
-function D(props) {
+function D (props) {
   const contextParent = useContext(ContextParent)
   const contextA = useContext(ContextA)
   const contextB = useContext(ContextB)
@@ -58,7 +58,7 @@ function D(props) {
     </div>
   )
 }
-function Age() {
+function Age () {
   const contextParent = useContext(ContextParent)
   return (
     <div style={style}>{contextParent.data}</div>
@@ -69,7 +69,7 @@ function Age() {
 // #region useContext() & state
 const Context2 = createContext('')
 
-function Parent2() {
+function Parent2 () {
   const [string, setString] = useState(shortid())
 
   const contextValue = {
@@ -83,21 +83,21 @@ function Parent2() {
       <div style={contextValue.style}>
         <div>Parent</div>
         <div>String from context: <b>{contextValue.string}</b></div>
-        <button onClick={() => contextValue.setString(shortid()) }>Change string</button>
-        <Child2 name='Child 1'/>
-        <Child2 name='Child 2'/>
+        <button onClick={() => contextValue.setString(shortid())}>Change string</button>
+        <Child2 name='Child 1' />
+        <Child2 name='Child 2' />
       </div>
     </Context2.Provider>
   )
 }
 
-function Child2(props) {
+function Child2 (props) {
   const contextValue = useContext(Context2)
   return (
     <div style={contextValue.style}>
       <div>{props.data}</div>
       <div>String from context: <b>{contextValue.string}</b></div>
-      <button onClick={() => contextValue.setString(shortid()) }>Change string</button>
+      <button onClick={() => contextValue.setString(shortid())}>Change string</button>
     </div>
   )
 }
@@ -106,12 +106,12 @@ function Child2(props) {
 // #region same with useReducer()
 const Context3 = createContext('')
 
-function reducer(state, action) {
+function reducer (state, action) {
   if (action === 'randomize string') return shortid()
   return state
 }
 
-function Parent3() {
+function Parent3 () {
   const [string, dispatch] = useReducer(reducer, shortid())
 
   const contextValue = {
@@ -125,21 +125,21 @@ function Parent3() {
       <div style={contextValue.style}>
         <div>Parent</div>
         <div>String from context: <b>{contextValue.string}</b></div>
-        <button onClick={() => contextValue.dispatch('randomize string') }>Change string</button>
-        <Child3 name='Child 1'/>
-        <Child3 name='Child 2'/>
+        <button onClick={() => contextValue.dispatch('randomize string')}>Change string</button>
+        <Child3 name='Child 1' />
+        <Child3 name='Child 2' />
       </div>
     </Context3.Provider>
   )
 }
 
-function Child3(props) {
+function Child3 (props) {
   const contextValue = useContext(Context3)
   return (
     <div style={contextValue.style}>
       <div>{props.data}</div>
       <div>String from context: <b>{contextValue.string}</b></div>
-      <button onClick={() => contextValue.dispatch('randomize string') }>Change string</button>
+      <button onClick={() => contextValue.dispatch('randomize string')}>Change string</button>
     </div>
   )
 }
@@ -181,7 +181,7 @@ const postObj = {
             <A data='data in props from Parent' />
             <Age />
           </ContextParent.Provider>
-          
+
         )
       }
       function A(props) {
@@ -229,7 +229,7 @@ const postObj = {
         const contextParent = useContext(ContextParent)
         return (
           <div style={style}>
-            I am data from {contextParent.data} 
+            I am data from {contextParent.data}
           </div>
         )
       }
@@ -333,6 +333,99 @@ const postObj = {
       `}</Code>
 
       <Parent3 />
+
+      <H>context in typescript</H>
+
+      <Code block jsx>{`
+        // RowProvider.tsx
+
+        import { createContext, useContext, type ReactNode } from 'react'
+
+        type Context = {
+          rowIndex: number
+          rowId: string
+        }
+
+        type Props = Context & {
+          children: ReactNode
+
+        }
+
+        const RowContext = createContext<Context | null>(null)
+
+        export const RowProvider = ({
+          children,
+          rowIndex,
+          rowId,
+        }: Props): JSX.Element => {
+          return (
+            <RowContext.Provider
+              value={{
+                rowIndex,
+                rowId,
+              }}
+            >
+              {children}
+            </RowContext.Provider>
+          )
+        }
+
+        export const useRow = (): Context => {
+          const context = useContext(RowContext)
+
+          if (!context) {
+            throw new Error('useRow must be used within a RowProvider')
+          }
+
+          return context
+        }
+      `}</Code>
+
+      <Code block jsx>{`
+        // ParentComponent.tsx
+
+        import { BoqRow, boqRows } from './row/BoqRow'
+        import { useItem } from 'client/widgets/items/ItemProvider'
+        import { RowProvider } from './RowProvider'
+
+        export const ParentComponent = (): JSX.Element => {
+          return (
+            {boqRows.map((boqRow, rowIndex) => {
+              if (boqRow.type === 'boq row') {
+                return (
+                  <RowProvider rowIndex={rowIndex} rowId={boqRow.id} key={boqRow.id} >
+                    <BoqRow />
+                  </RowProvider>
+                )
+              }
+            })}
+          )
+        }
+      `}</Code>
+
+      <Code block jsx>{`
+        // ChildComponent.tsx
+
+        import type { ReactNode } from 'react'
+        import { useRow } from '../RowProvider'
+
+        type Props = {
+          children: ReactNode
+        }
+
+        export const ChildComponent = ({ children }: Props): JSX.Element => {
+          const { rowId } = useRow()
+
+          return (
+            <div
+              id={rowId}
+            >
+              {children}
+            </div>
+          )
+        }
+
+      `}</Code>
     </>
   )
 }

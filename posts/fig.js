@@ -1,4 +1,4 @@
-import { Code, H, LazyImg, Lnk, jsxToStr } from '/components/post/reExport'
+import { Code, H, Lnk, LazyImg, jsxToStr } from '/components/post/reExport'
 
 const postObj = {
   title: 'fig',
@@ -134,7 +134,7 @@ const postObj = {
           description: "My git shortcut",
           insertValue: "add . && git commit -m '{cursor}' && git push",
           icon: "fig://template?color=2ecc71&badge=💩",
-          // type: "shortcut", 
+          // type: "shortcut",
         },
       ],
       `}</Code>
@@ -155,6 +155,10 @@ const postObj = {
         <li><Code>code ~/.p10k.zsh</Code></li>
         <li>Just play with configurations using as minimal options as possible</li>
       </ul>
+
+      <H>Highlighting</H>
+
+      <Lnk path='https://fig.io/plugins/other/zsh-syntax-highlighting'>https://fig.io/plugins/other/zsh-syntax-highlighting</Lnk>
     </>
   )
 }

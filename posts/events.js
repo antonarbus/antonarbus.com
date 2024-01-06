@@ -89,7 +89,7 @@ const postObj = {
       </ul>
 
       <Code block jsx>{`
-      element.addEventListener('click', func,  { 
+      element.addEventListener('click', func,  {
           capture: false,
           once: false
           passive: false
@@ -119,8 +119,8 @@ const postObj = {
       `}</Code>
 
       <Code block jsx>{`
-      el.addEventListener("event", fn, true) 
-      el.removeEventListener("event", fn, true) 
+      el.addEventListener("event", fn, true)
+      el.removeEventListener("event", fn, true)
       `}</Code>
 
       <p>Will not work, because technically they are different function objects</p>
@@ -165,7 +165,7 @@ const postObj = {
       <Code block jsx>{`
       elem.onclick = function(event) {
         event.type // Event type, here it’s "click".
-        event.currentTarget // el where the handler is // same as 'this' unless arrow func 
+        event.currentTarget // el where the handler is // same as 'this' unless arrow func
         event.target, // el that initiated the event
         event.clientX // window-relative coordinates of the cursor, for pointer events
         event.clientY
@@ -208,7 +208,7 @@ const postObj = {
           }
         }
       }
-    
+
       let menu = new Menu()
       elem.addEventListener('mousedown', menu)
       elem.addEventListener('mouseup', menu)
@@ -224,7 +224,7 @@ const postObj = {
         onMousedown() { elem.innerHTML = "Mouse button pressed" }
         onMouseup() { elem.innerHTML += "...and released." }
       }
-    
+
       let menu = new Menu()
       elem.addEventListener('mousedown', menu)
       elem.addEventListener('mouseup', menu)
@@ -263,6 +263,15 @@ const postObj = {
       </ul>
 
       <H>e.currentTarget</H>
+
+      <ul>
+        <li>element from where cursor exited or where it is entered</li>
+        <li>depends on the event</li>
+        <li>for <code>mouseenter</code>, <code>mouseover</code>, <code>dragenter</code> - element exited from</li>
+        <li>for <code>mouseleave</code>, <code>mouseout</code>, <code>dragleave</code> - element entered into</li>
+      </ul>
+
+      <H>e.relatedTarget</H>
 
       <ul>
         <li>el where the handler is</li>
@@ -419,13 +428,13 @@ const postObj = {
         e.preventDefault()
         alert("innerDiv context menu")
       }
-      
+
       div.oncontextmenu = function(e) {
         if (e.defaultPrevented) return
         e.preventDefault()
         alert("div context menu")
       }
-      
+
       outterDiv.oncontextmenu = function(e) {
         if (e.defaultPrevented) return
         e.preventDefault()
@@ -483,7 +492,7 @@ const postObj = {
 
       <Code block jsx>{`
       let event = new Event("click")
-      document.querySelector('button').dispatchEvent(event) 
+      document.querySelector('button').dispatchEvent(event)
       `}</Code>
 
       <ul>
@@ -504,7 +513,7 @@ const postObj = {
       <Hs>isTrusted</Hs>
 
       <Code block jsx>{`
-      event.isTrusted 
+      event.isTrusted
       `}</Code>
 
       <ul>
@@ -554,9 +563,9 @@ const postObj = {
       <p>Better way...</p>
 
       <Code block jsx>{`
-      const helloEvent = new CustomEvent("hello", { 
+      const helloEvent = new CustomEvent("hello", {
         bubbles: true,
-        detail: { name: "John" } 
+        detail: { name: "John" }
       })
       document.querySelector('button').dispatchEvent(helloEvent) // Hello from BUTTON
 
@@ -584,15 +593,15 @@ const postObj = {
       textarea.addEventListener('click', hide)
 
       function isPrevented(e) {
-        if (confirm("Call preventDefault?")) e.preventDefault()  
+        if (confirm("Call preventDefault?")) e.preventDefault()
       }
 
       function hide() {
         const event = new CustomEvent("hide", { cancelable: true })
-        if (!textarea.dispatchEvent(event)) { 
+        if (!textarea.dispatchEvent(event)) {
           alert('The action was prevented by a handler')
           return
-        } 
+        }
         textarea.hidden = true
       }
       `}</Code>

@@ -178,6 +178,13 @@ const postObj = {
       <H>Font</H>
 
       <p>Install <Lnk path='https://github.com/tonsky/FiraCode'>FiraCode</Lnk> font.</p>
+
+      <H>Restore old synced settings</H>
+
+      <ul>
+        <li><Code>{'>settings sync: show synced data'}</Code></li>
+      </ul>
+
     </>
   )
 }

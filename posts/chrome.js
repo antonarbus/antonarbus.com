@@ -1,11 +1,11 @@
 import { Code, H, Hs, LazyImg, Lnk, React, useEffect, useState, useRef, useCallback, useMemo, jsxToStr } from '/components/post/reExport'
 
 const postObj = {
-  title: 'old chrome version',
+  title: 'chrome',
   date: '2023.08.10',
   tags: ['tools'],
   imgUrl: 'https://antonarbus.com/imgs/chrome.png',
-  desc: 'old chrome version',
+  desc: 'chrome',
   body: (
     <>
       <H>Old chrome versions</H>

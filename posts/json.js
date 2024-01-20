@@ -14,14 +14,16 @@ const postObj = {
 
       <Hs>Basics</Hs>
 
-      <p>
-        <ul>
-          <li>json string is named also a "JSON-encoded" OR "serialized" OR "stringified" OR "marshalled" object</li>
-          <li>Strings use double quotes. No single quotes or backticks in JSON. 'John' becomes "John"</li>
-          <li>Object property names are double-quoted. So <code>age:30</code> becomes <code>"age":30</code>.</li>
-        </ul>
-
-      </p>
+      <ul>
+        <li>JSON is a string format <code>{"'{\"name\": \"Juha\"}'"}</code></li>
+        <li>The data is only JSON when it is in a string format</li>
+        <li>Inside the JSON string there is a JSON object literal <code>{'{"name": "Juha"}'}</code></li>
+        <li>JS object can be created from JSON object literal  const <code>{'const person = {"name": "Juha"}'}</code></li>
+        <li>JSON string is named also a "JSON-encoded" OR "serialized" OR "stringified" OR "marshalled" object</li>
+        <li>Strings use double quotes. No single quotes or backticks in JSON. 'John' becomes "John"</li>
+        <li>Object property names are double-quoted. So <code>age:30</code> becomes <code>"age":30</code>.</li>
+        <li>JSON is needed to transmit JS objects via http, as http does not work with JS objects, but works with text</li>
+      </ul>
 
       <Code block jsx>{`
       JSON.stringify(1) // "1"

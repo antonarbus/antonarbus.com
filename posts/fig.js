@@ -159,6 +159,13 @@ const postObj = {
       <H>Highlighting</H>
 
       <Lnk path='https://fig.io/plugins/other/zsh-syntax-highlighting'>https://fig.io/plugins/other/zsh-syntax-highlighting</Lnk>
+
+      <H>Some commands</H>
+
+      <ul>
+        <li><Code>fig doctor</Code> check status of fig</li>
+        <li><Code>fig restart</Code> restart</li>
+      </ul>
     </>
   )
 }

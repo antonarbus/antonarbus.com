@@ -11,13 +11,15 @@ const postObj = {
       <H>Basics</H>
 
       <ul>
-        <li><i>Signal</i> is a reactive value which re-render the component when it is changed</li>
-        <li><Code>signal.value</Code> property re-render the component</li>
+        <li><i>Signal</i> is a reactive value which re-renders the component when it is changed</li>
+        <li><Code>signal.value</Code> consumed by component re-renders the component</li>
         <li>if we consume <Code>signal</Code> directly in jsx, it will just change the dom without component re-render</li>
         <li>to update the signal you just have to mutate the <Code>signal.value</Code> prop, that's simple</li>
         <li><Lnk path='https://preactjs.com/guide/v10/signals/'>https://preactjs.com/guide/v10/signals/</Lnk></li>
         <li><Lnk path='https://github.com/preactjs/signals/tree/main/packages/react#react-integration'>https://github.com/preactjs/signals/tree/main/packages/react#react-integration</Lnk></li>
         <li><Code>npm install @preact/signals-react</Code></li>
+        <li>to let it signals without react hooks some magic is done on compilation step, thus we need to add Babel transformation</li>
+        <li><Code>npm i --save-dev @preact/signals-react-transform</Code></li>
       </ul>
 
       <H>Vite config</H>

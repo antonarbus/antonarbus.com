@@ -72,7 +72,7 @@ const postObj = {
         <li><Lnk path='https://www.npmjs.com/package/dpdm'>https://www.npmjs.com/package/dpdm</Lnk></li>
         <li><Code bash>npm i -g dpdm</Code>  install globally</li>
         <li><Code bash>npx dpdm ./src/index.tsx</Code> check all</li>
-        <li><Code bash>npx dpdm --no-warning --no-tree ./src/index.tsx</Code> check for circular reference only</li>
+        <li><Code bash>npx dpdm -T --no-warning --no-tree ./index.tsx</Code> check for circular reference only</li>
         <li><Code bash>npx dpdm --no-tree --no-warning --no-circular --detect-unused-files-from 'src/**/*.*' 'index.js'</Code> find unused files by index.js in src directory</li>
       </ul>
 

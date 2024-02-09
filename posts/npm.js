@@ -85,6 +85,13 @@ const postObj = {
         <li><Code>npm install</Code></li>
       </ul>
 
+      <H>update specific package</H>
+
+      <ul>
+        <li><Code>npm update --save <i>name</i></Code> updated package in both <i>package-lock.json</i> & <i>package.json</i> files</li>
+        <li>Without <Code>--save</Code> package will be updated only in <i>package-lock.json</i>, no clue why we may want it</li>
+      </ul>
+
     </>
   )
 }

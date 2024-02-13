@@ -1460,6 +1460,34 @@ const postObj = {
         }
       `}</Code>
 
+      <H>as const</H>
+
+      <ul>
+        <li><Code>as const</Code> makes type as narrow as possible</li>
+      </ul>
+
+      <Code block jsx>{`
+        // without "as const"
+        const employee = {
+          name: 'Jane',
+          age: 30
+        }
+        
+        type EmployeeKey = keyof typeof employee // "name" | "age"
+        type EmployeeValue = (typeof employee)[keyof typeof employee] // string | number
+        type EmployeeName = typeof employee['name'] // string
+
+        // with "as const"
+        const employee = {
+          name: 'Jane',
+          age: 30
+        } as const
+        
+        type EmployeeKey = keyof typeof employee // "name" | "age"
+        type EmployeeValue = (typeof employee)[keyof typeof employee] // "Jane" | 30
+        type EmployeeName = typeof employee['name'] // "Jane"
+      `}</Code>
+
       <H>Object keys & values</H>
 
       <Code block jsx>{`
@@ -1471,6 +1499,14 @@ const postObj = {
         
         type Keys = keyof typeof person // "age" | "name" | "job"
         type Values = (typeof person)[keyof typeof person] // 30 | "Jane" | "doctor"
+      `}</Code>
+
+      <H>Array values as enums</H>
+
+      <Code block jsx>{`
+        const person = ['Jane', 'Mat', 'Olivia'] as const
+
+        type ArrayValue = (typeof person)[number] // "Jane" | "Mat" | "Olivia"
       `}</Code>
     </>
   )

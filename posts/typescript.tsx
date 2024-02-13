@@ -1459,6 +1459,19 @@ const postObj = {
           lang: 'en' | 'fi' | 'nl' | 'sv' | Record<never, never> & string
         }
       `}</Code>
+
+      <H>Object keys & values</H>
+
+      <Code block jsx>{`
+        const person = { 
+          age: 30,
+          name: 'Jane',
+          job: 'doctor',
+        } as const
+        
+        type Keys = keyof typeof person // "age" | "name" | "job"
+        type Values = (typeof person)[keyof typeof person] // 30 | "Jane" | "doctor"
+      `}</Code>
     </>
   )
 }

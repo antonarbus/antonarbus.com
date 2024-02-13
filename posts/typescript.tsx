@@ -1155,6 +1155,16 @@ const postObj = {
         chaining <code>inputRef.current?.focus()</code>
       </p>
 
+      <H>useRef with ElementRef</H>
+
+      <p>Same as above, but no need to remember html element types, but just tag names</p>
+
+      <Code block jsx>{`
+      import { useRef, type ElementRef } from 'react'
+
+      const buttonRef = useRef<ElementRef<'button'>>(null)
+      `}</Code>
+
       <H>useRef as mutable container</H>
 
       <Code block jsx>{`

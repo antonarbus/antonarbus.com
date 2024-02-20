@@ -8,9 +8,64 @@ const postObj = {
   desc: 'OOP concepts in JavaScript',
   body: (
     <>
-      <p>Here are 4 object oriented programming key concepts.</p>
+      <H>OOP vs functional programming</H>
+
+      <ul>
+        <li>OOP - object oriented programming</li>
+        <li>It is just the principle of code organization inside objects</li>
+      </ul>
+
+      <p>Functional programming, encapsulation in object, class </p>
+
+      <Code block jsx>{`
+        const baseSalary = 30_000
+        const overtime = 10
+        const rate = 20
+
+        function getWage(baseSalary, overtime, rate) {
+          return baseSalary + overtime * rate;
+        }
+
+        getWage(baseSalary, overtime, rate);
+      `}</Code>
+
+      <p>Encapsulation inside object</p>
+
+      <Code block jsx>{`
+        const employee = {
+          baseSalary: 30_000, 
+          overtime: 10, 
+          rate: 20, 
+          getWage: function () {
+            return this.baseSalary + this.overtime * this.rate
+          }
+        }
+        
+        employee.getWage()
+      `}</Code>
+
+      <p>Same object created via class</p>
+
+      <Code block jsx>{`
+        class Employee {
+          baseSalary = 30_000
+          overtime = 10
+          rate = 20
+          getWage () {
+            return this.baseSalary + this.overtime * this.rate
+          }
+        }
+
+        const employee = new Employee()
+        employee. getWage()
+      `}</Code>
+
+      <ul>
+        <li>OOP has 4 key principles: encapsulation, inheritance, polymorphism, abstraction</li>
+      </ul>
 
       <H>Encapsulation</H>
+
       <>
         Combining relative functions and variables in a single unit(object).
       </>

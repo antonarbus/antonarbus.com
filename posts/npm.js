@@ -92,6 +92,14 @@ const postObj = {
         <li>Without <Code>--save</Code> package will be updated only in <i>package-lock.json</i>, no clue why we may want it</li>
       </ul>
 
+      <H>workspaces</H>
+
+      <ul>
+        <li><Lnk path='https://docs.npmjs.com/cli/v10/using-npm/workspaces'>https://docs.npmjs.com/cli/v10/using-npm/workspaces</Lnk></li>
+        <li>Workspaces provide a way to manage multiple packages within a single top-level root package</li>
+        <li>For ex. we have many lambdas in folders and with workspaces we may all installation from the root with just one command</li>
+        <li>It will be much faster</li>
+      </ul>
     </>
   )
 }

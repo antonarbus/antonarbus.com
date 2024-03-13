@@ -1518,6 +1518,35 @@ const postObj = {
 
         type ArrayValue = (typeof person)[number] // "Jane" | "Mat" | "Olivia"
       `}</Code>
+
+      <H>type of most nested property</H>
+
+      <Code block jsx>{`
+        type Lang = 'en' | 'fi' | 'nl' | 'sv'
+
+        type NestedObject<T = string> = {
+          [key: string]: T | NestedObject<T>
+        }
+        
+        type Translations = NestedObject<Record<Lang, string>>
+        
+        const translations: Translations = {
+          appName: {
+            en: 'eReceipt',
+            fi: 'eTosite',
+            nl: 'eReceipt',
+            sv: 'eKvitto'
+          },
+          navigation: {
+            home: {
+              en: 'Home',
+              fi: 'Koti',
+              nl: 'Home',
+              sv: 'Hem'
+            },
+          }
+        }  
+      `}</Code>
     </>
   )
 }

@@ -27,7 +27,7 @@ const postObj = {
         resources: {
           en: {
             translation: {
-              "key": "hello world"
+              "key": "hello"
             }
           },
           fi: {
@@ -45,7 +45,20 @@ const postObj = {
       </ul>
 
       <Code block jsx>{`
-      const translationsInput = {
+      const resources = {
+        fi: { translation: {} },
+        en: { translation: {} },
+      }
+      
+      type Lang = keyof typeof resources
+      
+      type NestedObject<T = string> = {
+        [key: string]: T | NestedObject<T>
+      }
+      
+      type Translations = NestedObject<Record<Lang, string>>
+
+      const translations: Translations = {
         nav: {
           key1: {
             en: "value 1 en",
@@ -78,65 +91,65 @@ const postObj = {
         }
       }
 
-      function processSection (section, lang) {
-        const processed = {};
-        for (let key in section) {
-          if (
-            typeof section[key] === 'object' &&
-            typeof section[key][lang] === 'string'
-          ) {
-            processed[key] =  section[key][lang];
-          } else {
-            processed[key] = processSection(section[key], lang);
+      const processNestedObject = (nestedObject: Translations | NestedObject, lang: Lang): NestedObject => {
+        const transformedObject: NestedObject = {}
+      
+        for (const key in nestedObject) {
+          const value = nestedObject[key]
+      
+          if (typeof value === 'object' && Object.hasOwn(value, lang)) {
+            Object.assign(transformedObject, { [key]: value[lang] })
+          }
+      
+          if (typeof value === 'object' && !Object.hasOwn(value, lang)) {
+            transformedObject[key] = processNestedObject(value, lang)
           }
         }
-
-        return processed;
+      
+        return transformedObject
       }
+      
+      (Object.keys(resources) as Lang[]).forEach(lang => {
+        resources[lang].translation = processNestedObject(translations, lang)
+      })
+      
+      export { resources }
+      `}</Code>
 
-      function convertTranslations (translations) {
-        const result = {};
-        ['en', 'fi'].forEach(lang => {
-          result[lang] = {
-            translation: processSection(translations, lang)
-          };
-        });
-        return result;
-      }
-
-      // output
-      en: {
-        translation: {
-          nav: {
-            key1: 'value 1 en',
-            key2: 'value 2 en',
-            someMenu: {
-              key3: 'value 3 en',
-              key4: 'value 4 en'
-            }
-          },
-          form: {
-            key5: 'value 5 en',
-            key6: 'value 6 en'
+      <Code block jsx>{`
+        // output
+        en: {
+          translation: {
+            nav: {
+              key1: 'value 1 en',
+              key2: 'value 2 en',
+              someMenu: {
+                key3: 'value 3 en',
+                key4: 'value 4 en'
+              }
+            },
+            form: {
+              key5: 'value 5 en',
+              key6: 'value 6 en'
+            },
           },
         },
-      },
-      fi: {
-        translation: {
-          nav: {
-            key1: 'value 1 fi',
-            key2: 'value 2 fi',
-            someMenu: {
-              key3: 'value 3 fi',
-              key4: 'value 4 fi'
+        fi: {
+          translation: {
+            nav: {
+              key1: 'value 1 fi',
+              key2: 'value 2 fi',
+              someMenu: {
+                key3: 'value 3 fi',
+                key4: 'value 4 fi'
+              }
+            },
+            form: {
+              key5: 'value 5 fi',
+              key6: 'value 6 fi'
             }
-          },
-          form: {
-            key5: 'value 5 fi',
-            key6: 'value 6 fi'
           }
-        }
-      },
+        },
       `}</Code>
 
     </>

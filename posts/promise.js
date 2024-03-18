@@ -1,5 +1,6 @@
-import axios from 'axios'
 import { Code, H, Hs, Lnk, jsxToStr, useState } from '/components/post/reExport'
+import axios from 'axios'
+import pMap from 'p-map'
 
 async function getPostTitle({ postNumber }) {
   const { data } = await axios(`https://jsonplaceholder.typicode.com/posts/${postNumber}`)
@@ -22,9 +23,10 @@ function Component() {
             setIsLoading(false)
           }}
         >
-          Get 10 titles in parallel
+          Get titles in parallel
         </button>
       </div>
+
       <div>
         <button
           onClick={async () => {
@@ -37,9 +39,24 @@ function Component() {
             setIsLoading(false)
           }}
         >
-          Get 10 titles in series
+          Get titles in series
         </button>
       </div>
+
+      <div>
+        <button
+          onClick={async () => {
+            setIsLoading(true)
+            setPostTitles([])
+            const postTitles = await pMap([...Array(10).keys()], (key) => getPostTitle({ postNumber: key + 1 }), { concurrency: 3 })
+            setPostTitles(postTitles)
+            setIsLoading(false)
+          }}
+        >
+          Get titles in sequential batches or parallel promises
+        </button>
+      </div>
+
       <div>isLoading: {isLoading.toString()} </div>
       <div>titles:</div>
       <ol>
@@ -48,7 +65,6 @@ function Component() {
     </>
   )
 }
-// #endregion
 
 const postObj = {
   title: 'promise',
@@ -715,10 +731,89 @@ const postObj = {
         <li>or split in sequential batches or parallel promises with <Lnk path='https://www.npmjs.com/package/p-map'>p-map</Lnk> package</li>
       </ul>
 
-      <Hs>parallel</Hs>
-
       <Component />
 
+      <Code block jsx>{`
+        import axios from 'axios'
+        import pMap from 'p-map'
+        
+        async function getPostTitle({ postNumber }) {
+          const { data } = await axios(\`https://jsonplaceholder.typicode.com/posts/\${postNumber}\`)
+          return data.title
+        }
+        
+        function Component() {
+          const [isLoading, setIsLoading] = useState(false)
+          const [postTitles, setPostTitles] = useState([])
+        
+          return (
+            <>
+              <div>
+                <button
+                  onClick={async () => {
+                    setIsLoading(true)
+                    setPostTitles([])
+                    const postTitles = await Promise.all([...Array(10).keys()].map((key) => getPostTitle({ postNumber: key + 1 })))
+                    setPostTitles(postTitles)
+                    setIsLoading(false)
+                  }}
+                >
+                  Get titles in parallel
+                </button>
+              </div>
+        
+              <div>
+                <button
+                  onClick={async () => {
+                    setIsLoading(true)
+                    setPostTitles([])
+                    for (const key of [...Array(10).keys()]) {
+                      const postTitle = await getPostTitle({ postNumber: key + 1 })
+                      setPostTitles(prev => [...prev, postTitle])
+                    }
+                    setIsLoading(false)
+                  }}
+                >
+                  Get titles in series
+                </button>
+              </div>
+        
+              <div>
+                <button
+                  onClick={async () => {
+                    setIsLoading(true)
+                    setPostTitles([])
+                    const postTitles = await pMap(
+                      [...Array(10).keys()], 
+                      (key) => getPostTitle({ postNumber: key + 1 }), 
+                      { concurrency: 3 }
+                    )
+                    setPostTitles(postTitles)
+                    setIsLoading(false)
+                  }}
+                >
+                  Get titles in sequential batches of parallel promises
+                </button>
+              </div>
+        
+              <div>isLoading: {isLoading.toString()} </div>
+              <div>titles:</div>
+              <ol>
+                {postTitles.map(title => <li key={title}>{title}</li>)}
+              </ol>
+            </>
+          )
+        }
+      `}</Code>
+
+      <p>parallel</p>
+      <img src="/imgs/parallel_promises.png" alt="" width='80%' />
+
+      <p>series</p>
+      <img src="/imgs/series_promises.png" alt="" width='80%' />
+
+      <p>sequential batches of parallel promises</p>
+      <img src="/imgs/sequential_batches_of_parallel_promises.png" alt="" width='80%' />
     </>
   )
 }

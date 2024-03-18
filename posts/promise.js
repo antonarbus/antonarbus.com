@@ -1,4 +1,54 @@
-import { Code, H, Hs, jsxToStr } from '/components/post/reExport'
+import axios from 'axios'
+import { Code, H, Hs, Lnk, jsxToStr, useState } from '/components/post/reExport'
+
+async function getPostTitle({ postNumber }) {
+  const { data } = await axios(`https://jsonplaceholder.typicode.com/posts/${postNumber}`)
+  return data.title
+}
+
+function Component() {
+  const [isLoading, setIsLoading] = useState(false)
+  const [postTitles, setPostTitles] = useState([])
+
+  return (
+    <>
+      <div>
+        <button
+          onClick={async () => {
+            setIsLoading(true)
+            setPostTitles([])
+            const postTitles = await Promise.all([...Array(10).keys()].map((key) => getPostTitle({ postNumber: key + 1 })))
+            setPostTitles(postTitles)
+            setIsLoading(false)
+          }}
+        >
+          Get 10 titles in parallel
+        </button>
+      </div>
+      <div>
+        <button
+          onClick={async () => {
+            setIsLoading(true)
+            setPostTitles([])
+            for (const key of [...Array(10).keys()]) {
+              const postTitle = await getPostTitle({ postNumber: key + 1 })
+              setPostTitles(prev => [...prev, postTitle])
+            }
+            setIsLoading(false)
+          }}
+        >
+          Get 10 titles in series
+        </button>
+      </div>
+      <div>isLoading: {isLoading.toString()} </div>
+      <div>titles:</div>
+      <ol>
+        {postTitles.map(title => <li key={title}>{title}</li>)}
+      </ol>
+    </>
+  )
+}
+// #endregion
 
 const postObj = {
   title: 'promise',
@@ -656,6 +706,19 @@ const postObj = {
             let res = await Promise.all([p1, p2, p3])
             console.log(res)
       `}</Code>
+
+      <H>Parallel vs sequential vs batches</H>
+
+      <ul>
+        <li>we may run async functions in parallel with <Code>Promise.all()</Code></li>
+        <li>or one one by one with <Code>for... of</Code> loop</li>
+        <li>or split in sequential batches or parallel promises with <Lnk path='https://www.npmjs.com/package/p-map'>p-map</Lnk> package</li>
+      </ul>
+
+      <Hs>parallel</Hs>
+
+      <Component />
+
     </>
   )
 }

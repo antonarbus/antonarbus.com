@@ -2,7 +2,7 @@ import { Code, H, Hs, LazyImg, Lnk, React, useEffect, useState, useRef, useCallb
 
 const postObj = {
   title: 'xxx',
-  date: '2024.02.xx',
+  date: '2024.03.xx',
   tags: ['xxx', 'xxx'],
   imgUrl: 'https://antonarbus.com/imgs/xxx.png',
   desc: 'xxx',

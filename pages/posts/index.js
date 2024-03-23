@@ -115,7 +115,6 @@ export default function Index(props) {
   )
 }
 
-// export async function getStaticProps() {
 export async function getStaticProps({ req, res }) {
   const module = await import('/exportAllPosts.js')
   const fileNames = Object.keys(module)
@@ -123,7 +122,6 @@ export async function getStaticProps({ req, res }) {
   posts.forEach((post, index) => {
     post.fileName = fileNames[index]
     post.url = `/posts/${fileNames[index]}`
-    delete post.bodyStr // coz it is huge
   })
 
   let tags = posts.map(post => post.tags).flat(Infinity)

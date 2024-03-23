@@ -9,17 +9,9 @@ const postObj = {
   body: (
     <>
       <ul>
-        <li>based on 2 videos</li>
-        <li><Lnk path='https://www.youtube.com/watch?v=c3JGBdxfYcU'>https://www.youtube.com/watch?v=c3JGBdxfYcU</Lnk></li>
-        <li><Lnk path='https://www.youtube.com/watch?v=UUga4-z7b6s'>https://www.youtube.com/watch?v=UUga4-z7b6s</Lnk></li>
-      </ul>
-
-      <H>What is architecture</H>
-
-      <ul>
-        <li>architecture is how software modules interact with each other</li>
-        <li>folders structure is not an architecture</li>
-        <li>in frontend modules are ui components that uses business logic inside</li>
+        <li>here is the summary of 2 videos <Lnk path='https://www.youtube.com/watch?v=c3JGBdxfYcU'>this</Lnk> & <Lnk path='https://www.youtube.com/watch?v=UUga4-z7b6s'>this</Lnk></li>
+        <li>this is not only about folder structures, but also how modules interact with each other in that folders</li>
+        <li>4 different architecture design approaches are reviewed here</li>
       </ul>
 
       <H>Classical</H>

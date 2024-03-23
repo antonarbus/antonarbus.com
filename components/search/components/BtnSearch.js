@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef } from 'react'
+import { useContext } from 'react'
 import { PostsContext } from '/pages/posts/index'
 
 export function BtnSearch() {
@@ -8,16 +8,9 @@ export function BtnSearch() {
     itemsInInput,
     setItemsInInput,
     setFoundPostsState,
-    searchBtnRef
+    searchBtnRef,
+    posts
   } = useContext(PostsContext)
-
-  const posts = useRef([])
-
-  useEffect(() => {
-    fetch('/api/allPosts')
-      .then(res => res.json())
-      .then(data => { posts.current = data })
-  }, [])
 
   function search() {
     let newItemsInInput = [...itemsInInput];
@@ -38,7 +31,7 @@ export function BtnSearch() {
     // filter posts and show on screen
     const tagsToSearch = newItemsInInput.filter(item => item.tag).map(item => item.val)
     const textsToSearch = newItemsInInput.filter(item => item.text).map(item => item.val)
-    const foundPosts = posts.current
+    const foundPosts = posts
       .filter(post => tagsToSearch.every(tagToSearch => post.tags.includes(tagToSearch)))
       .filter(post => textsToSearch.every(textToSearch => post.bodyStr.toLowerCase().includes(textToSearch.toLowerCase())))
     setFoundPostsState(foundPosts)

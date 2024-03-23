@@ -9,7 +9,7 @@ const postObj = {
   body: (
     <>
       <ul>
-        <li>Based on 2 videos</li>
+        <li>based on 2 videos</li>
         <li><Lnk path='https://www.youtube.com/watch?v=c3JGBdxfYcU'>https://www.youtube.com/watch?v=c3JGBdxfYcU</Lnk></li>
         <li><Lnk path='https://www.youtube.com/watch?v=UUga4-z7b6s'>https://www.youtube.com/watch?v=UUga4-z7b6s</Lnk></li>
       </ul>
@@ -135,14 +135,14 @@ const postObj = {
         <li>- unclear connections are formed in global folders like store, helpers, consts</li>
       </ul>
 
-      <p>Modular architecture is a way better that classical, but does not fit well for a project with complex business logic and big variety of features</p>
+      <p>Modular architecture is a way better than classical, but does not fit well for a project with complex business logic and big variety of features</p>
 
       <H>Atomic design</H>
 
       <ul>
-        <li>Similar to modular architecture</li>
-        <li>More design oriented</li>
-        <li>Was popular 4 years ago</li>
+        <li>similar to modular architecture</li>
+        <li>more design oriented</li>
+        <li>was popular 4 years ago</li>
       </ul>
 
       <LazyImg path='/imgs/frontend-architecture/03 01 overall.png' width='400px'/>

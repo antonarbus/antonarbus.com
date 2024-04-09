@@ -814,6 +814,47 @@ const postObj = {
 
       <p>sequential batches of parallel promises</p>
       <img src="/imgs/sequential_batches_of_parallel_promises.png" alt="" width='80%' />
+
+      <H>Promise.withResolvers</H>
+
+      <ul>
+        <li>new way to write promises without callbacks</li>
+        <li><Lnk path='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/withResolvers'>https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/withResolvers</Lnk></li>
+      </ul>
+
+      <Hs>new Promise</Hs>
+
+      <Code block jsx>{`
+        const sayHiAsync = () => {
+          const promise = new Promise((resolve, reject) => {
+            setTimeout(() => {
+              resolve('hi!');
+            }, 1000);
+          })
+          
+          return promise
+        }
+        
+        const msg = await sayHiAsync()
+        console.log(msg)
+      `}</Code>
+
+      <Hs>Promise.withResolvers</Hs>
+
+      <Code block jsx>{`
+        const sayHiAsync = () => {
+          const { promise, resolve, reject } = Promise.withResolvers()
+          
+          setTimeout(() => {
+            resolve('hi!')
+          }, 1000)
+        
+          return promise
+        }
+        
+        const msg = await sayHiAsync()
+        console.log(msg)
+      `}</Code>
     </>
   )
 }

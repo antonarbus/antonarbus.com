@@ -31,9 +31,10 @@ const postObj = {
       `}</Code>
 
       <ul>
-        <li>constructor() method is called automatically by 'new', so we can initialize the object there</li>
-        <li>MyClass is technically a constructor function</li>
-        <li>methods, getters and setters are written to MyClass.prototype of a constructor function</li>
+        <li><code>constructor()</code> method is called when object is created with <code>new</code> keyword, so we can initialize the object there</li>
+        <li><code>constructor()</code> allows us to pass arguments into the class and assign it to an object</li>
+        <li><code>MyClass</code> is technically a constructor function</li>
+        <li>methods, getters and setters are written to <code>MyClass.prototype</code> of a constructor function</li>
       </ul>
 
       <H>Create</H>
@@ -203,6 +204,7 @@ const postObj = {
       <H>Static methods & properties</H>
 
       <ul>
+        <li>can be accessed directly from the class without object instantiation (no idea why it is useful)</li>
         <li>they belong to the class</li>
         <li>they are not part of an instantiated object</li>
         <li>static properties and methods are inherited</li>

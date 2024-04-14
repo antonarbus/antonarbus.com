@@ -16,12 +16,6 @@ const postObj = {
 
       <H>Syntax</H>
 
-      <ul>
-        <li>Class is useful for objects creation of the same kind.</li>
-        <li>There is not 'real' classes in JS</li>
-        <li>Classes in JS are based internally on constructor functions & prototypes</li>
-      </ul>
-
       <Code block jsx>{`
             class MyClass {
               prop = value

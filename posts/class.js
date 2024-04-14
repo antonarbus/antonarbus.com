@@ -261,7 +261,7 @@ const postObj = {
             coffeeMachine.power = 25; // Error (no setter)
       `}</Code>
 
-      <H>Private property</H>
+      <H>Private properties & methods</H>
 
       <ul>
         <li>only accessible from inside the class</li>

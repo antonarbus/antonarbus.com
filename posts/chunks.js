@@ -11,23 +11,25 @@ const postObj = {
       <H>Chunks</H>
 
       <ul>
-        <li>we may deploy react app with <Code>npm run build </Code></li>
-        <li>it will show sizes of bundled chunks</li>
+        <li>we may build react app locally with <Code>npm run build </Code></li>
+        <li>and check sizes of bundled chunks</li>
       </ul>
 
       <LazyImg path='/imgs/npm_run_deploy.png' />
 
       <ul>
         <li>in general application is broken into numerous tiny files which are being loaded in parallel</li>
-        <li>big blocking files are not good</li>
+        <li>and big blocking files are not good</li>
       </ul>
+
+      <LazyImg path='/imgs/numerous-tiny-files.png'/>
 
       <H>vite-bundle-visualizer</H>
 
       <ul>
-        <li>we may check the content of built chunks with <Lnk path='https://www.npmjs.com/package/vite-bundle-visualizer'>vite-bundle-visualizer</Lnk> package</li>
-        <li>no need even to add it into the project, just run <Code>npx vite-bundle-visualizer</Code></li>
-        <li>we can see that all purple area is one blocking gzipped 1.3mb file</li>
+        <li>we may check the content of bundled chunks with <Lnk path='https://www.npmjs.com/package/vite-bundle-visualizer'>vite-bundle-visualizer</Lnk> package</li>
+        <li>no need even to install it into a project, just run <Code>npx vite-bundle-visualizer</Code></li>
+        <li>we may see that all purple area is one blocking gzipped 1.3mb file</li>
       </ul>
 
       <LazyImg path='/imgs/vite-bundle-visualizer.png' />
@@ -35,8 +37,8 @@ const postObj = {
       <H>manualChunks</H>
 
       <ul>
-        <li>we can break the file into multiple chunks manually and they will load by browser in parallel</li>
-        <li>can be done in <Lnk path='https://v3.vitejs.dev/guide/build.html#chunking-strategy'>vite</Lnk> configuration by adding the property <Lnk path='https://rollupjs.org/configuration-options/#output-manualchunks'>manualChunks</Lnk> to rollup's setting</li>
+        <li>we may break the file into multiple chunks manually and they will load by browser in parallel</li>
+        <li>can be done in <Lnk path='https://v3.vitejs.dev/guide/build.html#chunking-strategy'>vite's</Lnk> configuration by adding the property <Lnk path='https://rollupjs.org/configuration-options/#output-manualchunks'>manualChunks</Lnk> to rollup bundler settings</li>
       </ul>
 
       <Code block jsx>{`
@@ -114,9 +116,9 @@ const postObj = {
       `}</Code>
 
       <ul>
-        <li>where <code>id</code> parameter is the folder path in your project</li>
+        <li><code>id</code> parameter is the folder path in your project</li>
         <li>and we can group modules in separate files by returning chunk name</li>
-        <li>and we got more smaller chunks</li>
+        <li>and eventually get smaller chunks</li>
       </ul>
 
       <LazyImg path='/imgs/vite-bundle-visualizer-after-manual-chunk-splitting.png' />

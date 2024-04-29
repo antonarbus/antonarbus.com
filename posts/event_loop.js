@@ -1,4 +1,4 @@
-import { Code, H, Hs, React, jsxToStr } from '/components/post/reExport'
+import { Code, H, Hs, Lnk, React, jsxToStr } from '/components/post/reExport'
 
 function Cmpt0() {
   function func() {
@@ -93,13 +93,14 @@ const postObj = {
       <H>Event loop</H>
 
       <ul>
+        <li>best explanation ever -  <Lnk path='https://youtu.be/eiC58R16hb8?si=uv2bOdlrUJJEgP1J&t=652'>https://youtu.be/eiC58R16hb8?si=uv2bOdlrUJJEgP1J&t=652</Lnk></li>
         <li>JS execution flow is based on an endless <i>event loop</i></li>
         <li>JS executes tasks one by one starting from the oldest</li>
         <li>When there are no tasks anymore JS waits for new ones</li>
-        <li>Task may come while the engine is busy, then it’s queued</li>
+        <li>Task may come while the engine is busy, then it's queued</li>
         <li>Queue of tasks is called <i>macrotask queue</i></li>
         <li>Rendering happens only after the task is completed, before another macrotask</li>
-        <li>If a task takes long, the browser is blocked & raises an alert like "page unresponsive”</li>
+        <li>If a task takes long, the browser is blocked & raises the "page unresponsive” alert</li>
       </ul>
 
       <H>Macrotasks</H>
@@ -107,22 +108,22 @@ const postObj = {
       <ul>
         <li>Scripts we call</li>
         <li>Event handlers</li>
-        <li>Scripts added to the end of the <i>macrotask queue</i> by <Code>{'setTimeout(func)'}</Code> with no delay</li>
+        <li>Scripts are added to the end of the <i>macrotask queue</i> by <Code>{'setTimeout(func)'}</Code> with no delay</li>
       </ul>
 
       <H>Microtasks</H>
 
       <ul>
-        <li>After every macrotask tasks from microtask queue are executed</li>
+        <li>After every macrotask, tasks from microtask queue are executed</li>
         <li>It's done before running other macrotasks or rendering or event handling</li>
         <li>It guarantees that the environment is the same between microtasks (no mouse coordinate changes, no new network data, etc) </li>
-        <li>Microtask is a script called by promise handlers <Code>.then/catch/finally()</Code> or <Code>queueMicrotask(func)</Code></li>
-        <li>Microtasks are used “under the cover” of <code>await</code> as well</li>
+        <li>Microtask is a script called by promise handlers <Code>.then/catch/finally()</Code> or <Code>queueMicrotask(func)</Code> or observers</li>
+        <li>Microtasks are used behind of <code>await</code> as well</li>
       </ul>
 
       <Hs>queueMicrotask()</Hs>
 
-      <p>So if we’d like to execute a function asynchronously (after the current code), but before changes are rendered or new events handled, we can schedule it with <Code>{'queueMicrotask(() => { func() })'}</Code></p>
+      <p>So if we'd like to execute a function asynchronously (after the current code), but before changes are rendered or new events handled, we can schedule it with <Code>{'queueMicrotask(() => { func() })'}</Code></p>
 
       <H>Event loop sequence</H>
 
@@ -137,8 +138,8 @@ const postObj = {
       <H>Web workers</H>
 
       <ul>
-        <li>For calculations that shouldn’t block the event loop, we can use Web Workers.</li>
-        <li>That’s a way to run code in another, parallel thread.</li>
+        <li>For calculations that shouldn't block the event loop, we can use Web Workers.</li>
+        <li>That's a way to run code in another parallel thread</li>
         <li>Web Workers can exchange messages with the main process</li>
         <li>They have their own variables, and their own event loop.</li>
         <li>Web Workers do not have access to DOM</li>
@@ -178,7 +179,7 @@ const postObj = {
       <ul>
         <li>Run whole code at one time</li>
         <li>Changes to DOM are painted after running task is completed</li>
-        <li>We’ll see only the last value instead of progress</li>
+        <li>We'll see only the last value instead of progress</li>
         <li>Code freezes the browser</li>
       </ul>
 
@@ -212,7 +213,7 @@ const postObj = {
         <li>Splitting with <Code>setTimeout()</Code> we make multiple macrotasks and changes are painted in-between</li>
         <li>If an onclick event appears while the engine is busy it is queued mixed together with main counting tasks</li>
         <li>Page is responsive</li>
-        <li>There’s in-browser minimal delay of 4ms for many nested setTimeout calls and the earlier we schedule task via setTimeout, the faster it runs</li>
+        <li>There's in-browser minimal delay of 4ms for many nested setTimeout calls and the earlier we schedule task via setTimeout, the faster it runs</li>
       </ul>
 
       <Cmpt3 />

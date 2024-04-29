@@ -1547,6 +1547,24 @@ const postObj = {
           }
         }  
       `}</Code>
+
+      <H>Prettify</H>
+
+      <LazyImg path='/imgs/type-intersection.png'/>
+      <LazyImg path='/imgs/hover-over-type-intersection.png' />
+
+      <Code block jsx>{`
+        type Prettify<T> = {
+          [K in keyof T]: T[K]
+        } & {}
+      `}</Code>
+
+      <ul>
+        <li>if you hover over type intersection or nested type you may not see the shape of result type</li>
+        <li>wrap your result type into <code>Prettify</code> and type will be unwrapped</li>
+      </ul>
+
+      <LazyImg path='/imgs/prettify-type.png'/>
     </>
   )
 }

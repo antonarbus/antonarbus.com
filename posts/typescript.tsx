@@ -1563,7 +1563,7 @@ const postObj = {
 
       <H>Prettify</H>
 
-      <LazyImg path='/imgs/type-intersection.png'/>
+      <LazyImg path='/imgs/type-intersection.png' width='300px'/>
       <LazyImg path='/imgs/hover-over-type-intersection.png' />
 
       <Code block jsx>{`

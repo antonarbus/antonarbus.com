@@ -1335,9 +1335,11 @@ const postObj = {
 
       <H>Omit</H>
 
-      <p>With <i>Omit</i> we may exclude some property from type</p>
-
-      <p>Bellow we excluded <code>onChange</code> type form <code>input</code> element.</p>
+      <ul>
+        <li>with <i>Omit</i> we may exclude some property from type</li>
+        <li>works only with simple props, not nested objects</li>
+        <li>bellow we excluded <code>onChange</code> type form <code>input</code> element.</li>
+      </ul>
 
       <Code block jsx>{`
       type InpPropsType = Omit<React.ComponentProps<'input'>, 'onChange'>
@@ -1346,6 +1348,17 @@ const postObj = {
       `}</Code>
 
       <Inpt2 />
+
+      <LazyImg path='/imgs/omit.png' />
+
+      <H>Exclude</H>
+
+      <ul>
+        <li>if we want to omit an object from union types <code>Omit</code> will not work</li>
+        <li>use <Code>Exclude</Code></li>
+      </ul>
+
+      <LazyImg path='/imgs/exclude.png' />
 
       <H>Take types of other components</H>
 

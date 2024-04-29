@@ -1292,7 +1292,8 @@ const postObj = {
 
       <RandomNumber value={5} isPositive />
 
-      <H>Combine types with string template literals</H>
+      <H>Template literals</H>
+
       <Code block jsx>{`
       /*
       * Position prop can be one of
@@ -1312,7 +1313,14 @@ const postObj = {
 
       <Toast position='left-top'></Toast>
 
+      <li>
+        <ul>type will be combination of all possible strings</ul>
+      </li>
+
+      <LazyImg path='/imgs/template_literal_types.png'/>
+
       <H>Html element</H>
+
       <Code block jsx>{`
       type ButtonProps = {
         variant: 'primary' | 'secondary'

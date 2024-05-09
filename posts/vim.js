@@ -8,6 +8,7 @@ const postObj = {
   body: (
     <>
       <H>Modes</H>
+
       <ul>
         <li><kbd>a</kbd> insert mode before cursor</li>
         <li><kbd>i</kbd> insert mode after cursor</li>

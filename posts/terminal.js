@@ -204,6 +204,10 @@ const postObj = {
         alias start="npm run start"
         alias test="npm run test"
         alias lint="npm run lint"
+        alias tsc="npx tsc"
+        alias vpnoff="launchctl unload /Library/LaunchAgents/com.paloaltonetworks.gp.pangp*"
+        alias vpnon="launchctl load /Library/LaunchAgents/com.paloaltonetworks.gp.pangp*"
+
 
         # Print my public IP
         alias myip='curl ipinfo.io/ip'

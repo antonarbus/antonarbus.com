@@ -17,11 +17,11 @@ const postObj = {
       <p>Import libs</p>
 
       <Code block jsx>{`
-      const chai = require('chai')
-      const assert = require('chai').assert
-      const expect = require('chai').expect
-      const sinon = require('sinon')
-      chai.use(require('sinon-chai'))
+        const chai = require('chai')
+        const assert = require('chai').assert
+        const expect = require('chai').expect
+        const sinon = require('sinon')
+        chai.use(require('sinon-chai'))
       `}</Code>
 
       <H>Assertions</H>
@@ -60,33 +60,33 @@ const postObj = {
       </ul>
 
       <Code block jsx>{`
-      it('native sinon assertion vs chai', () => {
-        const myStub = sinon.stub()
-        const myStub2 = sinon.stub()
-        myStub()
-        myStub()
-        myStub('a')
-        myStub2('b')
+        it('native sinon assertion vs chai', () => {
+          const myStub = sinon.stub()
+          const myStub2 = sinon.stub()
+          myStub()
+          myStub()
+          myStub('a')
+          myStub2('b')
 
-        expect(myStub).called
-        sinon.assert.called(myStub)
+          expect(myStub).called
+          sinon.assert.called(myStub)
 
-        expect(myStub).callCount(3)
-        sinon.assert.callCount(myStub, 3)
+          expect(myStub).callCount(3)
+          sinon.assert.callCount(myStub, 3)
 
-        expect(myStub).calledThrice
-        sinon.assert.calledThrice(myStub)
+          expect(myStub).calledThrice
+          sinon.assert.calledThrice(myStub)
 
-        expect(myStub).not.calledOnce
+          expect(myStub).not.calledOnce
 
-        expect(myStub).calledBefore(myStub2)
-        expect(myStub2).calledAfter(myStub)
+          expect(myStub).calledBefore(myStub2)
+          expect(myStub2).calledAfter(myStub)
 
-        expect(myStub2).calledWith('b')
-        sinon.assert.calledWith(myStub2, 'b')
+          expect(myStub2).calledWith('b')
+          sinon.assert.calledWith(myStub2, 'b')
 
-        sinon.assert.callOrder(myStub, myStub2)
-      })
+          sinon.assert.callOrder(myStub, myStub2)
+        })
       `}</Code>
 
       <H>Matchers</H>
@@ -132,18 +132,18 @@ const postObj = {
       </ul>
 
       <Code block jsx>{`
-      it('matchers', () => {
-        const book = {
-          pages: 42,
-          author: 'cjno'
-        }
-        const spy = sinon.spy()
+        it('matchers', () => {
+          const book = {
+            pages: 42,
+            author: 'cjno'
+          }
+          const spy = sinon.spy()
 
-        spy(book)
+          spy(book)
 
-        sinon.assert.calledWith(spy, sinon.match({ author: 'cjno' }))
-        sinon.assert.calledWith(spy, sinon.match.has('pages', 42))
-      })
+          sinon.assert.calledWith(spy, sinon.match({ author: 'cjno' }))
+          sinon.assert.calledWith(spy, sinon.match.has('pages', 42))
+        })
       `}</Code>
 
       <H>spy</H>
@@ -153,30 +153,30 @@ const postObj = {
       <p>Spy <Lnk path='https://sinonjs.org/releases/v14/spies/'>methods</Lnk>.</p>
 
       <Code block jsx>{`
-      it('should call the callback', () => {
-        const callMyCallback = cb => cb()
-        const cbSpy = sinon.spy()
-        callMyCallback(cbSpy)
-        expect(cbSpy).to.have.been.calledOnce
-      })
+        it('should call the callback', () => {
+          const callMyCallback = cb => cb()
+          const cbSpy = sinon.spy()
+          callMyCallback(cbSpy)
+          expect(cbSpy).to.have.been.calledOnce
+        })
       `}</Code>
 
       <H>spy on existing method</H>
 
       <Code block jsx>{`
-      it('spy on existing method', () => {
-        const obj = {
-          say: (str) => console.log(str)
-        }
+        it('spy on existing method', () => {
+          const obj = {
+            say: (str) => console.log(str)
+          }
 
-        const spyOnSay = sinon.spy(obj, 'say')
+          const spyOnSay = sinon.spy(obj, 'say')
 
-        obj.say('hi')
-        expect(spyOnSay).to.have.been.calledOnce
-        expect(spyOnSay).to.have.been.calledWith('hi')
+          obj.say('hi')
+          expect(spyOnSay).to.have.been.calledOnce
+          expect(spyOnSay).to.have.been.calledWith('hi')
 
-        spyOnSay.restore()
-      })
+          spyOnSay.restore()
+        })
       `}</Code>
 
       <H>Stub</H>
@@ -210,25 +210,82 @@ const postObj = {
       <p>As I have understood do not use <i>yield</i>, but use <i>callsArg</i>.</p>
 
       <Code block jsx>{`
-      it('anonymous stub', async () => {
-        const myStub = sinon.stub()
-        myStub
-          .returns('hi')
+        it('anonymous stub', async () => {
+          const myStub = sinon.stub()
+          myStub
+            .returns('hi')
 
-        expect(myStub()).equal('hi')
-      })
+          expect(myStub()).equal('hi')
+        })
       `}</Code>
 
       <Code block jsx>{`
-      it('onCall', () => {
-        const myStub = sinon.stub()
-        myStub.onCall(0).returns(1)
-        myStub.onCall(1).returns(2)
-        myStub.returns(3)
-        expect(myStub()).equal(1)
-        expect(myStub()).equal(2)
-        expect(myStub()).equal(3)
-      })
+        it('onCall', () => {
+          const myStub = sinon.stub()
+          myStub.onCall(0).returns(1)
+          myStub.onCall(1).returns(2)
+          myStub.returns(3)
+          expect(myStub()).equal(1)
+          expect(myStub()).equal(2)
+          expect(myStub()).equal(3)
+        })
+      `}</Code>
+
+      <H>Stub imported function</H>
+
+      <Code block jsx>{`
+        const create = require('../create')
+        const customer = require('../lib/customer')
+        const dr = require('../lib/d-r')
+        const postings = require('../lib/postings')
+        const mapper = require('../lib/mapper')
+        const { log } = require('lambda-sdk')
+
+        describe('create', () => {
+          const params = {
+            pathParameters: {
+              id: 'mock company id'
+            }
+          }
+
+          const administrations = 
+
+          let enableAiPostingsStub,
+            fetchAdministrationsStub,
+            mapAdministrationsSpy,
+            errorSpy
+
+          beforeEach(() => {
+            enableAiPostingsStub = sinon.stub(customer, 'enableAiPostings').resolves()
+            fetchAdministrationsStub = sinon.stub(dr, 'fetchAdministrations').resolves([{ key: 'mock company' }])
+            mapAdministrationsSpy = sinon.spy(mapper, 'mapAdministrations')
+            errorSpy = sinon.spy(log, 'error')
+          })
+          afterEach(() => {
+            sinon.restore()
+          })
+
+          it('should enable ai postings with customer', async () => {
+            await create(params)
+            expect(enableAiPostingsStub).to.have.been.calledWith('mock company id')
+          })
+
+          it('should fetch accounting company\\'s administrations', async () => {
+            await create(params)
+            expect(fetchAdministrationsStub).to.have.been.calledWith('mock company id')
+          })
+
+          it('should map all fetched administrations', async () => {
+            await create(params)
+            expect(mapAdministrationsSpy).to.have.callCount(3)
+          })
+
+          it('should handle errors correctly', async () => {
+            enableAiPostingsStub.rejects(new Error('mock error'))
+            await expect(create(params)).to.have.been.rejected()
+            expect(errorSpy).to.have.been.called()
+          })
+        })
       `}</Code>
 
     </>

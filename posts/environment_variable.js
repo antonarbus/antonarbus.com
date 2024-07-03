@@ -71,8 +71,11 @@ const postObj = {
       <H>Save var in session and use it in script</H>
 
       <Code block bash>{`
-        gcloud projects list # to get project ID
-        export PROJECT_ID="your-project-id" # Set your project id in here
+        # to get project ID
+        gcloud projects list
+
+        # set your project id in here
+        export PROJECT_ID="your-project-id" 
 
         # later use variable in script
         gcloud iam service-accounts create "cloud-run-sa" --project="\${PROJECT_ID}" --description="Cloud Run Service Account" --display-name="Cloud Run Service Account

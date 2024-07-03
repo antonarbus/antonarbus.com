@@ -10,7 +10,7 @@ const postObj = {
       <H>environment variable</H>
 
       <ul>
-        <li>env var is name-value pair</li>
+        <li>env var is a name-value pair</li>
         <li>stores configuration information for your operating system and applications</li>
         <li>programs can access it when needed</li>
         <li>some are automatically set by your operating system during startup</li>
@@ -21,7 +21,7 @@ const postObj = {
           <code>export</code>
         </li>
         <li>env vars are not stored in a single central location</li>
-        <li>as i understood they are loaded from different places in memory</li>
+        <li>as i understood they are loaded from different places into memory</li>
       </ul>
 
       <H>Win</H>
@@ -67,6 +67,16 @@ const postObj = {
           , then <Code bash>source ~/.zshrc</Code> to add variable permanently into terminal profile
         </li>
       </ul>
+
+      <H>Save var in session and use it in script</H>
+
+      <Code block bash>{`
+        gcloud projects list # to get project ID
+        export PROJECT_ID="your-project-id" # Set your project id in here
+
+        # later use variable in script
+        gcloud iam service-accounts create "cloud-run-sa" --project="\${PROJECT_ID}" --description="Cloud Run Service Account" --display-name="Cloud Run Service Account
+      `}</Code>
 
       <H>PATH</H>
 

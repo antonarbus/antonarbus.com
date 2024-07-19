@@ -1,4 +1,17 @@
-import { Code, H, Hs, LazyImg, Lnk, React, useEffect, useState, useRef, useCallback, useMemo, jsxToStr } from '/components/post/reExport'
+import {
+  Code,
+  H,
+  Hs,
+  LazyImg,
+  Lnk,
+  React,
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+  useMemo,
+  jsxToStr
+} from '/components/post/reExport'
 
 const postObj = {
   title: 'tanstack router',
@@ -11,9 +24,15 @@ const postObj = {
       <H>Install</H>
 
       <ul>
-        <li><Code>npm install @tanstack/react-router</Code></li>
-        <li><Code>npm install --save-dev @tanstack/router-vite-plugin</Code></li>
-        <li><Code>npm install --save-dev @tanstack/router-devtools</Code></li>
+        <li>
+          <Code>npm install @tanstack/react-router</Code>
+        </li>
+        <li>
+          <Code>npm install --save-dev @tanstack/router-vite-plugin</Code>
+        </li>
+        <li>
+          <Code>npm install --save-dev @tanstack/router-devtools</Code>
+        </li>
       </ul>
 
       <H>Example</H>
@@ -135,6 +154,10 @@ const postObj = {
           )
         } 
       `}</Code>
+
+      <H>Protected route</H>
+
+      <LazyImg path="/imgs/protected routes with tanstack router.png" />
     </>
   )
 }

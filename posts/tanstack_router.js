@@ -171,8 +171,8 @@ const postObj = {
         </li>
         <li>
           when you do not want to show basic heading information from parent route being at{' '}
-          <code>/post/post1</code> you may break away from it by prefixing with underscore{' '}
-          <code>_</code>
+          <code>/post/post1</code> you may break away from parent content by postfixing parent route
+          with underscore <code>_</code>
         </li>
         <li>
           <Lnk path="https://tanstack.com/router/latest/docs/framework/react/guide/routing-concepts#non-nested-routes">

@@ -158,6 +158,33 @@ const postObj = {
       <H>Protected route</H>
 
       <LazyImg path="/imgs/protected routes with tanstack router.png" />
+
+      <H>Non-nested route</H>
+
+      <ul>
+        <li>
+          you have <code>/post</code> route with some basic heading information and{' '}
+          <code>{'<Outlet />'}</code> for child route
+        </li>
+        <li>
+          in <code>{'<Outlet />'}</code> specific post is rendered under <code>/post/post1</code>
+        </li>
+        <li>
+          when you do not want to show basic heading information from parent route being at{' '}
+          <code>/post/post1</code> you may break away from it by prefixing with underscore{' '}
+          <code>_</code>
+        </li>
+        <li>
+          <Lnk path="https://tanstack.com/router/latest/docs/framework/react/guide/routing-concepts#non-nested-routes">
+            https://tanstack.com/router/latest/docs/framework/react/guide/routing-concepts#non-nested-routes
+          </Lnk>
+        </li>
+        <li>
+          <Lnk path="https://www.youtube.com/watch?v=5RR6_hkAEbk">
+            https://www.youtube.com/watch?v=5RR6_hkAEbk
+          </Lnk>
+        </li>
+      </ul>
     </>
   )
 }

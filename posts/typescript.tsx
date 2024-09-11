@@ -3,7 +3,7 @@ import { ExportedTypes } from '/types/types'
 import { UserContext, UserContextProvider } from '/types/UserContext'
 
 // #region main types
-function myFunc (
+function myFunc(
   arg1: string,
   arg2: number,
   arg3: boolean,
@@ -31,7 +31,10 @@ myFunc(
   1,
   { val1: 'hi', val2: 5 },
   ['a', 'b'],
-  [{ first: 'John', last: 'Dow' }, { first: 'Jane', last: 'Blake' }],
+  [
+    { first: 'John', last: 'Dow' },
+    { first: 'Jane', last: 'Blake' }
+  ],
   'error',
   someFunc,
   'optional string'
@@ -44,12 +47,11 @@ interface propsTypes1 {
   lastName?: string
   likesNum: string | number
 }
-function Msg1 (props: propsTypes1): JSX.Element {
+function Msg1(props: propsTypes1): JSX.Element {
   return (
     <div>
       Hello {props.name}
-      {props.lastName && ` ${props.lastName}`}, you have received{' '}
-      {props.likesNum} likes.
+      {props.lastName && ` ${props.lastName}`}, you have received {props.likesNum} likes.
     </div>
   )
 }
@@ -67,13 +69,13 @@ type propTypes2 = {
   }
   cars: string[]
 }
-function Msg2 (props: propTypes2): JSX.Element {
+function Msg2(props: propTypes2): JSX.Element {
   return (
     <>
       Hello {props.name} {props.company && `from ${props.company}`}
-      {props.isLogged && `, you have received ${props.likesNum} likes.`} We wish
-      you and {props.spouseName.name} {props.spouseName.lastName} a good day.
-      Your following cars have unpaid fine tickets:{' '}
+      {props.isLogged && `, you have received ${props.likesNum} likes.`} We wish you and{' '}
+      {props.spouseName.name} {props.spouseName.lastName} a good day. Your following cars have
+      unpaid fine tickets:{' '}
       {props.cars.map((car, i) => {
         const ending = i !== props.cars.length - 1 ? ' & ' : ''
         return car + ending
@@ -84,38 +86,34 @@ function Msg2 (props: propTypes2): JSX.Element {
 // #endregion
 
 // #region prop.children as string
-function ComponentWithChildren (props: { children: string }) {
+function ComponentWithChildren(props: { children: string }) {
   return <h2> {props.children} </h2>
 }
 // #endregion
 
 // #region prop.children as React component
-function ComponentWithReactComponentAsChild (props: { children: React.ReactNode }) {
+function ComponentWithReactComponentAsChild(props: { children: React.ReactNode }) {
   return <h2> {props.children} </h2>
 }
 // #endregion
 
 // #region onClick event handler without return or event object
-function Button1 (props: { handleClick: () => void }) {
-  return (
-    <button onClick={props.handleClick}> Click </button>
-  )
+function Button1(props: { handleClick: () => void }) {
+  return <button onClick={props.handleClick}> Click </button>
 }
 // #endregion
 
 // #region onClick event handler with event object
-function Button2 (props: { handleClick: (e: React.MouseEvent<HTMLButtonElement>) => void }) {
-  return (
-    <button onClick={props.handleClick}> Click </button>
-  )
+function Button2(props: { handleClick: (e: React.MouseEvent<HTMLButtonElement>) => void }) {
+  return <button onClick={props.handleClick}> Click </button>
 }
 // #endregion
 
 // #region onClick event handler with event object & additional param
-function Button3 (props: { handleClick: (e: React.MouseEvent<HTMLButtonElement>, id: number) => void }) {
-  return (
-    <button onClick={e => props.handleClick(e, 1)}>Click</button>
-  )
+function Button3(props: {
+  handleClick: (e: React.MouseEvent<HTMLButtonElement>, id: number) => void
+}) {
+  return <button onClick={(e) => props.handleClick(e, 1)}>Click</button>
 }
 // #endregion
 
@@ -124,7 +122,7 @@ type InputProps = {
   value: string
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
-function Input (props: InputProps) {
+function Input(props: InputProps) {
   return <input type="text" value={props.value} onChange={props.handleChange} />
 }
 // #endregion
@@ -133,7 +131,7 @@ function Input (props: InputProps) {
 type InputProps1 = {
   value: string
 }
-function Input1 (props: InputProps1) {
+function Input1(props: InputProps1) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => console.log(e)
   return <input type="text" value={props.value} onChange={handleChange} />
 }
@@ -143,10 +141,8 @@ function Input1 (props: InputProps1) {
 type ContainerProps = {
   styles: React.CSSProperties
 }
-function SomeCmpt (props: ContainerProps) {
-  return (
-    <div style={props.styles}> Some text </div>
-  )
+function SomeCmpt(props: ContainerProps) {
+  return <div style={props.styles}> Some text </div>
 }
 // #endregion
 
@@ -154,18 +150,14 @@ function SomeCmpt (props: ContainerProps) {
 type SomeProps = {
   styles: React.CSSProperties
 }
-function Cmpt ({ styles }: SomeProps) {
-  return (
-    <div style={styles}> Some text </div>
-  )
+function Cmpt({ styles }: SomeProps) {
+  return <div style={styles}> Some text </div>
 }
 // #endregion
 
 // #region exporting types
-function Cmpt2 ({ styles }: ExportedTypes) {
-  return (
-    <div style={styles}> Some text </div>
-  )
+function Cmpt2({ styles }: ExportedTypes) {
+  return <div style={styles}> Some text </div>
 }
 // #endregion
 
@@ -177,8 +169,12 @@ type Name = {
 type PersonProp = {
   name: Name
 }
-function Person (props: PersonProp) {
-  return <h2>{props.name.first} {props.name.last}</h2>
+function Person(props: PersonProp) {
+  return (
+    <h2>
+      {props.name.first} {props.name.last}
+    </h2>
+  )
 }
 // #endregion
 
@@ -190,10 +186,10 @@ type Nameee = {
 type PersonsListProps = {
   names: Nameee[]
 }
-function PersonList (props: PersonsListProps) {
+function PersonList(props: PersonsListProps) {
   return (
     <div>
-      {props.names.map(name => {
+      {props.names.map((name) => {
         return (
           <Hs key={name.first}>
             {name.first} {name.last}
@@ -215,16 +211,18 @@ type AuthType = {
   name: string
   mail: string
 }
-function User () {
+function User() {
   const [userState, setUserState] = React.useState<null | AuthType>(null)
   const handleLogin = () => setUserState({ name: 'John', mail: 'john@mail.com' })
   const handleLogout = () => setUserState(null)
-  return <div>
-    <button onClick={handleLogin}>Login</button>
-    <button onClick={handleLogout}>Logout</button>
-    <div>User name is {userState?.name}</div>
-    <div>User name is {userState?.mail}</div>
-  </div>
+  return (
+    <div>
+      <button onClick={handleLogin}>Login</button>
+      <button onClick={handleLogout}>Logout</button>
+      <div>User name is {userState?.name}</div>
+      <div>User name is {userState?.mail}</div>
+    </div>
+  )
 }
 // #endregion
 
@@ -233,14 +231,16 @@ type AuthType2 = {
   name: string
   mail: string
 }
-function User2 () {
+function User2() {
   const [userState, setUserState] = React.useState<AuthType>({} as AuthType2)
   const handleLogin = () => setUserState({ name: 'John', mail: 'john@mail.com' })
-  return <div>
-    <button onClick={handleLogin}>Login</button>
-    <div>User name is {userState.name}</div>
-    <div>User name is {userState.mail}</div>
-  </div>
+  return (
+    <div>
+      <button onClick={handleLogin}>Login</button>
+      <div>User name is {userState.name}</div>
+      <div>User name is {userState.mail}</div>
+    </div>
+  )
 }
 // #endregion
 
@@ -253,12 +253,16 @@ type UpdateActionType = {
   payload?: number
 }
 const initialState = { count: 0 }
-function reducer (state: CounterStateType, action: UpdateActionType) {
+function reducer(state: CounterStateType, action: UpdateActionType) {
   switch (action.type) {
-    case 'increment': return { count: state.count + (action.payload || 0) }
-    case 'decrement': return { count: state.count - (action.payload || 0) }
-    case 'reset': return initialState
-    default: return state
+    case 'increment':
+      return { count: state.count + (action.payload || 0) }
+    case 'decrement':
+      return { count: state.count - (action.payload || 0) }
+    case 'reset':
+      return initialState
+    default:
+      return state
   }
 }
 const Counter = () => {
@@ -288,12 +292,16 @@ type ResetAction2 = {
 type CounterAction2 = UpdateAction2 | ResetAction2
 const initialState2 = { count: 0 }
 
-function reducer2 (state: CounterState2, action: CounterAction2) {
+function reducer2(state: CounterState2, action: CounterAction2) {
   switch (action.type) {
-    case 'increment': return { count: state.count + action.payload }
-    case 'decrement': return { count: state.count - action.payload }
-    case 'reset': return initialState2
-    default: return state
+    case 'increment':
+      return { count: state.count + action.payload }
+    case 'decrement':
+      return { count: state.count - action.payload }
+    case 'reset':
+      return initialState2
+    default:
+      return state
   }
 }
 
@@ -330,7 +338,7 @@ export const Userrr = () => {
 const DomRef = () => {
   const inputRef = React.useRef<HTMLInputElement>(null!)
   React.useEffect(() => inputRef.current.focus(), [])
-  return <input type='text' ref={inputRef} />
+  return <input type="text" ref={inputRef} />
 }
 // #endregion
 
@@ -344,15 +352,14 @@ const Timer = () => {
   }
   React.useEffect(() => {
     interValRef.current = window.setInterval(() => {
-      setTimer(timer => timer + 1)
+      setTimer((timer) => timer + 1)
     }, 1000)
     return () => stopTimer()
   }, [])
 
   return (
     <div>
-      HookTimer - {timer} -
-      <button onClick={() => stopTimer()}>Stop Timer</button>
+      HookTimer - {timer} -<button onClick={() => stopTimer()}>Stop Timer</button>
     </div>
   )
 }
@@ -366,7 +373,7 @@ type PrivateProps = {
 }
 const Profile = ({ name }: ProfileProps) => <div>Name is {name}</div>
 const Private = ({ isLoggedIn, Component }: PrivateProps) => {
-  if (isLoggedIn) return <Component name='John' />
+  if (isLoggedIn) return <Component name="John" />
   return <div>Login to continue</div>
 }
 // #endregion
@@ -377,13 +384,15 @@ type ListProps<T> = {
   onClick: (value: T) => void
 }
 
-const List = <T extends number> ({ items, onClick }: ListProps<T>) => {
+const List = <T extends number>({ items, onClick }: ListProps<T>) => {
   return (
     <div>
       <Hs>List of items</Hs>
-      {items.map(item => {
+      {items.map((item) => {
         return (
-          <div onClick={() => onClick(item)} key={item}>{item}</div>
+          <div onClick={() => onClick(item)} key={item}>
+            {item}
+          </div>
         )
       })}
     </div>
@@ -412,16 +421,10 @@ type Zero = RandomNumberType & {
 }
 type RandomNumberProps = PositiveNumber | NegativeNumber | Zero
 
-const RandomNumber = ({
-  value,
-  isPositive,
-  isNegative,
-  isZero
-}: RandomNumberProps) => {
+const RandomNumber = ({ value, isPositive, isNegative, isZero }: RandomNumberProps) => {
   return (
     <div>
-      {value} {isPositive && 'positive'} {isNegative && 'negative'}{' '}
-      {isZero && 'zero'}
+      {value} {isPositive && 'positive'} {isNegative && 'negative'} {isZero && 'zero'}
     </div>
   )
 }
@@ -432,7 +435,7 @@ const RandomNumber = ({
  * Position prop can be one of
  * "left-center" | "left-top" | "left-bottom" | "center" | "center-top" |
  * "center-bottom" | "right-center" | "right-top" | "right-bottom"
-*/
+ */
 
 type HorizontalPosition = 'left' | 'center' | 'right'
 type VerticalPosition = 'top' | 'center' | 'bottom'
@@ -454,7 +457,9 @@ const CustomButton = ({ variant, children, ...rest }: ButtonProps) => {
     </button>
   )
 }
-<CustomButton variant={'primary'} onClick={() => alert('clicked')}>Button text</CustomButton>
+;<CustomButton variant={'primary'} onClick={() => alert('clicked')}>
+  Button text
+</CustomButton>
 
 type InputPropsType = React.ComponentProps<'input'>
 const Inpt = (props: InputPropsType) => <input {...props} />
@@ -479,16 +484,9 @@ type TextOwnProps<E extends React.ElementType> = {
 type TextProps<E extends React.ElementType> = TextOwnProps<E> &
   Omit<React.ComponentProps<E>, keyof TextOwnProps<E>>
 
-const Text = <E extends React.ElementType = 'div'> ({
-  size,
-  color,
-  children,
-  as
-}: TextProps<E>) => {
+const Text = <E extends React.ElementType = 'div'>({ size, color, children, as }: TextProps<E>) => {
   const Component = as || 'div'
-  return (
-    <Component className={`class-with-${size}-${color}`}>{children}</Component>
-  )
+  return <Component className={`class-with-${size}-${color}`}>{children}</Component>
 }
 // #endregion
 
@@ -500,12 +498,19 @@ const postObj = {
   desc: 'typescript',
   body: (
     <>
-      <p>Here are notes of <Lnk path='https://www.youtube.com/playlist?list=PLC3y8-rFHvwi1AXijGTKM0BKtHzVC-LSK'>begginners tutorial</Lnk>.</p>
-
+      <p>
+        Here are notes of{' '}
+        <Lnk path="https://www.youtube.com/playlist?list=PLC3y8-rFHvwi1AXijGTKM0BKtHzVC-LSK">
+          begginners tutorial
+        </Lnk>
+        .
+      </p>
       <H>Why?</H>
-
       <ul>
-        <li><Lnk path="https://www.typescriptlang.org/">TypeScript</Lnk> is a way to describe a shape of an object</li>
+        <li>
+          <Lnk path="https://www.typescriptlang.org/">TypeScript</Lnk> is a way to describe a shape
+          of an object
+        </li>
         <li>It provides an additional layer of documentation</li>
         <li>Gives autocompletion in text editor</li>
         <li>Makes maintenance of large code easier</li>
@@ -513,35 +518,31 @@ const postObj = {
         <li>It is initial investment which pays off on a long run</li>
         <li>
           If we hover over a variable we can see{' '}
-          <Lnk path="https://www.typescriptlang.org/docs/handbook/type-inference.html"> type inference </Lnk>
+          <Lnk path="https://www.typescriptlang.org/docs/handbook/type-inference.html">
+            {' '}
+            type inference{' '}
+          </Lnk>
         </li>
         <LazyImg src="/imgs/ts/typeInference.png"></LazyImg>
         <li>TS notifies about missing arguments</li>
         <LazyImg src="/imgs/ts/missingProperty.png"></LazyImg>
       </ul>
-
       <H>Create typescript</H>
-
       <p>
         Import typescript into existing project with{' '}
         <Code bash>
           npm install --save-dev typescript @types/node @types/react @types/react-dom @types/jest
         </Code>
       </p>
-
       <Hs>OR</Hs>
-
       <p>
         Create a new react project with typescript with{' '}
         <Code bash>npx create-react-app my-app --template typescript</Code>
       </p>
-
       <p>
         TypeScript files should have <code>.tsx</code> extension.
       </p>
-
       <H>Basic types</H>
-
       <Code block jsx>{`
       function myFunc(
         arg1: string,
@@ -577,9 +578,7 @@ const postObj = {
         'optional string',
       )
       `}</Code>
-
       <H>Array of objects</H>
-
       <Code block jsx>{`
         type MenuType = {
           id: string
@@ -593,9 +592,7 @@ const postObj = {
           id: string,
         }
       `}</Code>
-
       <H>Object of objects</H>
-
       <Code block jsx>{`
         type ObjectOfObjectsType = {
           [key: string]: {
@@ -604,9 +601,7 @@ const postObj = {
           }
         }
       `}</Code>
-
       <H>Record</H>
-
       <Code block jsx>{`
         const obj: Record<string, number> = {
           'key 1': 1,
@@ -614,9 +609,7 @@ const postObj = {
           'key 3': 3
         }
       `}</Code>
-
       <H>Rest of props</H>
-
       <Code block jsx>{`
         type Props = {
           children?: React.ReactNode
@@ -624,9 +617,9 @@ const postObj = {
           [x:string]: any // all other ...props
         }
       `}</Code>
-
-      <H>Function returning <code>undefined</code></H>
-
+      <H>
+        Function returning <code>undefined</code>
+      </H>
       <Code block jsx>{`
         type Props = {
           children?: React.ReactNode
@@ -636,20 +629,14 @@ const postObj = {
           otherFunc: (() => void) | null
         }
       `}</Code>
-
       <H>Comments for types</H>
-
       <LazyImg src="/imgs/ts/commentsInTs.png" />
-
       <H>{'Interface & Type'}</H>
-
       <p>
-        To set types separately we can use <i>interface</i> or <i>type</i> which are basically
-        same things
+        To set types separately we can use <i>interface</i> or <i>type</i> which are basically same
+        things
       </p>
-
       <Hs>Interface</Hs>,
-
       <Code block jsx>{`
         interface propsTypes1 {
           name: string;
@@ -667,15 +654,11 @@ const postObj = {
         }
         <Msg1 name="John" likesNum={5} />
       `}</Code>
-
       <Msg1 name="John" likesNum={5} />
-
       <Hs>Type</Hs>
-
       <p>
         Types can be assigned also via <i>type</i>, which is preferable.
       </p>
-
       <Code block jsx>{`
       type propTypes2 = {
         name: string
@@ -710,7 +693,6 @@ const postObj = {
         cars={['bmw', 'vw', 'audi']}
       />
       `}</Code>
-
       <Msg2
         isLogged={true}
         name="John"
@@ -718,22 +700,16 @@ const postObj = {
         spouseName={{ name: 'Jane', lastName: 'Dow' }}
         cars={['bmw', 'vw', 'audi']}
       />
-
       <H>Children in a component</H>
-
       <Code block jsx>{`
       function ComponentWithChildren(props: {children: string}) {
         return <h2> {props.children} </h2>
       }
       <ComponentWithChildren>hi</ComponentWithChildren>
       `}</Code>
-
       <ComponentWithChildren>hi</ComponentWithChildren>
-
       <H>React node</H>
-
       <p>To pass react component as an argument</p>
-
       <Code block jsx>{`
         function ComponentWithReactComponentAsChild(props: {children: React.ReactNode}) {
           return <h2> {props.children} </h2>
@@ -742,15 +718,11 @@ const postObj = {
           <ComponentWithChildren>hi</ComponentWithChildren>
         </ComponentWithReactComponentAsChild>
       `}</Code>
-
       <ComponentWithReactComponentAsChild>
         <ComponentWithChildren>hi</ComponentWithChildren>
       </ComponentWithReactComponentAsChild>
-
       <H>Click event</H>
-
       <Hs>onClick event handler without return & without event object</Hs>
-
       <Code block jsx>{`
       function Button(props: { handleClick: () => void }) {
         return (
@@ -759,11 +731,12 @@ const postObj = {
       }
       <Button handleClick={() => { console.log('Button clicked') }} />
       `}</Code>
-
-      <Button1 handleClick={() => { console.log('Button clicked') }} />
-
+      <Button1
+        handleClick={() => {
+          console.log('Button clicked')
+        }}
+      />
       <Hs>onClick event handler with event object</Hs>
-
       <Code block jsx>{`
       function Button2(props: { handleClick: (e: React.MouseEvent<HTMLButtonElement>) => void }) {
         return (
@@ -772,13 +745,13 @@ const postObj = {
       }
       <Button2 handleClick={(e) => { console.log('Button clicked', e) }} />
       `}</Code>
-
-      <Button2 handleClick={(e) => { console.log('Button clicked', e) }} />
-
+      <Button2
+        handleClick={(e) => {
+          console.log('Button clicked', e)
+        }}
+      />
       <Hs>onClick event handler with additional parameter</Hs>
-
       <p>A bit strange example</p>
-
       <Code block jsx>{`
       // type for event with id parameter
       function Button3(props: { handleClick: (e: React.MouseEvent<HTMLButtonElement>, id: number) => void }) {
@@ -788,11 +761,12 @@ const postObj = {
       }
       <Button3 handleClick={(e, id) => { console.log('Button clicked', e, id) }} />
       `}</Code>
-
-      <Button3 handleClick={(e, id) => { console.log('Button clicked', e, id) }} />
-
+      <Button3
+        handleClick={(e, id) => {
+          console.log('Button clicked', e, id)
+        }}
+      />
       <Hs>onChange event handler as a prop</Hs>
-
       <Code block jsx>{`
       type InputProps = {
         value: string
@@ -803,11 +777,8 @@ const postObj = {
       }
       <Input value='' handleChange={(e) => console.log(e)}/>
       `}</Code>
-
-      <Input value='' handleChange={(e) => console.log(e)} />
-
+      <Input value="" handleChange={(e) => console.log(e)} />
       <Hs>onChange event handler defined within component</Hs>
-
       <Code block jsx>{`
       type InputProps1 = {
         value: string
@@ -818,11 +789,8 @@ const postObj = {
       }
       <Input1 value=''/>
       `}</Code>
-
-      <Input1 value='' />
-
+      <Input1 value="" />
       <H>Styles as props</H>
-
       <Code block jsx>{`
       type ContainerProps = {
         styles: React.CSSProperties
@@ -834,17 +802,12 @@ const postObj = {
       }
       <SomeCmpt styles={{ border: '1px solid black', padding: '1rem' }} />
       `}</Code>
-
       <SomeCmpt styles={{ border: '1px solid black', padding: '1rem' }} />
-
       <Hs>Specific css prop</Hs>
-
       <Code block jsx>{`
         const [visibility, setVisibility] = useState<CSSProperties['visibility']>('visible')
       `}</Code>
-
       <H>Props destructuring</H>
-
       <Code block jsx>{`
       type SomeProps = {
         styles: React.CSSProperties
@@ -856,18 +819,14 @@ const postObj = {
       }
       <Cmpt styles={{ border: '1px solid black', padding: '1rem' }} />
       `}</Code>
-
       <Cmpt styles={{ border: '1px solid black', padding: '1rem' }} />
-
       <H>Exporting types</H>
-
       <Code block jsx>{`
       // types.ts
       export type ExportedTypes = {
         styles: React.CSSProperties
       }
       `}</Code>
-
       <Code block jsx>{`
       // main.tsx
       import { ExportedTypes } from './types'
@@ -878,11 +837,8 @@ const postObj = {
       }
       <Cmpt2 styles={{ border: '1px solid black', padding: '1rem' }} />
       `}</Code>
-
       <Cmpt2 styles={{ border: '1px solid black', padding: '1rem' }} />
-
       <H>Re-use types</H>
-
       <Code block jsx>{`
       type Name = {
         first: string
@@ -896,11 +852,8 @@ const postObj = {
       }
       <Person name={{ first: 'John', last: 'Dow' }} />
       `}</Code>
-
       <Person name={{ first: 'John', last: 'Dow' }} />
-
       <H>Array of other types</H>
-
       <Code block jsx>{`
       type Nameee = {
         first: string
@@ -929,21 +882,16 @@ const postObj = {
       ];
       <PersonList names={namesArr} />
       `}</Code>
-
       <PersonList names={namesArr} />
-
       <H>useState</H>
-
       <p>
-        TypeScript automatically defines a type for <Code>useState(initVal)</Code>{' '}
-        variable based on initial value provided
+        TypeScript automatically defines a type for <Code>useState(initVal)</Code> variable based on
+        initial value provided
       </p>
-
       <p>
         But if the type is unknown beforehand, more complex, or may change in future then we may
         specify it in angled brackets.
       </p>
-
       <Code block jsx>{`
       type AuthType = {
         name: string
@@ -962,26 +910,19 @@ const postObj = {
       }
       <User />
       `}</Code>
-
       <User />
-
       <p>
         Note that VSCode automatically put optional chaining because we provided the type as{' '}
         <code>null</code>
       </p>
-
       <H>useState type assertion</H>
-
       <p>
-        If we are sure that state value will be set to not a <code>null</code> we may
-        define initial state as an empty object with a certain type
+        If we are sure that state value will be set to not a <code>null</code> we may define initial
+        state as an empty object with a certain type
       </p>
-
       <p>
-        For example we set a value as soon as a component mounts with{' '}
-        <code>useEffect</code> hook
+        For example we set a value as soon as a component mounts with <code>useEffect</code> hook
       </p>
-
       <Code block jsx>{`
       type AuthType2 = {
         name: string
@@ -998,13 +939,9 @@ const postObj = {
       }
       <User2 />
       `}</Code>
-
       <User2 />
-
       <p>Note that no optional chaining anymore.</p>
-
       <H>useReducer</H>
-
       <Code block jsx>{`
       type CounterStateType = {
         count: number
@@ -1035,11 +972,8 @@ const postObj = {
       }
       <Counter />
       `}</Code>
-
       <Counter />
-
       <H>useReducer (better approach)</H>
-
       <Code block jsx>{`
       type CounterState2 = {
         count: number
@@ -1076,11 +1010,8 @@ const postObj = {
       }
       <Counter2 />
       `}</Code>
-
       <Counter2 />
-
       <H>useContext</H>
-
       <Code block jsx>{`
         // UserContext.tsx
         import React from 'react'
@@ -1108,7 +1039,6 @@ const postObj = {
           )
         }
       `}</Code>
-
       <Code block jsx>{`
         // main.tsx
         import React from 'react'
@@ -1131,13 +1061,10 @@ const postObj = {
           <Userrr />
         </UserContextProvider>
       `}</Code>
-
       <UserContextProvider>
         <Userrr />
       </UserContextProvider>
-
       <H>useRef as DOM element</H>
-
       <Code block jsx>{`
       const DomRef = () => {
         const inputRef = React.useRef<HTMLInputElement>(null!)
@@ -1146,27 +1073,20 @@ const postObj = {
       }
       <DomRef />
       `}</Code>
-
       <DomRef />
-
       <p>
-        Note that we put an exclamation mark after null type <code>null!</code> to tell TS
-        that we are sure that variable will not be <code>null</code> and thus we avoid optional
-        chaining <code>inputRef.current?.focus()</code>
+        Note that we put an exclamation mark after null type <code>null!</code> to tell TS that we
+        are sure that variable will not be <code>null</code> and thus we avoid optional chaining{' '}
+        <code>inputRef.current?.focus()</code>
       </p>
-
       <H>useRef with ElementRef</H>
-
       <p>Same as above, but no need to remember html element types, but just tag names</p>
-
       <Code block jsx>{`
       import { useRef, type ElementRef } from 'react'
 
       const buttonRef = useRef<ElementRef<'button'>>(null)
       `}</Code>
-
       <H>useRef as mutable container</H>
-
       <Code block jsx>{`
       type Props = {
         children?: React.ReactNode
@@ -1177,7 +1097,6 @@ const postObj = {
         logo?: React.ReactNode
       }
       `}</Code>
-
       <Code block jsx>{`
       const Timer = () => {
         const [timer, setTimer] = React.useState(0)
@@ -1202,11 +1121,8 @@ const postObj = {
       }
       <Timer />
       `}</Code>
-
       <Timer />
-
       <H>Component in props</H>
-
       <Code block jsx>{`
       type ProfileProps = { name: string }
       type PrivateProps = {
@@ -1220,13 +1136,9 @@ const postObj = {
       }
       <Private isLoggedIn={true} Component={Profile} />
       `}</Code>
-
       <Private isLoggedIn={true} Component={Profile} />
-
       <H>Generic type</H>
-
       <i>Not clear what is it about, take a closer look later.</i>
-
       <Code block jsx>{`
       type ListProps<T> = {
         items: T[]
@@ -1247,12 +1159,11 @@ const postObj = {
       }
       <List items={[1, 2, 3]} onClick={item => console.log(item)} />
       `}</Code>
-
-      <List items={[1, 2, 3]} onClick={item => console.log(item)} />
-
+      <List items={[1, 2, 3]} onClick={(item) => console.log(item)} />
       <H>Never type</H>
-
-      <p>If one type is applicable we can disallow other types with <i>never</i> type.</p>
+      <p>
+        If one type is applicable we can disallow other types with <i>never</i> type.
+      </p>
       <Code block jsx>{`
       type RandomNumberType = {
         value: number
@@ -1289,11 +1200,8 @@ const postObj = {
       }
       <RandomNumber value={5} isPositive />
       `}</Code>
-
       <RandomNumber value={5} isPositive />
-
       <H>Template literals</H>
-
       <Code block jsx>{`
       /*
       * Position prop can be one of
@@ -1310,17 +1218,12 @@ const postObj = {
       const Toast = ({ position }: ToastProps) => <div>Position - {position}</div>;
       <Toast position='left-top'></Toast>
       `}</Code>
-
-      <Toast position='left-top'></Toast>
-
+      <Toast position="left-top"></Toast>
       <li>
         <ul>type will be combination of all possible strings</ul>
       </li>
-
-      <LazyImg path='/imgs/template_literal_types.png'/>
-
+      <LazyImg path="/imgs/template_literal_types.png" />
       <H>Html element</H>
-
       <Code block jsx>{`
       type ButtonProps = {
         variant: 'primary' | 'secondary'
@@ -1338,53 +1241,44 @@ const postObj = {
       const Inpt = (props: InputPropsType) => <input {...props} />;
       <Inpt onChange={() => alert('typed')}/>
       `}</Code>
-
       <Inpt onChange={() => alert('typed')} />
-
       <H>Omit</H>
-
       <ul>
-        <li>with <i>Omit</i> we may exclude some property from type</li>
+        <li>
+          with <i>Omit</i> we may exclude some property from type
+        </li>
         <li>works only with simple props, not nested objects</li>
-        <li>bellow we excluded <code>onChange</code> type form <code>input</code> element.</li>
+        <li>
+          bellow we excluded <code>onChange</code> type form <code>input</code> element.
+        </li>
       </ul>
-
       <Code block jsx>{`
       type InpPropsType = Omit<React.ComponentProps<'input'>, 'onChange'>
       const Inpt2 = (props: InpPropsType) => <input {...props} />;
       <Inpt2 />
       `}</Code>
-
       <Inpt2 />
-
-      <LazyImg path='/imgs/omit.png' />
-
+      <LazyImg path="/imgs/omit.png" />
       <H>Exclude</H>
-
       <ul>
-        <li>if we want to omit an object from union types <code>Omit</code> will not work</li>
-        <li>use <Code>Exclude</Code></li>
+        <li>
+          if we want to omit an object from union types <code>Omit</code> will not work
+        </li>
+        <li>
+          use <Code>Exclude</Code>
+        </li>
       </ul>
-
-      <LazyImg path='/imgs/exclude.png' />
-
+      <LazyImg path="/imgs/exclude.png" />
       <H>Take types of other components</H>
-
       <p>Let's take props type from the previous component.</p>
-
       <Code block jsx>{`
       const Inpt3 = (props: React.ComponentProps<typeof Inpt2>) => <input {...props} />;
       <Inpt3 />
       `}</Code>
-
       <Inpt3 />
-
       <H>Polymorphic components</H>
-
       <p>Polymorphic component renders different html tags depends on input props.</p>
-
       <i>Not clear because generic type is used, take a closer look later.</i>
-
       <Code block jsx>{`
       type TextOwnProps<E extends React.ElementType> = {
         size?: 'sm' | 'md' | 'lg'
@@ -1412,25 +1306,25 @@ const postObj = {
         <Text size='sm' color='secondary' as='label' htmlFor='someId'>Label</Text>
       </>
       `}</Code>
-
       <>
-        <Text size='lg' as='h1'>Heading</Text>
-        <Text size='md' as='p'>Paragraph</Text>
-        <Text size='sm' color='secondary' as='label' htmlFor='someId'>Label</Text>
+        <Text size="lg" as="h1">
+          Heading
+        </Text>
+        <Text size="md" as="p">
+          Paragraph
+        </Text>
+        <Text size="sm" color="secondary" as="label" htmlFor="someId">
+          Label
+        </Text>
       </>
-
       <H>Redux</H>
-
       <Hs>Payload in reducer</Hs>
-
       <Code block jsx>{`
         incrementByAmount: (state, action: PayloadAction<number>) => {
           state.value += action.payload
         }
       `}</Code>
-
       <Hs>Thunk</Hs>
-
       <Code block jsx>{`
         export const incrementIfOdd =(amount: number): AppThunk => (dispatch, getState) => {
           const currentValue = selectCount(getState())
@@ -1439,9 +1333,7 @@ const postObj = {
           }
         }
       `}</Code>
-
       <Hs>Redux config types</Hs>
-
       <Code block jsx>{`
         export type RootState = ReturnType<typeof store.getState>
         export type AppDispatch = typeof store.dispatch
@@ -1451,13 +1343,10 @@ const postObj = {
         export const useSelectorTyped: TypedUseSelectorHook<RootState> = useSelector
         export const useDispatchTyped = () => useDispatch<AppDispatch>()
       `}</Code>
-
       <H>{'Spread object - Partial<Type>'}</H>
-
       <ul>
         <li>works to update some prop inside an object</li>
       </ul>
-
       <Code block jsx>{`
         interface Todo {
           title: string;
@@ -1477,26 +1366,25 @@ const postObj = {
           description: "throw out trash",
         });
       `}</Code>
-
       <H>Any string with suggestions</H>
-
       <ul>
         <li>if we want to accept any string, but also want some suggests to be shown</li>
-        <li>can do following trick, taken from <Lnk path='https://stackoverflow.com/a/74467583/7239778'>here</Lnk></li>
+        <li>
+          can do following trick, taken from{' '}
+          <Lnk path="https://stackoverflow.com/a/74467583/7239778">here</Lnk>
+        </li>
       </ul>
-
       <Code block jsx>{`
         type Props = {
           lang: 'en' | 'fi' | 'nl' | 'sv' | Record<never, never> & string
         }
       `}</Code>
-
       <H>as const</H>
-
       <ul>
-        <li><Code>as const</Code> makes type as narrow as possible</li>
+        <li>
+          <Code>as const</Code> makes type as narrow as possible
+        </li>
       </ul>
-
       <Code block jsx>{`
         // without "as const"
         const employee = {
@@ -1518,9 +1406,7 @@ const postObj = {
         type EmployeeValue = (typeof employee)[keyof typeof employee] // "Jane" | 30
         type EmployeeName = typeof employee['name'] // "Jane"
       `}</Code>
-
       <H>Object keys & values</H>
-
       <Code block jsx>{`
         const person = { 
           age: 30,
@@ -1531,17 +1417,13 @@ const postObj = {
         type Keys = keyof typeof person // "age" | "name" | "job"
         type Values = (typeof person)[keyof typeof person] // 30 | "Jane" | "doctor"
       `}</Code>
-
       <H>Array values as enums</H>
-
       <Code block jsx>{`
         const person = ['Jane', 'Mat', 'Olivia'] as const
 
         type ArrayValue = (typeof person)[number] // "Jane" | "Mat" | "Olivia"
       `}</Code>
-
       <H>type of most nested property</H>
-
       <Code block jsx>{`
         type Lang = 'en' | 'fi' | 'nl' | 'sv'
 
@@ -1568,24 +1450,33 @@ const postObj = {
           }
         }  
       `}</Code>
-
       <H>Prettify</H>
-
-      <LazyImg path='/imgs/type-intersection.png' width='300px'/>
-      <LazyImg path='/imgs/hover-over-type-intersection.png' />
-
+      <LazyImg path="/imgs/type-intersection.png" width="300px" />
+      <LazyImg path="/imgs/hover-over-type-intersection.png" />
       <Code block jsx>{`
         type Prettify<T> = {
           [K in keyof T]: T[K]
         } & {}
       `}</Code>
-
       <ul>
-        <li>if you hover over type intersection or nested type you may not see the shape of result type</li>
-        <li>wrap your result type into <code>Prettify</code> and type will be unwrapped</li>
+        <li>
+          if you hover over type intersection or nested type you may not see the shape of result
+          type
+        </li>
+        <li>
+          wrap your result type into <code>Prettify</code> and type will be unwrapped
+        </li>
       </ul>
-
-      <LazyImg path='/imgs/prettify-type.png'/>
+      <LazyImg path="/imgs/prettify-type.png" />
+      <H>Conditional type</H>
+      <ul>
+        <li>In TypeScript, conditional types are distributive when applied to union types</li>
+        <li>
+          he conditional type is applied individually to each member of the union, and the results
+          are combined into a new union type
+        </li>
+      </ul>
+      <LazyImg path="/imgs/conditional_type.png" />
     </>
   )
 }

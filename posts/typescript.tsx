@@ -1472,8 +1472,8 @@ const postObj = {
       <ul>
         <li>In TypeScript, conditional types are distributive when applied to union types</li>
         <li>
-          he conditional type is applied individually to each member of the union, and the results
-          are combined into a new union type
+          conditional type is applied individually to each member of the union, and the results are
+          combined into a new union type
         </li>
       </ul>
       <LazyImg path="/imgs/conditional_type.png" />

@@ -65,23 +65,21 @@ const postObj = {
 
       <ul>
         <li>Block tends to expand to the whole width</li>
-        <li>block with <code>width: max-content</code> does not take whole width </li>
         <li>Block elements go one under another (if there is no "float" property)</li>
+        <Component
+          initOuterCss={ 'display: block; \ntext-align: left; \nwidth: 200px; \nheight: 100px; \nbackground: lightblue;' }
+          initInnerCss={'display: block; \nbackground: lightyellow;'}
+        />
+        <li>block with <code>width: max-content</code> does not take whole width </li>
+        <Component
+          initOuterCss={ 'display: block; \ntext-align: left; \nwidth: 200px; \nheight: 100px; \nbackground: lightblue;' }
+          initInnerCss={'display: block; \nbackground: lightyellow; \nwidth: max-content'}
+        />
         <li>height / width can be set</li>
         <li>block elements stick to each other w/o gaps (if there is no margin)</li>
         <li>most of elements are block els by default</li>
         <li>block element is a rectangle</li>
       </ul>
-
-      <Component
-        initOuterCss={ 'display: block; \ntext-align: left; \nwidth: 200px; \nheight: 100px; \nbackground: lightblue;' }
-        initInnerCss={'display: block; \nbackground: lightyellow;'}
-      />
-
-      <Component
-        initOuterCss={ 'display: block; \ntext-align: left; \nwidth: 200px; \nheight: 100px; \nbackground: lightblue;' }
-        initInnerCss={'display: block; \nbackground: lightyellow; \nwidth: max-content'}
-      />
 
       <H>display: inline-block</H>
 

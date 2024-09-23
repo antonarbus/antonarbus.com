@@ -22,8 +22,9 @@ function Component({ initOuterCss, initInnerCss }) {
       </div>
 
       <div className='outer'>
-        <div className='inner'>Inner text</div>
-        <div className='inner'>Inner text</div>
+        <div className='inner 1'>Inner text</div>
+        <div className='inner 2'>Inner text</div>
+        <div className='inner 3'>Inner text</div>
       </div>
 
       <style jsx>{`

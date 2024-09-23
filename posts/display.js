@@ -50,9 +50,13 @@ const postObj = {
       <H>display: inline</H>
 
       <ul>
-        <li>Inline elements are elements with <Code>display: inline</Code>, such as <Code html>{'<a>'}</Code>, <Code html>{'<input>'}</Code>, <Code html>{'<span>'}</Code>, <Code html>{'<img>'}</Code> and others</li>
-        <li>Text is inline element</li>
-        <li>go on the same line one by one</li>
+        <li>inline elements are elements with <Code>display: inline</Code>, such as <Code html>{'<a>'}</Code>, <Code html>{'<input>'}</Code>, <Code html>{'<span>'}</Code>, <Code html>{'<img>'}</Code> and others</li>
+        <li>text is inline element</li>
+        <li>inline elements go on the same line one by one</li>
+        <Component
+          initOuterCss={ 'display: block; \ntext-align: left; \nwidth: 200px; \nheight: 100px; \nbackground: lightblue;' }
+          initInnerCss={'display: inline; \nbackground: lightyellow;'}
+        />
         <li>jumps to the next line if there is no space anymore</li>
         <li>width / height fits the content & can not be set</li>
         <li>top & bottom margins can not be set</li>
@@ -73,7 +77,7 @@ const postObj = {
         <li>block with <code>width: max-content</code> does not take whole width </li>
         <Component
           initOuterCss={ 'display: block; \ntext-align: left; \nwidth: 200px; \nheight: 100px; \nbackground: lightblue;' }
-          initInnerCss={'display: block; \nbackground: lightyellow; \nwidth: max-content'}
+          initInnerCss={'display: block; \nbackground: lightyellow; \nwidth: max-content;'}
         />
         <li>height / width can be set</li>
         <li>block elements stick to each other w/o gaps (if there is no margin)</li>

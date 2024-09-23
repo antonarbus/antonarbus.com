@@ -56,12 +56,12 @@ function Component2({ initOuterCss, initInnerCss }) {
         </div>
         <div style={containerStyle}>
           <div>Inner element</div>
-          <div>Inner element</div>
           <textarea style={textAreaStyle} value={innerStyleState} onChange={updateInnerStyles} />
         </div>
       </div>
 
       <div className='outer'>
+        <div className='inner'>Inner text</div>
         <div className='inner'>Inner text</div>
       </div>
 

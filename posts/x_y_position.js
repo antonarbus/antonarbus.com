@@ -39,6 +39,49 @@ function Component({ initOuterCss, initInnerCss }) {
   )
 }
 
+function Component2({ initOuterCss, initInnerCss }) {
+  const [outerStyleState, setOuterStyleState] = React.useState(initOuterCss)
+  const [innerStyleState, setInnerStyleState] = React.useState(initInnerCss)
+  const updateOuterStyles = e => setOuterStyleState(e.target.value)
+  const updateInnerStyles = e => setInnerStyleState(e.target.value)
+  const textAreaStyle = { padding: '5px', width: '100%', height: '120px' }
+  const containerStyle = { display: 'inline-block', width: '50%' }
+
+  return (
+    <>
+      <div style={{ textAlign: 'center' }}>
+        <div style={containerStyle}>
+          <div>Outer element</div>
+          <textarea style={textAreaStyle} value={outerStyleState} onChange={updateOuterStyles} />
+        </div>
+        <div style={containerStyle}>
+          <div>Inner element</div>
+          <textarea style={textAreaStyle} value={innerStyleState} onChange={updateInnerStyles} />
+        </div>
+        <div style={containerStyle}>
+          <div>Inner element</div>
+          <textarea style={textAreaStyle} value={innerStyleState} onChange={updateInnerStyles} />
+        </div>
+      </div>
+
+      <div className='outer'>
+        <div className='inner'>Inner text</div>
+      </div>
+
+      <style jsx>{`
+        .outer { 
+          all: initial; 
+          ${outerStyleState}
+        }
+        .inner { 
+          all: unset; 
+          ${innerStyleState} 
+        }
+      `}</style>
+    </>
+  )
+}
+
 const postObj = {
   title: 'X & Y position in CSS',
   date: '2022.02.12',
@@ -112,6 +155,44 @@ const postObj = {
         initOuterCss={'display: block; \nwidth: 200px; \nheight: 50px; \nbackground: lightblue;'}
         initInnerCss={'display: inline;\nvertical-align: -5px; \nbackground: lightyellow;'}
       />
+
+      <H>Vertical position of inline elements </H>
+
+      <Component
+        initOuterCss={'display: block; \nwidth: 300px; \nheight: 200px; \nbackground: lightblue; \nalign-content: start;'}
+        initInnerCss={'display: inline; \nbackground: lightyellow;'}
+      />
+
+      <Component
+        initOuterCss={'display: block; \nwidth: 300px; \nheight: 200px; \nbackground: lightblue; \nalign-content: center;'}
+        initInnerCss={'display: inline; \nbackground: lightyellow;'}
+      />
+
+      <Component
+        initOuterCss={'display: block; \nwidth: 300px; \nheight: 200px; \nbackground: lightblue; \nalign-content: end;'}
+        initInnerCss={'display: inline; \nbackground: lightyellow;'}
+      />
+
+      <Component
+        initOuterCss={'display: block; \nwidth: 300px; \nheight: 200px; \nbackground: lightblue; \nalign-content: stretch;'}
+        initInnerCss={'display: inline; \nbackground: lightyellow;'}
+      />
+
+      <Component2
+        initOuterCss={'display: block; \nwidth: 300px; \nheight: 200px; \nbackground: lightblue; \nalign-content: space-between;'}
+        initInnerCss={'display: inline; \nbackground: lightyellow;'}
+      />
+
+      <Component2
+        initOuterCss={'display: block; \nwidth: 300px; \nheight: 200px; \nbackground: lightblue; \nalign-content: space-around;'}
+        initInnerCss={'display: inline; \nbackground: lightyellow;'}
+      />
+
+      <Component2
+        initOuterCss={'display: block; \nwidth: 300px; \nheight: 200px; \nbackground: lightblue; \nalign-content: space-evenly;'}
+        initInnerCss={'display: inline; \nbackground: lightyellow;'}
+      />
+
       <H>Vertical centering of inline element</H>
 
       <p>Make <Code>height</Code> & <Code>line-height</Code> properties of parent block element the same.</p>
@@ -177,7 +258,7 @@ const postObj = {
       <H>Position with flex</H>
 
       <Component
-        initOuterCss={ 'display: flex; justify-content: flex-start; \nalign-items: flex-start; \nwidth: 200px; \nheight: 50px; \npadding: 10px; \nbackground: lightblue;' }
+        initOuterCss={ 'display: flex; \njustify-content: flex-start; \nalign-items: flex-start; \nwidth: 200px; \nheight: 50px; \npadding: 10px; \nbackground: lightblue;' }
         initInnerCss={'background: lightyellow;'}
       />
 

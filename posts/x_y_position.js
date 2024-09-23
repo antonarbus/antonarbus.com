@@ -39,46 +39,6 @@ function Component({ initOuterCss, initInnerCss }) {
   )
 }
 
-function Component2({ initOuterCss, initInnerCss }) {
-  const [outerStyleState, setOuterStyleState] = React.useState(initOuterCss)
-  const [innerStyleState, setInnerStyleState] = React.useState(initInnerCss)
-  const updateOuterStyles = e => setOuterStyleState(e.target.value)
-  const updateInnerStyles = e => setInnerStyleState(e.target.value)
-  const textAreaStyle = { padding: '5px', width: '100%', height: '120px' }
-  const containerStyle = { display: 'inline-block', width: '50%' }
-
-  return (
-    <>
-      <div style={{ textAlign: 'center' }}>
-        <div style={containerStyle}>
-          <div>Outer element</div>
-          <textarea style={textAreaStyle} value={outerStyleState} onChange={updateOuterStyles} />
-        </div>
-        <div style={containerStyle}>
-          <div>Inner element</div>
-          <textarea style={textAreaStyle} value={innerStyleState} onChange={updateInnerStyles} />
-        </div>
-      </div>
-
-      <div className='outer'>
-        <div className='inner'>Inner text</div>
-        <div className='inner'>Inner text</div>
-      </div>
-
-      <style jsx>{`
-        .outer { 
-          all: initial; 
-          ${outerStyleState}
-        }
-        .inner { 
-          all: unset; 
-          ${innerStyleState} 
-        }
-      `}</style>
-    </>
-  )
-}
-
 const postObj = {
   title: 'X & Y position in CSS',
   date: '2022.02.12',
@@ -172,21 +132,6 @@ const postObj = {
 
       <Component
         initOuterCss={'display: block; \nwidth: 300px; \nheight: 200px; \nbackground: lightblue; \nalign-content: stretch;'}
-        initInnerCss={'display: block; \nbackground: lightyellow;'}
-      />
-
-      <Component2
-        initOuterCss={'display: block; \nwidth: 300px; \nheight: 200px; \nbackground: lightblue; \nalign-content: space-between;'}
-        initInnerCss={'display: block; \nbackground: lightyellow;'}
-      />
-
-      <Component2
-        initOuterCss={'display: block; \nwidth: 300px; \nheight: 200px; \nbackground: lightblue; \nalign-content: space-around;'}
-        initInnerCss={'display: block; \nbackground: lightyellow;'}
-      />
-
-      <Component2
-        initOuterCss={'display: block; \nwidth: 300px; \nheight: 200px; \nbackground: lightblue; \nalign-content: space-evenly;'}
         initInnerCss={'display: block; \nbackground: lightyellow;'}
       />
 

@@ -56,9 +56,6 @@ function Component2({ initOuterCss, initInnerCss }) {
         </div>
         <div style={containerStyle}>
           <div>Inner element</div>
-          <textarea style={textAreaStyle} value={innerStyleState} onChange={updateInnerStyles} />
-        </div>
-        <div style={containerStyle}>
           <div>Inner element</div>
           <textarea style={textAreaStyle} value={innerStyleState} onChange={updateInnerStyles} />
         </div>
@@ -156,7 +153,7 @@ const postObj = {
         initInnerCss={'display: inline;\nvertical-align: -5px; \nbackground: lightyellow;'}
       />
 
-      <H>Vertical position of inline elements </H>
+      <H>Vertical position with align-content</H>
 
       <Component
         initOuterCss={'display: block; \nwidth: 300px; \nheight: 200px; \nbackground: lightblue; \nalign-content: start;'}
@@ -175,22 +172,22 @@ const postObj = {
 
       <Component
         initOuterCss={'display: block; \nwidth: 300px; \nheight: 200px; \nbackground: lightblue; \nalign-content: stretch;'}
-        initInnerCss={'display: inline; \nbackground: lightyellow;'}
+        initInnerCss={'display: block; \nbackground: lightyellow;'}
       />
 
       <Component2
         initOuterCss={'display: block; \nwidth: 300px; \nheight: 200px; \nbackground: lightblue; \nalign-content: space-between;'}
-        initInnerCss={'display: inline; \nbackground: lightyellow;'}
+        initInnerCss={'display: block; \nbackground: lightyellow;'}
       />
 
       <Component2
         initOuterCss={'display: block; \nwidth: 300px; \nheight: 200px; \nbackground: lightblue; \nalign-content: space-around;'}
-        initInnerCss={'display: inline; \nbackground: lightyellow;'}
+        initInnerCss={'display: block; \nbackground: lightyellow;'}
       />
 
       <Component2
         initOuterCss={'display: block; \nwidth: 300px; \nheight: 200px; \nbackground: lightblue; \nalign-content: space-evenly;'}
-        initInnerCss={'display: inline; \nbackground: lightyellow;'}
+        initInnerCss={'display: block; \nbackground: lightyellow;'}
       />
 
       <H>Vertical centering of inline element</H>

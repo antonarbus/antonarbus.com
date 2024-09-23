@@ -1,4 +1,44 @@
-import { H, Lnk, Code, jsxToStr } from '/components/post/reExport'
+import { H, Lnk, Code, jsxToStr, useState } from '/components/post/reExport'
+
+function Component({ initOuterCss, initInnerCss }) {
+  const [outerStyleState, setOuterStyleState] = useState(initOuterCss)
+  const [innerStyleState, setInnerStyleState] = useState(initInnerCss)
+  const updateOuterStyles = e => setOuterStyleState(e.target.value)
+  const updateInnerStyles = e => setInnerStyleState(e.target.value)
+  const textAreaStyle = { padding: '5px', width: '100%', height: '120px' }
+  const containerStyle = { display: 'inline-block', width: '50%' }
+
+  return (
+    <>
+      <div style={{ textAlign: 'center' }}>
+        <div style={containerStyle}>
+          <div>Outer element</div>
+          <textarea style={textAreaStyle} value={outerStyleState} onChange={updateOuterStyles} />
+        </div>
+        <div style={containerStyle}>
+          <div>Inner element</div>
+          <textarea style={textAreaStyle} value={innerStyleState} onChange={updateInnerStyles} />
+        </div>
+      </div>
+
+      <div className='outer'>
+        <div className='inner'>Inner text</div>
+        <div className='inner'>Inner text</div>
+      </div>
+
+      <style jsx>{`
+        .outer { 
+          all: initial; 
+          ${outerStyleState}
+        }
+        .inner { 
+          all: unset; 
+          ${innerStyleState} 
+        }
+      `}</style>
+    </>
+  )
+}
 
 const postObj = {
   title: 'display',
@@ -8,36 +48,54 @@ const postObj = {
   body: (
     <>
       <H>display: inline</H>
+
       <ul>
         <li>Inline elements are elements with <Code>display: inline</Code>, such as <Code html>{'<a>'}</Code>, <Code html>{'<input>'}</Code>, <Code html>{'<span>'}</Code>, <Code html>{'<img>'}</Code> and others</li>
         <li>Text is inline element</li>
-        <li>Inline elements go on the same line one by one</li>
-        <li>Inline elements jumps to the next line if there is no space anymore</li>
-        <li>Width / height fits the content & can not be set</li>
-        <li>Top & bottom margins can not be set</li>
-        <li>Left & right margins can be set</li>
-        <li>Padding can be set</li>
-        <li>Line break in html between inline elements is considered as a space</li>
+        <li>go on the same line one by one</li>
+        <li>jumps to the next line if there is no space anymore</li>
+        <li>width / height fits the content & can not be set</li>
+        <li>top & bottom margins can not be set</li>
+        <li>left & right margins can be set</li>
+        <li>padding can be set</li>
+        <li>line break in html between inline elements is considered as a space</li>
       </ul>
+
       <H>display: block</H>
+
       <ul>
-        <li>Block elements go one under another (if there is no "float" property)</li>
         <li>Block tends to expand to the whole width</li>
-        <li>Height / width can be set</li>
-        <li>Block elements stick to each other w/o gaps (if there is no margin)</li>
-        <li>Most of elements are block els by default</li>
-        <li>Block element is a rectangle</li>
+        <li>block with <code>width: max-content</code> does not take whole width </li>
+        <li>Block elements go one under another (if there is no "float" property)</li>
+        <li>height / width can be set</li>
+        <li>block elements stick to each other w/o gaps (if there is no margin)</li>
+        <li>most of elements are block els by default</li>
+        <li>block element is a rectangle</li>
       </ul>
+
+      <Component
+        initOuterCss={ 'display: block; \ntext-align: left; \nwidth: 200px; \nheight: 100px; \nbackground: lightblue;' }
+        initInnerCss={'display: block; \nbackground: lightyellow;'}
+      />
+
+      <Component
+        initOuterCss={ 'display: block; \ntext-align: left; \nwidth: 200px; \nheight: 100px; \nbackground: lightblue;' }
+        initInnerCss={'display: block; \nbackground: lightyellow; \nwidth: max-content'}
+      />
+
       <H>display: inline-block</H>
+
       <ul>
-        <li>It is a block element with few exceptions</li>
-        <li>Elements go on the same line one by one</li>
-        <li>Width & height fits the content</li>
-        <li>Width & height can be set</li>
-        <li>Usually used to show block els in one line</li>
-        <li>Line break in html (between tags for ex) considered as a space</li>
+        <li>it is a block element with few exceptions</li>
+        <li>elements go on the same line one by one</li>
+        <li>width & height fits the content</li>
+        <li>width & height can be set</li>
+        <li>Usually used to show block elements in one line</li>
+        <li>line break in html (between tags for ex) considered as a space</li>
       </ul>
+
       <H>display: table</H>
+
       <ul>
         Can make a table from any element with following properties
         <li><Code css>{'display: table'}</Code></li>
@@ -50,17 +108,25 @@ const postObj = {
         <li><Code css>{'display: table-cell'}</Code></li>
         <li><Code css>{'display: table-caption'}</Code></li>
       </ul>
+
       <H>display: flex</H>
+
       <ul>
         <li>Flex container expands or shrinks items to fill available free.</li>
         <li>Flex layout is direction-agnostic</li>
         <li>Check my <Lnk path="/post/display:-flex">playground</Lnk> for flex properties</li>
       </ul>
+
       <H>display: list-item</H>
+
       <p>Makes like a <Code html>{'<li>'}</Code> bullet point list element.</p>
+
       <H>display: run-in</H>
+
       <p>Element becomes the first inline element of next block element</p>
+
       <H>float: left</H>
+
       <ul>
         <li><Code css>float: left | right | none | inherit</Code></li>
         <li>With <Code css>float</Code> property element is extracted from the normal css flow</li>

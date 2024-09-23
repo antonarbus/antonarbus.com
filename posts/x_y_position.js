@@ -135,7 +135,7 @@ const postObj = {
         initInnerCss={'display: block; \nbackground: lightyellow;'}
       />
 
-      <H>Vertical centering of inline element</H>
+      <H>Vertical centering of inline element with line-height</H>
 
       <p>Make <Code>height</Code> & <Code>line-height</Code> properties of parent block element the same.</p>
 

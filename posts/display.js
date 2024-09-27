@@ -1,10 +1,17 @@
-import { H, Lnk, Code, jsxToStr, useState } from '/components/post/reExport'
+import {
+  H,
+  Lnk,
+  Code,
+  jsxToStr,
+  useState,
+  ComponentFromHtmlString
+} from '/components/post/reExport'
 
 function Component({ initOuterCss, initInnerCss }) {
   const [outerStyleState, setOuterStyleState] = useState(initOuterCss)
   const [innerStyleState, setInnerStyleState] = useState(initInnerCss)
-  const updateOuterStyles = e => setOuterStyleState(e.target.value)
-  const updateInnerStyles = e => setInnerStyleState(e.target.value)
+  const updateOuterStyles = (e) => setOuterStyleState(e.target.value)
+  const updateInnerStyles = (e) => setInnerStyleState(e.target.value)
   const textAreaStyle = { padding: '5px', width: '100%', height: '120px' }
   const containerStyle = { display: 'inline-block', width: '50%' }
 
@@ -21,20 +28,20 @@ function Component({ initOuterCss, initInnerCss }) {
         </div>
       </div>
 
-      <div className='outer'>
-        <div className='inner 1'>Inner text</div>
-        <div className='inner 2'>Inner text</div>
-        <div className='inner 3'>Inner text</div>
+      <div className="outer">
+        <div className="inner 1">Inner text</div>
+        <div className="inner 2">Inner text</div>
+        <div className="inner 3">Inner text</div>
       </div>
 
       <style jsx>{`
-        .outer { 
-          all: initial; 
+        .outer {
+          all: initial;
           ${outerStyleState}
         }
-        .inner { 
-          all: unset; 
-          ${innerStyleState} 
+        .inner {
+          all: unset;
+          ${innerStyleState}
         }
       `}</style>
     </>
@@ -51,11 +58,17 @@ const postObj = {
       <H>display: inline</H>
 
       <ul>
-        <li>inline elements are elements with <Code>display: inline</Code>, such as <Code html>{'<a>'}</Code>, <Code html>{'<input>'}</Code>, <Code html>{'<span>'}</Code>, <Code html>{'<img>'}</Code> and others</li>
+        <li>
+          inline elements are elements with <Code>display: inline</Code>, such as{' '}
+          <Code html>{'<a>'}</Code>, <Code html>{'<input>'}</Code>, <Code html>{'<span>'}</Code>,{' '}
+          <Code html>{'<img>'}</Code> and others
+        </li>
         <li>text is inline element</li>
         <li>inline elements go on the same line one by one</li>
         <Component
-          initOuterCss={ 'display: block; \ntext-align: left; \nwidth: 200px; \nheight: 100px; \nbackground: lightblue;' }
+          initOuterCss={
+            'display: block; \ntext-align: left; \nwidth: 200px; \nheight: 100px; \nbackground: lightblue;'
+          }
           initInnerCss={'display: inline; \nbackground: lightyellow;'}
         />
         <li>jumps to the next line if there is no space anymore</li>
@@ -72,12 +85,18 @@ const postObj = {
         <li>Block tends to expand to the whole width</li>
         <li>Block elements go one under another (if there is no "float" property)</li>
         <Component
-          initOuterCss={ 'display: block; \ntext-align: left; \nwidth: 200px; \nheight: 100px; \nbackground: lightblue;' }
+          initOuterCss={
+            'display: block; \ntext-align: left; \nwidth: 200px; \nheight: 100px; \nbackground: lightblue;'
+          }
           initInnerCss={'display: block; \nbackground: lightyellow;'}
         />
-        <li>block with <code>width: max-content</code> does not take whole width </li>
+        <li>
+          block with <code>width: max-content</code> does not take whole width{' '}
+        </li>
         <Component
-          initOuterCss={ 'display: block; \ntext-align: left; \nwidth: 200px; \nheight: 100px; \nbackground: lightblue;' }
+          initOuterCss={
+            'display: block; \ntext-align: left; \nwidth: 200px; \nheight: 100px; \nbackground: lightblue;'
+          }
           initInnerCss={'display: block; \nbackground: lightyellow; \nwidth: max-content;'}
         />
         <li>height / width can be set</li>
@@ -101,15 +120,33 @@ const postObj = {
 
       <ul>
         Can make a table from any element with following properties
-        <li><Code css>{'display: table'}</Code></li>
-        <li><Code css>{'display: table-row'}</Code></li>
-        <li><Code css>{'display: table-header-group'}</Code></li>
-        <li><Code css>{'display: table-row-group'}</Code></li>
-        <li><Code css>{'display: table-footer-group'}</Code></li>
-        <li><Code css>{'display: table-column'}</Code></li>
-        <li><Code css>{'display: table-column-group'}</Code></li>
-        <li><Code css>{'display: table-cell'}</Code></li>
-        <li><Code css>{'display: table-caption'}</Code></li>
+        <li>
+          <Code css>{'display: table'}</Code>
+        </li>
+        <li>
+          <Code css>{'display: table-row'}</Code>
+        </li>
+        <li>
+          <Code css>{'display: table-header-group'}</Code>
+        </li>
+        <li>
+          <Code css>{'display: table-row-group'}</Code>
+        </li>
+        <li>
+          <Code css>{'display: table-footer-group'}</Code>
+        </li>
+        <li>
+          <Code css>{'display: table-column'}</Code>
+        </li>
+        <li>
+          <Code css>{'display: table-column-group'}</Code>
+        </li>
+        <li>
+          <Code css>{'display: table-cell'}</Code>
+        </li>
+        <li>
+          <Code css>{'display: table-caption'}</Code>
+        </li>
       </ul>
 
       <H>display: flex</H>
@@ -117,12 +154,16 @@ const postObj = {
       <ul>
         <li>Flex container expands or shrinks items to fill available free.</li>
         <li>Flex layout is direction-agnostic</li>
-        <li>Check my <Lnk path="/post/display:-flex">playground</Lnk> for flex properties</li>
+        <li>
+          Check my <Lnk path="/post/flex">playground</Lnk> for flex properties
+        </li>
       </ul>
 
       <H>display: list-item</H>
 
-      <p>Makes like a <Code html>{'<li>'}</Code> bullet point list element.</p>
+      <p>
+        Makes like a <Code html>{'<li>'}</Code> bullet point list element.
+      </p>
 
       <H>display: run-in</H>
 
@@ -131,17 +172,82 @@ const postObj = {
       <H>float: left</H>
 
       <ul>
-        <li><Code css>float: left | right | none | inherit</Code></li>
-        <li>With <Code css>float</Code> property element is extracted from the normal css flow</li>
-        <li>It is moved to left/right until touches the parent's edge or another <i>floating</i> element</li>
-        <li>Float makes element automatically <Code css>display: block</Code></li>
+        <li>
+          <Code css>float: left | right | none | inherit</Code>
+        </li>
+        <li>
+          With <Code css>float</Code> property element is extracted from the normal css flow
+        </li>
+        <li>
+          It is moved to left/right until touches the parent's edge or another <i>floating</i>{' '}
+          element
+        </li>
+        <li>
+          Float makes element automatically <Code css>display: block</Code>
+        </li>
         <li>If there is no space to fit the element on a line, then it goes to the next line</li>
-        <li>Other non-positioned block elements w/o <i>float</i> acts like floating element does not exist</li>
+        <li>
+          Other non-positioned block elements w/o <i>float</i> acts like floating element does not
+          exist
+        </li>
         <li>Inline elements know about floating element and go around it</li>
         <li>There is no vertical margin collapsing between floating and neighboring elements</li>
         <li>Float block can be a container and include other elements</li>
         <li>Widely used in text with images</li>
-        <li>Parent does not reserve space for floating element, to fix it may add element after with <Code css>clear: left | right | both</Code></li>
+        <li>
+          Parent does not reserve space for floating element, to fix it may add element after with{' '}
+          <Code css>clear: left | right | both</Code>
+        </li>
+        <H>display: contents</H>
+        <ul>
+          <li>
+            Allows you to treat children of flex or grid item just like they are flex/grid items
+            themselves.
+          </li>
+          <li>
+            In other words you can "flatten out" nested DOM tree to use it within one flex or grid
+            system.
+          </li>
+        </ul>
+
+        <ComponentFromHtmlString
+          htmlString={`
+<html>
+  <head>
+    <style>
+      .parent {
+        display: flex;
+        gap: 5px;
+      }
+      .contents {
+        display: contents;
+      }
+      .child {
+        border: 1px solid grey;
+        padding: 10px;
+      }
+    </style>
+  </head>
+  <body>      
+    <div class='parent'>
+      <div class='child'>1</div>
+      <div class='child'>2</div>
+      <div class='child'>3</div>
+      <div>
+        <div class='child'>4</div>
+        <div class='child'>5</div>
+        <div class='child'>6</div>
+      </div>
+      <div class='contents'>
+        <div class='child'>7</div>
+        <div class='child'>8</div>
+        <div class='child'>9</div>
+      </div>
+    </div>
+  </body>
+</html>
+          `}
+        />
       </ul>
     </>
   )

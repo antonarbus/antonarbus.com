@@ -14,6 +14,7 @@ import { H } from './H'
 import { Hs } from './Hs'
 import { LazyImg } from './LazyImg'
 import { Lnk } from './Lnk'
+import { ComponentFromHtmlString } from './ComponentFromHtmlString'
 import jsxToStr from '/functions/jsxToStr'
 
 export {
@@ -32,5 +33,6 @@ export {
   useMemo,
   useLayoutEffect,
   useReducer,
-  jsxToStr
+  jsxToStr,
+  ComponentFromHtmlString
 }

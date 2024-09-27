@@ -26,7 +26,7 @@ export const ComponentFromHtmlString = ({ htmlString }) => {
   const [html, setHtml] = useState(htmlString ?? '<div>hello</div>')
 
   return (
-    <root.div>
+    <>
       <textarea
         value={html}
         onChange={(e) => setHtml(e.target.value)}
@@ -39,7 +39,9 @@ export const ComponentFromHtmlString = ({ htmlString }) => {
           overflowX: 'scroll'
         }}
       />
-      <div dangerouslySetInnerHTML={{ __html: html }} />
-    </root.div>
+      <root.div>
+        <div dangerouslySetInnerHTML={{ __html: html }} />
+      </root.div>
+    </>
   )
 }

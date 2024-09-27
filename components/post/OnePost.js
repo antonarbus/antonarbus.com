@@ -37,12 +37,14 @@ export function OnePost(props) {
   useEffect(() => {
     const sectionEl = ref.current
     const hEls = sectionEl.querySelectorAll('.H')
-    const hArr = Array.from(hEls).map(h => h.textContent)
+    const hArr = Array.from(hEls).map((h) => h.textContent)
     if (hArr.length === 0) return
     setContent(hArr)
   }, [])
 
-  useEffect(() => { Prism.highlightAll() }, [])
+  useEffect(() => {
+    Prism.highlightAll()
+  }, [])
 
   // scroll to the hash on load
   useEffect(() => {
@@ -66,7 +68,9 @@ export function OnePost(props) {
       }
     }
     document.addEventListener('keydown', handler)
-    return () => { document.removeEventListener('keydown', handler) }
+    return () => {
+      document.removeEventListener('keydown', handler)
+    }
   }, [])
   // console.log(props)
   return (
@@ -75,7 +79,7 @@ export function OnePost(props) {
         <Back />
         <title>{props.post.title}</title>
         <section ref={ref}>
-          { content && <Content headings={content} /> }
+          {content && <Content headings={content} />}
           {props.post.body}
           <Tags tags={props.post.tags} />
           <Date>{props.post.date}</Date>
@@ -91,9 +95,9 @@ export function OnePost(props) {
           counter-increment: my-counter;
         }
         .H:before {
-          content: counter(my-counter) ". ";
+          content: counter(my-counter) '. ';
         }
-        article { 
+        article {
           margin: 0 auto;
           margin-bottom: 20px;
           padding: 25px;
@@ -108,7 +112,11 @@ export function OnePost(props) {
           background: white;
           position: relative;
           background-color: transparent;
-          background-image: linear-gradient(to right bottom,rgb(255 255 255 / 90%),rgb(255 255 255 / 90%));
+          background-image: linear-gradient(
+            to right bottom,
+            rgb(255 255 255 / 90%),
+            rgb(255 255 255 / 90%)
+          );
           box-shadow: #80808073 0px 0px 10px;
         }
 
@@ -116,15 +124,16 @@ export function OnePost(props) {
           color: #9a6e3a;
         }
 
-        ol, ul {
+        ol,
+        ul {
           padding-left: 15px;
           margin-top: 5px;
           margin-left: 5px;
         }
 
-        ol > p, 
+        ol > p,
         ul > p,
-        ol > div, 
+        ol > div,
         ul > div {
           position: relative;
           left: -10px;
@@ -155,7 +164,7 @@ export function OnePost(props) {
           line-height: 1.4;
           font-family: Arial, Helvetica, sans-serif;
           display: inline-block;
-          box-shadow: 0px 1px 0px rgba(0,0,0,0.2), inset 0px 0px 0px 2px #ffffff;
+          box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.2), inset 0px 0px 0px 2px #ffffff;
           background-color: rgb(247, 247, 247);
           text-shadow: 0 1px 0 #fff;
           font-size: 12px;
@@ -175,7 +184,7 @@ export function OnePost(props) {
           margin: 20px 0px;
         }
 
-        code:not([class*="language-"]) {
+        code:not([class*='language-']) {
           font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
           font-size: 15px;
           word-break: break-all;

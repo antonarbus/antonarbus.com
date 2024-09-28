@@ -24,6 +24,16 @@ const postObj = {
     <>
       <H>dangerouslySetInnerHTML</H>
 
+      <ul>
+        <li>
+          <Code>dangerouslySetInnerHTML</Code> is a special react prop
+        </li>
+        <li>
+          it overrides the <code>innerHTML</code> property of the DOM node and displays the passed
+          HTML string
+        </li>
+      </ul>
+
       <Code block jsx>{`
         import root from 'react-shadow'
 

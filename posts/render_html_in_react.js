@@ -15,11 +15,11 @@ import {
 } from '/components/post/reExport'
 
 const postObj = {
-  title: 'dangerouslySetInnerHTML',
+  title: 'render html in react',
   date: '2024.09.27',
   tags: ['react'],
   imgUrl: 'https://antonarbus.com/imgs/react.png',
-  desc: 'dangerouslySetInnerHTML',
+  desc: 'render raw html string in react',
   body: (
     <>
       <H>dangerouslySetInnerHTML</H>

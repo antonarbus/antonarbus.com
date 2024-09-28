@@ -33,7 +33,7 @@ export const ComponentFromHtmlString = ({ htmlString }) => {
           bottom: true
         }}
         defaultSize={{
-          width: 'inherit',
+          width: 'auto',
           height: '300px'
         }}
         style={{
@@ -65,7 +65,7 @@ export const ComponentFromHtmlString = ({ htmlString }) => {
         </pre>
       </Resizable>
       <root.div>
-        <div dangerouslySetInnerHTML={{ __html: html }} />
+        <div dangerouslySetInnerHTML={{ __html: html }} style={{ all: 'unset' }} />
       </root.div>
     </>
   )

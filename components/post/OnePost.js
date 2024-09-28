@@ -19,6 +19,7 @@ import 'prismjs/components/prism-tsx'
 import 'prismjs/components/prism-typescript'
 import 'prismjs/components/prism-ignore'
 import 'prismjs/plugins/normalize-whitespace/prism-normalize-whitespace'
+import { Resizable } from 're-resizable'
 
 // Prism.plugins.NormalizeWhitespace.setDefaults({
 //   'remove-trailing': true,
@@ -78,12 +79,22 @@ export function OnePost(props) {
       <article>
         <Back />
         <title>{props.post.title}</title>
-        <section ref={ref}>
-          {content && <Content headings={content} />}
-          {props.post.body}
-          <Tags tags={props.post.tags} />
-          <Date>{props.post.date}</Date>
-        </section>
+        <Resizable
+          enable={{
+            right: true
+          }}
+          defaultSize={{
+            width: '800px'
+          }}
+          maxWidth="100%"
+        >
+          <section ref={ref}>
+            {content && <Content headings={content} />}
+            {props.post.body}
+            <Tags tags={props.post.tags} />
+            <Date>{props.post.date}</Date>
+          </section>
+        </Resizable>
       </article>
 
       <style jsx global>{`
@@ -98,10 +109,11 @@ export function OnePost(props) {
           content: counter(my-counter) '. ';
         }
         article {
-          margin: 0 auto;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
           margin-bottom: 20px;
           padding: 25px;
-          max-width: 800px;
         }
 
         section {

@@ -27,22 +27,32 @@ const postObj = {
       <Code block jsx>{`
         import root from 'react-shadow'
 
-        const ComponentFromHtmlString = ({ htmlString }) => {
+        export const ComponentFromHtmlString = ({ htmlString }) => {
+          const codeRef = useRef()
           const [html, setHtml] = useState(htmlString ?? '<div>hello</div>')
 
           return (
-            <root.div>
-              <textarea
-                value={html}
-                onChange={(e) => setHtml(e.target.value)}
+            <>
+              <pre
+                contentEditable
                 style={{
-                  padding: '5px',
-                  width: '100%',
-                  fieldSizing: 'content'
+                  maxHeight: 'initial',
+                  border: '3px dashed #68bbe1',
+                  background: '#edfdff'
                 }}
-              />
-              <div dangerouslySetInnerHTML={{ __html: html }} />
-            </root.div>
+                onInput={() => {
+                  console.log(codeRef.current.innerText)
+                  setHtml(codeRef.current.innerText)
+                }}
+              >
+                <code ref={codeRef} className={'lang-html'}>
+                  {htmlString}
+                </code>
+              </pre>
+              <root.div>
+                <div dangerouslySetInnerHTML={{ __html: html }} />
+              </root.div>
+            </>
           )
         }
 

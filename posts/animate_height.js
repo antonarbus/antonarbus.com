@@ -10,7 +10,8 @@ import {
   useRef,
   useCallback,
   useMemo,
-  jsxToStr
+  jsxToStr,
+  ComponentFromHtmlString
 } from '/components/post/reExport'
 
 const postObj = {
@@ -21,34 +22,45 @@ const postObj = {
   desc: 'height animation',
   body: (
     <>
-      <H>height animation with css</H>
+      <H>height: auto animation with css</H>
 
-      <ul>may not be supported yet</ul>
+      <p>It may not work yet in browsers.</p>
 
       <Lnk path="https://www.tiktok.com/@wesbos/video/7391970597799988485">
         https://www.tiktok.com/@wesbos/video/7391970597799988485
       </Lnk>
 
-      <Code block jsx>{`
-        <div>
-          hello
-          hello
-          hello
-          hello
-          hello
-        </div>
+      <ComponentFromHtmlString
+        htmlString={`
+          <html>
+            <head>
+              <style>
+                div {
+                  margin: 0 auto;
+                  text-align: center;
+                  width: 50px;
+                  height: 50px;
+                  background: tomato;
+                  transition: height 0.5s;
+                }
 
-        div {
-          width: 50px;
-          height: 50px;
-          background: tomato;
-          transition: height 0.5s;
-        }
-
-        div:hover {
-          height: calc-size(auto);
-        }
-      `}</Code>
+                div:hover {
+                  height: calc-size(auto);
+                }
+              </style>
+            </head>
+            <body>
+              <div>
+                hello
+                hello
+                hello
+                hello
+                hello
+              </div>
+            </body>
+          </html>
+        `}
+      />
     </>
   )
 }

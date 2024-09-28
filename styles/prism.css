@@ -30,8 +30,6 @@ pre[class*='language-'] {
   -moz-hyphens: none;
   -ms-hyphens: none;
   hyphens: none;
-
-  max-height: 200px;
 }
 
 pre[class*='language-']::-moz-selection,

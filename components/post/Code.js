@@ -1,20 +1,23 @@
+import { Resizable } from 're-resizable'
 import { useEffect, useRef, useState } from 'react'
-import { Copied } from './Copied'
-import { useCopyToClipboard } from 'react-use'
 
 export function Code(props) {
-  const ref = useRef()
-  let maxHeightVal
+  const contentRef = useRef()
+  const [height, setHeight] = useState('auto')
+  console.log('🚀 ~ height:', height)
 
-  // #region block, inline or just a code
-  /*
-    - but a 'block' attr to make it a block code
-    - but language attr to set a language, otherwise 'jsx' is used
-    - but a 'inline' attr to make it an inline code
-    - may skip 'inline' attr if provide language attribute
-    - do not put any attributes to use just a native <code> with copy function and it will follow your markup
-    - use just <code> instead of <Code> to avoid copy function on click
-  */
+  const handleResizeStop = (e, direction, ref, d) => {
+    setHeight(ref.style.height)
+  }
+
+  useEffect(() => {
+    if (contentRef.current) {
+      const contentHeight = contentRef.current.clientHeight
+      console.log('🚀 ~ contentHeight:', contentHeight)
+      setHeight(contentHeight > 250 ? '250px' : 'auto')
+    }
+  }, [])
+
   let lang
   if (props.js) lang = 'js'
   if (props.jsx) lang = 'jsx'
@@ -40,62 +43,34 @@ export function Code(props) {
 
   if (block && !lang) lang = 'jsx' // if no lang attr is provided for block code
   if (inline && !lang) lang = 'jsx' // if no lang attr is provided for inline code
-  // #endregion
-
-  // expand non-inline code
-  useEffect(() => {
-    if (!ref.current || inline) return
-
-    function expandCode() {
-      if (maxHeightVal) return
-      maxHeightVal = getComputedStyle(ref.current).getPropertyValue('max-height')
-      ref.current.style.maxHeight = 'none'
-    }
-
-    ref.current.addEventListener('click', expandCode)
-    return () => { ref?.current?.removeEventListener('click', expandCode) }
-  }, [])
-
-  // shrink non-inline code
-  useEffect(() => {
-    if (!ref.current || inline) return
-
-    function shrinkCode(e) {
-      // do not shrink if clicked on any other code blocks, otherwise annoying jumps may happen
-      const preEls = document.querySelectorAll('pre')
-      const arrWithPreEls = [...preEls]
-      const clickedEl = e.target
-      if (arrWithPreEls.some(preEl => preEl.contains(clickedEl))) return
-      if (!maxHeightVal) return
-      ref.current.style.maxHeight = maxHeightVal
-      maxHeightVal = null
-    }
-
-    document.addEventListener('click', shrinkCode)
-    return () => { document.removeEventListener('click', shrinkCode) }
-  }, [])
-
-  // #region copy
-  // eslint-disable-next-line no-unused-vars
-  const [{ value, error, noUserInteraction }, copyToClipboard] = useCopyToClipboard()
-
-  const [copiedFlag, setCopiedFlag] = useState(false)
-  const codeRef = useRef('')
-
-  function copy() {
-    copyToClipboard(codeRef.current.textContent)
-    setCopiedFlag(true)
-    setTimeout(() => setCopiedFlag(false), 2000)
-  }
-  // #endregion
 
   return (
-    <div className="code-container" onClick={copy} ref={codeRef}>
-      {copiedFlag && <Copied />}
-
-      {inline && <code ref={ref} className={`lang-${lang}`}>{props.children}</code>}
-      {block && <pre ref={ref}> <code className={`lang-${lang}`}> {props.children} </code> </pre>}
-      {!inline && !block && <code ref={ref}>{props.children}</code>}
+    <div className="code-container">
+      {inline && <code className={`lang-${lang}`}>{props.children}</code>}
+      {block && (
+        <Resizable
+          className="resizable"
+          enable={{
+            bottom: true
+          }}
+          style={{
+            marginBottom: '20px'
+          }}
+          // defaultSize={{
+          //   width: 'auto',
+          //   height: 'auto'
+          // }}
+          size={{
+            height
+          }}
+          onResizeStop={handleResizeStop}
+        >
+          <pre ref={contentRef} style={{ height: '100%' }}>
+            <code className={`lang-${lang}`}>{props.children}</code>
+          </pre>
+        </Resizable>
+      )}
+      {!inline && !block && <code>{props.children}</code>}
 
       <style jsx>{`
         .code-container {

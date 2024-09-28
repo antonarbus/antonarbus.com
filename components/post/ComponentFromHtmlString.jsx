@@ -8,7 +8,7 @@ import { Resizable } from 're-resizable'
  * Useful for playing with CSS.
  *
  * htmlString={\`\
- *   \</html>\
+ *   \<html>\
  *    &nbsp;&nbsp;\<head>\
  *      &nbsp;&nbsp;&nbsp;&nbsp;\<style>\
  *        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;div {\

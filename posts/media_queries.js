@@ -25,7 +25,7 @@ const postObj = {
 
       <ComponentFromHtmlString
         htmlString={`
-          </html>
+          <html>
             <head>
               <style>
                 .parent {
@@ -62,7 +62,7 @@ const postObj = {
 
       <ComponentFromHtmlString
         htmlString={`
-          </html>
+          <html>
             <head>
               <style>
                 div {

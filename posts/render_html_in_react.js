@@ -35,75 +35,59 @@ const postObj = {
       </ul>
 
       <Code block jsx>{`
+        import { useRef, useState } from 'react'
         import root from 'react-shadow'
+        import { Resizable } from 're-resizable'
 
+        
         export const ComponentFromHtmlString = ({ htmlString }) => {
           const codeRef = useRef()
           const [html, setHtml] = useState(htmlString ?? '<div>hello</div>')
 
           return (
             <>
-              <pre
-                contentEditable
-                style={{
-                  maxHeight: 'initial',
-                  border: '3px dashed #68bbe1',
-                  background: '#edfdff'
+              <Resizable
+                enable={{
+                  bottom: true
                 }}
-                onInput={() => {
-                  console.log(codeRef.current.innerText)
-                  setHtml(codeRef.current.innerText)
+                defaultSize={{
+                  width: 'inherit',
+                  height: '300px'
+                }}
+                style={{
+                  marginBottom: '10px'
                 }}
               >
-                <code ref={codeRef} className={'lang-html'}>
-                  {htmlString}
-                </code>
-              </pre>
+                <pre
+                  style={{
+                    maxHeight: 'initial',
+                    border: '3px dashed #68bbe1',
+                    background: '#edfdff',
+                    height: '100%',
+                    cursor: 'text'
+                  }}
+                  onInput={() => {
+                    setHtml(codeRef.current.textContent)
+                  }}
+                >
+                  <code
+                    ref={codeRef}
+                    className={'lang-html'}
+                    contentEditable
+                    style={{
+                      outline: 'none'
+                    }}
+                  >
+                    {htmlString}
+                  </code>
+                </pre>
+              </Resizable>
               <root.div>
                 <div dangerouslySetInnerHTML={{ __html: html }} />
               </root.div>
             </>
           )
         }
-
-        <ComponentFromHtmlString
-          htmlString={\`
-            <html>
-              <head>
-                <style>
-                  .parent {
-                    display: flex;
-                    gap: 5px;
-                  }
-                  .contents {
-                    display: contents;
-                  }
-                  .child {
-                    border: 1px solid grey;
-                    padding: 10px;
-                  }
-                </style>
-              </head>
-              <body>      
-                <div class='parent'>
-                  <div class='child'>1</div>
-                  <div class='child'>2</div>
-                  <div class='child'>3</div>
-                  <div>
-                    <div class='child'>4</div>
-                    <div class='child'>5</div>
-                    <div class='child'>6</div>
-                  </div>
-                  <div class='contents'>
-                    <div class='child'>7</div>
-                    <div class='child'>8</div>
-                    <div class='child'>9</div>
-                  </div>
-                </div>
-              </body>
-            </html>
-          \`}
-        />
       `}</Code>
 
       <ComponentFromHtmlString

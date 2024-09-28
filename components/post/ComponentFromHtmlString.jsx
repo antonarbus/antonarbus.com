@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import root from 'react-shadow'
+import { Resizable } from 're-resizable'
 
 /**
  * @description
@@ -27,22 +28,42 @@ export const ComponentFromHtmlString = ({ htmlString }) => {
 
   return (
     <>
-      <pre
-        contentEditable
-        style={{
-          maxHeight: 'initial',
-          border: '3px dashed #68bbe1',
-          background: '#edfdff'
+      <Resizable
+        enable={{
+          bottom: true
         }}
-        onInput={() => {
-          console.log(codeRef.current.innerText)
-          setHtml(codeRef.current.innerText)
+        defaultSize={{
+          width: 'inherit',
+          height: '300px'
+        }}
+        style={{
+          marginBottom: '10px'
         }}
       >
-        <code ref={codeRef} className={'lang-html'}>
-          {htmlString}
-        </code>
-      </pre>
+        <pre
+          style={{
+            maxHeight: 'initial',
+            border: '3px dashed #68bbe1',
+            background: '#edfdff',
+            height: '100%',
+            cursor: 'text'
+          }}
+          onInput={() => {
+            setHtml(codeRef.current.textContent)
+          }}
+        >
+          <code
+            ref={codeRef}
+            className={'lang-html'}
+            contentEditable
+            style={{
+              outline: 'none'
+            }}
+          >
+            {htmlString}
+          </code>
+        </pre>
+      </Resizable>
       <root.div>
         <div dangerouslySetInnerHTML={{ __html: html }} />
       </root.div>

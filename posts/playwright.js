@@ -423,8 +423,8 @@ const postObj = {
       <Lnk path="https://playwright.dev/docs/auth">https://playwright.dev/docs/auth</Lnk>
 
       <ul>
-        <li>Mainly tests are done for authenticated user</li>
-        <li>We may do authentication for all subsequent tests</li>
+        <li>Mainly we want to make tests for authenticated user</li>
+        <li>We may do authentication for all tests</li>
       </ul>
 
       <Code block jsx>{`

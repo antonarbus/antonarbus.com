@@ -430,7 +430,7 @@ const postObj = {
       <Code block jsx>{`
         // create a file where auth user tokens to be stored
         mkdir -p playwright/.auth
-        echo $'\nplaywright/.auth' >> .gitignore
+        echo $'\\nplaywright/.auth' >> .gitignore
 
         // create auth.setup.ts
         import { test as setup, request } from '@playwright/test'

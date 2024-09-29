@@ -113,7 +113,7 @@ const postObj = {
       <Hs>Custom expect message</Hs>
 
       <p>
-        String <code>should be logged in</code> will be visible in test logs
+        String <i>"should be logged in"</i> will be visible in test logs
       </p>
 
       <Code block jsx>{`
@@ -122,7 +122,18 @@ const postObj = {
 
       <H>Locators</H>
 
-      <Lnk path="https://playwright.dev/docs/locators">https://playwright.dev/docs/locators</Lnk>
+      <ul>
+        <li>
+          <Lnk path="https://playwright.dev/docs/locators">
+            https://playwright.dev/docs/locators
+          </Lnk>
+        </li>
+        <li>
+          <Lnk path="https://playwright.dev/docs/other-locators">
+            https://playwright.dev/docs/other-locators
+          </Lnk>
+        </li>
+      </ul>
 
       <Code block jsx>{`
         // Recommended
@@ -136,6 +147,46 @@ const postObj = {
 
         // Not recommended
         await page.locator('#tsf > div:nth-child(2) > div.A8SBwf > input').click();
+
+        // CSS locator (not recommended)
+        // Playwright adds custom pseudo-classes like :visible, :has-text(), :has(), :is(), :nth-match() and more.
+        await page.locator('css=button').click();
+        await page.locator('button').click();
+        await page.locator('button:visible').click();
+        await page.locator(':has-text("Playwright")').click();
+        await page.locator('article:has-text("Playwright")').click();
+        await page.locator('#nav-bar :text("Home")').click();
+        await page.locator('article:has(div.promo)').textContent();
+        await page.locator('button:has-text("Log in"), button:has-text("Sign in")').click();
+        await page.locator('button:near(.promo-card)').click();
+        await page.locator('button:above(.promo-card)').click();
+        await page.locator('button:below(.promo-card)').click();
+        await page.locator('button:right-of(.promo-card)').click();
+        await page.locator('input:right-of(:text("Username"))').fill('value');
+        await page.locator('button:left-of(.promo-card)').click();
+        await page.locator('[type=radio]:left-of(:text("Label 3"))').first().click();
+        await page.locator(':nth-match(:text("Buy"), 3)').click(); // click 3rd "Buy" button
+        await page.locator('button').locator('nth=0').click(); // click 1st button
+        await page.locator('button').locator('nth=-1').click(); // click last button
+
+        // Parent element locator
+        const child = page.getByText('Hello');
+        const parent = page.getByRole('listitem').filter({ has: child });
+
+        // React locator
+        // Only work against unminified application builds
+        await page.locator('_react=BookItem').click(); // match by component
+        await page.locator('_react=BookItem[author = "Steven King"]').click(); // match by component and exact property value, case-sensitive
+        await page.locator('_react=[author = "Steven King" i]').click(); // match by property value only, case-insensitive
+        await page.locator('_react=MyButton[enabled]').click(); // match by component and truthy property value
+        await page.locator('_react=MyButton[enabled = false]').click(); // match by component and boolean value
+        await page.locator('_react=[author *= "King"]').click(); // match by property value substring
+        await page.locator('_react=BookItem[author *= "king" i][year = 1990]').click(); // match by component and multiple properties
+        await page.locator('_react=[some.nested.value = 12]').click(); // match by nested property value
+        await page.locator('_react=BookItem[author ^= "Steven"]').click(); // match by component and property value prefix
+        await page.locator('_react=BookItem[author $= "Steven"]').click(); // match by component and property value suffix
+        await page.locator('_react=BookItem[key = '2']').click(); // match by component and key
+        await page.locator('_react=[author = /Steven(\\\\s+King)?/i]'2']').click(); // match by property value regex:
 
         // Examples
         await page.getByLabel('User Name').fill('John');
@@ -272,12 +323,103 @@ const postObj = {
         locator.first()
         locator.last()
         locator.nth()
+      `}</Code>
+
+      <H>Actions</H>
+
+      <Lnk path="https://playwright.dev/docs/input">https://playwright.dev/docs/input</Lnk>
+
+      <Code block jsx>{`
+        // Text input
+        await page.getByRole('textbox').fill('Peter'); // Text input
+        await page.getByLabel('Birth date').fill('2020-02-02') // Date input
+        await page.getByLabel('Appointment time').fill('13:15'); // Time input
+        await page.getByLabel('Local time').fill('2020-03-02T05:15'); // Local datetime input
+
+        // Checkboxes and radio buttons
+        await page.getByLabel('I agree to the terms above').check(); // Check the checkbox
+        expect(page.getByLabel('Subscribe to newsletter')).toBeChecked(); // Assert the checked state
+        await page.getByLabel('XL').check(); // Select the radio button
+
+        // Select options
+        await page.getByLabel('Choose a color').selectOption('blue'); // Single selection matching the value or label
+        await page.getByLabel('Choose a color').selectOption({ label: 'Blue' }); // Single selection matching the label
+        await page.getByLabel('Choose multiple colors').selectOption(['red', 'green', 'blue']); // Multiple selected items
+
+        // Mouse click
+        await page.getByRole('button').click(); // Generic click
+        await page.getByText('Item').dblclick(); // Double click
+        await page.getByText('Item').click({ button: 'right' }); // Right click
+        await page.getByText('Item').click({ modifiers: ['Shift'] }); // Shift + click
+        await page.getByText('Item').click({ modifiers: ['ControlOrMeta'] }); // Ctrl + click or Windows and Linux, Meta + click on macOS
+        await page.getByText('Item').hover(); // Hover over element
+        await page.getByText('Item').click({ position: { x: 0, y: 0 } }); // Click the top left corner
+
+        // Forcing the click
+        await page.getByRole('button').click({ force: true });
+
+        // Programmatic click
+        await page.getByRole('button').dispatchEvent('click');
+
+        // Type characters
+        await page.locator('#area').pressSequentially('Hello World!'); // Press keys one by one
+
+        // Keys and shortcuts
+        await page.getByText('Submit').press('Enter'); // Hit Enter
+        await page.getByRole('textbox').press('Control+ArrowRight'); // Dispatch Control+Right
+        await page.getByRole('textbox').press('$'); // Press $ sign on keyboard
+
+        Can use Shift, Control, Alt, Meta, 
+        Backquote, Minus, Equal, Backslash, Backspace, Tab, Delete, Escape,
+        ArrowDown, End, Enter, Home, Insert, PageDown, PageUp, ArrowRight,
+        ArrowUp, F1 - F12, Digit0 - Digit9, KeyA - KeyZ, etc.
+        "a"..."Z"
+        "Control+o", "Control+Shift+T"
+
+        // Upload files
+        await page.getByLabel('Upload file').setInputFiles(path.join(__dirname, 'myfile.pdf')); // Select one file
+        await page.getByLabel('Upload files').setInputFiles([
+          path.join(__dirname, 'file1.txt'),
+          path.join(__dirname, 'file2.txt'),
+        ]); // Select multiple files
+        await page.getByLabel('Upload directory').setInputFiles(path.join(__dirname, 'mydir')); // Select a directory
+        await page.getByLabel('Upload file').setInputFiles([]); // Remove all the selected files
+        await page.getByLabel('Upload file').setInputFiles({
+          name: 'file.txt',
+          mimeType: 'text/plain',
+          buffer: Buffer.from('this is test')
+        }); // Upload buffer from memory
+
+        // If you don't have input element in hand (it is created dynamically)
+        // Start waiting for file chooser before clicking. Note no await.
+        const fileChooserPromise = page.waitForEvent('filechooser');
+        await page.getByLabel('Upload file').click();
+        const fileChooser = await fileChooserPromise;
+        await fileChooser.setFiles(path.join(__dirname, 'myfile.pdf'));
+
+        // Focus element
+        await page.getByLabel('Password').focus();
+
+        // Drag and Drop
+        await page.locator('#item-to-be-dragged').dragTo(page.locator('#item-to-drop-at'));
+
+        // Dragging manually
+        await page.locator('#item-to-be-dragged').hover();
+        await page.mouse.down();
+        await page.locator('#item-to-drop-at').hover();
+        await page.mouse.up();
+
+        // Scrolling (usually Playwright does it automatically)
+        await page.getByText('Footer text').scrollIntoViewIfNeeded(); // Scroll the footer into view, forcing an "infinite list" to load more content
+        // Position the mouse and scroll with the mouse wheel
+        await page.getByTestId('scrolling-container').hover();
+        await page.mouse.wheel(0, 10);
+        // Alternatively, programmatically scroll a specific element
+        await page.getByTestId('scrolling-container').evaluate(e => e.scrollTop += 100);
 
 
 
 
-
-        
       `}</Code>
     </>
   )

@@ -416,10 +416,97 @@ const postObj = {
         await page.mouse.wheel(0, 10);
         // Alternatively, programmatically scroll a specific element
         await page.getByTestId('scrolling-container').evaluate(e => e.scrollTop += 100);
+      `}</Code>
 
+      <H>Authentication</H>
 
+      <Lnk path="https://playwright.dev/docs/auth">https://playwright.dev/docs/auth</Lnk>
 
+      <ul>
+        <li>Mainly tests are done for authenticated user</li>
+        <li>We may do authentication for all subsequent tests</li>
+      </ul>
 
+      <Code block jsx>{`
+        // create a file where auth user tokens to be stored
+        mkdir -p playwright/.auth
+        echo $'\nplaywright/.auth' >> .gitignore
+
+        // create auth.setup.ts
+        import { test as setup, request } from '@playwright/test'
+        import fs from 'fs/promises'
+        import path from 'path'
+
+        setup('authenticate', async () => {
+          const context = await request.newContext({
+            ignoreHTTPSErrors: true, // This line ignores certificate errors
+          })
+
+          const response = await context.post('/api/login', {
+            data: {
+              email: 'email@gmail.com',
+              password: 'pass',
+            },
+          })
+
+          if (response.ok()) {
+            const authDir = path.resolve('playwright', '.auth')
+            const filePath = path.join(authDir, 'user.json')
+            await fs.mkdir(authDir, { recursive: true })
+            await context.storageState({ path: filePath })
+          } else {
+            throw new Error(\`Failed to authenticate: \${response.status()}\`)
+          }
+        })
+
+        // at playwright.config.ts make a dependency
+        import { baseUrlFrontDev } from '@back/utils/env'
+        import { defineConfig, devices } from '@playwright/test'
+
+        // https://playwright.dev/docs/test-configuration
+
+        export default defineConfig({
+          testDir: './tests',
+          fullyParallel: true,
+          forbidOnly: Boolean(process.env.CI),
+          retries: process.env.CI ? 2 : 0,
+          workers: process.env.CI ? 1 : undefined,
+          reporter: process.env.CI ? 'dot' : 'list',
+          use: {
+            baseURL: baseUrlFrontDev,
+            trace: 'on-first-retry',
+          },
+          projects: [
+            {
+              name: 'setup',
+              testMatch: /.*\\.setup\\.ts/u,
+              use: {
+                launchOptions: {
+                  args: ['--ignore-certificate-errors'],
+                },
+              },
+            },
+            {
+              name: 'chromium',
+              use: {
+                ...devices['Desktop Chrome'],
+                launchOptions: {
+                  args: ['--ignore-certificate-errors'],
+                },
+                storageState: 'playwright/.auth/user.json',
+              },
+              dependencies: ['setup'],
+            },
+          ],
+
+          /* Run your local dev server before starting the tests */
+          webServer: {
+            command: 'npm run start',
+            url: 'https://localhost:3000',
+            reuseExistingServer: !process.env.CI,
+            ignoreHTTPSErrors: true,
+          },
+        })
       `}</Code>
     </>
   )

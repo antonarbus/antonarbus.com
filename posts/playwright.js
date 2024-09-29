@@ -431,7 +431,9 @@ const postObj = {
         // create a file where auth user tokens to be stored
         mkdir -p playwright/.auth
         echo $'\\nplaywright/.auth' >> .gitignore
+      `}</Code>
 
+      <Code block jsx>{`
         // create auth.setup.ts
         import { test as setup, request } from '@playwright/test'
         import fs from 'fs/promises'
@@ -458,7 +460,9 @@ const postObj = {
             throw new Error(\`Failed to authenticate: \${response.status()}\`)
           }
         })
+      `}</Code>
 
+      <Code block jsx>{`
         // at playwright.config.ts make a dependency
         import { baseUrlFrontDev } from '@back/utils/env'
         import { defineConfig, devices } from '@playwright/test'

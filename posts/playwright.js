@@ -434,7 +434,7 @@ const postObj = {
       `}</Code>
 
       <Code block jsx>{`
-        // create auth.setup.ts
+        // create auth.setup.ts dependency which will be run before all tests
         import { test as setup, request } from '@playwright/test'
         import fs from 'fs/promises'
         import path from 'path'
@@ -453,7 +453,7 @@ const postObj = {
 
           if (response.ok()) {
             const authDir = path.resolve('playwright', '.auth')
-            const filePath = path.join(authDir, 'user.json')
+            const filePath = path.join(authDir, 'authenticated_user.json')
             await fs.mkdir(authDir, { recursive: true })
             await context.storageState({ path: filePath })
           } else {
@@ -463,7 +463,7 @@ const postObj = {
       `}</Code>
 
       <Code block jsx>{`
-        // at playwright.config.ts make a dependency
+        // at playwright.config.ts make a 'setup' as dependency
         import { baseUrlFrontDev } from '@back/utils/env'
         import { defineConfig, devices } from '@playwright/test'
 
@@ -497,7 +497,7 @@ const postObj = {
                 launchOptions: {
                   args: ['--ignore-certificate-errors'],
                 },
-                storageState: 'playwright/.auth/user.json',
+                storageState: 'playwright/.auth/authenticated_user.json',
               },
               dependencies: ['setup'],
             },
@@ -510,6 +510,47 @@ const postObj = {
             reuseExistingServer: !process.env.CI,
             ignoreHTTPSErrors: true,
           },
+        })
+      `}</Code>
+
+      <Code block jsx>{`
+        // after successful setup 'authenticated_user.json' looks like
+        {
+          "cookies": [
+            {
+              "name": "refreshJwtToken",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFudG9uLmFyYnVzQGdtYWlsLmNvbSIsInJvbGVzIjpbInVzZXIiXSwiaWF0IjoxNzI2NTE4NzM5LCJleHAiOjE3MjkxMTA3Mzl9.-ig09wjRB3Seo6oSP3LAfIn0qE6E7lhrHCgxGaar5g8",
+              "domain": "localhost",
+              "path": "/",
+              "expires": 1730268519,
+              "httpOnly": true,
+              "secure": false,
+              "sameSite": "Lax"
+            }
+          ],
+          "origins": []
+        }
+      `}</Code>
+
+      <Code block jsx>{`
+        // if some test requires non authenticated guest user
+        // we may also add 'playwright/.auth/guest_user.json'
+
+        {
+          "cookies": [],
+          "origins": []
+        }
+
+        // and use it in specific tests like 
+        test.describe('nav icons for guest user', () => {
+          test.use({ storageState: 'playwright/.auth/guest_user.json' })
+
+          test('should show icons & text', async ({ page }) => {
+            await expect(nav.locator('[data-testid="login icon"]')).toBeVisible()
+            await expect(nav).toHaveText(/Log in/u, { timeout: 1000 })
+            await expect(nav.locator('[data-testid="profile icon"]')).not.toBeVisible()
+            await expect(nav).not.toHaveText(/Profile/u, { timeout: 1000 })
+          })
         })
       `}</Code>
     </>

@@ -190,7 +190,7 @@ const postObj = {
 
       <p>And boom, we have a true ssl.</p>
 
-      <LazyImg path="/imgs/caddy.png" />
+      <LazyImg path="/imgs/ssl_with_caddy.png" />
     </>
   )
 }

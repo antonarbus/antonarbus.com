@@ -188,6 +188,14 @@ const postObj = {
         <li><Code>git rm -r <i>folder_path</i></Code> remove folder from git & stage</li>
       </ul>
 
+      <Hs>Untrack file and put into .gitignore</Hs>
+
+      <ul>
+        <li>add the file to .gitignore file</li>
+        <li><Code>git rm --cached <i>file.txt</i></Code> remove file from git repo only (unstage file)</li>
+        <li><Code>git commit -m "Stop tracking file.txt"</Code></li>
+      </ul>
+
       <H>Ignore</H>
 
       <p>Files which are not staged, can be put into <Code bash>.gitignore</Code> file. Such filed will not be shown as <i>untracked</i>.</p>

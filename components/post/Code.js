@@ -18,36 +18,15 @@ export function Code(props) {
     }
   }, [])
 
-  let lang
-  if (props.js) lang = 'js'
-  if (props.jsx) lang = 'jsx'
-  if (props.json) lang = 'json'
-  if (props.bash) lang = 'bash'
-  if (props.css) lang = 'css'
-  if (props.scss) lang = 'scss'
-  if (props.html) lang = 'html'
-  if (props.php) lang = 'php'
-  if (props.python) lang = 'python'
-  if (props.py) lang = 'py'
-  if (props.ruby) lang = 'ruby'
-  if (props.ts) lang = 'ts'
-  if (props.tsx) lang = 'tsx'
-  if (props.typescript) lang = 'typescript'
-  if (props.ignore) lang = 'ignore'
-  if (props.markup) lang = 'markup'
-  if (props.yaml) lang = 'yaml'
-  if (props.none) lang = 'none'
+  const lang = getLang({ props })
 
-  const block = Boolean(false || props.block)
-  const inline = Boolean(false || props.inline || (lang && !block))
-
-  if (block && !lang) lang = 'jsx' // if no lang attr is provided for block code
-  if (inline && !lang) lang = 'jsx' // if no lang attr is provided for inline code
+  const isBlock = Boolean(false || props.block)
+  const isInline = Boolean(false || props.inline || (lang && !isBlock))
 
   return (
     <div className="code-container">
-      {inline && <code className={`lang-${lang}`}>{props.children}</code>}
-      {block && (
+      {isInline && <code className={`lang-${lang}`}>{props.children}</code>}
+      {isBlock && (
         <Resizable
           className="resizable"
           enable={{
@@ -70,11 +49,11 @@ export function Code(props) {
           </pre>
         </Resizable>
       )}
-      {!inline && !block && <code>{props.children}</code>}
+      {!isInline && !isBlock && <code>{props.children}</code>}
 
       <style jsx>{`
         .code-container {
-          display: ${block ? 'block' : 'inline'};
+          display: ${isBlock ? 'block' : 'inline'};
           position: relative;
         }
         pre {
@@ -86,4 +65,34 @@ export function Code(props) {
       `}</style>
     </div>
   )
+}
+
+function getLang({ props }) {
+  let lang
+  if (props.js) lang = 'js'
+  if (props.jsx) lang = 'jsx'
+  if (props.json) lang = 'json'
+  if (props.bash) lang = 'bash'
+  if (props.css) lang = 'css'
+  if (props.scss) lang = 'scss'
+  if (props.html) lang = 'html'
+  if (props.php) lang = 'php'
+  if (props.python) lang = 'python'
+  if (props.py) lang = 'py'
+  if (props.ruby) lang = 'ruby'
+  if (props.ts) lang = 'ts'
+  if (props.tsx) lang = 'tsx'
+  if (props.typescript) lang = 'typescript'
+  if (props.ignore) lang = 'ignore'
+  if (props.markup) lang = 'markup'
+  if (props.yaml) lang = 'yaml'
+  if (props.none) lang = 'none'
+
+  const isBlock = Boolean(false || props.block)
+  const isInline = Boolean(false || props.inline || (lang && !isBlock))
+
+  if (isBlock && !lang) lang = 'jsx' // if no lang attr is provided for block code
+  if (isInline && !lang) lang = 'jsx' // if no lang attr is provided for inline code
+
+  return lang
 }

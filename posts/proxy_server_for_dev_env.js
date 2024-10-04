@@ -23,6 +23,7 @@ const postObj = {
   body: (
     <>
       <H>Why?</H>
+
       <ul>
         <li>
           Explanation is here{' '}
@@ -35,6 +36,32 @@ const postObj = {
           communicate, get trusted ssl certificate automatically
         </li>
       </ul>
+
+      <H>host</H>
+
+      <ul>
+        <li>think of a host name for your local app</li>
+        <li>
+          for example <i>local.webapp.com</i>
+        </li>
+        <li>
+          add the host to your dns{' '}
+          <Code inline jsx>
+            code /etc/hosts
+          </Code>
+        </li>{' '}
+        or programmatically
+        <Code block jsx>{`
+          sudo echo "127.0.0.1 local.webapp.com" | sudo tee -a /etc/hosts
+        `}</Code>
+      </ul>
+
+      <Code block none>{`
+        127.0.0.1 localhost
+        255.255.255.255 broadcasthost
+        ::1             localhost
+        127.0.0.1 local.webapp.com
+      `}</Code>
 
       <H>Caddy</H>
 
@@ -49,7 +76,7 @@ const postObj = {
 
         <Code block none>{`
           # Dev server
-          local.webpage.com {
+          local.webapp.com {
 
             # Reverse proxy API requests
             handle /api/* {
@@ -63,7 +90,7 @@ const postObj = {
           }
 
           # Preview built react app
-          local.webpage.com:4500 {
+          local.webapp.com:4500 {
 
             # Reverse proxy API requests
             handle /api/* {
@@ -145,14 +172,14 @@ const postObj = {
 
       <ul>
         <li>
-          all requests to backend go to <code>https://local.webpage.com/api</code>
+          all requests to backend go to <code>https://local.webapp.com/api</code>
         </li>
 
         <Code block jsx>{`
             import axios from 'axios'
 
             export const axiosInstance = axios.create({
-              baseURL: 'https://local.webpage.com/api',
+              baseURL: 'https://local.webapp.com/api',
               withCredentials: true,
             })
           `}</Code>

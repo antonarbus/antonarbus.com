@@ -49,18 +49,20 @@ const postObj = {
           <Code inline jsx>
             code /etc/hosts
           </Code>
-        </li> or programmatically
-        <Code block jsx>{`
+        </li>
+        <Code block none>{`
+          127.0.0.1 localhost
+          255.255.255.255 broadcasthost
+          ::1             localhost
+          127.0.0.1 local.webapp.com
+        `}</Code>
+        <li>
+          or programmatically
+          <Code block jsx>{`
           sudo echo "127.0.0.1 local.webapp.com" | sudo tee -a /etc/hosts
         `}</Code>
+        </li>
       </ul>
-
-      <Code block none>{`
-        127.0.0.1 localhost
-        255.255.255.255 broadcasthost
-        ::1             localhost
-        127.0.0.1 local.webapp.com
-      `}</Code>
 
       <H>Caddy</H>
 

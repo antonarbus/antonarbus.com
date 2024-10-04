@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react'
 export function Code(props) {
   const contentRef = useRef()
   const [height, setHeight] = useState('auto')
-  console.log('🚀 ~ height:', height)
 
   const handleResizeStop = (e, direction, ref, d) => {
     setHeight(ref.style.height)
@@ -12,9 +11,10 @@ export function Code(props) {
 
   useEffect(() => {
     if (contentRef.current) {
-      const contentHeight = contentRef.current.clientHeight
-      console.log('🚀 ~ contentHeight:', contentHeight)
-      setHeight(contentHeight > 250 ? '250px' : 'auto')
+      setTimeout(() => {
+        const contentHeight = contentRef.current.clientHeight
+        setHeight(contentHeight > 250 ? '250px' : 'auto')
+      }, 0)
     }
   }, [])
 
@@ -38,8 +38,8 @@ export function Code(props) {
   if (props.yaml) lang = 'yaml'
   if (props.none) lang = 'none'
 
-  const block = !!(false || props.block)
-  const inline = !!(false || props.inline || (lang && !block))
+  const block = Boolean(false || props.block)
+  const inline = Boolean(false || props.inline || (lang && !block))
 
   if (block && !lang) lang = 'jsx' // if no lang attr is provided for block code
   if (inline && !lang) lang = 'jsx' // if no lang attr is provided for inline code
@@ -53,13 +53,13 @@ export function Code(props) {
           enable={{
             bottom: true
           }}
+          defaultSize={{
+            width: 'auto',
+            height
+          }}
           style={{
             marginBottom: '20px'
           }}
-          // defaultSize={{
-          //   width: 'auto',
-          //   height: 'auto'
-          // }}
           size={{
             height
           }}

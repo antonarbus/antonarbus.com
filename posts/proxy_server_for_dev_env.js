@@ -49,8 +49,7 @@ const postObj = {
           <Code inline jsx>
             code /etc/hosts
           </Code>
-        </li>{' '}
-        or programmatically
+        </li> or programmatically
         <Code block jsx>{`
           sudo echo "127.0.0.1 local.webapp.com" | sudo tee -a /etc/hosts
         `}</Code>

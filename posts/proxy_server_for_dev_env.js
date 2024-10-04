@@ -124,7 +124,7 @@ const postObj = {
 
       <ul>
         <li>
-          React Vite serves from port <code>3000</code>
+          Front React Vite serves from port <code>3000</code>
         </li>
 
         <Code block jsx>{`
@@ -173,7 +173,7 @@ const postObj = {
 
       <ul>
         <li>
-          all requests to backend go to <code>https://local.webapp.com/api</code>
+          All requests to backend go to <code>https://local.webapp.com/api</code>
         </li>
 
         <Code block jsx>{`

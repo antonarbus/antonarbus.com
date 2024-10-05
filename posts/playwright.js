@@ -424,134 +424,281 @@ const postObj = {
 
       <ul>
         <li>Mainly we want to make tests for authenticated user</li>
-        <li>We may do authentication for all tests</li>
+        <li>We may do authentication for all tests using a dependency</li>
+        <li>Create a file where auth user tokens will be stored</li>
+
+        <Code block jsx>{`
+          mkdir -p playwright/.auth
+          echo $'\\nplaywright/.auth' >> .gitignore
+        `}</Code>
+
+        <li>Create a dependency which will be run ones before all tests</li>
+
+        <Code block jsx>{`
+          // auth.setup.ts
+          import { test as setup, request } from '@playwright/test'
+          import fs from 'fs/promises'
+          import path from 'path'
+
+          setup('authenticate', async () => {
+            const context = await request.newContext({
+              ignoreHTTPSErrors: true, // This line ignores certificate errors
+            })
+
+            const response = await context.post('/api/login', {
+              data: {
+                email: 'email@gmail.com',
+                password: 'pass',
+              },
+            })
+
+            if (response.ok()) {
+              const authDir = path.resolve('playwright', '.auth')
+              const filePath = path.join(authDir, 'authenticated_user.json')
+              await fs.mkdir(authDir, { recursive: true })
+              await context.storageState({ path: filePath })
+            } else {
+              throw new Error(\`Failed to authenticate: \${response.status()}\`)
+            }
+          })
+        `}</Code>
+        <li>
+          Run all <i>*.setup.ts</i> files as a dependency before all tests
+        </li>
+        <Code block jsx>{`
+          // playwright.config.ts
+          import { baseUrlFrontDev } from '@back/utils/env'
+          import { defineConfig, devices } from '@playwright/test'
+
+          // https://playwright.dev/docs/test-configuration
+
+          export default defineConfig({
+            testDir: './tests',
+            fullyParallel: true,
+            forbidOnly: Boolean(process.env.CI),
+            retries: process.env.CI ? 2 : 0,
+            workers: process.env.CI ? 1 : undefined,
+            reporter: process.env.CI ? 'dot' : 'list',
+            use: {
+              baseURL: baseUrlFrontDev,
+              trace: 'on-first-retry',
+            },
+            projects: [
+              {
+                name: 'setup',
+                testMatch: /.*\\.setup\\.ts/u,
+                use: {
+                  launchOptions: {
+                    args: ['--ignore-certificate-errors'],
+                  },
+                },
+              },
+              {
+                name: 'chromium',
+                use: {
+                  ...devices['Desktop Chrome'],
+                  launchOptions: {
+                    args: ['--ignore-certificate-errors'],
+                  },
+                  storageState: 'playwright/.auth/authenticated_user.json',
+                },
+                dependencies: ['setup'],
+              },
+            ],
+
+            /* Run your local dev server before starting the tests */
+            webServer: {
+              command: 'npm run start',
+              url: 'https://localhost:3000',
+              reuseExistingServer: !process.env.CI,
+              ignoreHTTPSErrors: true,
+            },
+          })
+        `}</Code>
+        <li>After setup test is run it will populate following file with auth tokens</li>
+        <Code block jsx>{`
+          // playwright/.auth/authenticated_user.json
+          {
+            "cookies": [
+              {
+                "name": "refreshJwtToken",
+                "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFudG9uLmFyYnVzQGdtYWlsLmNvbSIsInJvbGVzIjpbInVzZXIiXSwiaWF0IjoxNzI2NTE4NzM5LCJleHAiOjE3MjkxMTA3Mzl9.-ig09wjRB3Seo6oSP3LAfIn0qE6E7lhrHCgxGaar5g8",
+                "domain": "localhost",
+                "path": "/",
+                "expires": 1730268519,
+                "httpOnly": true,
+                "secure": false,
+                "sameSite": "Lax"
+              }
+            ],
+            "origins": []
+          }
+        `}</Code>
+
+        <li>To avoid authentication we may create a file with empty tokens</li>
+
+        <Code block jsx>{`
+          // playwright/.auth/guest_user.json
+
+          {
+            "cookies": [],
+            "origins": []
+          }
+        `}</Code>
+
+        <li>Reference it in tests like where you don't need a user to be authenticated</li>
+        <Code block jsx>{`
+          test.use({ storageState: 'playwright/.auth/guest_user.json' })
+          // or
+          test.use({ storageState: { cookies: [], origins: [] } });
+        `}</Code>
+
+        <Code block jsx>{`
+          test.describe('nav icons for guest user', () => {
+            test.use({ viewport: { width: 1600, height: 1200 } })
+            test.use({ storageState: 'playwright/.auth/guest_user.json' })
+
+            test('should show icons & text', async ({ page }) => {
+              await expect(nav.locator('[data-testid="login icon"]')).toBeVisible()
+              await expect(nav).toHaveText(/Log in/u, { timeout: 1000 })
+              await expect(nav.locator('[data-testid="profile icon"]')).not.toBeVisible()
+              await expect(nav).not.toHaveText(/Profile/u, { timeout: 1000 })
+            })
+          })
+        `}</Code>
+        <li>
+          Same way you may reference different auth files in different tests instead of setting it
+          in the config
+        </li>
+        <li>
+          For different auth roles you just do multiple login setup function which create different
+          files
+        </li>
+
+        <Code block jsx>{`
+          // basic-auth.setup.ts
+          import { test as setup, request } from '@playwright/test'
+          import fs from 'fs/promises'
+          import path from 'path'
+
+          setup('authenticate basic user', async () => {
+            const context = await request.newContext({
+              ignoreHTTPSErrors: true, // This line ignores certificate errors
+            })
+
+            const response = await context.post('/api/login', {
+              data: {
+                email: 'basic-user@gmail.com',
+                password: 'some password',
+              },
+            })
+
+            if (response.ok()) {
+              const authDir = path.resolve('playwright', '.auth')
+              const filePath = path.join(authDir, 'basic_user.json')
+              await fs.mkdir(authDir, { recursive: true })
+              await context.storageState({ path: filePath })
+            } else {
+              throw new Error(\`Failed to authenticate: \${response.status()}\`)
+            }
+          })
+
+          // admin-auth.setup.ts
+          import { test as setup, request } from '@playwright/test'
+          import fs from 'fs/promises'
+          import path from 'path'
+
+          setup('authenticate admin user', async () => {
+            const context = await request.newContext({
+              ignoreHTTPSErrors: true, // This line ignores certificate errors
+            })
+
+            const response = await context.post('/api/login', {
+              data: {
+                email: 'admin-user@gmail.com',
+                password: 'some password',
+              },
+            })
+
+            if (response.ok()) {
+              const authDir = path.resolve('playwright', '.auth')
+              const filePath = path.join(authDir, 'admin_user.json')
+              await fs.mkdir(authDir, { recursive: true })
+              await context.storageState({ path: filePath })
+            } else {
+              throw new Error(\`Failed to authenticate: \${response.status()}\`)
+            }
+          })
+        `}</Code>
+
+        <li>
+          And you to those files in <code>storageState</code> in tests or test groups, instead of
+          setting it globally in the config.
+        </li>
+
+        <Code block jsx>{`
+          import { test } from '@playwright/test';
+
+          test.use({ storageState: 'playwright/.auth/basic_user.json' });
+
+          test('basic user test', async ({ page }) => {
+            // page is authenticated as basic user
+          });
+
+          test.describe(() => {
+            test.use({ storageState: 'playwright/.auth/admin_user.json' });
+
+            test('admin user test', async ({ page }) => {
+              // page is authenticated as a admin_ user
+            });
+          })
+        `}</Code>
+
+        <li>To test how users with different roles interact together in a single test</li>
+
+        <Code block jsx>{`
+          import { test } from '@playwright/test';
+
+          test('admin and user', async ({ browser }) => {
+            // adminContext and all pages inside, including adminPage, are signed in as "admin".
+            const adminContext = await browser.newContext({ storageState: 'playwright/.auth/admin.json' });
+            const adminPage = await adminContext.newPage();
+
+            // userContext and all pages inside, including userPage, are signed in as "user".
+            const userContext = await browser.newContext({ storageState: 'playwright/.auth/user.json' });
+            const userPage = await userContext.newPage();
+
+            // ... interact with both adminPage and userPage ...
+
+            await adminContext.close();
+            await userContext.close();
+          });
+        `}</Code>
+      </ul>
+
+      <H>Session storage</H>
+
+      <ul>
+        <li>Some data from session storage may be required for tests, for example </li>
+        <li>Session storage is specific to a particular domain</li>
+        <li>It is not persisted across page loads</li>
+        <li>Playwright does not provide API to persist session storage</li>
+        <li>Here is the hack to emulate the session storage</li>
       </ul>
 
       <Code block jsx>{`
-        // create a file where auth user tokens to be stored
-        mkdir -p playwright/.auth
-        echo $'\\nplaywright/.auth' >> .gitignore
-      `}</Code>
+        // Get session storage and store as env variable
+        const sessionStorage = await page.evaluate(() => JSON.stringify(sessionStorage));
+        fs.writeFileSync('playwright/.auth/session.json', sessionStorage, 'utf-8');
 
-      <Code block jsx>{`
-        // create auth.setup.ts dependency which will be run before all tests
-        import { test as setup, request } from '@playwright/test'
-        import fs from 'fs/promises'
-        import path from 'path'
-
-        setup('authenticate', async () => {
-          const context = await request.newContext({
-            ignoreHTTPSErrors: true, // This line ignores certificate errors
-          })
-
-          const response = await context.post('/api/login', {
-            data: {
-              email: 'email@gmail.com',
-              password: 'pass',
-            },
-          })
-
-          if (response.ok()) {
-            const authDir = path.resolve('playwright', '.auth')
-            const filePath = path.join(authDir, 'authenticated_user.json')
-            await fs.mkdir(authDir, { recursive: true })
-            await context.storageState({ path: filePath })
-          } else {
-            throw new Error(\`Failed to authenticate: \${response.status()}\`)
+        // Set session storage in a new context
+        const sessionStorage = JSON.parse(fs.readFileSync('playwright/.auth/session.json', 'utf-8'));
+        await context.addInitScript(storage => {
+          if (window.location.hostname === 'example.com') {
+            for (const [key, value] of Object.entries(storage))
+              window.sessionStorage.setItem(key, value);
           }
-        })
-      `}</Code>
-
-      <Code block jsx>{`
-        // at playwright.config.ts make a 'setup' as dependency
-        import { baseUrlFrontDev } from '@back/utils/env'
-        import { defineConfig, devices } from '@playwright/test'
-
-        // https://playwright.dev/docs/test-configuration
-
-        export default defineConfig({
-          testDir: './tests',
-          fullyParallel: true,
-          forbidOnly: Boolean(process.env.CI),
-          retries: process.env.CI ? 2 : 0,
-          workers: process.env.CI ? 1 : undefined,
-          reporter: process.env.CI ? 'dot' : 'list',
-          use: {
-            baseURL: baseUrlFrontDev,
-            trace: 'on-first-retry',
-          },
-          projects: [
-            {
-              name: 'setup',
-              testMatch: /.*\\.setup\\.ts/u,
-              use: {
-                launchOptions: {
-                  args: ['--ignore-certificate-errors'],
-                },
-              },
-            },
-            {
-              name: 'chromium',
-              use: {
-                ...devices['Desktop Chrome'],
-                launchOptions: {
-                  args: ['--ignore-certificate-errors'],
-                },
-                storageState: 'playwright/.auth/authenticated_user.json',
-              },
-              dependencies: ['setup'],
-            },
-          ],
-
-          /* Run your local dev server before starting the tests */
-          webServer: {
-            command: 'npm run start',
-            url: 'https://localhost:3000',
-            reuseExistingServer: !process.env.CI,
-            ignoreHTTPSErrors: true,
-          },
-        })
-      `}</Code>
-
-      <Code block jsx>{`
-        // after successful setup 'authenticated_user.json' looks like
-        {
-          "cookies": [
-            {
-              "name": "refreshJwtToken",
-              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFudG9uLmFyYnVzQGdtYWlsLmNvbSIsInJvbGVzIjpbInVzZXIiXSwiaWF0IjoxNzI2NTE4NzM5LCJleHAiOjE3MjkxMTA3Mzl9.-ig09wjRB3Seo6oSP3LAfIn0qE6E7lhrHCgxGaar5g8",
-              "domain": "localhost",
-              "path": "/",
-              "expires": 1730268519,
-              "httpOnly": true,
-              "secure": false,
-              "sameSite": "Lax"
-            }
-          ],
-          "origins": []
-        }
-      `}</Code>
-
-      <Code block jsx>{`
-        // if some test requires non authenticated guest user
-        // we may also add 'playwright/.auth/guest_user.json'
-
-        {
-          "cookies": [],
-          "origins": []
-        }
-
-        // and use it in specific tests like 
-        test.describe('nav icons for guest user', () => {
-          test.use({ storageState: 'playwright/.auth/guest_user.json' })
-
-          test('should show icons & text', async ({ page }) => {
-            await expect(nav.locator('[data-testid="login icon"]')).toBeVisible()
-            await expect(nav).toHaveText(/Log in/u, { timeout: 1000 })
-            await expect(nav.locator('[data-testid="profile icon"]')).not.toBeVisible()
-            await expect(nav).not.toHaveText(/Profile/u, { timeout: 1000 })
-          })
-        })
+        }, sessionStorage);
       `}</Code>
     </>
   )

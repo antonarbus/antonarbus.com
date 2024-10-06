@@ -418,6 +418,101 @@ const postObj = {
         await page.getByTestId('scrolling-container').evaluate(e => e.scrollTop += 100);
       `}</Code>
 
+      <H>API testing</H>
+
+      <ul>
+        <li>
+          <code>APIRequestContext</code> can send all kinds of HTTP(S) requests over network
+        </li>
+        <Code block jsx>{`
+        import { apiUrl } from '@back/consts/apiUrl'
+        import { connectToDb } from '@back/db/connectToDb'
+        import { UserModel } from '@back/db/models/userModel'
+        import { baseUrlBack } from '@back/utils/env'
+        import { test, expect } from '@playwright/test'
+        import { userFilePath } from 'tests/setup/userFilePath'
+
+        test.describe.configure({ mode: 'serial' })
+
+        test.describe('#activateRouter', () => {
+          test.beforeAll(async () => {
+            await connectToDb()
+          })
+
+          test.afterAll(async ({ request }) => {
+            // console.log('do after test, for ex clean db')
+          })
+
+          test.use({ baseURL: baseUrlBack })
+
+          const email = 'anton.arbus@gmail.com'
+
+          test('should not return successful status if key is missing', async ({
+            request,
+          }) => {
+            const res = await request.post(apiUrl.activate, {
+              data: {
+                activationKey: 'bad activation key',
+              },
+            })
+
+            expect(res.ok()).toBeFalsy()
+            expect(await res.json()).toMatchObject({
+              message: 'activation key not found',
+            })
+          })
+
+          test('should return successful status if activation key is correct', async ({
+            request,
+          }) => {
+            const userDocument = await UserModel.findOneAndUpdate(
+              { email },
+              {
+                activationKey: 'good activation key',
+                isActivated: false,
+              },
+              { upsert: true, new: true },
+            ).lean()
+
+            const res = await request.post(apiUrl.activate, {
+              data: {
+                activationKey: userDocument.activationKey,
+              },
+            })
+
+            await request.storageState({ path: userFilePath.authenticated })
+
+            expect(res.ok()).toBeTruthy()
+            expect(await res.json()).toMatchObject({ message: 'activated' })
+          })
+
+          test('should return successful status if account had been already activated', async ({
+            request,
+          }) => {
+            const userDocument = await UserModel.findOneAndUpdate(
+              { email },
+              { isActivated: true },
+              { upsert: true, new: true },
+            ).lean()
+            const res = await request.post(apiUrl.activate, {
+              data: {
+                activationKey: userDocument.activationKey,
+              },
+            })
+
+            expect(res.ok()).toBeTruthy()
+            expect(await res.json()).toMatchObject({ message: 'already activated' })
+          })
+        })
+
+
+      `}</Code>
+
+        <li>
+          <code>request</code> object is also available in <code></code>
+        </li>
+      </ul>
+
       <H>Authentication</H>
 
       <Lnk path="https://playwright.dev/docs/auth">https://playwright.dev/docs/auth</Lnk>
@@ -462,9 +557,11 @@ const postObj = {
             }
           })
         `}</Code>
+
         <li>
           Run all <i>*.setup.ts</i> files as a dependency before all tests
         </li>
+
         <Code block jsx>{`
           // playwright.config.ts
           import { baseUrlFrontDev } from '@back/utils/env'
@@ -515,7 +612,12 @@ const postObj = {
             },
           })
         `}</Code>
-        <li>After setup test is run it will populate following file with auth tokens</li>
+
+        <li>
+          After setup test is run it will populate following file with cookies which should include
+          auth data
+        </li>
+
         <Code block jsx>{`
           // playwright/.auth/authenticated_user.json
           {
@@ -535,7 +637,7 @@ const postObj = {
           }
         `}</Code>
 
-        <li>To avoid authentication we may create a file with empty tokens</li>
+        <li>To avoid authentication we may create a file with empty cookies</li>
 
         <Code block jsx>{`
           // playwright/.auth/guest_user.json
@@ -547,6 +649,7 @@ const postObj = {
         `}</Code>
 
         <li>Reference it in tests like where you don't need a user to be authenticated</li>
+
         <Code block jsx>{`
           test.use({ storageState: 'playwright/.auth/guest_user.json' })
           // or
@@ -571,7 +674,7 @@ const postObj = {
           in the config
         </li>
         <li>
-          For different auth roles you just do multiple login setup function which create different
+          For different auth roles you just do multiple login setup functions which create different
           files
         </li>
 
@@ -632,8 +735,8 @@ const postObj = {
         `}</Code>
 
         <li>
-          And you to those files in <code>storageState</code> in tests or test groups, instead of
-          setting it globally in the config.
+          And you just point to those files in <code>storageState</code> in tests or test groups,
+          instead of setting it globally in the config.
         </li>
 
         <Code block jsx>{`
@@ -654,7 +757,10 @@ const postObj = {
           })
         `}</Code>
 
-        <li>To test how users with different roles interact together in a single test</li>
+        <li>
+          To test how users with different roles interact together in a single test have to create
+          pages with different contexts
+        </li>
 
         <Code block jsx>{`
           import { test } from '@playwright/test';
@@ -673,6 +779,41 @@ const postObj = {
             await adminContext.close();
             await userContext.close();
           });
+        `}</Code>
+
+        <li>
+          If some api test invalidates auth tokens you need to update the files to prevent other
+          tests to fail
+        </li>
+
+        <Code block jsx>{`
+          test('should return successful status if activation key is correct', async ({
+            request,
+          }) => {
+            const userDocument = await UserModel.findOneAndUpdate(
+              { email },
+              {
+                activationKey: 'good activation key',
+                isActivated: false,
+              },
+              { upsert: true, new: true },
+            ).lean()
+
+            const res = await request.post(apiUrl.activate, {
+              data: {
+                activationKey: userDocument.activationKey,
+              },
+            })
+
+            const filePath = path.resolve( 'playwright', '.auth', 'authenticated_user.json', )
+
+            await request.storageState({ path: filePath })
+
+            expect(res.ok()).toBeTruthy()
+            expect(await res.json()).toMatchObject({
+              message: 'activated',
+            })
+          })
         `}</Code>
       </ul>
 
@@ -699,6 +840,29 @@ const postObj = {
               window.sessionStorage.setItem(key, value);
           }
         }, sessionStorage);
+      `}</Code>
+
+      <H>Tests in series</H>
+
+      <ul>
+        <li>To run tests one by one and wait one to complete before another starts</li>
+      </ul>
+
+      <Code block jsx>{`
+        test.describe.configure({ mode: 'serial' })
+
+        test.describe('#sequential tests', () => {
+          test('1st test', async ({ request }) => {
+            // first test
+          })
+
+          test('2nd test', async ({ request }) => {
+            // second test
+          })
+          test('3rd test', async ({ request }) => {
+            // third test
+          })
+        })
       `}</Code>
     </>
   )

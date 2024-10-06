@@ -10,7 +10,9 @@ const postObj = {
       <H>Commands</H>
 
       <ul>
-        <li><Code bash>node -v</Code> node version</li>
+        <li>
+          <Code bash>node -v</Code> node version
+        </li>
       </ul>
 
       <H>Exports & require</H>
@@ -80,10 +82,16 @@ const postObj = {
       <H>Pass args to a script</H>
 
       <ul>
-        <li>we may trigger a script like <code>node server.js</code></li>
+        <li>
+          we may trigger a script like <code>node server.js</code>
+        </li>
         <li>but how to pass arguments into that</li>
-        <li>we can do <code>node server.js one two=three four</code></li>
-        <li>ad get args with <Code>process.argv</Code></li>
+        <li>
+          we can do <code>node server.js one two=three four</code>
+        </li>
+        <li>
+          ad get args with <Code>process.argv</Code>
+        </li>
       </ul>
 
       <Code block bash>{`
@@ -93,6 +101,22 @@ const postObj = {
         console.log(args)
 
         // ['node', '/home/server.js', 'one', 'two=three', 'four']
+      `}</Code>
+
+      <H>Path</H>
+
+      <Code block jsx>{`
+        const thisFilePath = fileURLToPath(import.meta.url)
+        const thisDirName = dirname(thisFilePath)
+        const filePathInSameFolder = join(thisDirName, 'readme.txt')
+
+        path.join('folder', 'subfolder', 'file.txt') // 'folder/subfolder/file.txt'
+        path.join('/folder', 'subfolder', 'file.txt') // '/folder/subfolder/file.txt'
+        path.join('folder', '/subfolder', 'file.txt') // 'folder/subfolder/file.txt' 
+
+        path.resolve('folder', 'subfolder', 'file.txt') // '/current/working/directory/folder/subfolder/file.txt'
+        path.resolve('/folder', 'subfolder', 'file.txt') // '/folder/subfolder/file.txt'
+        path.resolve('folder', '/subfolder', 'file.txt') // '/subfolder/file.txt'
       `}</Code>
     </>
   )
@@ -107,5 +131,4 @@ export const post = {
   desc: postObj.desc,
   imgUrl: postObj.imgUrl || null,
   bodyStr: jsxToStr(postObj.body)
-
 }

@@ -15,11 +15,11 @@ import {
 } from '/components/post/reExport'
 
 const postObj = {
-  title: 'proxy server for dev env',
+  title: 'ssl for dev env',
   date: '2024.10.04',
   tags: ['tools'],
   imgUrl: 'https://antonarbus.com/imgs/xxx.png',
-  desc: 'proxy server for dev env',
+  desc: 'ssl & proxy server for dev env',
   body: (
     <>
       <H>Why?</H>
@@ -30,10 +30,6 @@ const postObj = {
           <Lnk path="https://www.tiktok.com/@syntaxfm/video/7394478096591621406">
             https://www.tiktok.com/@syntaxfm/video/7394478096591621406
           </Lnk>
-        </li>
-        <li>
-          Somehow it feels nice, a bit closer to real application, have more clarity how all
-          communicate, get trusted ssl certificate automatically
         </li>
       </ul>
 
@@ -64,7 +60,7 @@ const postObj = {
         </li>
       </ul>
 
-      <H>Caddy</H>
+      <H>Caddy proxy</H>
 
       <ul>
         <li>
@@ -120,7 +116,7 @@ const postObj = {
         `}</Code>
       </ul>
 
-      <H>Dev servers</H>
+      <Hs>Dev servers</Hs>
 
       <ul>
         <li>
@@ -169,7 +165,7 @@ const postObj = {
         `}</Code>
       </ul>
 
-      <H>Requests to backend</H>
+      <Hs>Requests to backend</Hs>
 
       <ul>
         <li>
@@ -186,11 +182,107 @@ const postObj = {
           `}</Code>
       </ul>
 
-      <H>SSL</H>
+      <Hs>SSL</Hs>
 
       <p>And boom, we have a true ssl.</p>
 
       <LazyImg path="/imgs/ssl_with_caddy.png" />
+
+      <H>Vite proxy with ssl</H>
+
+      <ul>
+        <li>
+          We can use internal vite's proxy and wire all requests and responses with backend through
+          it
+        </li>
+        <li>
+          It can accept some ssl from <code>basicSsl</code> package
+        </li>
+
+        <Code block jsx>{`
+          import basicSsl from '@vitejs/plugin-basic-ssl'
+          import react from '@vitejs/plugin-react'
+          import { defineConfig } from 'vite'
+          import tsconfigPaths from 'vite-tsconfig-paths'
+
+          export default defineConfig(({ command, mode }) => {
+            return {
+              root: './front/',
+              server: {
+                host: 'localhost',
+                port: 3000,
+                proxy: {
+                  '/api': 'http://localhost:4000',
+                },
+              },
+              plugins: [react(), tsconfigPaths(), basicSsl()],
+            }
+          })
+        `}</Code>
+
+        <li>
+          Requests from backend are made to <code>/api</code> prefixed endpoints
+        </li>
+
+        <Code block jsx>{`
+          import type { ResBody, ReqBody as Payload } from '@back/api/auth/registerRouter'
+          import { useMutation, type UseMutationResult } from '@tanstack/react-query'
+          import axios, { type AxiosError } from 'axios'
+          import { queryKey } from '@shared/consts/queryKey'
+
+          export const useRegisterMutation = (): UseMutationResult<
+            ResBody,
+            AxiosError<ResBody>,
+            Payload
+          > => {
+            const query = useMutation<ResBody, AxiosError<ResBody>, Payload>({
+              mutationKey: [queryKey.register],
+              mutationFn: async ({ email, password }: Payload) => {
+                const res = await axios<ResBody>({
+                  url: '/api/register',
+                  method: 'post',
+                  data: { email, password },
+                })
+
+                return res.data
+              },
+            })
+
+            return query
+          }
+        `}</Code>
+
+        <Code block jsx>{`
+          import 'dotenv/config'
+          import cookieParser from 'cookie-parser'
+          import express from 'express'
+          import { registerRouter } from './api/auth/registerRouter'
+          import { errorHandlerMiddleware } from './middleware/errorHandlerMiddleware'
+          import type { Req, Res } from './types'
+
+          const app = express()
+          app.use(express.json({ limit: '50mb' }))
+          app.use(cookieParser())
+
+          app.get('/api', (_req: Req, res: Res) => res.send('i am express.js'))
+          app.use('/api/register', registerRouter)
+          app.use(errorHandlerMiddleware)
+
+          app.listen(4000, () => {
+            console.info(\`🚀 Started at http://localhost:4000\`)
+          })
+        `}</Code>
+      </ul>
+
+      <H>No proxy</H>
+
+      <ul>
+        <li>
+          If you do not use external or internal vite's proxy you have manage ssl certificate
+          manually
+        </li>
+        <li>To be continued...</li>
+      </ul>
     </>
   )
 }

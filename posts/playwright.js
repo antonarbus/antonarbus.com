@@ -33,6 +33,26 @@ const postObj = {
         </li>
       </ul>
 
+      <H>Commands</H>
+
+      <Code block jsx>{`
+        "playwright": "npx playwright install && npx playwright test",
+        "playwright:ui": "npx playwright install && npx playwright test --ui",
+        "playwright:debug": "npx playwright install && npx playwright test --debug",
+        "playwright:codegen": "npx playwright install && npx playwright codegen https://localhost:3000 --ignore-https-errors",
+        "playwright:update": "npm i -D @playwright/test@latest",
+      `}</Code>
+
+      <H>Parallel vs serial</H>
+
+      <Code block jsx>{`
+        test.describe.configure({ mode: 'parallel' }) // default
+        // test.describe.configure({ mode: 'serial' })
+
+        test('runs in parallel 1', async ({ page }) => { /* ... */ })
+        test('runs in parallel 2', async ({ page }) => { /* ... */ })
+      `}</Code>
+
       <H>Assertions</H>
 
       <Lnk path="https://playwright.dev/docs/test-assertions">
@@ -118,6 +138,16 @@ const postObj = {
 
       <Code block jsx>{`
         await expect(page.getByText('Name'), 'should be logged in').toBeVisible()
+      `}</Code>
+
+      <Hs>Soft assertions</Hs>
+
+      <Code block jsx>{`
+        // Make a few checks that will not stop the test when failed...
+        await expect.soft(page.getByTestId('status')).toHaveText('Success')
+
+        // ... and continue the test to check more things.
+        await page.getByRole('link', { name: 'next page' }).click()
       `}</Code>
 
       <H>Locators</H>
@@ -872,28 +902,7 @@ const postObj = {
         }, sessionStorage);
       `}</Code>
 
-      <H>Tests in series</H>
-
-      <ul>
-        <li>To run tests one by one and wait one to complete before another starts</li>
-      </ul>
-
-      <Code block jsx>{`
-        test.describe.configure({ mode: 'serial' })
-
-        test.describe('#sequential tests', () => {
-          test('1st test', async ({ request }) => {
-            // first test
-          })
-
-          test('2nd test', async ({ request }) => {
-            // second test
-          })
-          test('3rd test', async ({ request }) => {
-            // third test
-          })
-        })
-      `}</Code>
+      <H>Clock</H>
     </>
   )
 }

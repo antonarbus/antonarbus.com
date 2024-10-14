@@ -903,6 +903,267 @@ const postObj = {
       `}</Code>
 
       <H>Clock</H>
+
+      <p>
+        <Lnk path="https://playwright.dev/docs/api/class-clock">Clock api</Lnk> provides the
+        following methods to control time:
+      </p>
+
+      <Code block jsx>{`
+        setFixedTime() // Sets the fixed time for Date.now() and new Date()
+        install() // initializes the clock and allows you to
+        pauseAt() // Pauses the time at a specific time
+        fastForward() // Fast forwards the time
+        runFor() // Runs the time for a specific duration
+        resume() // Resumes the time
+        setSystemTime() // Sets the current system time
+      `}</Code>
+
+      <Code block html>{`
+        <div id="current-time" data-testid="current-time"></div>
+        <script>
+          const renderTime = () => {
+            document.getElementById('current-time').textContent =
+                new Date().toLocaleString();
+          };
+          setInterval(renderTime, 1000);
+        </script>
+      `}</Code>
+
+      <Code block jsx>{`
+        // test 1 - setFixedTime
+        await page.clock.setFixedTime(new Date('2024-02-02T10:00:00'));
+        await page.goto('http://localhost:3333');
+        await expect(page.getByTestId('current-time')).toHaveText('2/2/2024, 10:00:00 AM');
+
+        await page.clock.setFixedTime(new Date('2024-02-02T10:30:00'));
+        // We know that the page has a timer that updates the time every second.
+        await expect(page.getByTestId('current-time')).toHaveText('2/2/2024, 10:30:00 AM');
+
+        // test 2 - install + pauseAt + fastForward
+        // Initialize clock with some time before the test time and let the page load
+        // naturally. \`Date.now\` will progress as the timers fire.
+        await page.clock.install({ time: new Date('2024-02-02T08:00:00') });
+        await page.goto('http://localhost:3333');
+
+        // Pretend that the user closed the laptop lid and opened it again at 10am,
+        // Pause the time once reached that point.
+        await page.clock.pauseAt(new Date('2024-02-02T10:00:00'));
+
+        // Assert the page state.
+        await expect(page.getByTestId('current-time')).toHaveText('2/2/2024, 10:00:00 AM');
+
+        // Close the laptop lid again and open it at 10:30am.
+        await page.clock.fastForward('30:00');
+        await expect(page.getByTestId('current-time')).toHaveText('2/2/2024, 10:30:00 AM');
+
+        // test 3 - runFor
+        // Initialize clock with a specific time, let the page load naturally.
+        await page.clock.install({ time: new Date('2024-02-02T08:00:00') });
+        await page.goto('http://localhost:3333');
+
+        // Pause the time flow, stop the timers, you now have manual control
+        // over the page time.
+        await page.clock.pauseAt(new Date('2024-02-02T10:00:00'));
+        await expect(page.getByTestId('current-time')).toHaveText('2/2/2024, 10:00:00 AM');
+
+        // Tick through time manually, firing all timers in the process.
+        // In this case, time will be updated in the screen 2 times.
+        await page.clock.runFor(2000);
+        await expect(page.getByTestId('current-time')).toHaveText('2/2/2024, 10:00:02 AM');
+      `}</Code>
+
+      <H>Dialogs</H>
+
+      <ul>
+        <li>alert(), confirm(), prompt() are dismissed by default in playwright</li>
+        <li>to handle the dialog you need to register the listener</li>
+      </ul>
+
+      <Code block jsx>{`
+        // alert(), confirm(), prompt()
+        page.on('dialog', dialog => dialog.accept()) // or dialog.dismiss()
+        await page.getByRole('button').click()
+
+        // beforeunload
+        page.on('dialog', async dialog => {
+          assert(dialog.type() === 'beforeunload')
+          await dialog.dismiss()
+        })
+        await page.close({ runBeforeUnload: true })
+
+        // printer dialog
+        await page.goto('<url>')
+        await page.evaluate('(() => {window.waitForPrintDialog = new Promise(f => window.print = f)})()')
+        await page.getByText('Print it!').click()
+        await page.waitForFunction('window.waitForPrintDialog')
+      `}</Code>
+
+      <H>Downloads</H>
+
+      <ul>
+        <li>
+          For every download by the page, <code>page.on('download')</code> event is emitted
+        </li>
+        <li>attachments are downloaded into a temporary folder</li>
+        <li>You can obtain the download url, file name and payload stream</li>
+        <li>Downloaded files are deleted when the browser context that produced them is closed</li>
+
+        <Code block jsx>{`
+          // Start waiting for download before clicking. Note no await.
+          const downloadPromise = page.waitForEvent('download')
+          await page.getByText('Download file').click()
+          const download = await downloadPromise
+
+          // Wait for the download process to complete and save the downloaded file somewhere.
+          await download.saveAs('/path/to/save/at/' + download.suggestedFilename())
+        `}</Code>
+
+        <li>If you have no idea what initiates the download, you can still handle the event</li>
+
+        <Code block jsx>{`
+          page.on('download', download => download.path().then(console.log))
+        `}</Code>
+      </ul>
+
+      <H>Run JS in page</H>
+
+      <ul>
+        <li>
+          <code>page.evaluate()</code> allows you to execute JavaScript in the context of the web
+          page
+        </li>
+        <li>test and page has different contexts</li>
+        <li>but you can run JS in page and bring result back to test</li>
+
+        <Code block jsx>{`
+          // not promise
+          const href = await page.evaluate(() => document.location.href);
+          console.log(await page.evaluate('1 + 2')); // prints "3"
+          const x = 10;
+          console.log(await page.evaluate(\`1 + \${x}\`)); // prints "11"
+
+          // promise
+          const status = await page.evaluate(async () => {
+            const response = await fetch(location.href);
+            return response.status;
+          });
+        `}</Code>
+
+        <li>if you need to pass a variable to the page as a parameter </li>
+
+        <Code block jsx>{`
+          const data = 'some data';
+          const result = await page.evaluate(data => {
+            window.myApp.use(data);
+          }, data);
+        `}</Code>
+
+        <li>
+          <Lnk path="https://playwright.dev/docs/evaluating">
+            https://playwright.dev/docs/evaluating
+          </Lnk>{' '}
+          check it further, not very clear....
+        </li>
+      </ul>
+
+      <H>Events</H>
+
+      <ul>
+        <li>
+          <Lnk path="https://playwright.dev/docs/events">https://playwright.dev/docs/events</Lnk>{' '}
+          check it further, not very clear....
+        </li>
+      </ul>
+
+      <H>iFrame</H>
+
+      <ul>
+        <li>a page can have iframe</li>
+
+        <Code block jsx>{`
+          // Locate element inside frame
+          const username = await page.frameLocator('.frame-class').getByLabel('User Name');
+          await username.fill('John')
+
+          // Get frame using the frame's name attribute
+          const frame = page.frame('frame-login');
+
+          // Get frame using frame's URL
+          const frame = page.frame({ url: /.*domain.*/ });
+
+          // Interact with the frame
+          await frame.fill('#username-input', 'John');
+        `}</Code>
+      </ul>
+
+      <H>Multiple Contexts in a Single Test</H>
+
+      <Code block jsx>{`
+        test('admin and user', async ({ browser }) => {
+          // Create two isolated browser contexts
+          const adminContext = await browser.newContext()
+          const userContext = await browser.newContext()
+
+          // Create pages and interact with contexts independently
+          const adminPage = await adminContext.newPage()
+          const userPage = await userContext.newPage()
+        })
+      `}</Code>
+
+      <H>Mock api</H>
+
+      <ul>
+        <li>Any requests that a page does can be tracked, modified and mocked</li>
+        <li>
+          The following code will intercept all the calls to */**/api/v1/fruits and will return a
+          custom response instead.
+        </li>
+        <li>No requests to the API will be made</li>
+
+        <Code block jsx>{`
+          test("mocks a fruit and doesn't call api", async ({ page }) => {
+          // Mock the api call before navigating
+          await page.route('*/**/api/v1/fruits', async route => {
+            const json = [{ name: 'Strawberry', id: 21 }]
+            await route.fulfill({ json })
+          })
+          // Go to the page
+          await page.goto('https://demo.playwright.dev/api-mocking')
+
+          // Assert that the Strawberry fruit is visible
+          await expect(page.getByText('Strawberry')).toBeVisible()
+        })
+        `}</Code>
+
+        <li>Patch api response</li>
+
+        <Code block jsx>{`
+          test('gets the json from api and adds a new fruit', async ({ page }) => {
+            // Get the response and add to it
+            await page.route('*/**/api/v1/fruits', async route => {
+              const response = await route.fetch()
+              const json = await response.json()
+              json.push({ name: 'Loquat', id: 100 })
+              // Fulfill using the original response, while patching the response body
+              // with the given JSON object.
+              await route.fulfill({ response, json })
+            })
+
+            // Go to the page
+            await page.goto('https://demo.playwright.dev/api-mocking')
+
+            // Assert that the new fruit is visible
+            await expect(page.getByText('Loquat', { exact: true })).toBeVisible()
+          })
+        `}</Code>
+      </ul>
+
+      <H>Mock browser APIs</H>
+
+      <ul>
+        <li></li>
+      </ul>
     </>
   )
 }

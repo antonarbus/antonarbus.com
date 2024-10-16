@@ -1123,17 +1123,18 @@ const postObj = {
 
         <Code block jsx>{`
           test("mocks a fruit and doesn't call api", async ({ page }) => {
-          // Mock the api call before navigating
-          await page.route('*/**/api/v1/fruits', async route => {
-            const json = [{ name: 'Strawberry', id: 21 }]
-            await route.fulfill({ json })
-          })
-          // Go to the page
-          await page.goto('https://demo.playwright.dev/api-mocking')
+            // Mock the api call before navigating
+            await page.route('*/**/api/v1/fruits', async route => {
+              const json = [{ name: 'Strawberry', id: 21 }]
+              await route.fulfill({ json })
+            })
 
-          // Assert that the Strawberry fruit is visible
-          await expect(page.getByText('Strawberry')).toBeVisible()
-        })
+            // Go to the page
+            await page.goto('https://demo.playwright.dev/api-mocking')
+
+            // Assert that the Strawberry fruit is visible
+            await expect(page.getByText('Strawberry')).toBeVisible()
+          })
         `}</Code>
 
         <li>Patch api response</li>
@@ -1159,10 +1160,24 @@ const postObj = {
         `}</Code>
       </ul>
 
-      <H>Mock browser APIs</H>
+      <H>Page loading</H>
 
       <ul>
-        <li></li>
+        <li>Playwright can load page and wait for the target elements to become actionable</li>
+        <li>
+          If clicking an element could trigger multiple navigations then use{' '}
+          <code>waitForURL()</code>
+        </li>
+
+        <Code block jsx>{`
+          // goto()
+          await page.goto('https://example.com')
+          await page.getByText('Example Domain').click()
+
+          // waitForURL()
+          await page.getByText('Click me').click()
+          await page.waitForURL('**/login')
+        `}</Code>
       </ul>
     </>
   )

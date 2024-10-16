@@ -181,30 +181,37 @@ const postObj = {
         // CSS locator (not recommended)
         // Playwright adds custom pseudo-classes like :visible, :has-text(), :has(), :is(), :nth-match() and more.
         await page.locator('css=button').click();
+        await page.locator('css=button:visible').click();
+        await page.locator('css=[data-test="login"]:enabled').click();
         await page.locator('button').click();
         await page.locator('button:visible').click();
         await page.locator(':has-text("Playwright")').click();
         await page.locator('article:has-text("Playwright")').click();
         await page.locator('#nav-bar :text("Home")').click();
-        await page.locator('article:has(div.promo)').textContent();
+        await page.locator('#nav-bar :text-is(("Home")').click() // matches exact text
+        await page.locator('#nav-bar :text-matches("reg?ex", "i")').click() // matches reg exp
+        await page.locator('article:has(div.promo)').textContent() // elements that contain other elements
         await page.locator('button:has-text("Log in"), button:has-text("Sign in")').click();
         await page.locator('button:near(.promo-card)').click();
+        await page.locator('button:near(div > button)').click();
         await page.locator('button:above(.promo-card)').click();
         await page.locator('button:below(.promo-card)').click();
-        await page.locator('button:right-of(.promo-card)').click();
+        await page.locator('button:right-of(.promo-card)').click() // button to the right of card
         await page.locator('input:right-of(:text("Username"))').fill('value');
         await page.locator('button:left-of(.promo-card)').click();
         await page.locator('[type=radio]:left-of(:text("Label 3"))').first().click();
         await page.locator(':nth-match(:text("Buy"), 3)').click() // click 3rd "Buy" button
         await page.locator('button').locator('nth=0').click() // click 1st button
         await page.locator('button').locator('nth=-1').click() // click last button
+        await page.locator('button:has-text("Log in"), button:has-text("Sign in")').click() // matching one of the conditions
+        await page.locator('id=username').fill('value') // Fill an input with the id "username"
+        await page.locator('data-test-id=submit').click() // Click an element with data-test-id "submit"
 
         // Parent element locator
         const child = page.getByText('Hello');
         const parent = page.getByRole('listitem').filter({ has: child });
 
-        // React locator
-        // Only work against unminified application builds
+        // React locator, only work against unminified application builds
         await page.locator('_react=BookItem').click() // match by component
         await page.locator('_react=BookItem[author = "Steven King"]').click() // match by component and exact property value, case-sensitive
         await page.locator('_react=[author = "Steven King" i]').click() // match by property value only, case-insensitive
@@ -1097,7 +1104,7 @@ const postObj = {
         `}</Code>
       </ul>
 
-      <H>Multiple Contexts in a Single Test</H>
+      <H>Multiple Contexts in a single test</H>
 
       <Code block jsx>{`
         test('admin and user', async ({ browser }) => {
@@ -1111,7 +1118,7 @@ const postObj = {
         })
       `}</Code>
 
-      <H>Mock api</H>
+      <H>Mock request</H>
 
       <ul>
         <li>Any requests that a page does can be tracked, modified and mocked</li>
@@ -1137,26 +1144,233 @@ const postObj = {
           })
         `}</Code>
 
-        <li>Patch api response</li>
+        <li>Shorter version</li>
 
         <Code block jsx>{`
-          test('gets the json from api and adds a new fruit', async ({ page }) => {
-            // Get the response and add to it
-            await page.route('*/**/api/v1/fruits', async route => {
-              const response = await route.fetch()
-              const json = await response.json()
-              json.push({ name: 'Loquat', id: 100 })
-              // Fulfill using the original response, while patching the response body
-              // with the given JSON object.
-              await route.fulfill({ response, json })
-            })
+          await page.route('**/api/fetch_data', route => route.fulfill({
+            status: 200,
+            body: testData,
+          }));
+          await page.goto('https://example.com');
+        `}</Code>
+      </ul>
 
-            // Go to the page
-            await page.goto('https://demo.playwright.dev/api-mocking')
+      <H>Modify response</H>
 
-            // Assert that the new fruit is visible
-            await expect(page.getByText('Loquat', { exact: true })).toBeVisible()
+      <Code block jsx>{`
+        test('gets the json from api and adds a new fruit', async ({ page }) => {
+          // Get the response and add to it
+          await page.route('*/**/api/v1/fruits', async route => {
+            const response = await route.fetch()
+            const json = await response.json()
+            json.push({ name: 'Loquat', id: 100 })
+
+            // Fulfill using the original response, while patching the response body
+            // with the given JSON object.
+            await route.fulfill({ response, json })
           })
+
+          // Go to the page
+          await page.goto('https://demo.playwright.dev/api-mocking')
+
+          // Assert that the new fruit is visible
+          await expect(page.getByText('Loquat', { exact: true })).toBeVisible()
+        })
+      `}</Code>
+
+      <p>You can override individual fields on the response</p>
+
+      <Code block jsx>{`
+        await page.route('**/title.html', async route => {
+          // Fetch original response.
+          const response = await route.fetch();
+          // Add a prefix to the title.
+          let body = await response.text();
+          body = body.replace('<title>', '<title>My prefix:');
+          await route.fulfill({
+            // Pass all fields from the response.
+            response,
+            // Override response body.
+            body,
+            // Force content type to be html.
+            headers: {
+              ...response.headers(),
+              'content-type': 'text/html'
+            }
+          });
+        });
+      `}</Code>
+
+      <H>Modify request</H>
+
+      <Code block jsx>{`
+        // Delete header
+        await page.route('**/*', async route => {
+          const headers = route.request().headers();
+          delete headers['X-Secret'];
+          await route.continue({ headers });
+        });
+
+        // Continue requests as POST.
+        await page.route('**/*', route => route.continue({ method: 'POST' }));
+      `}</Code>
+
+      <H>Abort request</H>
+
+      <Code block jsx>{`
+        test.beforeEach(async ({ context }) => {
+          // Block any css requests for each test in this file.
+          await context.route(/.css$/, route => route.abort())
+        })
+
+        test('loads page without css', async ({ page }) => {
+          await page.goto('https://playwright.dev')
+          // ... test goes here
+        })
+      `}</Code>
+
+      <p>
+        Or, you can use <Code>page.route()</Code>
+      </p>
+
+      <Code block jsx>{`
+        test('loads page without images', async ({ page }) => {
+          // Block png and jpeg images
+          await page.route(/(png|jpeg)$/, route => route.abort())
+
+          await page.goto('https://playwright.dev')
+          // ... test goes here
+        })
+      `}</Code>
+
+      <Code block jsx>{`
+        // Abort based on the request type
+        await page.route('**/*', route => {
+          return route.request().resourceType() === 'image' ? route.abort() : route.continue();
+        });
+      `}</Code>
+
+      <H>HTTP Authentication</H>
+
+      <ul>
+        <li>
+          Via <Code>playwright.config.ts</Code>
+        </li>
+
+        <Code block jsx>{`
+          import { defineConfig } from '@playwright/test';
+          export default defineConfig({
+            use: {
+              httpCredentials: {
+                username: 'bill',
+                password: 'pa55w0rd',
+              }
+            }
+          });
+        `}</Code>
+
+        <li>In test</li>
+
+        <Code block jsx>{`
+          const context = await browser.newContext({
+            httpCredentials: {
+              username: 'bill',
+              password: 'pa55w0rd',
+            },
+          });
+          const page = await context.newPage();
+          await page.goto('https://example.com');
+        `}</Code>
+      </ul>
+
+      <H>HTTP Proxy</H>
+
+      <ul>
+        <li>
+          Proxy can be either set globally for the entire browser, or for each browser context
+          individually
+        </li>
+
+        <Code block jsx>{`
+          // playwright.config.ts
+          import { defineConfig } from '@playwright/test';
+          export default defineConfig({
+            use: {
+              proxy: {
+                server: 'http://myproxy.com:3128',
+                username: 'usr',
+                password: 'pwd'
+              }
+            }
+          });
+        `}</Code>
+
+        <li>Or in test</li>
+
+        <Code block jsx>{`
+          import { test, expect } from '@playwright/test';
+
+          test('should use custom proxy on a new context', async ({ browser }) => {
+            const context = await browser.newContext({
+              proxy: {
+                server: 'http://myproxy.com:3128',
+              }
+            });
+            const page = await context.newPage();
+
+            await context.close();
+          });
+        `}</Code>
+      </ul>
+
+      <H>WebSockets</H>
+
+      <ul>
+        <li>Playwright supports WebSockets inspection out of the box</li>
+
+        <Code block jsx>{`
+          page.on('websocket', ws => {
+            console.log(\`WebSocket opened: \${ws.url()}>\`);
+            ws.on('framesent', event => console.log(event.payload));
+            ws.on('framereceived', event => console.log(event.payload));
+            ws.on('close', () => console.log('WebSocket closed'));
+          });
+        `}</Code>
+      </ul>
+
+      <H>Network events</H>
+
+      <ul>
+        <li>You can monitor all the Requests and Responses</li>
+
+        <Code block jsx>{`
+          // Subscribe to 'request' and 'response' events.
+          page.on('request', request => console.log('>>', request.method(), request.url()));
+          page.on('response', response => console.log('<<', response.status(), response.url()));
+
+          await page.goto('https://example.com');
+        `}</Code>
+
+        <li>
+          Or wait for a network response after the button click with{' '}
+          <Code>page.waitForResponse()</Code>
+        </li>
+
+        <Code block jsx>{`
+          // Use a glob URL pattern. Note no await.
+          const responsePromise = page.waitForResponse('**/api/fetch_data');
+          await page.getByText('Update').click();
+          const response = await responsePromise;
+
+          // or use a RegExp. Note no await.
+          const responsePromise = page.waitForResponse(/\\.jpeg$/);
+          await page.getByText('Update').click();
+          const response = await responsePromise;
+
+          // Use a predicate taking a Response object. Note no await.
+          const responsePromise = page.waitForResponse(response => response.url().includes(token));
+          await page.getByText('Update').click();
+          const response = await responsePromise;
         `}</Code>
       </ul>
 
@@ -1166,7 +1380,7 @@ const postObj = {
         <li>Playwright can load page and wait for the target elements to become actionable</li>
         <li>
           If clicking an element could trigger multiple navigations then use{' '}
-          <code>waitForURL()</code>
+          <Code>waitForURL()</Code>
         </li>
 
         <Code block jsx>{`

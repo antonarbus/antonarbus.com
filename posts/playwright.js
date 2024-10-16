@@ -736,6 +736,7 @@ const postObj = {
             })
           })
         `}</Code>
+
         <li>
           Same way you may reference different auth files in different tests instead of setting it
           in the config
@@ -1104,20 +1105,6 @@ const postObj = {
         `}</Code>
       </ul>
 
-      <H>Multiple Contexts in a single test</H>
-
-      <Code block jsx>{`
-        test('admin and user', async ({ browser }) => {
-          // Create two isolated browser contexts
-          const adminContext = await browser.newContext()
-          const userContext = await browser.newContext()
-
-          // Create pages and interact with contexts independently
-          const adminPage = await adminContext.newPage()
-          const userPage = await userContext.newPage()
-        })
-      `}</Code>
-
       <H>Mock request</H>
 
       <ul>
@@ -1391,6 +1378,186 @@ const postObj = {
           // waitForURL()
           await page.getByText('Click me').click()
           await page.waitForURL('**/login')
+        `}</Code>
+      </ul>
+
+      <H>Page model</H>
+
+      <ul>
+        <li>Page objects may simplify authoring by creating a higher-level API for your page</li>
+        <li>
+          PlaywrightDevPage helper class to encapsulate common operations on the playwright.dev
+          page.
+        </li>
+
+        <Code block jsx>{`
+          // playwright-dev-page.ts
+          import { expect, type Locator, type Page } from '@playwright/test';
+
+          export class PlaywrightDevPage {
+            readonly page: Page;
+            readonly getStartedLink: Locator;
+            readonly gettingStartedHeader: Locator;
+            readonly pomLink: Locator;
+            readonly tocList: Locator;
+
+            constructor(page: Page) {
+              this.page = page;
+              this.getStartedLink = page.locator('a', { hasText: 'Get started' });
+              this.gettingStartedHeader = page.locator('h1', { hasText: 'Installation' });
+              this.pomLink = page.locator('li', {
+                hasText: 'Guides',
+              }).locator('a', {
+                hasText: 'Page Object Model',
+              });
+              this.tocList = page.locator('article div.markdown ul > li > a');
+            }
+
+            async goto() {
+              await this.page.goto('https://playwright.dev');
+            }
+
+            async getStarted() {
+              await this.getStartedLink.first().click();
+              await expect(this.gettingStartedHeader).toBeVisible();
+            }
+
+            async pageObjectModel() {
+              await this.getStarted();
+              await this.pomLink.click();
+            }
+          }
+        `}</Code>
+
+        <li>use the custom page in your tests</li>
+
+        <Code block jsx>{`
+          import { test, expect } from '@playwright/test';
+          import { PlaywrightDevPage } from './playwright-dev-page';
+
+          test('getting started should contain table of contents', async ({ page }) => {
+            const playwrightDev = new PlaywrightDevPage(page);
+            await playwrightDev.goto();
+            await playwrightDev.getStarted();
+            await expect(playwrightDev.tocList).toHaveText([
+              \`How to install Playwright\`,
+              \`What's Installed\`,
+              \`How to run the example test\`,
+              \`How to open the HTML test report\`,
+              \`Write tests using web first assertions, page fixtures and locators\`,
+              \`Run single test, multiple tests, headed mode\`,
+              \`Generate tests with Codegen\`,
+              \`See a trace of your tests\`
+            ]);
+          });
+
+          test('should show Page Object Model article', async ({ page }) => {
+            const playwrightDev = new PlaywrightDevPage(page);
+            await playwrightDev.goto();
+            await playwrightDev.pageObjectModel();
+            await expect(page.locator('article')).toContainText('Page Object Model is a common pattern');
+          });
+        `}</Code>
+      </ul>
+
+      <H>Multiple browser contexts</H>
+
+      <Code block jsx>{`
+        test('admin and user', async ({ browser }) => {
+          // Create two isolated browser contexts
+          const adminContext = await browser.newContext()
+          const userContext = await browser.newContext()
+
+          // Create pages and interact with contexts independently
+          const adminPage = await adminContext.newPage()
+          const userPage = await userContext.newPage()
+        })
+      `}</Code>
+
+      <H>Multiple pages</H>
+
+      <ul>
+        <li>Each BrowserContext can have multiple pages</li>
+        <li>A Page refers to a single tab or a popup window within a browser context</li>
+        <li>It should be used to navigate to URLs and interact with the page content.</li>
+
+        <Code block jsx>{`
+          // Create a page.
+          const page = await context.newPage();
+
+          // Navigate explicitly, similar to entering a URL in the browser.
+          await page.goto('http://example.com');
+          // Fill an input.
+          await page.locator('#search').fill('query');
+
+          // Navigate implicitly by clicking a link.
+          await page.locator('#submit').click();
+          // Expect a new url.
+          console.log(page.url());
+        `}</Code>
+
+        <li>Each browser context can host multiple pages (tabs)</li>
+
+        <Code block jsx>{`
+          // Create two pages
+          const pageOne = await context.newPage();
+          const pageTwo = await context.newPage();
+
+          // Get pages of a browser context
+          const allPages = context.pages();
+        `}</Code>
+
+        <li>
+          Link opened in a new page{' '}
+          <Code inline html>
+            {'target="_blank"'}
+          </Code>
+        </li>
+
+        <Code block jsx>{`
+          // Start waiting for new page before clicking. Note no await.
+          const pagePromise = context.waitForEvent('page');
+          await page.getByText('open new tab').click();
+          const newPage = await pagePromise;
+          // Interact with the new page normally.
+          await newPage.getByRole('button').click();
+          console.log(await newPage.title());
+        `}</Code>
+
+        <li>
+          If the action that triggers the new page is unknown, the following pattern can be used.
+        </li>
+
+        <Code block jsx>{`
+          // Get all new pages (including popups) in the context
+          context.on('page', async page => {
+            await page.waitForLoadState();
+            console.log(await page.title());
+          });
+        `}</Code>
+
+        <li>If the page opens a pop-up</li>
+
+        <Code block jsx>{`
+          // Start waiting for popup before clicking. Note no await.
+          const popupPromise = page.waitForEvent('popup');
+          await page.getByText('open the popup').click();
+          const popup = await popupPromise;
+          // Interact with the new popup normally.
+          await popup.getByRole('button').click();
+          console.log(await popup.title());
+        `}</Code>
+
+        <li>
+          If the action that triggers the popup is unknown, the following pattern can be used.
+        </li>
+
+        <Code block jsx>{`
+          // Get all popups when they open
+          page.on('popup', async popup => {
+            await popup.waitForLoadState();
+            console.log(await popup.title());
+          });
         `}</Code>
       </ul>
     </>

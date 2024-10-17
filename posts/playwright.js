@@ -90,7 +90,7 @@ const postObj = {
         await expect(page).toHaveURL() // page has a URL
         await expect(response).toBeOK() // response has an OK status
 
-        // Non//retrying assertions
+        // Non-retrying assertions
         expect(value).toBe() // value is the same
         expect(value).toBeCloseTo() // number is approximately equal
         expect(value).toBeDefined() // value is not undefined
@@ -105,6 +105,7 @@ const postObj = {
         expect(value).toBeTruthy() // value is truthy, i.e. not false, 0, null, etc.
         expect(value).toBeUndefined() // value is undefined
         expect(value).toContain() // string contains a substring
+        expect(data.message).toContain('Expired Token') // example from work
         expect(value).toContain() // array or set contains an element
         expect(value).toContainEqual() // array or set contains a similar element
         expect(value).toEqual() // value is similar // deep equality and pattern matching
@@ -1560,6 +1561,32 @@ const postObj = {
           });
         `}</Code>
       </ul>
+
+      <H>Cookie modification</H>
+
+      <Code block jsx>{`
+        test.describe('user/me', () => {
+        test.use({ baseURL: process.env.BACKEND_BASE_URL })
+
+        test('should throw 403 status if ltpa token is invalid', async ({ request, page }) => {
+          await page.context().clearCookies()
+          await page.context().addCookies([
+            {
+              name: 'LtpaToken',
+              value: 'invalid token',
+              domain: '/webapp.com',
+              path: '/',
+              httpOnly: true,
+              secure: true,
+              expires: -1
+            }
+          ])
+          const res = await page.request.get('user/')
+          expect(res.status()).toBe(403)
+          const data = await res.json()
+          expect(data.message).toContain('Expired LTPA Token')
+        })
+      `}</Code>
     </>
   )
 }

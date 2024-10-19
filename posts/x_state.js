@@ -23,6 +23,7 @@ const postObj = {
   body: (
     <>
       <H>Why</H>
+
       <ul>
         <li>If we need to add some feature it is intuitive to introduce some a boolean flag</li>
         <li>"Boolean" programming is bad</li>
@@ -30,7 +31,9 @@ const postObj = {
         <li>As a programmer we have to code the transitions between states</li>
         <li>xState helps with this</li>
       </ul>
-      <H>XState</H>
+
+      <H>xState</H>
+
       <ul>
         <li>XState is a state management and orchestration solution for JavaScript apps</li>
         <li>
@@ -133,7 +136,9 @@ const postObj = {
           textActor.send({ type: 'text.cancel' }) // logs 'Hello'
         `}</Code>
       </ul>
+
       <H>Actor</H>
+
       <ul>
         <li>
           <i>Actor</i> is a{' '}
@@ -148,6 +153,7 @@ const postObj = {
         <li>Actors can create new actors</li>
         <li>Actors can be created and destroyed as needed to handle the workload efficiently</li>
       </ul>
+
       <Code block jsx>{`
         import { createMachine, createActor } from 'xstate';
 
@@ -180,7 +186,9 @@ const postObj = {
         actor.send({ type: 'toggle' }); // logs 'Active'
         actor.send({ type: 'toggle' }); // logs 'Inactive'
       `}</Code>
+
       <H>Main principles</H>
+
       <ul>
         <li>
           <Lnk path="https://stately.ai/docs/state-machines-and-statecharts">
@@ -246,7 +254,9 @@ const postObj = {
           is finished
         </li>
       </ul>
+
       <H>Parent state</H>
+
       <ul>
         <li>
           A <i>parent</i> state is a state that can contain more states, also known as <i>child</i>{' '}
@@ -257,6 +267,7 @@ const postObj = {
           An <i>atomic</i> state is a state that doesn't have any child states.
         </li>
       </ul>
+
       <Code block jsx>{`
           export const walkMachine = createMachine({
             id: 'walk',
@@ -302,54 +313,59 @@ const postObj = {
             },
           })
         `}</Code>
+
       <H>Parallel state</H>
+
       <ul>
         <li>
           A <i>parallel state</i> is a state where all of its child states, also known as{' '}
           <i>regions</i>, are active simultaneously
         </li>
       </ul>
-      <Code block jsx>{`
-          export const callMachine = createMachine({
-            id: 'call machine',
-            type: 'parallel',
-            states: {
-              mic: {
-                initial: 'muted',
-                states: {
-                  muted: {
-                    on: {
-                      unmute: 'unmuted',
-                    },
-                  },
 
-                  unmuted: {
-                    on: {
-                      mute: 'muted',
-                    },
+      <Code block jsx>{`
+        export const callMachine = createMachine({
+          id: 'call machine',
+          type: 'parallel',
+          states: {
+            mic: {
+              initial: 'muted',
+              states: {
+                muted: {
+                  on: {
+                    unmute: 'unmuted',
                   },
                 },
-              },
-              video: {
-                initial: 'showing video',
-                states: {
-                  'showing video': {
-                    on: {
-                      hide: 'hiding video',
-                    },
-                  },
 
-                  'hiding video': {
-                    on: {
-                      show: 'showing video',
-                    },
+                unmuted: {
+                  on: {
+                    mute: 'muted',
                   },
                 },
               },
             },
-          })
-        `}</Code>
+            video: {
+              initial: 'showing video',
+              states: {
+                'showing video': {
+                  on: {
+                    hide: 'hiding video',
+                  },
+                },
+
+                'hiding video': {
+                  on: {
+                    show: 'showing video',
+                  },
+                },
+              },
+            },
+          },
+        })
+      `}</Code>
+
       <H>Self-transition</H>
+
       <ul>
         <li>
           A <i>self-transition</i> is when an event happens, but the transition returns to the same
@@ -359,6 +375,7 @@ const postObj = {
           Useful for changing context and/or executing actions without changing the finite state
         </li>
       </ul>
+
       <Code block jsx>{`
         import { createMachine, assign } from 'xstate';
 
@@ -374,7 +391,9 @@ const postObj = {
           }
         });
       `}</Code>
+
       <H>Context data</H>
+
       <ul>
         <li>Context is how you store data in a state machine actor</li>
 
@@ -400,7 +419,9 @@ const postObj = {
           });
         `}</Code>
       </ul>
+
       <H>Input & Guards</H>
+
       <ul>
         <li>Input is how initial data can be provided to a machine actor</li>
         <li>Guards are used to conditionally allow or disallow transitions</li>
@@ -448,7 +469,9 @@ const postObj = {
           actor.send({ type: 'toggle' });
         `}</Code>
       </ul>
+
       <H>Machine with React</H>
+
       <Code block jsx>{`
         import { assign, createMachine } from 'xstate';
         import { useMachine } from '@xstate/react';

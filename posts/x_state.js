@@ -1,4 +1,4 @@
-import { createMachine } from 'xstate'
+import { createMachine, assign, createActor } from 'xstate'
 import {
   Code,
   H,
@@ -14,6 +14,7 @@ import {
   jsxToStr,
   ComponentFromHtmlString
 } from '/components/post/reExport'
+import { useMachine } from '@xstate/react'
 
 export const dogMachine = createMachine({
   /** @xstate-layout N4IgpgJg5mDOIC5QQPZQHQENYBsxgAcBiHFAVwgAIA7FAS1jAG0AGAXUVAJVjoBc6KapxAAPRAFoAnAHZ0AFnksAHAEYWLGVIDM8mavkAaEAE9JqgKzplSlgDYZy7fvkAmVdoC+n46gzY8QiJYAFswHBxYSgAzFBQIVg4kEG5eASERcQQ9dBlXNVlXbQtXKVVXC2MzBAlLa1sHJxd3S29fNCwAd0wAazAiaMwIqID8AkSRVP5BYWSs1SlXBTdtZ3kdbRYF1yrzKxsNRucDd3zvHxBaCDgRP0meaYy583krRRV1TR09VTtdmvccmcUkWdgsLG0rnkJzaID8WFwY3uaRmmUQDnQHgsMjsygs2lUn1x-1qm3QLGxWy2+QqFjxsPhmG6fWRj1moCyGLBGkW6jyeOUUn+6lU1lW61WMl0qhkW3OniAA */
@@ -123,6 +124,123 @@ export const callMachine = createMachine({
   }
 })
 
+// simple counter state machine
+/** @xstate-layout N4IgpgJg5mDOIC5QAoC2BDAxgCwJYDswBKAYgEkA5AYQG0AGAXUVAAcB7WXAF1zf2ZAAPRAFoAnAEYAdACYAHAHYFAVjoBmZWLkA2OXTkAaEAE9EEhWKl1NYumI0SALDMcTlAX3dG0WPIVIAIgCitIwC7Jw8fALCCBIyylZiygpOcvIKamIy2kamCGKOUtryCRJ6knKOYp7eGDgExCQAykEAKvRMSCAR3Lz83bEKUsrpusratpNTuSaijsN01QsTVWKTdAqeXiD4bBBwAj4N-uEcfdGDZgp5iGp0MlLpzpuFyTJqatvuQA */
+const countMachine = createMachine({
+  context: {
+    count: 0
+  },
+  on: {
+    INC: {
+      actions: assign({
+        count: ({ context }) => context.count + 1
+      })
+    },
+    DEC: {
+      actions: assign({
+        count: ({ context }) => context.count - 1
+      })
+    },
+    SET: {
+      actions: assign({
+        count: ({ event }) => event.value
+      })
+    }
+  }
+})
+
+const countActor = createActor(countMachine).start()
+
+countActor.subscribe((state) => {
+  console.log(state.context.count)
+})
+
+countActor.send({ type: 'INC' }) // logs 1
+countActor.send({ type: 'DEC' }) // logs 0
+countActor.send({ type: 'SET', value: 10 }) // logs 10
+
+// reading state machine
+/** @xstate-layout N4IgpgJg5mDOIC5QAoC2BDAxgCwJYDswBKAOgCcx0ICoBiAFzAA96TJd6BtABgF1FQABwD2sDrmH4BIJogBM3AKwluAZgAcAFk0BGAGybuu7jtUAaEAE9EOnXJJz9AdgCce-RpOa5AXx8W0LDxCUnZ6GgZmVhx0fBgefiQQETFwyWlZBABaF00STUU5OVUXJ309Jw1NC2sEUx0SHU0tVTkCl253RT8AjBwCYjZqcLjIlhJMYVRUDgTpFPF0pMydF3USRVUnAz0lOT11NZr5F2VvTRcXIrlXC6cekED+kKHxUcZxzFjMMAAbOaSCzSUmWNlOKic3Eu+x0nU6xzq6mUdgKiiUGl2a00fn8IHwwggcGkT2CxHmokWINAmSyTXsBSKJTKegqGnMVnkeUOGnUcjRqJ0hweJIGpAoVBo5NSEipMkQqkUeW4TkOTR0mycN1U1Q5CAUTg2OjK+0MakMTnuuJFLzCksBFOBGUQenshzWByM6j0JXUTh1tX1huNBm4Zu46hxPiAA */
+const textMachine = createMachine({
+  context: {
+    committedValue: '',
+    value: ''
+  },
+  initial: 'reading',
+  states: {
+    reading: {
+      on: {
+        'text.edit': { target: 'editing' }
+      }
+    },
+    editing: {
+      on: {
+        'text.change': {
+          actions: assign({
+            value: ({ event }) => event.value
+          })
+        },
+        'text.commit': {
+          actions: assign({
+            committedValue: ({ context }) => context.value
+          }),
+          target: 'reading'
+        },
+        'text.cancel': {
+          actions: assign({
+            value: ({ context }) => context.committedValue
+          }),
+          target: 'reading'
+        }
+      }
+    }
+  }
+})
+
+const textActor = createActor(textMachine).start()
+
+textActor.subscribe((state) => {
+  console.log(state.context.value)
+})
+
+textActor.send({ type: 'text.edit' }) // logs ''
+textActor.send({ type: 'text.change', value: 'Hello' }) // logs 'Hello'
+textActor.send({ type: 'text.commit' }) // logs 'Hello'
+textActor.send({ type: 'text.edit' }) // logs 'Hello'
+textActor.send({ type: 'text.change', value: 'Hello world' }) // logs 'Hello world'
+textActor.send({ type: 'text.cancel' }) // logs 'Hello'
+
+// example with react
+
+export const toggleMachine = createMachine({
+  id: 'toggle',
+  context: { count: 0 },
+  initial: 'Inactive',
+  states: {
+    Inactive: {
+      on: { toggle: 'Active' }
+    },
+    Active: {
+      entry: assign({
+        count: ({ context }) => context.count + 1
+      }),
+      on: { toggle: 'Inactive' },
+      after: { 2000: 'Inactive' }
+    }
+  }
+})
+
+const ToggleComponent = () => {
+  const [state, send] = useMachine(toggleMachine)
+
+  return (
+    <div>
+      <div>Value: {state.value}</div>
+      <button onClick={() => send({ type: 'toggle' })}>Toggle</button>
+    </div>
+  )
+}
+
 const postObj = {
   title: 'xState',
   date: '2024.10.17',
@@ -132,7 +250,6 @@ const postObj = {
   body: (
     <>
       <H>Why</H>
-
       <ul>
         <li>If we need to add some feature it is intuitive to introduce some a boolean flag</li>
         <li>"Boolean" programming is bad</li>
@@ -140,26 +257,7 @@ const postObj = {
         <li>As a programmer we have to code the transitions between states</li>
         <li>xState helps with this</li>
       </ul>
-
-      <H>Actor</H>
-
-      <ul>
-        <li>
-          <i>Actor</i> is a{' '}
-          <Lnk path="https://en.wikipedia.org/wiki/Actor_model">mathematical model</Lnk> for
-          building message-based systems by using actors to communicate
-        </li>
-        <li>When you run a state machine in XState, it becomes an actor</li>
-        <li>Actorsx can communicate with each other via asynchronous message passing - events</li>
-        <li>Actors process one message at a time</li>
-        <li>Actor has its own internal state that can only be updated by the actor itself</li>
-        <li>Actor may update its internal state in response to a message it receives</li>
-        <li>Actors can create new actors</li>
-        <li>Actors can be created and destroyed as needed to handle the workload efficiently</li>
-      </ul>
-
       <H>XState</H>
-
       <ul>
         <li>XState is a state management and orchestration solution for JavaScript apps</li>
         <li>
@@ -210,10 +308,106 @@ const postObj = {
           countActor.send({ type: 'SET', value: 10 });
           // logs 10
         `}</Code>
+
+        <Code block jsx>{`
+          const textMachine = createMachine({
+            context: {
+              committedValue: '',
+              value: ''
+            },
+            initial: 'reading',
+            states: {
+              reading: {
+                on: {
+                  'text.edit': { target: 'editing' }
+                }
+              },
+              editing: {
+                on: {
+                  'text.change': {
+                    actions: assign({
+                      value: ({ event }) => event.value
+                    })
+                  },
+                  'text.commit': {
+                    actions: assign({
+                      committedValue: ({ context }) => context.value
+                    }),
+                    target: 'reading'
+                  },
+                  'text.cancel': {
+                    actions: assign({
+                      value: ({ context }) => context.committedValue
+                    }),
+                    target: 'reading'
+                  }
+                }
+              }
+            }
+          })
+
+          const textActor = createActor(textMachine).start()
+
+          textActor.subscribe((state) => {
+            console.log(state.context.value)
+          })
+
+          textActor.send({ type: 'text.edit' }) // logs ''
+          textActor.send({ type: 'text.change', value: 'Hello' }) // logs 'Hello'
+          textActor.send({ type: 'text.commit' }) // logs 'Hello'
+          textActor.send({ type: 'text.edit' }) // logs 'Hello'
+          textActor.send({ type: 'text.change', value: 'Hello world' }) // logs 'Hello world'
+          textActor.send({ type: 'text.cancel' }) // logs 'Hello'
+        `}</Code>
       </ul>
+      <H>Actor</H>
+      <ul>
+        <li>
+          <i>Actor</i> is a{' '}
+          <Lnk path="https://en.wikipedia.org/wiki/Actor_model">mathematical model</Lnk> for
+          building message-based systems by using actors to communicate
+        </li>
+        <li>When you run a state machine in XState, it becomes an actor</li>
+        <li>Actors can communicate with each other via asynchronous message passing - events</li>
+        <li>Actors process one message at a time</li>
+        <li>Actor has its own internal state that can only be updated by the actor itself</li>
+        <li>Actor may update its internal state in response to a message it receives</li>
+        <li>Actors can create new actors</li>
+        <li>Actors can be created and destroyed as needed to handle the workload efficiently</li>
+      </ul>
+      <Code block jsx>{`
+        import { createMachine, createActor } from 'xstate';
 
+        const toggleMachine = createMachine({
+          id: 'toggle',
+          initial: 'Inactive',
+          states: {
+            Inactive: {
+              on: { toggle: 'Active' },
+            },
+            Active: {
+              on: { toggle: 'Inactive' },
+            },
+          },
+        });
+
+        // Create an actor that you can send events to.
+        // Note: the actor is not started yet!
+        const actor = createActor(toggleMachine);
+
+        // Subscribe to snapshots (emitted state changes) from the actor
+        actor.subscribe((snapshot) => {
+          console.log('Value:', snapshot.value);
+        });
+
+        // Start the actor
+        actor.start(); // logs 'Inactive'
+
+        // Send events
+        actor.send({ type: 'toggle' }); // logs 'Active'
+        actor.send({ type: 'toggle' }); // logs 'Inactive'
+      `}</Code>
       <H>Main principles</H>
-
       <ul>
         <li>
           <Lnk path="https://stately.ai/docs/state-machines-and-statecharts">
@@ -279,7 +473,6 @@ const postObj = {
           is finished
         </li>
       </ul>
-
       <H>Parent state</H>
       <ul>
         <li>
@@ -291,7 +484,6 @@ const postObj = {
           An <i>atomic</i> state is a state that doesn't have any child states.
         </li>
       </ul>
-
       <Code block jsx>{`
           export const walkMachine = createMachine({
             id: 'walk',
@@ -337,16 +529,13 @@ const postObj = {
             },
           })
         `}</Code>
-
       <H>Parallel state</H>
-
       <ul>
         <li>
           A <i>parallel state</i> is a state where all of its child states, also known as{' '}
           <i>regions</i>, are active simultaneously
         </li>
       </ul>
-
       <Code block jsx>{`
           export const callMachine = createMachine({
             id: 'call machine',
@@ -387,9 +576,7 @@ const postObj = {
             },
           })
         `}</Code>
-
       <H>Self-transition</H>
-
       <ul>
         <li>
           A <i>self-transition</i> is when an event happens, but the transition returns to the same
@@ -399,7 +586,6 @@ const postObj = {
           Useful for changing context and/or executing actions without changing the finite state
         </li>
       </ul>
-
       <Code block jsx>{`
         import { createMachine, assign } from 'xstate';
 
@@ -415,6 +601,118 @@ const postObj = {
           }
         });
       `}</Code>
+      <H>Context data</H>
+      <ul>
+        <li>Context is how you store data in a state machine actor</li>
+
+        <Code block jsx>{`
+          import { assign, createMachine } from 'xstate';
+
+          export const toggleMachine = createMachine({
+            id: 'toggle',
+            context: { count: 0 },
+            initial: 'Inactive',
+            states: {
+              Inactive: {
+                on: { toggle: 'Active' },
+              },
+              Active: {
+                entry: assign({
+                  count: ({ context }) => context.count + 1
+                }),
+                on: { toggle: 'Inactive' },
+                after: { 2000: 'Inactive' },
+              },
+            },
+          });
+        `}</Code>
+      </ul>
+      <H>Input & Guards</H>
+      <ul>
+        <li>Input is how initial data can be provided to a machine actor</li>
+        <li>Guards are used to conditionally allow or disallow transitions</li>
+
+        <Code block jsx>{`
+          import { assign, createMachine } from 'xstate';
+
+          export const toggleMachine = createMachine({
+            id: 'toggle',
+            context: ({ input }) => ({
+              count: 0,
+              maxCount: input.maxCount
+            }),
+            initial: 'Inactive',
+            states: {
+              Inactive: {
+                on: {
+                  toggle: {
+                    // Only trigger toggle transition if count is less than maxCount
+                    guard: ({ context }) => context.count < context.maxCount,
+                    target: 'Active'
+                  }
+                }
+              },
+              Active: {
+                entry: assign({
+                  count: ({ context }) => context.count + 1
+                }),
+                on: { toggle: 'Inactive' },
+                after: { 2000: 'Inactive' },
+              },
+            },
+          });
+
+          const actor = createActor(toggleMachine, {
+            input: { maxCount: 10 }
+          });
+
+          actor.subscribe(snapshot => {
+            console.log('State:', snapshot.value);
+          });
+
+          actor.start();
+
+          actor.send({ type: 'toggle' });
+        `}</Code>
+      </ul>
+      <H>Machine with React</H>
+      <Code block jsx>{`
+        import { assign, createMachine } from 'xstate';
+        import { useMachine } from '@xstate/react';
+
+        export const toggleMachine = createMachine({
+          id: 'toggle',
+          context: { count: 0 },
+          initial: 'Inactive',
+          states: {
+            Inactive: {
+              on: { toggle: 'Active' },
+            },
+            Active: {
+              entry: assign({
+                count: ({ context }) => context.count + 1
+              }),
+              on: { toggle: 'Inactive' },
+              after: { 2000: 'Inactive' },
+            },
+          },
+        });
+
+        const App = () => {
+          const [state, send] = useMachine(toggleMachine);
+
+          return (
+            <div>
+              <div>Value: {state.value}</div>
+              <button onClick={() => send({ type: 'toggle' })}>
+                Toggle
+              </button>
+            </div>
+          );
+        };
+      `}</Code>
+
+      <ToggleComponent />
     </>
   )
 }

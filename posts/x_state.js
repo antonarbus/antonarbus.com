@@ -123,22 +123,6 @@ export const callMachine = createMachine({
   }
 })
 
-/** @xstate-layout N4IgpgJg5mDOIC5QDMyQEYEMDGBrAdAI4CucALgJYD2AdgMSoY4FRVUQDaADALqKgAHKrAqVa-EAA9EXADQgAnjIC+q+TXZwJjCFjwShIsTQnSEAWgCMXAEz5LNgBwBmRwFYAbAHYujm1w95JQtHL3xnGxsATksItxtLHy8otRAdPQIScmoTJBBDURzTRHM3ABZ7J1dPHz8AgKDEL0d8MoTnV1dLMrKvGzLU9OZ8MgALTBpceDyC42KEBwrLKOc3RP6PNzcoty9GhGbW9ptnSy2yri4ox1VVIA */
-export const feedbackMachine = createMachine({
-  id: 'feedback',
-  initial: 'question',
-  states: {
-    question: {
-      on: {
-        'feedback.good': {
-          target: 'thanks'
-        }
-      }
-    },
-    thanks: {}
-  }
-})
-
 const postObj = {
   title: 'xState',
   date: '2024.10.17',
@@ -155,6 +139,77 @@ const postObj = {
         <li>Processes in the app better to be based on named states</li>
         <li>As a programmer we have to code the transitions between states</li>
         <li>xState helps with this</li>
+      </ul>
+
+      <H>Actor</H>
+
+      <ul>
+        <li>
+          <i>Actor</i> is a{' '}
+          <Lnk path="https://en.wikipedia.org/wiki/Actor_model">mathematical model</Lnk> for
+          building message-based systems by using actors to communicate
+        </li>
+        <li>When you run a state machine in XState, it becomes an actor</li>
+        <li>Actorsx can communicate with each other via asynchronous message passing - events</li>
+        <li>Actors process one message at a time</li>
+        <li>Actor has its own internal state that can only be updated by the actor itself</li>
+        <li>Actor may update its internal state in response to a message it receives</li>
+        <li>Actors can create new actors</li>
+        <li>Actors can be created and destroyed as needed to handle the workload efficiently</li>
+      </ul>
+
+      <H>XState</H>
+
+      <ul>
+        <li>XState is a state management and orchestration solution for JavaScript apps</li>
+        <li>
+          XState allows to manage workflow state by creating a model logic as actors and state
+          machines
+        </li>
+        <li>Can be used in the frontend, backend, or wherever JavaScript runs</li>
+        <li>
+          <Code>npm i xstate @xstate/react</Code> install with npm
+        </li>
+
+        <Code block jsx>{`
+          import { createMachine, assign, createActor } from 'xstate';
+
+          const countMachine = createMachine({
+            context: {
+              count: 0,
+            },
+            on: {
+              INC: {
+                actions: assign({
+                  count: ({ context }) => context.count + 1,
+                }),
+              },
+              DEC: {
+                actions: assign({
+                  count: ({ context }) => context.count - 1,
+                }),
+              },
+              SET: {
+                actions: assign({
+                  count: ({ event }) => event.value,
+                }),
+              },
+            },
+          });
+
+          const countActor = createActor(countMachine).start();
+
+          countActor.subscribe((state) => {
+            console.log(state.context.count);
+          });
+
+          countActor.send({ type: 'INC' });
+          // logs 1
+          countActor.send({ type: 'DEC' });
+          // logs 0
+          countActor.send({ type: 'SET', value: 10 });
+          // logs 10
+        `}</Code>
       </ul>
 
       <H>Main principles</H>
@@ -340,10 +395,25 @@ const postObj = {
           A <i>self-transition</i> is when an event happens, but the transition returns to the same
           state
         </li>
+        <li>
+          Useful for changing context and/or executing actions without changing the finite state
+        </li>
       </ul>
 
       <Code block jsx>{`
-        xxx
+        import { createMachine, assign } from 'xstate';
+
+        const machine = createMachine({
+          context: { count: 0 },
+          on: {
+            someEvent: {
+              // No target
+              actions: assign({
+                count: ({context}) => context.count + 1,
+              })
+            }
+          }
+        });
       `}</Code>
     </>
   )

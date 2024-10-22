@@ -745,8 +745,8 @@ const postObj = {
         <li>Comment sign is hash #</li>
         <li>Need to point to your bash executable at the top of the file</li>
 
-        <Code block jsx>{`
-          # path to bash executable, can be checke by 'which bash'
+        <Code block bash>{`
+          # path to bash executable, can be check by 'which bash'
           #! /bin/bash
 
           # print
@@ -756,21 +756,21 @@ const postObj = {
 
       <Hs>Variables</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         NAME="Anton" # assign a value
         echo "my name is $NAME" # reference variable
       `}</Code>
 
       <Hs>User input</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         read -p "Enter your age: " AGE
         echo "you are $AGE years old"
       `}</Code>
 
       <Hs>If statement</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         #! /bin/bash
 
         NAME="Anton"
@@ -807,7 +807,7 @@ const postObj = {
 
       <Hs>Case statement</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         # case statement
         read -p "Are you 21 or over? Y/N " ANSWER
 
@@ -826,7 +826,7 @@ const postObj = {
 
       <Hs>Comparison</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         # comparison
 
         # -eq equal
@@ -849,7 +849,7 @@ const postObj = {
 
       <Hs>Files conditions</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         # FILE CONDITIONS
         
         # -d file   True if the file is a directory
@@ -874,7 +874,7 @@ const postObj = {
 
       <Hs>FOR loop</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         # FOR LOOP
         NAMES="Brad Kevin Alice Mark"
         for NAME in $NAMES
@@ -885,7 +885,7 @@ const postObj = {
 
       <Hs>FOR loop to rename files</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         # FOR LOOP to rename files
         touch 1.txt 2.txt 3.txt
 
@@ -901,7 +901,7 @@ const postObj = {
 
       <Hs>WHILE loop</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         # WHILE LOOP
         COUNT=1
 
@@ -914,7 +914,7 @@ const postObj = {
 
       <Hs>Function</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         # function without params
         function sayHello() {
           echo "Hello World"
@@ -942,7 +942,7 @@ const postObj = {
 
       <Hs>CREATE FOLDER AND WRITE TO A FILE</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         # CREATE FOLDER AND WRITE TO A FILE
         mkdir hello
         touch "hello/world. txt"

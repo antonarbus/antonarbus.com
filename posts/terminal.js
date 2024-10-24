@@ -709,7 +709,7 @@ const postObj = {
         }
       `}</Code>
 
-      <H>App location</H>
+      <H>Executable location</H>
 
       <ul>
         <li>
@@ -722,43 +722,68 @@ const postObj = {
       <ul>
         <li>Uppercase by convention</li>
         <li>Persisted in terminal session</li>
-        <li>
-          <Code>NAME="BRAD"</Code>
-        </li>
-        <li>
-          <Code>echo "my name is $NAME"</Code> use money sign to reference a variable
-        </li>
+        <li>Use money sign to reference a variable</li>
       </ul>
+
+      <Code block bash>{`
+        NAME="John"
+
+        echo $NAME      # John
+        echo "$NAME"    # John 
+        echo \${NAME}    # John 
+        echo "\${NAME}!" # John! 
+
+        echo '$NAME'    # $NAME (Exact string)
+
+        NAME = "John"   # Error (about space)
+      `}</Code>
 
       <H>Script file</H>
 
       <ul>
         <li>
-          <Code>touch myscript.sh</Code> create script file
+          <Code>touch ./script.sh</Code> create script file
         </li>
-        <li>
-          <Code>chmod +x myscript.sh</Code> make script executable
-        </li>
-        <li>
-          <Code>./myscript.sh</Code> run the script
-        </li>
-        <li>Comment sign is hash #</li>
-        <li>Need to point to your bash executable at the top of the file</li>
 
         <Code block bash>{`
-          # path to bash executable, can be check by 'which bash'
+          # path to bash executable, can be checked with 'which bash'
           #! /bin/bash
 
           # print
           echo Hello world!
         `}</Code>
+
+        <li>
+          <Code bash>bash ./script.sh</Code> execute the script
+        </li>
       </ul>
 
-      <Hs>Variables</Hs>
+      <Hs>Executable script</Hs>
+
+      <ul>
+        <li>
+          <Code>chmod +x ./script.sh</Code> make script executable
+        </li>
+        <li>
+          <Code>./myscript.sh</Code> run the script without <code>bash</code> command
+        </li>
+      </ul>
+
+      <Hs>Comments</Hs>
+
+      <ul>
+        <li>Line comment starts with hash sign</li>
+        <li>Multi-line comments use :' to open and ' to close</li>
+      </ul>
 
       <Code block bash>{`
-        NAME="Anton" # assign a value
-        echo "my name is $NAME" # reference variable
+        # This is an inline Bash comment
+
+        : '
+        This is a
+        very neat comment
+        in bash
+        '
       `}</Code>
 
       <Hs>User input</Hs>
@@ -921,8 +946,9 @@ const postObj = {
         }
 
         sayHello
+        echo "This is my $(sayHello) function"
 
-        # function with positional params
+        # function with params
         function greet() {
           echo "Hello $1, I am $2"
         }
@@ -938,6 +964,39 @@ const postObj = {
 
         greet "Brad" "36"
 
+      `}</Code>
+
+      <Hs>Arguments</Hs>
+
+      <Code block text>{`
+        $1 … $9     Parameter 1 ... 9
+        $0          Name of the script itself
+        $1          First argument
+        \${10}       Positional parameter 10
+        $#          Number of arguments
+        $$          Process id of the shell
+        $*          All arguments
+        $@          All arguments, starting from first
+        $-          Current options
+        $_          Last argument of the previous command
+      `}</Code>
+
+      <Code block jsx>{`
+        function greet() {
+        echo $0 # ./script.sh (name of the script)
+        echo $1 # Brad (parameter 1)
+        echo Hello $1, I am $2 # Hello Brad, I am 36
+        echo \${1} # Brad (positional parameter 1)
+        echo $* # Brad 36 (all arguments)
+        echo $@ # Brad 36 (all arguments starting from first)
+        echo $9 # ""
+        echo $# # 2 (number of arguments)
+        echo $$ # 98438 (process id of the shell)
+        echo $- # hB (current options)
+        echo $_ # hB (last argument of the previous command)
+      }
+
+      greet "Brad" "36"
       `}</Code>
 
       <Hs>CREATE FOLDER AND WRITE TO A FILE</Hs>

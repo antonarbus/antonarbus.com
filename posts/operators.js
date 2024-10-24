@@ -28,7 +28,8 @@ const postObj = {
       <H>Arithmetical</H>
 
       <p>
-        <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code>, <code>**</code>
+        <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code>,{' '}
+        <code>**</code>
       </p>
 
       <Code block jsx>{`
@@ -50,7 +51,8 @@ const postObj = {
       <H>Comparison</H>
 
       <p>
-        <code>{'>'}</code>, <code>{'<'}</code>, <code>{'>='}</code>, <code>{'<='}</code>, <code>{'=='}</code>, <code>{'==='}</code>, <code>{'!='}</code>, <code>{'!=='}</code>
+        <code>{'>'}</code>, <code>{'<'}</code>, <code>{'>='}</code>, <code>{'<='}</code>,{' '}
+        <code>{'=='}</code>, <code>{'==='}</code>, <code>{'!='}</code>, <code>{'!=='}</code>
       </p>
 
       <Code block jsx>{`
@@ -103,11 +105,13 @@ const postObj = {
       </p>
 
       <p>
-        <code>||</code> ('OR') finds the first truthy value, returns it and stops"||" finds the first truthy
-        value, returns it and stops
+        <code>||</code> ('OR') finds the first truthy value, returns it and stops"||" finds the
+        first truthy value, returns it and stops
       </p>
 
-      <Code block jsx> {`
+      <Code block jsx>
+        {' '}
+        {`
       // || (OR)
       true || true // true
       false || true // true
@@ -117,11 +121,12 @@ const postObj = {
       "" || 0 || false || "SuperCoder" || "Anonymous" // SuperCoder
       true || alert("not printed") // true
       false || alert("printed") // printed
-      `}</Code>
+      `}
+      </Code>
 
       <p>
-        <code>&&</code> (AND) finds the first falsy value and returns it, if all operands are truthy, returns
-        the last operand
+        <code>&&</code> (AND) finds the first falsy value and returns it, if all operands are
+        truthy, returns the last operand
       </p>
 
       <Code block jsx>{`
@@ -138,7 +143,9 @@ const postObj = {
       1 && 2 && 3 // 3, the last one // all true
       `}</Code>
 
-      <p><code>!</code> (NOT) is used for negation</p>
+      <p>
+        <code>!</code> (NOT) is used for negation
+      </p>
 
       <Code block jsx>{`
       !true // false
@@ -149,7 +156,9 @@ const postObj = {
       !!null // false // Boolean(null)
       `}</Code>
 
-      <p><code>??</code> (Nullish Coalescing) returns the first defined value</p>
+      <p>
+        <code>??</code> (Nullish Coalescing) returns the first defined value
+      </p>
 
       <Code block jsx>{`
       a ?? b // if a is defined, then a // if not defined, then b
@@ -205,16 +214,22 @@ const postObj = {
       <p>
         <Lnk path="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence#table">
           Whole table
-        </Lnk> of operators precedence.
+        </Lnk>{' '}
+        of operators precedence.
       </p>
 
-      <Code block jsx> {`
+      <Code block jsx>
+        {' '}
+        {`
       a && b || c && d 
       // same as 
       (a && b) || (c && d)
-      `}</Code>
+      `}
+      </Code>
 
-      <H>Modify -in -place <Code>+=</Code></H>
+      <H>
+        Modify -in -place <Code>+=</Code>
+      </H>
 
       <Code block jsx>{`
       let n = 2
@@ -222,7 +237,9 @@ const postObj = {
       n *= 2 // now n = 14 (same as n = n * 2)
       `}</Code>
 
-      <Hs>Increment / decrement <code> ++</code>, <code>--</code></Hs>
+      <Hs>
+        Increment / decrement <code> ++</code>, <code>--</code>
+      </Hs>
 
       <Code block jsx>{`
       // increase a value and immediately use the result
@@ -245,10 +262,14 @@ const postObj = {
       b // 3
       `}</Code>
 
-      <H>Spread <code>...</code></H>
+      <H>
+        Spread <code>...</code>
+      </H>
 
-      <p>Spread syntax allows an iterable to be expanded in places where zero or more arguments or elements are expected:
-        for function calls, for array & object literals</p>
+      <p>
+        Spread syntax allows an iterable to be expanded in places where zero or more arguments or
+        elements are expected: for function calls, for array & object literals
+      </p>
 
       <Code block jsx>{`
       Math.max(3, 5, 1) // 5
@@ -263,7 +284,9 @@ const postObj = {
       [...str] // H,e,l,l,o // same as Array.from(str)
       `}</Code>
 
-      <H>Rest <code>...</code></H>
+      <H>
+        Rest <code>...</code>
+      </H>
 
       <p>Rest parameter collects all remaining elements into an array.</p>
 
@@ -300,6 +323,19 @@ const postObj = {
       a // 4
       b // 4
       c // 4
+      `}</Code>
+
+      <H>Nullish coalescing assignment</H>
+
+      <ul>
+        <li>Also knowns as logical nullish assignment</li>
+        <li>Evaluates and assigns if the left operand is nullish (null or undefined)</li>
+      </ul>
+
+      <Code block jsx>{`
+        const a = { duration: 50 };
+        a.speed ??= 25// Expected output: 25
+        a.duration ??= 10 // Expected output: 50
       `}</Code>
     </>
   )

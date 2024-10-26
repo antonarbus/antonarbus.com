@@ -786,6 +786,204 @@ const postObj = {
         '
       `}</Code>
 
+      <Hs>Shell execution</Hs>
+
+      <Code block jsx>{`
+        echo "I'm in $(PWD)"
+        echo "I'm in \`pwd\`" # Same as:
+      `}</Code>
+
+      <Hs>Brace expansion</Hs>
+
+      <Code block jsx>{`
+        echo {A,B} # A B
+        echo {A,B}.js # A.js B.js
+        echo {1..5} # 1 2 3 4 5
+      `}</Code>
+
+      <Hs>String replacement</Hs>
+
+      <Code block jsx>{`
+        # Remove Suffix
+        TEXT="example.txt"
+        echo \${TEXT%.txt}     # Output: example (removes the last suffix .txt)
+
+        # Remove Prefix
+        TEXT="prefix_example"
+        echo \${TEXT#prefix}    # Output: _example (removes the 'prefix')
+
+        # Remove Long Suffix
+        TEXT="example.txt.bak"
+        echo \${TEXT%%.*}       # Output: example (removes everything from the first dot to the end)
+
+        # Remove Long Prefix
+        TEXT="prefix_example_text"
+        echo \${TEXT##prefix_}  # Output: example_text (removes everything up to the last 'prefix_')
+
+        # Replace First Match
+        TEXT="hello world"
+        echo \${TEXT / h / H}  # Output: Hello world
+      
+        # Replace All
+        TEXT="hello world world"
+        echo \${TEXT//world/universe}  # Output: hello universe universe (replaces all 'world' with 'universe')
+          
+        # Replace Suffix
+        TEXT="file.txt"
+        echo \${TEXT/%txt/doc}  # Output: file.doc (replaces 'txt' suffix with 'doc')
+
+        # Replace Prefix
+        TEXT="hello_world"
+        echo \${TEXT/#hello/hi}  # Output: hi_world (replaces 'hello' prefix with 'hi')
+      `}</Code>
+
+      <Hs>Slicing</Hs>
+
+      <Code block jsx>{`
+       name="John"
+
+        echo \${name}           # => John
+        echo \${name:0:2}       # => Jo
+        echo \${name::2}        # => Jo
+        echo \${name::-1}       # => Joh
+        echo \${name:(-1)}      # => n
+        echo \${name:(-2)}      # => hn
+        echo \${name:(-2):2}    # => hn
+      `}</Code>
+
+      <Hs>Length</Hs>
+
+      <Code block jsx>{`
+        # Length of TEXT
+        TEXT="example"
+        echo \${#TEXT}  # Output: 7 (length of the string)
+      `}</Code>
+
+      <Hs>Text transform</Hs>
+
+      <Code block jsx>{`
+        STR="HELLO WORLD!"
+        echo \${STR,}   # => hELLO WORLD!
+        echo \${STR,,}  # => hello world!
+
+        STR="hello world!"
+        echo \${STR^}   # => Hello world!
+        echo \${STR^^}  # => HELLO WORLD!
+
+        ARR=(hello World)
+        echo "\${ARR[@],}" # => hello world
+        echo "\${ARR[@]^}" # => Hello World
+      `}</Code>
+
+      <Hs>basepath & dirpath</Hs>
+
+      <Code block jsx>{`
+        SRC="/path/to/foo.cpp"
+
+        BASEPATH=\${SRC##*/}   
+        echo $BASEPATH  # => "foo.cpp"
+
+
+        DIRPATH=\${SRC%$BASEPATH}
+        echo $DIRPATH   # => "/path/to/"
+      `}</Code>
+
+      <Hs>Define array</Hs>
+
+      <Code block jsx>{`
+        Fruits=('Apple' 'Banana' 'Orange')
+
+        Fruits[0]="Apple"
+        Fruits[1]="Banana"
+        Fruits[2]="Orange"
+
+        ARRAY1=(foo{1..2}) # => foo1 foo2
+        ARRAY2=({A..D})    # => A B C D
+
+        # Merge => foo1 foo2 A B C D
+        ARRAY3=(\${ARRAY1[@]} \${ARRAY2[@]})
+      `}</Code>
+
+      <Hs>Index array</Hs>
+
+      <Code block jsx>{`
+        Fruits=('Apple' 'Banana' 'Orange')
+
+        \${Fruits[0]}       First element --> Apple
+        \${Fruits[*]}       All elements --> Apple Banana Orange
+        \${Fruits[@]}       All elements --> Apple Banana Orange
+        \${#Fruits[@]}      Number of all --> 3
+        \${#Fruits}         Length of 1st --> 5
+        \${#Fruits[2]}      Length of 2nd --> 6
+        \${Fruits[@]:1:2}   Range --> Banana Orange
+        \${!Fruits[@]}      Keys of all --> 0 1 2
+      `}</Code>
+
+      <Hs>Iteration over array</Hs>
+
+      <Code block jsx>{`
+        Fruits=('Apple' 'Banana' 'Orange')
+
+        for e in "\${Fruits[@]}"; do
+          echo $e 
+        done
+
+        # Apple 
+        # Banana
+        # Orange
+
+        # With index
+        for i in "\${!Fruits[@]}"; do
+          printf "%s\t%s\n" "$i" "\${Fruits[$i]}"
+        done
+
+        # 0       Apple
+        # 1       Banana
+        # 2       Orange
+        
+      `}</Code>
+
+      <Hs>Array operations</Hs>
+
+      <Code block jsx>{`
+        Fruits=("\${Fruits[@]}" "Watermelon")      # Push
+        Fruits+=('Watermelon')                     # Also Push
+        Fruits=( \${Fruits[@]/Ap*/} )              # Remove by regex match
+        unset Fruits[2]                            # Remove one item
+        Fruits=("\${Fruits[@]}")                   # Duplicate
+        Fruits=("\${Fruits[@]}" "\${Veggies[@]}")  # Concatenate
+      `}</Code>
+
+      <Hs>Dictionariy</Hs>
+
+      <Code block jsx>{`
+        # works from version 4 (check with bash --version)
+
+        # declare
+        declare -A sounds
+
+        sounds[dog]="bark"
+        sounds[cow]="moo"
+        sounds[bird]="tweet"
+        sounds[wolf]="howl"
+
+        # access
+        echo \${sounds[dog]} # Dog's sound
+        echo \${sounds[@]}   # All values
+        echo \${!sounds[@]}  # All keys
+        echo \${#sounds[@]}  # Number of elements
+        unset sounds[dog]   # Delete dog
+
+        # iterate
+        for val in "\${sounds[@]}"; do
+          echo $val
+        done
+
+        for key in "\${!sounds[@]}"; do
+          echo $key
+        done
+      `}</Code>
+
       <Hs>User input</Hs>
 
       <Code block bash>{`
@@ -849,26 +1047,94 @@ const postObj = {
         esac
       `}</Code>
 
+      <Hs>Conditions</Hs>
+
+      <Code block jsx>{`
+        [[ X && Y ]]        # And
+        [[ X -a Y ]]        # And
+        [[ X || Y ]]        # Or
+        [[ X -o Y ]]        # Or
+        [[ ! EXPR ]]        # Not
+        [[ -o noclobber ]]  # If OPTION is enabled, needs  to avoid overwriting existing files by accident
+
+        # example
+
+        if [[ X && Y ]]; then
+          ...
+        fi
+
+        if [ "$1" = 'y' -a $2 -gt 0 ]; then
+          echo "yes"
+        fi
+
+        if [ "$1" = 'n' -o $2 -lt 0 ]; then
+          echo "no"
+        fi
+      `}</Code>
+
       <Hs>Comparison</Hs>
 
       <Code block bash>{`
-        # comparison
+        # NUMERICAL comparison
 
-        # -eq equal
-        # -ne not equal
-        # -gt greater
-        # -ge greater or equal
-        # -lt less
-        # -le less or equal
+        [[ NUM -eq NUM ]]   # Equal
+        [[ NUM == NUM ]]    # Equal
+
+        [[ NUM -ne NUM ]]   # Not equal
+
+        [[ NUM -lt NUM ]]   # Less than
+        (( NUM < NUM ))     # Less than
+
+        [[ NUM -le NUM ]]   # Less than or equal
+        (( NUM <= NUM ))    # Less than or equal
+        
+        [[ NUM -gt NUM ]]   # Greater than
+        (( NUM > NUM ))     # Greater than
+        
+        [[ NUM -ge NUM ]]   # Greater than or equal
+        (( NUM >= NUM ))    # Greater than or equal
+
+
+
+        # example
 
         NUM1=3
         NUM2=5
 
-        if [ "$NUM1" -gt "$NUM2" ]
+        if [[ "$NUM1" -gt "$NUM2" ]]
         then
           echo "$NUM1 is greater than $NUM2"
         else
           echo "$NUM1 is less than $NUM2"
+        fi
+      `}</Code>
+
+      <Hs>String comparison</Hs>
+
+      <Code block jsx>{`
+        # STRING comparison
+
+        [[ STR == STR ]]    # Equal
+        [[ STR = STR ]]     # Equal (Same above)
+        [[ STR < STR ]]     # Less than (ASCII)
+        [[ STR > STR ]]     # Greater than (ASCII)
+        [[ STR != STR ]]    # Not Equal
+        [[ STR =~ STR ]]    # Regexp
+        [[ -z STR ]]        # Empty string
+        [[ -n STR ]]        # Not empty string
+
+        # example
+
+        if [[ "$A" == "$B" ]]; then
+            ...
+        fi
+
+        if [[ '1. abc' =~ ([a-z]+) ]]; then
+            echo \${BASH_REMATCH[1]}
+        fi
+
+        if (( $a < $b )); then
+          echo "$a is smaller than $b"
         fi
       `}</Code>
 
@@ -877,23 +1143,32 @@ const postObj = {
       <Code block bash>{`
         # FILE CONDITIONS
         
-        # -d file   True if the file is a directory
-        # -e file   True if the file exists (note that this is not particularly portable, thus -f is generally used)
-        # -f file   True if the provided string is a file
-        # -g file   True if the group id is set on a file
-        # -r file   True if the file is readable
-        # -s file   True if the file has a non-zero size
-        # -u        True if the user id is set on a file
-        # —W        True if the file is writable
-        # -X        True if the file is an executable
+        [[ -e FILE ]]     # Checks if the file exists. 
+        [[ -d FILE ]]     # Checks if FILE is a directory. 
+        [[ -f FILE ]]     # Checks if FILE is a regular file. Returns true if FILE exists and is a file, not a directory or symlink.
+        [[ -h FILE ]]     # Checks if FILE is a symbolic link (symlink). 
+        [[ -s FILE ]]     # Checks if FILE has non-zero size. Returns true if FILE exists and has a size greater than 0 bytes.
+        [[ -r FILE ]]     # Checks if FILE is readable. 
+        [[ -w FILE ]]     # Checks if FILE is writable. 
+        [[ -x FILE ]]     # Checks if FILE is executable. 
+        [[ f1 -nt f2 ]]   # Checks if f1 is newer than f2. 
+        [[ f1 -ot f2 ]]   # Checks if f1 is older than f2. 
+        [[ f1 -ef f2 ]]   # Checks if f1 and f2 are the same file. 
+        
+        # example
 
-        FILE="test.txt"
+        touch ./test.txt
+        FILE="./test.txt"
 
-        if [ -f "$FILE" ]
+        if [[ -f $FILE ]]
         then
           echo "$FILE is a file"
         else
           echo "$FILE is NOT a file"
+        fi
+
+        if [[ -e "file.txt" ]]; then
+            echo "file exists"
         fi
       `}</Code>
 
@@ -902,6 +1177,7 @@ const postObj = {
       <Code block bash>{`
         # FOR LOOP
         NAMES="Brad Kevin Alice Mark"
+        
         for NAME in $NAMES
           do
             echo "Hello $NAME"

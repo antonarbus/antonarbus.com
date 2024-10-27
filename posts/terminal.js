@@ -795,14 +795,14 @@ const postObj = {
 
       <Hs>Shell execution</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         echo "I'm in $(PWD)"
         echo "I'm in \`pwd\`" # Same as:
       `}</Code>
 
       <Hs>Brace expansion</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         echo {A,B} # A B
         echo {A,B}.js # A.js B.js
         echo {1..5} # 1 2 3 4 5
@@ -810,7 +810,7 @@ const postObj = {
 
       <Hs>String replacement</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         # Remove Suffix
         TEXT="example.txt"
         echo \${TEXT%.txt}     # Output: example (removes the last suffix .txt)
@@ -846,8 +846,8 @@ const postObj = {
 
       <Hs>Slicing</Hs>
 
-      <Code block jsx>{`
-       name="John"
+      <Code block bash>{`
+        name="John"
 
         echo \${name}           # => John
         echo \${name:0:2}       # => Jo
@@ -860,7 +860,7 @@ const postObj = {
 
       <Hs>Length</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         # Length of TEXT
         TEXT="example"
         echo \${#TEXT}  # Output: 7 (length of the string)
@@ -868,7 +868,7 @@ const postObj = {
 
       <Hs>Text transform</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         STR="HELLO WORLD!"
         echo \${STR,}   # => hELLO WORLD!
         echo \${STR,,}  # => hello world!
@@ -884,7 +884,7 @@ const postObj = {
 
       <Hs>BASE_PATH</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         SRC="/path/to/foo.cpp"
 
         BASE_PATH=\${SRC##*/}   
@@ -893,7 +893,7 @@ const postObj = {
 
       <Hs>DIR_PATH</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         SRC="/path/to/foo.cpp"
 
         DIR_PATH=\${SRC%$BASEPATH}
@@ -902,20 +902,20 @@ const postObj = {
 
       <Hs>THIS_DIR</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         THIS_DIR="\${0%/*}"
       `}</Code>
 
       <Hs>Relative path</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         THIS_DIR="\${0%/*}"
         echo "\${THIS_DIR}/../share/foo.sh"
       `}</Code>
 
       <Hs>Define array</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         Fruits=('Apple' 'Banana' 'Orange')
 
         Fruits[0]="Apple"
@@ -931,7 +931,7 @@ const postObj = {
 
       <Hs>Index array</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         Fruits=('Apple' 'Banana' 'Orange')
 
         \${Fruits[0]}       First element --> Apple
@@ -946,7 +946,7 @@ const postObj = {
 
       <Hs>Iteration over array</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         Fruits=('Apple' 'Banana' 'Orange')
 
         for e in "\${Fruits[@]}"; do
@@ -970,7 +970,7 @@ const postObj = {
 
       <Hs>Array operations</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         Fruits=("\${Fruits[@]}" "Watermelon")      # Push
         Fruits+=('Watermelon')                     # Also Push
         Fruits=( \${Fruits[@]/Ap*/} )              # Remove by regex match
@@ -981,7 +981,7 @@ const postObj = {
 
       <Hs>Dictionary</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         # works from version 4 (check with bash --version)
 
         # declare
@@ -1095,7 +1095,7 @@ const postObj = {
 
       <Hs>Conditions</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         [[ X && Y ]]   # And
         [[ X -a Y ]]   # And
         [[ X || Y ]]   # Or
@@ -1154,7 +1154,7 @@ const postObj = {
 
       <Hs>String comparison</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         # STRING comparison
 
         [[ STR == STR ]]    # Equal
@@ -1265,7 +1265,7 @@ const postObj = {
 
       <Hs>Ranges</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         for i in {1..5}; do
           echo "Welcome $i"
         done
@@ -1286,7 +1286,7 @@ const postObj = {
 
       <Hs>Until</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         count=0
         until [ $count -gt 10 ]; do
           echo "$count"
@@ -1296,7 +1296,7 @@ const postObj = {
 
       <Hs>Forever</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         while true; do
             # here is some code.
         done
@@ -1309,7 +1309,7 @@ const postObj = {
 
       <Hs>Reading lines</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         cat file.txt | while read line; do
           echo $line
         done
@@ -1346,7 +1346,7 @@ const postObj = {
 
       <Hs>Return value</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         myfunc() {
             local myresult='some value'
             echo $myresult
@@ -1359,7 +1359,7 @@ const postObj = {
 
       <Hs>Raise error</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         myfunc() {
           return 1
         }
@@ -1388,7 +1388,7 @@ const postObj = {
         $_          # Last argument of the previous command
       `}</Code>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         function greet() {
         echo $0 # ./script.sh (name of the script)
         echo $1 # Brad (parameter 1)
@@ -1418,14 +1418,14 @@ const postObj = {
 
       <Hs>Numeric calculations</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         a=1
         echo $((a + 200))
       `}</Code>
 
       <Hs>Randomize</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         echo $(($RANDOM%200))  # Random number 0..199
       `}</Code>
 
@@ -1435,14 +1435,14 @@ const postObj = {
         <li>Use round braces to run a command in separate shell</li>
       </ul>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         (cd ..; echo $PWD) # /Users/sherb/Git
         echo $PWD # /Users/sherb/Git/antonarbus.com
       `}</Code>
 
       <Hs>Redirection</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         python hello.py > output.txt   # stdout to (file)
         python hello.py >> output.txt  # stdout to (file), append
         python hello.py 2> error.log   # stderr to (file)
@@ -1463,7 +1463,7 @@ const postObj = {
         </li>
       </ul>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         traperr() {
           echo "ERROR: \${BASH_SOURCE[1]} at about \${BASH_LINENO[0]}"
         }
@@ -1490,7 +1490,7 @@ const postObj = {
         </li>
       </ul>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         printf "Hello, %s!\\n" "World"
         printf "Hello %s, I'm %s" Sven Olga   # => "Hello Sven, I'm Olga
         printf "1 + 1 = %d" 2                 # => "1 + 1 = 2"
@@ -1499,7 +1499,7 @@ const postObj = {
 
       <Hs>Ping</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         if ping -c 1 google.com; then
           echo "It appears you have a working internet connection"
         fi
@@ -1514,7 +1514,7 @@ const postObj = {
         </li>
       </ul>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         # -i: Case-insensitive search
         grep -i "pattern" file.txt
 
@@ -1549,34 +1549,18 @@ const postObj = {
           Escape these special characters with <code>{'\\'}</code>
         </li>
         <li>
-          <code>{'!'}</code>
-          <code>{'"'}</code>
-          <code>{'#'}</code>
-          <code>{'&'}</code>
-          <code>{"'"}</code>
-          <code>{'('}</code>
-          <code>{')'}</code>
-          <code>{','}</code>
-          <code>{';'}</code>
-          <code>{'<'}</code>
-          <code>{'>'}</code>
-          <code>{'['}</code>
-          <code>{'|'}</code>
-          <code>{'\\'}</code>
-          <code>{']'}</code>
-          <code>{'^'}</code>
-          <code>{'{'}</code>
-          <code>{'}'}</code>
-          <code>{'`'}</code>
-          <code>{'$'}</code>
-          <code>{'*'}</code>
-          <code>{'?'}</code>
+          <code>{'!'}</code> <code>{'"'}</code> <code>{'#'}</code> <code>{'&'}</code>{' '}
+          <code>{"'"}</code> <code>{'('}</code> <code>{')'}</code> <code>{','}</code>{' '}
+          <code>{';'}</code> <code>{'<'}</code> <code>{'>'}</code> <code>{'['}</code>{' '}
+          <code>{'|'}</code> <code>{'\\'}</code> <code>{']'}</code> <code>{'^'}</code>{' '}
+          <code>{'{'}</code> <code>{'}'}</code> <code>{'`'}</code> <code>{'$'}</code>{' '}
+          <code>{'*'}</code> <code>{'?'}</code>{' '}
         </li>
       </ul>
 
       <Hs>Multi-line text</Hs>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         # Printing Multi-line Text
 
         cat <<EOF

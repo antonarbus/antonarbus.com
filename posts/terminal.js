@@ -13,6 +13,7 @@ const postObj = {
       <ul>
         <li>
           <Code bash>echo Hello World</Code> print on screen
+          <Code bash>echo -n "Hello, World!"</Code> no new line
         </li>
       </ul>
 
@@ -40,7 +41,7 @@ const postObj = {
 
       <ul>
         <li>
-          <Code bash>pwd</Code> show where you are
+          <Code bash>pwd</Code> shows where you are
         </li>
       </ul>
 
@@ -316,6 +317,9 @@ const postObj = {
         <li>
           <Code bash>sudo -s</Code> stay sudo permanently (Super User DO)
         </li>
+        <li>
+          <Code bash>sudo !!</Code> Run the previous command with sudo
+        </li>
       </ul>
 
       <H>Size</H>
@@ -553,6 +557,9 @@ const postObj = {
         </li>
         <li>
           <kbd>Ctrl</kbd> + <kbd>G</kbd> exit search mode
+        </li>
+        <li>
+          <Code bash>history</Code> show history commands
         </li>
       </ul>
 
@@ -875,17 +882,35 @@ const postObj = {
         echo "\${ARR[@]^}" # => Hello World
       `}</Code>
 
-      <Hs>basepath & dirpath</Hs>
+      <Hs>BASE_PATH</Hs>
 
       <Code block jsx>{`
         SRC="/path/to/foo.cpp"
 
-        BASEPATH=\${SRC##*/}   
-        echo $BASEPATH  # => "foo.cpp"
+        BASE_PATH=\${SRC##*/}   
+        echo $BASE_PATH  # => "foo.cpp"
+      `}</Code>
 
+      <Hs>DIR_PATH</Hs>
 
-        DIRPATH=\${SRC%$BASEPATH}
-        echo $DIRPATH   # => "/path/to/"
+      <Code block jsx>{`
+        SRC="/path/to/foo.cpp"
+
+        DIR_PATH=\${SRC%$BASEPATH}
+        echo $DIR_PATH  # => "/path/to/"
+      `}</Code>
+
+      <Hs>THIS_DIR</Hs>
+
+      <Code block jsx>{`
+        THIS_DIR="\${0%/*}"
+      `}</Code>
+
+      <Hs>Relative path</Hs>
+
+      <Code block jsx>{`
+        THIS_DIR="\${0%/*}"
+        echo "\${THIS_DIR}/../share/foo.sh"
       `}</Code>
 
       <Hs>Define array</Hs>
@@ -937,9 +962,9 @@ const postObj = {
           printf "%s\t%s\n" "$i" "\${Fruits[$i]}"
         done
 
-        # 0       Apple
-        # 1       Banana
-        # 2       Orange
+        # 0  Apple
+        # 1  Banana
+        # 2  Orange
         
       `}</Code>
 
@@ -954,7 +979,7 @@ const postObj = {
         Fruits=("\${Fruits[@]}" "\${Veggies[@]}")  # Concatenate
       `}</Code>
 
-      <Hs>Dictionariy</Hs>
+      <Hs>Dictionary</Hs>
 
       <Code block jsx>{`
         # works from version 4 (check with bash --version)
@@ -1031,7 +1056,28 @@ const postObj = {
       <Hs>Case statement</Hs>
 
       <Code block bash>{`
-        # case statement
+        # example 1
+
+        echo "Enter a number between 1 and 3:"
+        read NUMBER
+
+        case $NUMBER in
+          1)
+            echo "You chose 1!"
+            ;;
+          2)
+            echo "You chose 2!"
+            ;;
+          3)
+            echo "You chose 3!"
+            ;;
+          *)
+            echo "Invalid choice, please enter a number between 1 and 3."
+            ;;
+        esac
+
+        # example 2
+
         read -p "Are you 21 or over? Y/N " ANSWER
 
         case "$ANSWER" in
@@ -1050,12 +1096,11 @@ const postObj = {
       <Hs>Conditions</Hs>
 
       <Code block jsx>{`
-        [[ X && Y ]]        # And
-        [[ X -a Y ]]        # And
-        [[ X || Y ]]        # Or
-        [[ X -o Y ]]        # Or
-        [[ ! EXPR ]]        # Not
-        [[ -o noclobber ]]  # If OPTION is enabled, needs  to avoid overwriting existing files by accident
+        [[ X && Y ]]   # And
+        [[ X -a Y ]]   # And
+        [[ X || Y ]]   # Or
+        [[ X -o Y ]]   # Or
+        [[ ! EXPR ]]   # Not
 
         # example
 
@@ -1094,8 +1139,6 @@ const postObj = {
         [[ NUM -ge NUM ]]   # Greater than or equal
         (( NUM >= NUM ))    # Greater than or equal
 
-
-
         # example
 
         NUM1=3
@@ -1126,11 +1169,11 @@ const postObj = {
         # example
 
         if [[ "$A" == "$B" ]]; then
-            ...
+          ...
         fi
 
         if [[ '1. abc' =~ ([a-z]+) ]]; then
-            echo \${BASH_REMATCH[1]}
+          echo \${BASH_REMATCH[1]}
         fi
 
         if (( $a < $b )); then
@@ -1177,16 +1220,12 @@ const postObj = {
       <Code block bash>{`
         # FOR LOOP
         NAMES="Brad Kevin Alice Mark"
-        
+
         for NAME in $NAMES
           do
             echo "Hello $NAME"
         done
-      `}</Code>
 
-      <Hs>FOR loop to rename files</Hs>
-
-      <Code block bash>{`
         # FOR LOOP to rename files
         touch 1.txt 2.txt 3.txt
 
@@ -1198,6 +1237,38 @@ const postObj = {
             echo "Renaming $FILE to new-$FILE"
             mV $FILE $NEW-$FILE
         done
+
+        # C-like for loop
+
+        for ((i = 0 ; i < 100 ; i++)); do
+          echo $i
+        done
+
+        # Continue
+        for number in $(seq 1 3); do
+          if [[ $number == 2 ]]; then
+            continue;
+          fi
+          echo "$number"
+        done
+
+        # Break
+        for number in $(seq 1 3); do
+          if [[ $number == 2 ]]; then
+              # Skip entire rest of loop.
+              break;
+          fi
+          # This will only print 1
+          echo "$number"
+        done
+      `}</Code>
+
+      <Hs>Ranges</Hs>
+
+      <Code block jsx>{`
+        for i in {1..5}; do
+          echo "Welcome $i"
+        done
       `}</Code>
 
       <Hs>WHILE loop</Hs>
@@ -1206,10 +1277,41 @@ const postObj = {
         # WHILE LOOP
         COUNT=1
 
-        while [ $COUNT -le 5 ]
+        while [[ $COUNT -le 5 ]]
         do
           echo "Count is: $COUNT"
           ((COUNT++))  # Increment the count variable
+        done
+      `}</Code>
+
+      <Hs>Until</Hs>
+
+      <Code block jsx>{`
+        count=0
+        until [ $count -gt 10 ]; do
+          echo "$count"
+          ((count++))
+        done
+      `}</Code>
+
+      <Hs>Forever</Hs>
+
+      <Code block jsx>{`
+        while true; do
+            # here is some code.
+        done
+
+        # shorthand
+        while :; do
+            # here is some code.
+        done
+      `}</Code>
+
+      <Hs>Reading lines</Hs>
+
+      <Code block jsx>{`
+        cat file.txt | while read line; do
+          echo $line
         done
       `}</Code>
 
@@ -1242,19 +1344,48 @@ const postObj = {
 
       `}</Code>
 
+      <Hs>Return value</Hs>
+
+      <Code block jsx>{`
+        myfunc() {
+            local myresult='some value'
+            echo $myresult
+        }
+
+        result="$(myfunc)"
+
+        echo $result
+      `}</Code>
+
+      <Hs>Raise error</Hs>
+
+      <Code block jsx>{`
+        myfunc() {
+          return 1
+        }
+
+        if myfunc; then
+            echo "success"
+        else
+            echo "failure"
+        fi
+      `}</Code>
+
       <Hs>Arguments</Hs>
 
       <Code block text>{`
-        $1 … $9     Parameter 1 ... 9
-        $0          Name of the script itself
-        $1          First argument
-        \${10}       Positional parameter 10
-        $#          Number of arguments
-        $$          Process id of the shell
-        $*          All arguments
-        $@          All arguments, starting from first
-        $-          Current options
-        $_          Last argument of the previous command
+        $1 … $9     # Parameter 1 ... 9
+        $0          # Filename of the script
+        $1          # First argument
+        \${10}      # Positional parameter 10
+        $#          # Number of arguments
+        $$          # Process id (PID) of the shell
+        $!          # PID of last background task
+        $?          # Exit status of last task
+        $*          # All arguments
+        $@          # All arguments, starting from first
+        $-          # Current options
+        $_          # Last argument of the previous command
       `}</Code>
 
       <Code block jsx>{`
@@ -1284,6 +1415,200 @@ const postObj = {
         echo "Hello World" >> "hello/world.txt"
         echo "Created hello/world.txt"
       `}</Code>
+
+      <Hs>Numeric calculations</Hs>
+
+      <Code block jsx>{`
+        a=1
+        echo $((a + 200))
+      `}</Code>
+
+      <Hs>Randomize</Hs>
+
+      <Code block jsx>{`
+        echo $(($RANDOM%200))  # Random number 0..199
+      `}</Code>
+
+      <Hs>Subshell</Hs>
+
+      <ul>
+        <li>Use round braces to run a command in separate shell</li>
+      </ul>
+
+      <Code block jsx>{`
+        (cd ..; echo $PWD) # /Users/sherb/Git
+        echo $PWD # /Users/sherb/Git/antonarbus.com
+      `}</Code>
+
+      <Hs>Redirection</Hs>
+
+      <Code block jsx>{`
+        python hello.py > output.txt   # stdout to (file)
+        python hello.py >> output.txt  # stdout to (file), append
+        python hello.py 2> error.log   # stderr to (file)
+        python hello.py 2>&1           # stderr to stdout
+
+        python hello.py > /dev/null    # stdout to (null)
+        python hello.py 2> /dev/null   # stderr to (null)
+        python hello.py &> /dev/null   # stdout and stderr to (null)
+
+        python hello.py < foo.txt      # feed foo.txt to stdin for python
+      `}</Code>
+
+      <Hs>Error handling</Hs>
+
+      <ul>
+        <li>
+          <code>trap</code> executes an action when a certain event occurs
+        </li>
+      </ul>
+
+      <Code block jsx>{`
+        traperr() {
+          echo "ERROR: \${BASH_SOURCE[1]} at about \${BASH_LINENO[0]}"
+        }
+
+        set -o errtrace
+        trap traperr ERR
+
+        some_incorrect_code
+
+        # ERROR: ./script.sh at about 10
+      `}</Code>
+
+      <Hs>printf</Hs>
+
+      <ul>
+        <li>
+          Supports format specifiers (e.g., <code>%s</code> for strings, <code>%d</code> for
+          integers), allowing for more complex text formatting
+        </li>
+        <li>Requires format strings, so it's slightly more complex to use</li>
+        <li>
+          By default, <code>echo</code> adds a newline at the end of its output, but{' '}
+          <code>printf</code> does not
+        </li>
+      </ul>
+
+      <Code block jsx>{`
+        printf "Hello, %s!\\n" "World"
+        printf "Hello %s, I'm %s" Sven Olga   # => "Hello Sven, I'm Olga
+        printf "1 + 1 = %d" 2                 # => "1 + 1 = 2"
+        printf "Print a float: %f" 2          # => "Print a float: 2.000000"
+      `}</Code>
+
+      <Hs>Ping</Hs>
+
+      <Code block jsx>{`
+        if ping -c 1 google.com; then
+          echo "It appears you have a working internet connection"
+        fi
+      `}</Code>
+
+      <Hs>Grep (search in text)</Hs>
+
+      <ul>
+        <li>grep stands for Global Regular Expression Print</li>
+        <li>
+          <code>grep</code> searches for text patterns within files or input streams
+        </li>
+      </ul>
+
+      <Code block jsx>{`
+        # -i: Case-insensitive search
+        grep -i "pattern" file.txt
+
+        # -r or -R: Recursive search in directories
+        grep -r "pattern" /path/to/directory
+
+        # -l: Only lists file names with matches, not the matching lines
+        grep -l "pattern" *.txt
+
+        # -v: Invert match; shows lines that do not contain the pattern.
+        grep -v "pattern" file.txt
+
+        # -c: Counts the number of matches per file.
+        grep -c "pattern" file.txt
+
+        # -n: Shows line numbers for each matching line.
+        grep -n "pattern" file.txt
+
+        # -q: Quiet mode; suppresses output, sets exit status only.
+        grep -q "pattern" file.txt && echo "Found" || echo "Not found"
+
+        # example
+        if grep -q 'foo' ~/.bash_history; then
+          echo "You appear to have typed 'foo' in the past"
+        fi
+      `}</Code>
+
+      <Hs>Backslash escapes</Hs>
+
+      <ul>
+        <li>
+          Escape these special characters with <code>{'\\'}</code>
+        </li>
+        <li>
+          <code>{'!'}</code>
+          <code>{'"'}</code>
+          <code>{'#'}</code>
+          <code>{'&'}</code>
+          <code>{"'"}</code>
+          <code>{'('}</code>
+          <code>{')'}</code>
+          <code>{','}</code>
+          <code>{';'}</code>
+          <code>{'<'}</code>
+          <code>{'>'}</code>
+          <code>{'['}</code>
+          <code>{'|'}</code>
+          <code>{'\\'}</code>
+          <code>{']'}</code>
+          <code>{'^'}</code>
+          <code>{'{'}</code>
+          <code>{'}'}</code>
+          <code>{'`'}</code>
+          <code>{'$'}</code>
+          <code>{'*'}</code>
+          <code>{'?'}</code>
+        </li>
+      </ul>
+
+      <Hs>Multi-line text</Hs>
+
+      <Code block jsx>{`
+        # Printing Multi-line Text
+
+        cat <<EOF
+        Welcome to the Script!
+        This is a multi-line message.
+        EOF
+
+        # Redirecting Input to a Command
+
+        mysql -u user -p database <<EOF
+        SELECT * FROM users;
+        EOF
+
+        # Creating Configuration Files on the Fly
+
+        cat <<EOF > config.conf
+        [Settings]
+        theme=dark
+        EOF
+
+        # Save Multi-line Text in variable
+
+        message=$(cat <<EOF
+        This is a
+        multi-line string
+        stored in a variable.
+        EOF
+        )
+        echo "$message"
+      `}</Code>
+
+      <Hs></Hs>
 
       <H>Useful shortcuts</H>
 

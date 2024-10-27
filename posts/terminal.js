@@ -13,6 +13,8 @@ const postObj = {
       <ul>
         <li>
           <Code bash>echo Hello World</Code> print on screen
+        </li>
+        <li>
           <Code bash>echo -n "Hello, World!"</Code> no new line
         </li>
       </ul>
@@ -71,8 +73,7 @@ const postObj = {
         </li>
         <li>
           <Code>
-            {' '}
-            cd <i>path</i>{' '}
+            cd <i>path</i>
           </Code>{' '}
           go to path
         </li>
@@ -207,7 +208,7 @@ const postObj = {
       <ul>
         <li>
           <Code>
-            mv <i>/file_path_from</i> <i>/file_path_to</i>{' '}
+            mv <i>/file_path_from</i> <i>/file_path_to</i>
           </Code>{' '}
           move a file
         </li>
@@ -1592,7 +1593,18 @@ const postObj = {
         echo "$message"
       `}</Code>
 
-      <Hs></Hs>
+      <Hs>Pipe (connecting commands)</Hs>
+
+      <ul>
+        <li>Pipe sign (|) connects the output of one command to the input of another</li>
+        <li>Piping allows to chain commands together to process data efficiently</li>
+      </ul>
+
+      <Code block bash>{`
+        # Lists files in long format is piped into grep
+        # Which shows only files with a .txt extension
+        ls -l | grep ".txt"
+      `}</Code>
 
       <H>Useful shortcuts</H>
 

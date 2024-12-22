@@ -589,6 +589,17 @@ const postObj = {
         </li>
       </ul>
 
+      <H>Switch</H>
+
+      <ul>
+        <li>
+          <Code>
+            git switch <i>branch_name</i>
+          </Code>{' '}
+          switch to another branch, kind of limited version of <code>git checkout</code>
+        </li>
+      </ul>
+
       <H>Merge types</H>
 
       <ul>
@@ -682,26 +693,6 @@ const postObj = {
 
       <LazyImg src="/imgs/git/rebase interactive flags.png"></LazyImg>
 
-      <H>Restore vs Reset</H>
-
-      <ul>
-        <li>
-          <Code bash>git restore .</Code> undo unstaged changes (no <Code>git add .</Code> done)
-        </li>
-        <li>
-          <Code bash>git reset .</Code> unstage staged but not committed changes, then you need to{' '}
-          <Code bash>git restore .</Code>
-        </li>
-        <li>
-          <Code bash>git reset HEAD~1</Code> unstage last commit and then{' '}
-          <Code bash>git restore .</Code> to undo local changes
-        </li>
-        <li>
-          <Code bash>git reset --hard HEAD~1</Code> unstage and last commit and undo changes (same
-          as above)
-        </li>
-      </ul>
-
       <H>Restore</H>
 
       <ul>
@@ -794,6 +785,26 @@ const postObj = {
         </li>
         <li>
           <Code>git reset --hard HEAD~2</Code> remove last 2 commits
+        </li>
+      </ul>
+
+      <H>Restore vs Reset</H>
+
+      <ul>
+        <li>
+          <Code bash>git restore .</Code> undo unstaged changes (no <Code>git add .</Code> done)
+        </li>
+        <li>
+          <Code bash>git reset .</Code> unstage staged but not committed changes, then you need to{' '}
+          <Code bash>git restore .</Code>
+        </li>
+        <li>
+          <Code bash>git reset HEAD~1</Code> unstage last commit and then{' '}
+          <Code bash>git restore .</Code> to undo local changes
+        </li>
+        <li>
+          <Code bash>git reset --hard HEAD~1</Code> unstage and last commit and undo changes (same
+          as above)
         </li>
       </ul>
 

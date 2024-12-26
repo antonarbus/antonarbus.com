@@ -8,7 +8,7 @@ on:
 env:
   PROJECT_ID: 'antonarbus'
   REGION: 'us-central1'
-  ARTIFACTS_REGISTRY_FOLDER: 'artifact-registry'
+  ARTIFACTS_REGISTRY_NAME: 'artifact-registry'
   DOCKER_IMAGE_NAME: 'docker-image'
 
 jobs:
@@ -42,13 +42,13 @@ jobs:
           context: .
           file: ./dockerfile.prod
           push: true
-          tags: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACTS_REGISTRY_FOLDER }}/${{ env.DOCKER_IMAGE_NAME }}:${{ env.IMAGE_VERSION }}
+          tags: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACTS_REGISTRY_NAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ env.IMAGE_VERSION }}
 
       - name: Deploy to Cloud Run
         uses: google-github-actions/deploy-cloudrun@v2
         with:
           service: cloud-run-${{ env.IMAGE_VERSION }}
-          image: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACTS_REGISTRY_FOLDER }}/${{ env.DOCKER_IMAGE_NAME }}:${{ env.IMAGE_VERSION }}
+          image: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACTS_REGISTRY_NAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ env.IMAGE_VERSION }}
           region: ${{ env.REGION }}
           project_id: ${{ env.PROJECT_ID }}
 

@@ -2,6 +2,8 @@
   "standard.enable": true,
   "cSpell.words": [
     "accum",
+    "addgroup",
+    "adduser",
     "autogrow",
     "autokill",
     "babeled",
@@ -31,6 +33,7 @@
     "jsxes",
     "Laravel",
     "lazyload",
+    "libc",
     "lightgray",
     "lightgreen",
     "lightpink",

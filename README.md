@@ -1,34 +1,28 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# myvocab.org
 
-## Getting Started
+## Cloud Run
 
-First,  run the development server:
+- create a cloud run container with unauthenticated access + min 0 instances + 'us-central1' region
+- give it a name "cloud-run"
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+https://console.cloud.google.com/run/detail/us-central1/cloud-run/metrics?inv=1&invt=AblLKg&project=antonarbus
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Artifact Registry
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+- create repository for docker + 'us-central1' region + with delete artifacts option
+- give it a name "artifact-registry"
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+https://console.cloud.google.com/artifacts/docker/antonarbus/us-central1/artifact-registry?inv=1&invt=AblLNw&project=antonarbus
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## IAM-Admin
 
-## Learn More
+- go to Service Accounts --> Create Service Account to let github actions upload docker to Artifact Registery
+- give it a name "github-actions-sa"
+- add roles: 1. "Cloud Run Admin" 2. "Artifact Registry Administrator" 3. "Service Account User"
+- go into created account --> keys --> add key --> create new json key
+- copy full content of the key (big object) and add into github --> settings --> secretes & variables --> actions --> Repository secrets under "GCP_SA_KEY" name
 
-To learn more about Next.js, take a look at the following resources:
+## Github Actions
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- Container is automatically deployed with github actions on merge to main branch
+- Configuration is kept at

@@ -10,7 +10,8 @@
     "lint": "next lint",
     "test": "jest --watch",
     "mocha": "mocha",
-    "build-docker": "docker compose -f docker-compose.prod.yml build --no-cache",
+    "build-docker": "docker compose -f docker-compose.prod.yml build",
+    "build-docker-no-cache": "docker compose -f docker-compose.prod.yml build --no-cache",
     "start-docker": "docker compose -f docker-compose.prod.yml up"
   },
   "dependencies": {

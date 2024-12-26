@@ -25,4 +25,4 @@ https://console.cloud.google.com/artifacts/docker/antonarbus/us-central1/artifac
 ## Github Actions
 
 - Container is automatically deployed with github actions on merge to main branch
-- Configuration is kept at
+- Configuration is kept at /.github/workflows/google-cloudrun-docker.ymal

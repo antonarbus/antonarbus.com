@@ -1,12 +1,19 @@
 import Link from 'next/link'
+import { IoIosArrowBack } from 'react-icons/io'
 
 export function Back(props) {
   return (
     <>
       <Link href={'/posts'} legacyBehavior>
-        <a>
-          {' '}
-          <img src="/svg/back.svg" alt="back to posts" />{' '}
+        <a
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            color: 'black'
+          }}
+        >
+          <IoIosArrowBack style={{ width: '26px', height: '26px', color: 'black' }} /> back
         </a>
       </Link>
 

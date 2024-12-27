@@ -1,9 +1,9 @@
-# myvocab.org
+# https://antonarbus.com
 
-## Github Actions
+## CI/CD with Github Actions
 
-- Container is automatically deployed with github actions on merge to main branch
-- Configuration is kept at /.github/workflows/google-cloudrun-docker.ymal
+- Container is automatically build, dockerized, uploaded to Artifact Registry and deployed to Cloud Run with github actions on merge to main branch
+- Configuration is kept at /.github/workflows/google-cloudrun-docker.yml
 
 ## Cloud Run
 

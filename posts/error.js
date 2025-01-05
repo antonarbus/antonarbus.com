@@ -11,15 +11,32 @@ const postObj = {
       <H>try…catch…finally</H>
 
       <ul>
-        <li>code to be put into <code>try</code> block</li>
-        <li>if no errors, then <code>catch</code> block is ignored</li>
+        <li>
+          code to be put into <code>try</code> block
+        </li>
+        <li>
+          if no errors, then <code>catch</code> block is ignored
+        </li>
         <li>if an error the script is not killed</li>
-        <li><code>try...catch</code> works synchronously, no delayed functions will be executed</li>
-        <li>if an error occurs, then execution in <code>try</code> block is stopped</li>
-        <li><code>try...catch</code> can only handle errors that occur in valid code</li>
-        <li><code>catch</code> block has default <code>error</code> variable which contains an error object</li>
-        <li><code>finally</code> block always executes</li>
-        <li><code>finally</code> can be omitted</li>
+        <li>
+          <code>try...catch</code> works synchronously, no delayed functions will be executed
+        </li>
+        <li>
+          if an error occurs, then execution in <code>try</code> block is stopped
+        </li>
+        <li>
+          <code>try...catch</code> can only handle errors that occur in valid code
+        </li>
+        <li>
+          <code>catch</code> block has default <code>error</code> variable which contains an error
+          object
+        </li>
+        <li>
+          <code>finally</code> block always executes
+        </li>
+        <li>
+          <code>finally</code> can be omitted
+        </li>
       </ul>
 
       <Code block jsx>{`
@@ -38,8 +55,12 @@ const postObj = {
       <H>Finally and return</H>
 
       <ul>
-        <li>be careful with return statement in <code>try</code> & <code>finally</code> blocks</li>
-        <li>return value in <code>finally</code> block overwrites a value in <code>try</code> block</li>
+        <li>
+          be careful with return statement in <code>try</code> & <code>finally</code> blocks
+        </li>
+        <li>
+          return value in <code>finally</code> block overwrites a value in <code>try</code> block
+        </li>
       </ul>
 
       <Code block jsx>{`
@@ -168,10 +189,14 @@ const postObj = {
       }
       `}</Code>
 
-      <H><code>Finally</code> always executes</H>
+      <H>
+        <code>Finally</code> always executes
+      </H>
 
       <ul>
-        <li>even if we use <code>return</code> in <code>try</code> block</li>
+        <li>
+          even if we use <code>return</code> in <code>try</code> block
+        </li>
         <li>can use it if don’t want to handle errors, but want to finalize process</li>
       </ul>
 
@@ -194,7 +219,9 @@ const postObj = {
       <H>Global catch error listener</H>
 
       <ul>
-        <li>In case of fatal error outside <code>try...catch</code></li>
+        <li>
+          In case of fatal error outside <code>try...catch</code>
+        </li>
         <li>ErrorEvent contains all the information about the event and the error.</li>
       </ul>
 
@@ -207,6 +234,54 @@ const postObj = {
         console.log(event.error) // Is a JavaScript Object that is concerned by the event.
       })
       `}</Code>
+
+      <H>var inside try...catch</H>
+
+      <ul>
+        <li>
+          if we should declare <code>const</code> or <code>let</code> variables it should be outside
+          the <code>try...catch</code> blocks
+        </li>
+
+        <Code block jsx>{`
+          function getNumber() {
+            function getRandomNumber() {
+              return Math.floor(Math.random() * 100 + 1)
+            }
+            
+            let number
+
+            try {
+              number = getRandomNumber()
+              throw new Error('error')
+            } catch {
+              number = 0
+            }
+
+            return number // 0
+          }
+        `}</Code>
+        <li>
+          it may be the good use case for using <code>var</code> declaration as it is function
+          scoped
+        </li>
+        <Code block jsx>{`
+          function getNumber() {
+            function getRandomNumber() {
+              return Math.floor(Math.random() * 100 + 1)
+            }
+            
+            try {
+              var number = getRandomNumber()
+              throw new Error('error')
+            } catch {
+              var number = 0
+            }
+
+            return number
+          }
+        `}</Code>
+      </ul>
     </>
   )
 }

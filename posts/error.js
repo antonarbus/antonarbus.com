@@ -1,4 +1,4 @@
-import { Code, H, jsxToStr } from '/components/post/reExport'
+import { Code, H, jsxToStr, Lnk } from '/components/post/reExport'
 
 const postObj = {
   title: 'error',
@@ -8,7 +8,103 @@ const postObj = {
   desc: 'Error handling in JavaScript',
   body: (
     <>
-      <H>try…catch…finally</H>
+      <H>
+        <code>.then().catch()</code>
+      </H>
+
+      <Code block jsx>{`
+        async function getCheese(shouldError = false) {
+          // after 1 second, return an array of cheese or Reject with an error
+          return new Promise((resolve, reject) => {
+            setTimeout(() => {
+              if (shouldError) {
+                return reject('Cheese Sucks')
+              }
+            }, 1)
+          })
+
+          resolve(['cheddar', 'brie', 'gouda']);
+        }
+      `}</Code>
+
+      <Code block jsx>{`
+        getCheese()
+          .then(cheeses => {
+            console.log (cheeses) // ['cheddar', 'brie', 'gouda']
+          })
+          .catch(herr => console.log(err))
+      `}</Code>
+
+      <H>
+        <code>try…catch</code>
+      </H>
+
+      <Code block jsx>{`
+        try {
+          const cheese = await getCheese()
+          console.log(cheese) // ['cheddar', 'brie', 'gouda']
+        } catch(err) {
+          console.log(err)
+        }
+      `}</Code>
+
+      <H>
+        <code>await</code> + <code>catch</code>
+      </H>
+
+      <Code block jsx>{`
+        const myCheese = await getCheese().catch(err => console.log(err))
+        console.log(myCheese) // ['cheddar', 'brie', 'gouda']
+      `}</Code>
+
+      <H>
+        error handling with <code>Promise.allSettled()</code>
+      </H>
+
+      <ul>
+        <li>
+          <Lnk path="https://youtu.be/wsoQ-fgaoyQ?si=MX5SvTAkJq4PqO-7&t=778">
+            https://youtu.be/wsoQ-fgaoyQ?si=MX5SvTAkJq4PqO-7&t=778
+          </Lnk>
+
+          <Code block jsx>{`
+            function wrapIt(promise) {
+              // Promise.allSettled() will return an array of objects, we grab the first one
+              // That object will only ever have one of these properties:
+              // "value" - the resolved data
+              // OR
+              // "reason" - the rejected error
+
+              return Promise.allSettled([promise]).then(function([{ value, reason }]) {
+                return [value, reason]
+            }
+
+            const [data, err] = await wrapIt(getCheese()) // [[ 'cheddar', 'brie', 'gouda' ], undefined ]
+            const [cheese, cheeseError] = await wrapIt(getCheese(true)) // [ undefined, 'Cheese Sucks' ]
+          `}</Code>
+        </li>
+        <li>may also return not an array, but an object</li>
+
+        <Code block jsx>{`
+            function wrapIt(promise) {
+              return Promise.allSettled([promise]).then(function([{ value, reason }]) {
+                return { data: value, error: reason }
+            }
+
+            const result = await wrapIt(getCheese()) 
+
+            if (result.error) {
+              console.log(error)
+              return
+            }
+
+            console.log(result.data)
+        `}</Code>
+      </ul>
+
+      <H>
+        <>try…catch…finally</>
+      </H>
 
       <ul>
         <li>
@@ -35,7 +131,7 @@ const postObj = {
           <code>finally</code> block always executes
         </li>
         <li>
-          <code>finally</code> can be omitted
+          <code>catch</code> or <code>finally</code> can be omitted
         </li>
       </ul>
 
@@ -52,14 +148,30 @@ const postObj = {
       }
       `}</Code>
 
-      <H>Finally and return</H>
+      <H>
+        <code>error</code> variable is optional
+      </H>
+
+      <Code block jsx>{`
+      try {
+        alert('Start of try runs')
+        lalala // error, variable is not defined!
+        alert('End of try (never reached)')
+      } catch {
+        alert(\`Error has occurred!\`)
+      } finally {
+        alert('bugs happens, do not get upset')
+      }
+      `}</Code>
+
+      <H>
+        <code>finally</code> with <code>return</code>
+      </H>
 
       <ul>
         <li>
-          be careful with return statement in <code>try</code> & <code>finally</code> blocks
-        </li>
-        <li>
-          return value in <code>finally</code> block overwrites a value in <code>try</code> block
+          <code>return</code> value in <code>finally</code> block overwrites a value in{' '}
+          <code>try</code> block
         </li>
       </ul>
 
@@ -89,7 +201,9 @@ const postObj = {
       }, 1000)
       `}</Code>
 
-      <H>Error object</H>
+      <H>
+        <code>Error</code> object
+      </H>
 
       <Code block jsx>{`
       try {
@@ -105,7 +219,7 @@ const postObj = {
       } 
       `}</Code>
 
-      <H>Different ways to create error object</H>
+      <H>Create error object</H>
 
       <Code block jsx>{`
       let error = new Error(message)
@@ -114,7 +228,7 @@ const postObj = {
       let error = new TypeError(message)
       `}</Code>
 
-      <p>Or even extend built-in class (overkill!!!)</p>
+      <p>Or even extend built-in class</p>
 
       <Code block jsx>{`
       class ValidationError extends Error {
@@ -147,35 +261,15 @@ const postObj = {
       }
       `}</Code>
 
-      <H>Throw own error</H>
-
-      <Code block jsx>{`
-      let error = new Error("Things happen o_O")
-      error.name // Error
-      error.message // Things happen o_O
-
-      let json = '{ "age": 30 }' // incomplete data
-      try {
-        let user = JSON.parse(json) // <-- no errors
-        if (!user.name) {
-          // generate error object
-          throw new SyntaxError("no name!")
-        }
-        // never come here
-        alert(user.name)
-      } catch (err) {
-        console.dir(err) // JSON Error: Incomplete data: no name
-      `}</Code>
-
-      <H>Re -throw error</H>
+      <H>Re-throw error</H>
 
       <Code block jsx>{`
       function readData() {
-        let json = '{ "age": 30 }';
+        let json = '{ "age": 30 }'
+
         try {
           blabla(); // error!
-        } 
-        catch (err) {
+        } catch (err) {
           if (!(err instanceof SyntaxError)) {
             throw err; // rethrow (don't know how to deal with it)
           }
@@ -190,7 +284,7 @@ const postObj = {
       `}</Code>
 
       <H>
-        <code>Finally</code> always executes
+        <code>finally</code> always executes
       </H>
 
       <ul>
@@ -205,10 +299,9 @@ const postObj = {
         try {
           console.log('try')
           return 
-        } 
-        catch (err) {
-        } 
-        finally {
+        } catch (err) {
+          console.log('error')
+        } finally {
           console.log('finally' )
         }
       }
@@ -216,7 +309,9 @@ const postObj = {
       func() // try // finally
       `}</Code>
 
-      <H>Global catch error listener</H>
+      <H>
+        Global <code>error</code> event listener
+      </H>
 
       <ul>
         <li>
@@ -235,20 +330,20 @@ const postObj = {
       })
       `}</Code>
 
-      <H>var inside try...catch</H>
+      <H>
+        <code>var</code> inside <code>atch</code>
+      </H>
 
       <ul>
         <li>
-          if we should declare <code>const</code> or <code>let</code> variables it should be outside
-          the <code>try...catch</code> blocks
+          <code>try...catch</code> creates block scopes and we should declare <code>const</code> or{' '}
+          <code>let</code> variables outside
         </li>
 
         <Code block jsx>{`
-          function getNumber() {
-            function getRandomNumber() {
-              return Math.floor(Math.random() * 100 + 1)
-            }
+          const getRandomNumber = () => Math.floor(Math.random() * 100 + 1)
             
+          function getNumber() {
             let number
 
             try {
@@ -262,15 +357,12 @@ const postObj = {
           }
         `}</Code>
         <li>
-          it may be the good use case for using <code>var</code> declaration as it is function
-          scoped
+          may use <code>var</code> declaration as it is hoisted and goes to function scope
         </li>
         <Code block jsx>{`
+          const getRandomNumber = () => Math.floor(Math.random() * 100 + 1)
+
           function getNumber() {
-            function getRandomNumber() {
-              return Math.floor(Math.random() * 100 + 1)
-            }
-            
             try {
               var number = getRandomNumber()
               throw new Error('error')
@@ -278,7 +370,7 @@ const postObj = {
               var number = 0
             }
 
-            return number
+            return number // 0
           }
         `}</Code>
       </ul>

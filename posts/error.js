@@ -331,7 +331,7 @@ const postObj = {
       `}</Code>
 
       <H>
-        <code>var</code> inside <code>atch</code>
+        <code>var</code> inside <code>catch</code>
       </H>
 
       <ul>

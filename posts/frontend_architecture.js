@@ -288,17 +288,17 @@ const postObj = {
 
       <p>3 main rules</p>
 
-      <ul>
-        <ol>
+      <ol>
+        <li>
           imports can be done only in one way <code>app</code> {'<--'}
           <code>pages</code> {'<--'} <code>widgets</code> {'<--'} <code>features</code> {'<--'}{' '}
           <code>entities</code> {'<--'} <code>shared</code>
-        </ol>
-        <ol>entity can not imports from other entity, same for features and widgets</ol>
-        <ol>
+        </li>
+        <li>entity can not imports from other entity, same for features and widgets</li>
+        <li>
           <code>index.ts</code> should be on top level and show what is exposed outside
-        </ol>
-      </ul>
+        </li>
+      </ol>
 
       <ul>
         <li>

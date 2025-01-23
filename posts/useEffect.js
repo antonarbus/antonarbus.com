@@ -25,11 +25,17 @@ function Basics() {
 
   return (
     <div style={style}>
-      <div>State1 value: <b>{state1}</b></div>
+      <div>
+        State1 value: <b>{state1}</b>
+      </div>
       <button onClick={() => setState1(state1 + 1)}>Add +1 to state1</button>
-      <div>State2 value: <b>{state2}</b></div>
+      <div>
+        State2 value: <b>{state2}</b>
+      </div>
       <button onClick={() => setState2(state2 + 1)}>Add +1 to state2</button>
-      <div><i>Check which useEffect is triggers in console</i></div>
+      <div>
+        <i>Check which useEffect is triggers in console</i>
+      </div>
     </div>
   )
 }
@@ -71,8 +77,12 @@ function Child() {
   return (
     <div style={style}>
       <div>Child component</div>
-      <div>xCord: <b>{x}</b></div>
-      <div>yCord: <b>{y}</b></div>
+      <div>
+        xCord: <b>{x}</b>
+      </div>
+      <div>
+        yCord: <b>{y}</b>
+      </div>
     </div>
   )
 }
@@ -84,14 +94,14 @@ function FetchData() {
 
   useEffect(() => {
     fetch('https://jsonplaceholder.typicode.com/posts')
-      .then(res => res.json())
-      .then(data => setPosts(data.slice(0, 5)))
-      .catch(err => console.log(err))
+      .then((res) => res.json())
+      .then((data) => setPosts(data.slice(0, 5)))
+      .catch((err) => console.log(err))
   }, [])
 
   return (
     <ul>
-      {posts.map(post => (
+      {posts.map((post) => (
         <li key={post.id}>{post.title}</li>
       ))}
     </ul>
@@ -106,10 +116,18 @@ function SkipInitRender() {
   return (
     <div style={style}>
       <h4>Parent</h4>
-      <div> <button onClick={() => setStateA(!stateA)}>Show/hide component A</button> </div>
-      <div> <button onClick={() => setStateB(!stateB)}>Show/hide component B without useEffect on initial render</button> </div>
-      {stateA && <MyChild name='A' state={stateA} skipInitUseEffect={false}/>}
-      {stateB && <MyChild name='B' state={stateB} skipInitUseEffect={true}/>}
+      <div>
+        {' '}
+        <button onClick={() => setStateA(!stateA)}>Show/hide component A</button>{' '}
+      </div>
+      <div>
+        {' '}
+        <button onClick={() => setStateB(!stateB)}>
+          Show/hide component B without useEffect on initial render
+        </button>{' '}
+      </div>
+      {stateA && <MyChild name="A" state={stateA} skipInitUseEffect={false} />}
+      {stateB && <MyChild name="B" state={stateB} skipInitUseEffect={true} />}
     </div>
   )
 }
@@ -143,10 +161,12 @@ const postObj = {
     <>
       <H>Basics</H>
 
-      <p><Code js >useEffect()</Code> runs after the render or when some value is changed.</p>
+      <p>
+        <Code js>useEffect()</Code> runs after the render or when some value is changed.
+      </p>
 
       <p>
-        <Code js >useEffect(func, [prop || state])</Code> hook may run a function after:
+        <Code js>useEffect(func, [prop || state])</Code> hook may run a function after:
         <ul>
           <li>every component's render, when no 2nd parameter is provided</li>
           <li>initial render, when empty array is provided as a 2nd parameter</li>
@@ -154,7 +174,10 @@ const postObj = {
         </ul>
       </p>
 
-      <p><Code js >useEffect()</Code> is placed inside a component and have access to states and variables.</p>
+      <p>
+        <Code js>useEffect()</Code> is placed inside a component and have access to states and
+        variables.
+      </p>
 
       <Code block>{`
       import { useEffect, useState } from 'react';
@@ -194,11 +217,27 @@ const postObj = {
       <H>addEventListener() & cleanup</H>
 
       <ul>
-        <li>We can attach <Code js >addEventListener()</Code> via <Code js >useEffect(func, [])</Code> function on initial component render. </li>
-        <li> Let's have a parent component with a toggle button to render the child component with coordinates logging. </li>
-        <li>Apart from showing coordinates on screen we will display coordinates also in <Code>document.title</Code></li>
-        <li>After hiding the child component we should remove our event listener to avoid coords logging</li>
-        <li>To remove event listener we need to <Code>return</Code> a function with such instruction at the end of useEffect callback</li>
+        <li>
+          We can attach <Code js>addEventListener()</Code> via <Code js>useEffect(func, [])</Code>{' '}
+          function on initial component render.{' '}
+        </li>
+        <li>
+          {' '}
+          Let's have a parent component with a toggle button to render the child component with
+          coordinates logging.{' '}
+        </li>
+        <li>
+          Apart from showing coordinates on screen we will display coordinates also in{' '}
+          <Code>document.title</Code>
+        </li>
+        <li>
+          After hiding the child component we should remove our event listener to avoid coords
+          logging
+        </li>
+        <li>
+          To remove event listener we need to <Code>return</Code> a function with such instruction
+          at the end of useEffect callback
+        </li>
       </ul>
 
       <Code block>{`
@@ -227,6 +266,7 @@ const postObj = {
 
         useEffect(() => {
           document.addEventListener('mousemove', logMouseCords)
+          
           return () => {
             document.removeEventListener('mousemove', logMouseCords)
             document.title = 'cords are gone'
@@ -247,8 +287,14 @@ const postObj = {
 
       <H>Fetch data</H>
 
-      <p>Fetch data on component load inside <Code js >useEffect()</Code></p>
-      <p>Let's fetch data from <Lnk path='https://jsonplaceholder.typicode.com/guide/'>jsonplaceholder</Lnk> and set it into the <i>state</i> after component's render via <Code js >useEffect()</Code>.</p>
+      <p>
+        Fetch data on component load inside <Code js>useEffect()</Code>
+      </p>
+      <p>
+        Let's fetch data from{' '}
+        <Lnk path="https://jsonplaceholder.typicode.com/guide/">jsonplaceholder</Lnk> and set it
+        into the <i>state</i> after component's render via <Code js>useEffect()</Code>.
+      </p>
 
       <Code block>{`
       function FetchData() {
@@ -275,7 +321,10 @@ const postObj = {
 
       <H>Skip initial render</H>
 
-      <p>No matter what we put into <Code js >useEffect(func, [dep])</Code> dependency array, it will trigger function on an initial render.</p>
+      <p>
+        No matter what we put into <Code js>useEffect(func, [dep])</Code> dependency array, it will
+        trigger function on an initial render.
+      </p>
       <p>To avoid it we may bring a boolean flag, which we negate after first render.</p>
 
       <Code block>{`

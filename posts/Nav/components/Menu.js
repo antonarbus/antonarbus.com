@@ -22,24 +22,20 @@ export function Menu() {
   // console.log('Menu')
 
   const context = useContext(ContextNavItem)
-  const {
-    openedMenuState,
-    menuO,
-    showMenuState,
-    setShowMenuState,
-    setOpenedMenuState,
-  } = context
+  const { openedMenuState, menuO, showMenuState, setShowMenuState, setOpenedMenuState } = context
 
   const [prevMenuState, setPrevMenuState] = React.useState({
     ...menuO.menu,
     navItemId: menuO.id,
-    prevMenu: [],
+    prevMenu: []
   })
   const [whereToSlidState, setWhereToSlidState] = React.useState('nowhere')
   const [menuTransitionState, setMenuTransitionState] = React.useState(true)
   const swapMenu = () => setMenuTransitionState(!menuTransitionState)
-  const swapMenuMemoized = React.useCallback(swapMenu, [setMenuTransitionState,
-    menuTransitionState])
+  const swapMenuMemoized = React.useCallback(swapMenu, [
+    setMenuTransitionState,
+    menuTransitionState
+  ])
 
   function closeMenu(e) {
     // e?.stopPropagation();
@@ -53,7 +49,7 @@ export function Menu() {
     showMenuState,
     setShowMenuState,
     setOpenedMenuState,
-    setPrevMenuState,
+    setPrevMenuState
   ])
 
   function changeMenu(o) {
@@ -64,7 +60,7 @@ export function Menu() {
     setOpenedMenuState({
       ...subMenu,
       navItemId: openedMenuState.navItemId,
-      prevMenu: [...openedMenuState.prevMenu, openedMenuState],
+      prevMenu: [...openedMenuState.prevMenu, openedMenuState]
     })
   }
 
@@ -81,7 +77,7 @@ export function Menu() {
     setPrevMenuState,
     openedMenuState,
     setOpenedMenuState,
-    swapMenuMemoized,
+    swapMenuMemoized
   ])
 
   function navKeyboardHandler(e) {
@@ -96,7 +92,7 @@ export function Menu() {
   const navKeyboardHandlerMemoized = React.useCallback(navKeyboardHandler, [
     openedMenuState,
     changeMenuMemoized,
-    closeMenuMemoized,
+    closeMenuMemoized
   ])
 
   const fakeMenuRef = useRef()
@@ -106,11 +102,15 @@ export function Menu() {
 
   useEffect(() => {
     setMenuHeightState(calcHeight(fakeMenuRef.current))
-    return () => { setMenuHeightState(0) }
+
+    return () => {
+      setMenuHeightState(0)
+    }
   }, [openedMenuState, navKeyboardHandlerMemoized, closeMenuMemoized, setMenuHeightState])
 
   useEffect(() => {
     window.addEventListener('keydown', navKeyboardHandlerMemoized)
+
     return () => {
       window.removeEventListener('keydown', navKeyboardHandlerMemoized)
     }
@@ -140,7 +140,7 @@ export function Menu() {
     position: 'absolute',
     right: '0px',
     left: '0px',
-    height: 'auto',
+    height: 'auto'
   }
 
   const contextValue = {
@@ -154,7 +154,7 @@ export function Menu() {
     closeMenu,
     changeMenu,
     goBack,
-    navKeyboardHandler,
+    navKeyboardHandler
   }
 
   return (
@@ -184,11 +184,11 @@ export function Menu() {
             {/* if transition enters, current menu renders
             if transition exists, pervious menu renders */}
             {menuTransitionState &&
-              openedMenuState.menuItems.map(menuItem => (
+              openedMenuState.menuItems.map((menuItem) => (
                 <MenuItem menuItem={menuItem} key={menuItem.id} />
               ))}
             {!menuTransitionState &&
-              prevMenuState?.menuItems.map(menuItem => (
+              prevMenuState?.menuItems.map((menuItem) => (
                 <MenuItem menuItem={menuItem} key={menuItem.id} />
               ))}
           </div>
@@ -203,11 +203,11 @@ export function Menu() {
         >
           <div className={whereToSlidState} style={menuItemsDivStyle}>
             {!menuTransitionState &&
-              openedMenuState.menuItems.map(menuItem => (
+              openedMenuState.menuItems.map((menuItem) => (
                 <MenuItem menuItem={menuItem} key={menuItem.id} />
               ))}
             {menuTransitionState &&
-              prevMenuState?.menuItems.map(menuItem => (
+              prevMenuState?.menuItems.map((menuItem) => (
                 <MenuItem menuItem={menuItem} key={menuItem.id} />
               ))}
           </div>
@@ -215,7 +215,7 @@ export function Menu() {
 
         {/* fake div to measure menu height for animation */}
         <div style={{ position: 'absolute', right: '1000px' }} ref={fakeMenuRef}>
-          {openedMenuState.menuItems.map(menuItem => (
+          {openedMenuState.menuItems.map((menuItem) => (
             <MenuItem menuItem={menuItem} key={menuItem.id} />
           ))}
         </div>
@@ -238,7 +238,7 @@ export const MenuContainer = styled.div`
   z-index: 666;
 
   transition-property: height;
-  transition-duration: .35s;
+  transition-duration: 0.35s;
   transition-timing-function: ease-out;
 
   @media screen and (max-width: 480px) {

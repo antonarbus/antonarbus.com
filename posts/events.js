@@ -8,30 +8,57 @@ const postObj = {
   desc: 'events in JavaScript',
   body: (
     <>
-
       <H>DOM events</H>
 
       <p>Most useful DOM events</p>
 
       <ul>
-        <li><code>click</code> click or tap on an element</li>
-        <li><code>dblclick</code> two clicks on the same element within a short time, rarely used</li>
-        <li><code>contextmenu</code> mouse right-clicks on an element or special contextmenu keyboard key pressed</li>
-        <li><code>mouseover</code>, <code>mouseout</code> mouse cursor comes over / leaves an element</li>
-        <li><code>mousedown</code>, <code>mouseup</code> mouse button is pressed / released over an element</li>
-        <li><code>mousemove</code> mouse is moved</li>
-        <li><code>keydown</code>, <code>keyup</code> keyboard key is pressed and released</li>
-        <li><code>submit</code> visitor submits a form</li>
-        <li><code>focus</code> visitor focuses on an element, e.g. input, textarea</li>
-        <li><code>DOMContentLoaded</code> the HTML is loaded and processed, DOM is fully built</li>
-        <li><code>transitionend</code> CSS-animation finishes</li>
+        <li>
+          <code>click</code> click or tap on an element
+        </li>
+        <li>
+          <code>dblclick</code> two clicks on the same element within a short time, rarely used
+        </li>
+        <li>
+          <code>contextmenu</code> mouse right-clicks on an element or special contextmenu keyboard
+          key pressed
+        </li>
+        <li>
+          <code>mouseover</code>, <code>mouseout</code> mouse cursor comes over / leaves an element
+        </li>
+        <li>
+          <code>mousedown</code>, <code>mouseup</code> mouse button is pressed / released over an
+          element
+        </li>
+        <li>
+          <code>mousemove</code> mouse is moved
+        </li>
+        <li>
+          <code>keydown</code>, <code>keyup</code> keyboard key is pressed and released
+        </li>
+        <li>
+          <code>submit</code> visitor submits a form
+        </li>
+        <li>
+          <code>focus</code> visitor focuses on an element, e.g. input, textarea
+        </li>
+        <li>
+          <code>DOMContentLoaded</code> the HTML is loaded and processed, DOM is fully built
+        </li>
+        <li>
+          <code>transitionend</code> CSS-animation finishes
+        </li>
       </ul>
 
-      <p>Take a closer look at <Lnk path='/posts/dom_events'>DOM events</Lnk>.</p>
+      <p>
+        Take a closer look at <Lnk path="/posts/dom_events">DOM events</Lnk>.
+      </p>
 
       <H>Event handler in HTML-attribute</H>
 
-      <p><i>Event handler</i> - a function that reacts on events</p>
+      <p>
+        <i>Event handler</i> - a function that reacts on events
+      </p>
 
       <Code block html>{`
       <input value="Click me" onclick="alert('Click!')" type="button"></input>
@@ -39,8 +66,13 @@ const postObj = {
       `}</Code>
 
       <ul>
-        <li>inside onclick we use single quotes, because the attribute itself is in double quotes</li>
-        <li>HTML attribute names are not case-sensitive, so ONCLICK works as well as onClick and onCLICK… But usually attributes are lowercased</li>
+        <li>
+          inside onclick we use single quotes, because the attribute itself is in double quotes
+        </li>
+        <li>
+          HTML attribute names are not case-sensitive, so ONCLICK works as well as onClick and
+          onCLICK… But usually attributes are lowercased
+        </li>
       </ul>
 
       <Code block jsx>{`
@@ -66,8 +98,13 @@ const postObj = {
       `}</Code>
 
       <ul>
-        <li>Some handlers work only with <code>addEventListener</code>, for ex <i>DOMContentLoaded</i> event</li>
-        <li><Code>elem.onclick = null</Code> remove a handler</li>
+        <li>
+          Some handlers work only with <code>addEventListener</code>, for ex <i>DOMContentLoaded</i>{' '}
+          event
+        </li>
+        <li>
+          <Code>elem.onclick = null</Code> remove a handler
+        </li>
       </ul>
 
       <ul>
@@ -83,9 +120,15 @@ const postObj = {
       `}</Code>
 
       <ul>
-        <li><code>event</code> event name, e.g. "click"</li>
-        <li><code>handler</code> handler function</li>
-        <li><code>options</code> additional optional object with properties</li>
+        <li>
+          <code>event</code> event name, e.g. "click"
+        </li>
+        <li>
+          <code>handler</code> handler function
+        </li>
+        <li>
+          <code>options</code> additional optional object with properties
+        </li>
       </ul>
 
       <Code block jsx>{`
@@ -97,11 +140,21 @@ const postObj = {
       `}</Code>
 
       <ul>
-        <li><code>capture: true</code> catch an event on the capturing phase</li>
-        <li><code>once: true</code> fires an event only ones</li>
-        <li><code>passive: true</code> tells the browser that the handler is not going to cancel scrolling, not going to call <code>preventDefault()</code></li>
+        <li>
+          <code>capture: true</code> catch an event on the capturing phase
+        </li>
+        <li>
+          <code>once: true</code> fires an event only ones
+        </li>
+        <li>
+          <code>passive: true</code> tells the browser that the handler is not going to cancel
+          scrolling, not going to call <code>preventDefault()</code>
+        </li>
         <li>Then browser scrolls immediately providing a maximally fluent experience</li>
-        <li>For some browsers (Firefox, Chrome), passive is true by default for touchstart and touchmove events</li>
+        <li>
+          For some browsers (Firefox, Chrome), passive is true by default for touchstart and
+          touchmove events
+        </li>
       </ul>
 
       <H>removeEventListener</H>
@@ -142,9 +195,54 @@ const postObj = {
       elem.addEventListener("click", handler2) // Thanks again!
       `}</Code>
 
+      <H>AbortController</H>
+
+      <ul>
+        <li>
+          May provide an abort signal when adding an event listener and call abort to remove
+          listener
+        </li>
+        <li>
+          No need to keep reference to the handler function just to reference it in{' '}
+          <code>.removeEventListener()</code>.
+        </li>
+
+        <Code block jsx>{`
+          const controller = new AbortController()
+          window.addEventListener('resize', () => {}, { signal: controller.signal })
+          controller.abort()
+        `}</Code>
+
+        <li>Also cancels multiple listeners</li>
+
+        <Code block jsx>{`
+          useEffect(() => {
+            const controller = new AbortController()
+
+            window.addEventListener('resize', handleResize, {
+              signal: controller.signal,
+            })
+
+            window.addEventListener('hashchange', handleHashChange, {
+              signal: controller.signal,
+            })
+              
+            window.addEventListener('storage', handleStorageChange, {
+              signal: controller.signal,
+            })
+
+            return () => {
+              controller.abort()
+            }
+          }, [])
+        `}</Code>
+      </ul>
+
       <H>this</H>
 
-      <p>The value of <code>this</code> inside a handler is the element, which has the handler on it.</p>
+      <p>
+        The value of <code>this</code> inside a handler is the element, which has the handler on it.
+      </p>
 
       <Code block html>{`
       <button onclick="alert(this.innerHTML)">Click me</button> // Click me
@@ -153,12 +251,25 @@ const postObj = {
       <H>Event object</H>
 
       <ul>
-        <li>when an event happens, event object is created and passes it as an argument to the handler</li>
-        <li><code>event.type</code> event type, for ex. <i>click</i></li>
-        <li><code>event.currentTarget</code> el where the handler is, same as <code>this</code> unless arrow func</li>
-        <li><code>event.target</code> el that initiated the event</li>
-        <li><code>event.clientX</code> window-relative coordinates of the cursor, for pointer events</li>
-        <li><code>event.eventPhase</code> current phase (capturing=1, target=2, bubbling=3)</li>
+        <li>
+          when an event happens, event object is created and passes it as an argument to the handler
+        </li>
+        <li>
+          <code>event.type</code> event type, for ex. <i>click</i>
+        </li>
+        <li>
+          <code>event.currentTarget</code> el where the handler is, same as <code>this</code> unless
+          arrow func
+        </li>
+        <li>
+          <code>event.target</code> el that initiated the event
+        </li>
+        <li>
+          <code>event.clientX</code> window-relative coordinates of the cursor, for pointer events
+        </li>
+        <li>
+          <code>event.eventPhase</code> current phase (capturing=1, target=2, bubbling=3)
+        </li>
         <li>There are more event properties, depending on the event type</li>
       </ul>
 
@@ -183,7 +294,9 @@ const postObj = {
 
       <ul>
         <li>can assign not just a function, but an object as an event handler </li>
-        <li>when an event occurs, its <code>handleEvent</code> method is called</li>
+        <li>
+          when an event occurs, its <code>handleEvent</code> method is called
+        </li>
       </ul>
 
       <Code block jsx>{`
@@ -233,11 +346,16 @@ const postObj = {
       <H>Bubbling</H>
 
       <ul>
-        <li>When an event happens on an element, it first runs the handlers on it, then on its parent, then all the way up on other ancestors</li>
+        <li>
+          When an event happens on an element, it first runs the handlers on it, then on its parent,
+          then all the way up on other ancestors
+        </li>
         <li>{'span --> div --> body --> html --> document --> window'}</li>
         <li>some events reach 'window', not all</li>
         <li>Almost all events bubble</li>
-        <li><code>focus</code> event does not bubble</li>
+        <li>
+          <code>focus</code> event does not bubble
+        </li>
       </ul>
 
       <Code block html>{`
@@ -249,9 +367,13 @@ const postObj = {
       `}</Code>
 
       <ul>
-        <li>Click on <code>{'<p>'}</code> triggers 3 alerts due to bubbling</li>
-        <li>bubbling happens  upwards till the document object</li>
-        <li>if we have a single handler form.onclick, then it can “catch” all clicks inside the form</li>
+        <li>
+          Click on <code>{'<p>'}</code> triggers 3 alerts due to bubbling
+        </li>
+        <li>bubbling happens upwards till the document object</li>
+        <li>
+          if we have a single handler form.onclick, then it can “catch” all clicks inside the form
+        </li>
       </ul>
 
       <H>e.target</H>
@@ -267,15 +389,23 @@ const postObj = {
       <ul>
         <li>element from where cursor exited or where it is entered</li>
         <li>depends on the event</li>
-        <li>for <code>mouseenter</code>, <code>mouseover</code>, <code>dragenter</code> - element exited from</li>
-        <li>for <code>mouseleave</code>, <code>mouseout</code>, <code>dragleave</code> - element entered into</li>
+        <li>
+          for <code>mouseenter</code>, <code>mouseover</code>, <code>dragenter</code> - element
+          exited from
+        </li>
+        <li>
+          for <code>mouseleave</code>, <code>mouseout</code>, <code>dragleave</code> - element
+          entered into
+        </li>
       </ul>
 
       <H>e.relatedTarget</H>
 
       <ul>
         <li>el where the handler is</li>
-        <li>same as <code>this</code></li>
+        <li>
+          same as <code>this</code>
+        </li>
       </ul>
 
       <H>e.stopPropagation()</H>
@@ -284,7 +414,10 @@ const postObj = {
         <li>stop bubbling</li>
         <li>Don’t stop it w/o a real need</li>
         <li>we forever deny access to information about events for any outer code</li>
-        <li><code>document.addEventListener('click', fn)</code> will not work on document level for stopped bubble events, it might be useful</li>
+        <li>
+          <code>document.addEventListener('click', fn)</code> will not work on document level for
+          stopped bubble events, it might be useful
+        </li>
       </ul>
 
       <Code block jsx>{`
@@ -298,7 +431,10 @@ const postObj = {
       <ul>
         <li>stop the bubbling and prevent handlers on the current element</li>
         <li>After it no other handlers execute</li>
-        <li>If an el has multiple event handlers on a single event, then even if one of them stops the bubbling, the other ones still execute</li>
+        <li>
+          If an el has multiple event handlers on a single event, then even if one of them stops the
+          bubbling, the other ones still execute
+        </li>
         <li>but on the current element all other handlers will run</li>
       </ul>
 
@@ -307,18 +443,30 @@ const postObj = {
       <p>Event propagation has 3 phases</p>
 
       <ul>
-        <li><i>Capturing</i> - event goes down to the element</li>
-        <li><i>Target</i> – event reached the target element</li>
-        <li><i>Bubbling</i> – event bubbles up from the element</li>
+        <li>
+          <i>Capturing</i> - event goes down to the element
+        </li>
+        <li>
+          <i>Target</i> – event reached the target element
+        </li>
+        <li>
+          <i>Bubbling</i> – event bubbles up from the element
+        </li>
       </ul>
 
       <ul>
         <li>Capturing phase is invisible to us normally</li>
         <li>rarely used in real code</li>
-        <li>Capturing path example {'Window -> Document -> <html> -> <body> -> <table> -> <tbody> -> <tr> -> <td>'}</li>
+        <li>
+          Capturing path example{' '}
+          {'Window -> Document -> <html> -> <body> -> <table> -> <tbody> -> <tr> -> <td>'}
+        </li>
       </ul>
 
-      <p>Capturing path example {'Window -> Document -> <html> -> <body> -> <table> -> <tbody> -> <tr> -> <td>'}</p>
+      <p>
+        Capturing path example{' '}
+        {'Window -> Document -> <html> -> <body> -> <table> -> <tbody> -> <tr> -> <td>'}
+      </p>
 
       <Code block jsx>{`
       el.addEventListener('click', fn, { capture: true })
@@ -330,7 +478,9 @@ const postObj = {
       `}</Code>
 
       <ul>
-        <li>if <code>false</code> (default), then the handler is set on the bubbling phase</li>
+        <li>
+          if <code>false</code> (default), then the handler is set on the bubbling phase
+        </li>
         <li>2nd phase (“target phase”: the event reached the element) is not handled separately</li>
         <li>handlers on both capturing and bubbling phases trigger at target phase</li>
       </ul>
@@ -339,7 +489,10 @@ const postObj = {
 
       <ul>
         <li>event delegation - a single handler on their common ancestor</li>
-        <li>in the handler we get <code>event.target</code> to see where the event actually happened and handle it</li>
+        <li>
+          in the handler we get <code>event.target</code> to see where the event actually happened
+          and handle it
+        </li>
         <li>event must bubble</li>
       </ul>
 
@@ -408,7 +561,9 @@ const postObj = {
 
       <ul>
         <li>stops default browser actions</li>
-        <li>some events flow one into another, if we prevent the first event, there will be no second</li>
+        <li>
+          some events flow one into another, if we prevent the first event, there will be no second
+        </li>
         <li>{'mousedown on an <input> field leads to focusing in it, and the focus event'}</li>
         <li>If we prevent the mousedown event, there’s no focus.</li>
         <li>The focusing is still possible with Tab key, But not with the mouse click any more</li>
@@ -417,10 +572,17 @@ const postObj = {
       <Hs>e.defaultPrevented</Hs>
 
       <ul>
-        <li><code>true</code> if the default action was prevented</li>
+        <li>
+          <code>true</code> if the default action was prevented
+        </li>
         <li>sometimes better to use than stopping bubbling by event.stopPropagation()</li>
-        <li>we can use <code>event.defaultPrevented</code> instead, to signal other event handlers that the event was handled</li>
-        <li>solution would be to check in the document handler if the default action was prevented</li>
+        <li>
+          we can use <code>event.defaultPrevented</code> instead, to signal other event handlers
+          that the event was handled
+        </li>
+        <li>
+          solution would be to check in the document handler if the default action was prevented
+        </li>
       </ul>
 
       <Code block jsx>{`
@@ -475,11 +637,21 @@ const postObj = {
 
       <ul>
         <li>create Event objects</li>
-        <li><code>bubbles: true</code> event bubbles, <code>false</code> by default</li>
-        <li><code>cancelable: true</code> “default action” may be prevented, <code>false</code> by default</li>
-        <li><Code>elem.dispatchEvent(event)</Code> trigger event on an element</li>
+        <li>
+          <code>bubbles: true</code> event bubbles, <code>false</code> by default
+        </li>
+        <li>
+          <code>cancelable: true</code> “default action” may be prevented, <code>false</code> by
+          default
+        </li>
+        <li>
+          <Code>elem.dispatchEvent(event)</Code> trigger event on an element
+        </li>
         <li>handlers will react on it as if it were a regular browser event</li>
-        <li>return <code>false</code> if event is cancelable and any handlers which received event called preventDefault()</li>
+        <li>
+          return <code>false</code> if event is cancelable and any handlers which received event
+          called preventDefault()
+        </li>
       </ul>
 
       <Code block jsx>{`
@@ -496,7 +668,9 @@ const postObj = {
       `}</Code>
 
       <ul>
-        <li><code>dispatchEvent</code> is processed immediately, synchronous</li>
+        <li>
+          <code>dispatchEvent</code> is processed immediately, synchronous
+        </li>
       </ul>
 
       <Code block jsx>{`
@@ -517,8 +691,12 @@ const postObj = {
       `}</Code>
 
       <ul>
-        <li><code>true</code> for events that come from real user</li>
-        <li><code>false</code> for script-generated events</li>
+        <li>
+          <code>true</code> for events that come from real user
+        </li>
+        <li>
+          <code>false</code> for script-generated events
+        </li>
       </ul>
 
       <Hs>Built-in event classes</Hs>
@@ -537,20 +715,34 @@ const postObj = {
       `}</Code>
 
       <ul>
-        <li>use it instead of <code>new Event</code> </li>
+        <li>
+          use it instead of <code>new Event</code>{' '}
+        </li>
         <li>The right constructor allows to specify standard properties for that type of event</li>
         <li>generic Event constructor does not allow that</li>
-        <li>we can work around that by assigning directly <code>event.clientX=100</code></li>
+        <li>
+          we can work around that by assigning directly <code>event.clientX=100</code>
+        </li>
       </ul>
 
       <p>List of some classes for UI Events...</p>
 
       <ul>
-        <li><Code>new UIEvent()</Code></li>
-        <li><Code>new FocusEvent()</Code></li>
-        <li><Code>new MouseEvent()</Code></li>
-        <li><Code>new WheelEvent()</Code></li>
-        <li><Code>new KeyboardEvent()</Code></li>
+        <li>
+          <Code>new UIEvent()</Code>
+        </li>
+        <li>
+          <Code>new FocusEvent()</Code>
+        </li>
+        <li>
+          <Code>new MouseEvent()</Code>
+        </li>
+        <li>
+          <Code>new WheelEvent()</Code>
+        </li>
+        <li>
+          <Code>new KeyboardEvent()</Code>
+        </li>
         <li>others…</li>
       </ul>
 
@@ -575,16 +767,26 @@ const postObj = {
       `}</Code>
 
       <ul>
-        <li>We should use <code>addEventListener</code> for our custom events</li>
-        <li><code>new CustomEvent</code> allows to add <code>detail</code> property</li>
+        <li>
+          We should use <code>addEventListener</code> for our custom events
+        </li>
+        <li>
+          <code>new CustomEvent</code> allows to add <code>detail</code> property
+        </li>
       </ul>
 
       <Hs>preventDefault for custom events</Hs>
 
       <ul>
         <li>new custom events have no default browser action</li>
-        <li>but a code that dispatches such event may have own plans what to do after triggering the event</li>
-        <li>return <code>false</code> if event is cancelable and any handlers which received event called preventDefault()</li>
+        <li>
+          but a code that dispatches such event may have own plans what to do after triggering the
+          event
+        </li>
+        <li>
+          return <code>false</code> if event is cancelable and any handlers which received event
+          called preventDefault()
+        </li>
       </ul>
 
       <Code block jsx>{`
@@ -605,7 +807,6 @@ const postObj = {
         textarea.hidden = true
       }
       `}</Code>
-
     </>
   )
 }

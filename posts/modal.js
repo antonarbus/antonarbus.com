@@ -36,9 +36,8 @@ const postObj = {
       <ModalWithBackground />
 
       <p>
-        In styled components let's make a gray transparent background layer with fixed
-        position which covers whole screen. Content will be positioned 20hv from
-        the top.
+        In styled components let's make a gray transparent background layer with fixed position
+        which covers whole screen. Content will be positioned 20hv from the top.
       </p>
 
       <p>
@@ -53,16 +52,15 @@ const postObj = {
           }}
         >
           ×
-        </span> close button as a span in the right top corner.
+        </span>{' '}
+        close button as a span in the right top corner.
       </p>
 
-      <p>
-        Parent component has a button to show the modal window.
-      </p>
+      <p>Parent component has a button to show the modal window.</p>
 
       <Code block jsx>{`
           import React from 'react';
-          import { useModalWithBackground } from '../../../helpers/functions/usemodalWithBackgroundReact';
+          import { useModalWithBackground } from '../../../helpers/functions/useModalWithBackgroundReact';
 
           function Parent() {
             const [showModalState, openModal, Modal] = useModalWithBackground();
@@ -77,12 +75,10 @@ const postObj = {
           const toRender = <Parent />;
           `}</Code>
 
-      <p>
-        Modal window and its control comes from custom hook.
-      </p>
+      <p>Modal window and its control comes from custom hook.</p>
 
       <Code block jsx>{`
-          // usemodalWithBackgroundReact.js
+          // useModalWithBackgroundReact.js
           import React, { useEffect, useState } from 'react';
           import styled from 'styled-components';
 
@@ -174,25 +170,26 @@ const postObj = {
           `}</Code>
 
       <p>
-        In modal window component we can close it with <i>onClick</i> event on
-        the dimmed background layer & on the close button. <br />
+        In modal window component we can close it with <i>onClick</i> event on the dimmed background
+        layer & on the close button. <br />
         <br />
-        To prevent <i>onClick</i> an event trigger on grey layer from bubbling we disable event propagation on modal window.
+        To prevent <i>onClick</i> an event trigger on grey layer from bubbling we disable event
+        propagation on modal window.
       </p>
 
       <p>
-        Before modal component renders we prevent body scroll and fix its width
-        to avoid jumping due to scrollbar disappear.
+        Before modal component renders we prevent body scroll and fix its width to avoid jumping due
+        to scrollbar disappear.
       </p>
 
       <p>
-        After initial render with <Code>useEffect()</Code> we launch
-        listener for a <kbd>Esc</kbd> keypress to close the modal window.
+        After initial render with <Code>useEffect()</Code> we launch listener for a <kbd>Esc</kbd>{' '}
+        keypress to close the modal window.
       </p>
 
       <p>
-        On component unmount we clean our code brought by <i>useEffect</i> and
-        return auto body width.
+        On component unmount we clean our code brought by <i>useEffect</i> and return auto body
+        width.
       </p>
 
       <H>With background</H>
@@ -200,15 +197,22 @@ const postObj = {
       <ModalWithoutBackground />
 
       <p>
-        Modal window has a basic styling with fixed position and {' '}
-        <span style={{ fontSize: '30px', color: 'red', position: 'relative', top: '3px', cursor: 'pointer' }} >
+        Modal window has a basic styling with fixed position and{' '}
+        <span
+          style={{
+            fontSize: '30px',
+            color: 'red',
+            position: 'relative',
+            top: '3px',
+            cursor: 'pointer'
+          }}
+        >
           ×
-        </span> close button.
+        </span>{' '}
+        close button.
       </p>
 
-      <p>
-        Parent component has a button to show the modal window.
-      </p>
+      <p>Parent component has a button to show the modal window.</p>
 
       <Code block jsx>{`
         import React from 'react';
@@ -228,12 +232,10 @@ const postObj = {
         const toRender = <Parent />;
       `}</Code>
 
-      <p>
-        Modal window and its control comes from the custom hook.
-      </p>
+      <p>Modal window and its control comes from the custom hook.</p>
 
       <Code block jsx>{`
-        // usemodalWithBackgroundReact.js
+        // useModalWithBackgroundReact.js
         export function useModalWithoutBackground() {
 
           const [showModalState, setShowModalState] = useState(false);
@@ -313,19 +315,16 @@ const postObj = {
       `}</Code>
 
       <p>
-        On the modal window mount we start listening for click events to close the window.
-        We close modal if click event target element is outside of modal element.
+        On the modal window mount we start listening for click events to close the window. We close
+        modal if click event target element is outside of modal element.
       </p>
 
       <p>
         We also close the window on <kbd>Esc</kbd> button.
       </p>
 
-      <p>
-        On component unmount we clean our code from event listeners.
-      </p>
+      <p>On component unmount we clean our code from event listeners.</p>
     </>
-
   )
 }
 

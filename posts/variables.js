@@ -8,17 +8,13 @@ const postObj = {
   desc: 'variables in JavaScript',
   body: (
     <>
-
       <H>Naming</H>
-
       <Code block jsx>{`
         let userName = 'John', age = 25, message = 'Hello', test123 = true;
         const myBirthday = '18.04.1982';
         const COLOR_RED = "#F00";
       `}</Code>
-
       <H>Declaration (let, const, var)</H>,
-
       <ul>
         <li>
           <code>let</code> & <code>const</code> have block scope
@@ -26,6 +22,26 @@ const postObj = {
         <li>
           <code>var</code> has functional or global scoped, visible through blocks
         </li>
+        <li>
+          <code>var</code> is hoisted and initialized to <code>undefined</code>
+        </li>
+        <li>
+          <code>let</code> & <code>const</code> is hoisted but uninitialized
+        </li>
+
+        <Code block jsx>{`
+          // this works fine
+          
+          const sayHello = () => {
+            alertHello()
+          }
+
+          const alertHello = () => {
+            alert('hello')
+          }
+
+          sayHello()
+        `}</Code>
         <li>
           <code>var</code> variables can be declared below their use
         </li>
@@ -39,7 +55,6 @@ const postObj = {
           <code>if</code>, <code>for</code>, <code>while</code> are blocks{' '}
         </li>
       </ul>
-
       <Code block jsx>{`
         {
           {

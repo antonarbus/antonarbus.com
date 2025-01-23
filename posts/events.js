@@ -199,6 +199,11 @@ const postObj = {
 
       <ul>
         <li>
+          <Lnk path="https://kettanaito.com/blog/dont-sleep-on-abort-controller">
+            https://kettanaito.com/blog/dont-sleep-on-abort-controller
+          </Lnk>
+        </li>
+        <li>
           May provide an abort signal when adding an event listener and call abort to remove
           listener
         </li>
@@ -226,7 +231,7 @@ const postObj = {
             window.addEventListener('hashchange', handleHashChange, {
               signal: controller.signal,
             })
-              
+
             window.addEventListener('storage', handleStorageChange, {
               signal: controller.signal,
             })

@@ -204,12 +204,12 @@ const postObj = {
           </Lnk>
         </li>
         <li>
-          May provide an abort signal when adding an event listener and call abort to remove
-          listener
+          May provide an abort signal to an event listener and call <code>controller.abort()</code>{' '}
+          to remove it
         </li>
         <li>
-          No need to keep reference to the handler function just to reference it in{' '}
-          <code>.removeEventListener()</code>.
+          No need to keep a reference to a handler function for{' '}
+          <code>{'element.removeEventListener("click", handlerFunc)'}</code>
         </li>
 
         <Code block jsx>{`

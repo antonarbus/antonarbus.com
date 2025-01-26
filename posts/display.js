@@ -155,7 +155,7 @@ const postObj = {
         <li>Flex container expands or shrinks items to fill available free.</li>
         <li>Flex layout is direction-agnostic</li>
         <li>
-          Check my <Lnk path="/post/flex">playground</Lnk> for flex properties
+          Check my <Lnk path="/posts/flex">playground</Lnk> for flex properties
         </li>
       </ul>
 

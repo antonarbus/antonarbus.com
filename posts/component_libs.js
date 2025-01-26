@@ -15,12 +15,23 @@ import {
 } from '/components/post/reExport'
 
 const postObj = {
-  title: 'xxx',
-  date: '2025.01.xx',
-  tags: ['xxx', 'xxx'],
+  title: 'component libs',
+  date: '2025.01.15',
+  tags: ['css', 'react'],
   imgUrl: 'https://antonarbus.com/imgs/xxx.png',
-  desc: 'xxx',
-  body: <>xyz</>
+  desc: 'component libs',
+  body: (
+    <>
+      <H>Component libs</H>
+
+      <ul>
+        <li>
+          <Lnk path="https://www.reactbits.dev/">https://www.reactbits.dev/</Lnk> - beautifully
+          animated components for react
+        </li>
+      </ul>
+    </>
+  )
 }
 
 export default postObj

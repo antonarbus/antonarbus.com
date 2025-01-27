@@ -1478,6 +1478,17 @@ const postObj = {
       </ul>
       <LazyImg path="/imgs/conditional_type.png" />
       <H>JSON typed</H>
+      <ul>
+        <li>
+          <Lnk path="https://www.youtube.com/watch?v=z7pDvyVhUnE">
+            https://www.youtube.com/watch?v=z7pDvyVhUnE
+          </Lnk>
+        </li>
+        <li>
+          Just cool hack, but there is no real use case for this, coz we usually to not stringify
+          and then convert json back
+        </li>
+      </ul>
       <Code block jsx>{`
         type JsonifiedValue<T> = T extends string | number | null | boolean
           ? T

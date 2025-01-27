@@ -1477,6 +1477,60 @@ const postObj = {
         </li>
       </ul>
       <LazyImg path="/imgs/conditional_type.png" />
+      <H>JSON typed</H>
+      <Code block jsx>{`
+        type JsonifiedValue<T> = T extends string | number | null | boolean
+          ? T
+          : T extends { toJSON(): infer R }
+            ? R
+            : T extends undefined | ((...args: any[]) => any)
+              ? never
+              : T extends object
+                ? JsonifiedObject<T>
+                : never
+
+        type JsonifiedObject<T> = {
+          [Key in keyof T as [JsonifiedValue<T[Key]>] extends [never]
+            ? never
+            : Key]: JsonifiedValue<T[Key]>
+        }
+
+        type Stringified<ObjType> = string & { source: ObjType }
+
+        declare global {
+          // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+          interface JSON {
+            stringify<T>(
+              value: T,
+              replacer?: null | undefined,
+              space?: string | number,
+            ): Stringified<T>
+            parse<T>(
+              str: Stringified<T>,
+              replacer?: null | undefined,
+            ): JsonifiedObject<T>
+          }
+        }
+
+        const obj = {
+          a: 'hello',
+          b: 1,
+          c: undefined,
+          d: {
+            toJSON(): number {
+              return 42
+            },
+          },
+          e: (): void => {
+            console.log('hi from e')
+          },
+        }
+
+        const str = JSON.stringify(obj) 
+        const parsed = JSON.parse(str)
+
+        parsed.b
+      `}</Code>
     </>
   )
 }

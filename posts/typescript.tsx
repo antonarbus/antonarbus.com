@@ -1488,8 +1488,7 @@ const postObj = {
           Just cool hack, but there is no real use case for this, coz we usually to not stringify
           and then convert json back
         </li>
-      </ul>
-      <Code block jsx>{`
+        <Code block jsx>{`
         type JsonifiedValue<T> = T extends string | number | null | boolean
           ? T
           : T extends { toJSON(): infer R }
@@ -1542,6 +1541,24 @@ const postObj = {
 
         parsed.b
       `}</Code>
+        <li>More realistic scenario is to manually type the outcoming object</li>
+        <Code block jsx>{`
+          export const jsonParseSafe = <T>(str: unknown): T | undefined => {
+            try {
+              if (typeof str !== 'string') {
+                return undefined
+              }
+
+              const parsedJson: T = JSON.parse(str) as T
+
+              return parsedJson
+            } catch {
+              return undefined
+            }
+          }
+        `}</Code>
+        <li>Or even better to use Zod for runtime validation which also produces a type</li>
+      </ul>
     </>
   )
 }

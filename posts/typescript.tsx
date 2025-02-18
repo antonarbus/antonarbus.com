@@ -1079,20 +1079,20 @@ const postObj = {
         are sure that variable will not be <code>null</code> and thus we avoid optional chaining{' '}
         <code>inputRef.current?.focus()</code>
       </p>
-      <H>useRef with ElementRef</H>
+      <H>useRef with ComponentRef</H>
       <p>Same as above, but no need to remember html element types, but just tag names</p>
       <Code block jsx>{`
-      import { useRef, type ElementRef } from 'react'
+      import { useRef, type ComponentRef } from 'react'
 
-      const buttonRef = useRef<ElementRef<'button'>>(null)
+      const buttonRef = useRef<ComponentRef<'button'> | null>(null)
       `}</Code>
       <H>useRef as mutable container</H>
       <Code block jsx>{`
       type Props = {
         children?: React.ReactNode
         cssProps?: React.CSSProperties
-        reference?: React.MutableRefObject<HTMLDivElement>
-        ref2?: React.MutableRefObject<HTMLDivElement>
+        reference?: React.RefObject<HTMLDivElement>
+        ref2?: React.RefObject<HTMLDivElement>
         title?: string | React.ReactNode
         logo?: React.ReactNode
       }

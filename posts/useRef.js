@@ -32,11 +32,42 @@ function Component() {
 }
 // #endregion
 
+// #region pass ref in props
+function PassRefInProps() {
+  const myRef = useRef()
+  return (
+    <>
+      <Input myRef={myRef} />
+      <button onClick={() => myRef.current.focus()}>Focus</button>
+    </>
+  )
+}
+
+function Input(props) {
+  return <input ref={props.myRef} placeholder="Custom input" />
+}
+// #endregion
+
+// #region pass ref in props
+function PassRefViaReactForwardRef() {
+  const ref = useRef()
+  return (
+    <>
+      <MyInputWrappedInForwardRef ref={ref} placeholder="I am a placeholder" />
+      <button onClick={() => ref.current.focus()}>Focus</button>
+    </>
+  )
+}
+function MyInput(props, ref) {
+  return <input ref={ref} {...props} />
+}
+const MyInputWrappedInForwardRef = React.forwardRef(MyInput)
+// #endregion
+
 // #region multiple refs
 const customRef = {
   current: null
 }
-// #endregion
 
 export const ComponentWithRef = () => {
   const externalRef = useRef(null)
@@ -95,37 +126,6 @@ export const MultipleRefs = ({ externalRef }) => {
     </>
   )
 }
-
-// #region pass ref in props
-function PassRefInProps() {
-  const myRef = useRef()
-  return (
-    <>
-      <Input myRef={myRef} />
-      <button onClick={() => myRef.current.focus()}>Focus</button>
-    </>
-  )
-}
-
-function Input(props) {
-  return <input ref={props.myRef} placeholder="Custom input" />
-}
-// #endregion
-
-// #region pass ref in props
-function PassRefViaReactForwardRef() {
-  const ref = useRef()
-  return (
-    <>
-      <MyInputWrappedInForwardRef ref={ref} placeholder="I am a placeholder" />
-      <button onClick={() => ref.current.focus()}>Focus</button>
-    </>
-  )
-}
-function MyInput(props, ref) {
-  return <input ref={ref} {...props} />
-}
-const MyInputWrappedInForwardRef = React.forwardRef(MyInput)
 // #endregion
 
 const postObj = {
@@ -268,6 +268,70 @@ const postObj = {
       </ul>
 
       <ComponentWithRef />
+
+      <Code block jsx>{`
+        const customRef = {
+          current: null
+        }
+
+        export const ComponentWithRef = () => {
+          const externalRef = useRef(null)
+
+          return <MultipleRefs externalRef={externalRef} />
+        }
+
+        export const MultipleRefs = ({ externalRef }) => {
+          const internalRef = useRef(null)
+
+          return (
+            <>
+              <div
+                ref={(element) => {
+                  internalRef.current = element
+                  externalRef.current = element
+                  customRef.current = element
+                }}
+                css={{
+                  background: 'lightgrey'
+                }}
+              >
+                div element
+              </div>
+              <br />
+              <button
+                onClick={() => {
+                  const element = internalRef.current
+                  const color = element.style.background === 'red' ? 'green' : 'red'
+                  element.style.background = color
+                }}
+              >
+                change background <br />
+                with internal ref
+              </button>{' '}
+              <button
+                onClick={() => {
+                  const element = externalRef.current
+                  const color = element.style.background === 'red' ? 'green' : 'red'
+                  element.style.background = color
+                }}
+              >
+                change background <br />
+                with external ref
+              </button>{' '}
+              <button
+                onClick={() => {
+                  const element = customRef.current
+                  const color = element.style.background === 'red' ? 'green' : 'red'
+                  element.style.background = color
+                }}
+              >
+                change background <br />
+                with custom ref
+              </button>
+            </>
+          )
+        }
+      `}</Code>
     </>
   )
 }

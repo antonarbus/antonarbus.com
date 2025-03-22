@@ -47,6 +47,9 @@ const postObj = {
           <code>-X POST</code> → Specify HTTP method (GET, POST, PUT, DELETE). Default is GET.
         </li>
         <li>
+          <code>-k</code> → ignore SSL certificate validation
+        </li>
+        <li>
           <code>-d "name=John"</code> → Send data in a request (use with -X POST or -X PUT).
         </li>
         <li>

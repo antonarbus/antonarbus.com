@@ -1478,71 +1478,7 @@ const postObj = {
       </ul>
       <LazyImg path="/imgs/conditional_type.png" />
       <H>JSON typed</H>
-      <ul>
-        <li>
-          <Lnk path="https://www.youtube.com/watch?v=z7pDvyVhUnE">
-            https://www.youtube.com/watch?v=z7pDvyVhUnE
-          </Lnk>
-        </li>
-        <li>
-          Just cool hack, but there is no real use case for this, coz we usually to not stringify
-          and then convert json back
-        </li>
-        <Code block jsx>{`
-        type JsonifiedValue<T> = T extends string | number | null | boolean
-          ? T
-          : T extends { toJSON(): infer R }
-            ? R
-            : T extends undefined | ((...args: any[]) => any)
-              ? never
-              : T extends object
-                ? JsonifiedObject<T>
-                : never
-
-        type JsonifiedObject<T> = {
-          [Key in keyof T as [JsonifiedValue<T[Key]>] extends [never]
-            ? never
-            : Key]: JsonifiedValue<T[Key]>
-        }
-
-        type Stringified<ObjType> = string & { source: ObjType }
-
-        declare global {
-          // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-          interface JSON {
-            stringify<T>(
-              value: T,
-              replacer?: null | undefined,
-              space?: string | number,
-            ): Stringified<T>
-            parse<T>(
-              str: Stringified<T>,
-              replacer?: null | undefined,
-            ): JsonifiedObject<T>
-          }
-        }
-
-        const obj = {
-          a: 'hello',
-          b: 1,
-          c: undefined,
-          d: {
-            toJSON(): number {
-              return 42
-            },
-          },
-          e: (): void => {
-            console.log('hi from e')
-          },
-        }
-
-        const str = JSON.stringify(obj) 
-        const parsed = JSON.parse(str)
-
-        parsed.b
-      `}</Code>
-        <li>More realistic scenario is to manually type the outcoming object</li>
-        <Code block jsx>{`
+      <Code block jsx>{`
           export const jsonParseSafe = <T>(str: unknown): T | undefined => {
             try {
               if (typeof str !== 'string') {
@@ -1557,8 +1493,92 @@ const postObj = {
             }
           }
         `}</Code>
-        <li>Or even better to use Zod for runtime validation which also produces a type</li>
+      <p>Probably better to use Zod for runtime validation which may produce a type</p>
+      <H>Function Overloads</H>
+      <ul>
+        <li>Used for a function that can be called in different ways</li>
+        <li>
+          Write different function signatures (overload signatures), followed by the body of real
+          function
+        </li>
       </ul>
+      <p>Function may accept one argument or three arguments</p>
+      <Code block jsx>{`
+        function makeDate(timestamp: number): Date;
+        function makeDate(m: number, d: number, y: number): Date;
+
+        function makeDate(mOrTimestamp: number, d?: number, y?: number): Date {
+          if (d !== undefined && y !== undefined) {
+            return new Date(y, mOrTimestamp, d);
+          } else {
+            return new Date(mOrTimestamp);
+          }
+        }
+
+        const d1 = makeDate(12345678);
+        const d2 = makeDate(5, 5, 5);
+        const d3 = makeDate(1, 3); // error
+      `}</Code>
+      <p>Function returns different object shape depending on parameters shape</p>
+      <Code block jsx>{`
+        type Props1 = { id: string }
+        type Res1 = { name: string; age: number; sex: string }
+        type Props2 = { name: string }
+        type Res2 = { name: string; occupation: string; language: string }
+
+        function getUser(props: Props1): Res1
+        function getUser(props: Props2): Res2
+
+        function getUser(props: Props1 | Props2): Res1 | Res2 {
+          const user =
+            'id' in props
+              ? {
+                  name: 'John',
+                  age: 20,
+                  sex: 'Male',
+                }
+              : {
+                  name: 'John',
+                  occupation: 'Cook',
+                  language: 'French',
+                }
+
+          return user
+        }
+
+        const user1 = getUser({ id: '1' }) // { name: 'John', age: 20, sex: 'Male' }
+        const user2 = getUser({ name: 'John' }) // { name: 'John', occupation: 'Cook', language: 'French' }
+      `}</Code>
+      <p>Same function with generics looks way more complex</p>
+      <Code block jsx>{`
+        type Props1 = { id: string }
+        type Res1 = { name: string; age: number; sex: string }
+        type Props2 = { name: string }
+        type Res2 = { name: string; occupation: string; language: string }
+
+        type Props = Props1 | Props2
+        type Res<P> = P extends Props1 ? Res1 : Res2
+
+        function getUser<P extends Props>(props: P): Res<P> {
+          const user =
+            'id' in props
+              ? {
+                  name: 'John',
+                  age: 20,
+                  sex: 'Male',
+                }
+              : {
+                  name: 'John',
+                  occupation: 'Cook',
+                  language: 'French',
+                }
+
+          return user as Res<P>
+        }
+
+        const user1 = getUser({ id: '1' }) // { name: 'John', age: 20, sex: 'Male' }
+        const user2 = getUser({ name: 'John' }) // { name: 'John', occupation: 'Cook', language: 'French' }
+      `}</Code>
     </>
   )
 }

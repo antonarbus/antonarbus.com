@@ -35,9 +35,9 @@ const postObj = {
       <Code block bash>{`
         curl \\ 
           -k \\
-          -H "Itpa-token: AAECAzYЗRDkyNzVDNjdEfPluGUv4DJ2tMh/LTdU+/ywA==" \\
+          -H "ltpa-token: AAECAzYЗRDkyNzVDNjdEfPluGUv4DJ2tMh/LTdU+/ywA==" \\
           -H "Content-Type: application/json" \\
-          https://local.heeros.com:3010/public/administration/tt88001la2F00345
+          https://local.domain.com:3010/public/administration/tt88001la2F00345
       `}</Code>
 
       <H>Arguments</H>

@@ -1579,6 +1579,40 @@ const postObj = {
         const user1 = getUser({ id: '1' }) // { name: 'John', age: 20, sex: 'Male' }
         const user2 = getUser({ name: 'John' }) // { name: 'John', occupation: 'Cook', language: 'French' }
       `}</Code>
+      <H>Type predicate</H>
+      <ul>
+        <li>
+          A Type Predicate in TypeScript is a special return type for a function that tells
+          TypeScript whether a value is of a specific type.
+        </li>
+        <li>
+          We know that if this function returns true then value is a <code>string</code>
+        </li>
+        <li>But TS does not and throws an error</li>
+        <Code block jsx>{`
+          function isString(value: unknown): boolean {
+            return typeof value === 'string'
+          }
+
+          const data: unknown = 'Hello'
+
+          if (isString(data)) {
+            alert(data.toUpperCase()) // value is of type "unknown"
+          }
+        `}</Code>
+        <li>We may add a return type manually</li>
+        <Code block jsx>{`
+          function isString(value: unknown): value is string {
+            return typeof value === 'string'
+          }
+
+          const data: unknown = 'Hello'
+
+          if (isString(data)) {
+            alert(data.toUpperCase()) // No TypeScript error
+          }
+        `}</Code>
+      </ul>
     </>
   )
 }

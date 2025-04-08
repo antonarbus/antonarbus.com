@@ -81,8 +81,20 @@ const postObj = {
       <ul>
         <li><Lnk path='https://stackoverflow.com/questions/71582397/eresolve-unable-to-resolve-dependency-tree-while-installing-a-pacakge'>https://stackoverflow.com/questions/71582397/eresolve-unable-to-resolve-dependency-tree-while-installing-a-pacakge</Lnk></li>
         <li><Code>rm -rf node_modules</Code></li>
+        <li><Code>npm config get legacy-peer-deps</Code> check peer dep config</li>
         <li><Code>npm config set legacy-peer-deps true</Code></li>
-        <li><Code>npm install</Code></li>
+        <li><Code>npm i</Code></li>
+      </ul>
+
+      <H>Peer dependencies</H>
+
+      <ul>
+        <li>Nowadays peer dependencies are tried to be installed automatically</li>
+        <li>Before npm v7 they where not installed automatically</li>
+        <li><Code>npm config get legacy-peer-deps</Code> check peer dep config</li>
+        <li><Code>npm config set legacy-peer-deps false</Code> correct settings, you're telling npm NOT to use the legacy behavior</li>
+        <li>It means you do not ignore peer dependency conflicts.</li>
+        <li>Do not skip installing peer dependencies that are missing or conflicting</li>
       </ul>
 
       <H>update specific package</H>

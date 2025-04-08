@@ -104,6 +104,15 @@ const postObj = {
         <li>Without <Code>--save</Code> package will be updated only in <i>package-lock.json</i>, no clue why we may want it</li>
       </ul>
 
+      <H>Dependency tree</H>
+
+      <ul>
+        <li><Code>npm ls</Code> project's installed packages</li>
+        <li><Code>npm ls --global</Code> globally installed packages</li>
+        <li><Code>npm ls --depth=1</Code> dependencies one-level deep</li>
+        <li><Code>npm ls package-name</Code> how a specific package is installed in the tree. This is particular useful when you encounter an error at some node_module package which is not your direct dependency but installed by some other package.</li>
+      </ul>
+
       <H>workspaces</H>
 
       <ul>

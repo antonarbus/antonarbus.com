@@ -1,188 +1,82 @@
 import { Code, H, LazyImg, Lnk, jsxToStr } from '/components/post/reExport'
 
-function Component() {
-  const x = 'hello'
-  const y = x + ' John'
-
-  if (x) {
-
-  }
-
-  return y
-}
-
 const postObj = {
   title: 'eslint',
-  date: '2022.05.05',
+  date: '2025.02.05',
   tags: ['tools'],
   imgUrl: 'https://antonarbus.com/imgs/eslint.png',
   desc: 'eslint example configuration',
   body: (
     <>
-      <p><Lnk path="https://eslint.org/">ESLint</Lnk> is a package to find problematic code.</p>
+      <H>Manual check in terminal</H>
 
-      <H>React</H>
+      <p>
+        <Lnk path="https://eslint.org/">ESLint</Lnk> is a package to find problematic code.
+      </p>
 
-      <p>ESLint comes with React <Code>create-react-app app-name</Code> by default.</p>
+      <p>
+        Rule may have 3 flags: <Code>{'"off"'}</Code>, <Code>{'"warn"'}</Code> &{' '}
+        <Code>{'"error"'}</Code>
+      </p>
 
-      <H>Rules</H>
-
-      <p>We can extent <Lnk path="https://eslint.org/docs/rules/">ESLint rules</Lnk> by adding them into <Code>package.json</Code> file under <Code>rules</Code>.</p>
-
-      <Code block json>{`
-        "eslintConfig": {
-          "extends": [
-            "react-app",
-            "react-app/jest"
-          ],
-          "rules": {
-            "no-unused-vars": "warn",
-            "no-var": "error",
-            "no-empty": "warn",
-            "prefer-template": "warn",
-            "prefer-const": "warn"
-          }
-        }
-      `}</Code>
-
-      <p>Rule may have 3 flags: <Code>{'"off"'}</Code>, <Code>{'"warn"'}</Code> & <Code>{'"error"'}</Code></p>
-
-      <p><Code>{'"error"'}</Code> rule does not permit to compile a React project until it is resolved.</p>
+      <p>
+        <Code>{'"error"'}</Code> rule does not permit to compile a React project until it is
+        resolved.
+      </p>
 
       <H>Manual check in terminal</H>
 
-      <p>Run ESLint check in terminal by typing <Code bash>{"eslint './posts/eslint.js'"}</Code></p>
+      <p>
+        Run ESLint check in terminal by typing <Code bash>{"eslint './posts/eslint.js'"}</Code>
+      </p>
 
-      <p>Run batch error checking with <Code>{"eslint './posts/**js'"}</Code></p>
+      <p>
+        Run batch error checking with <Code>{"eslint './posts/**js'"}</Code>
+      </p>
 
-      <p><LazyImg src="/imgs/esLint/ESLintProblemsInTerminal.png"></LazyImg></p>
+      <p>
+        <LazyImg src="/imgs/esLint/ESLintProblemsInTerminal.png"></LazyImg>
+      </p>
 
       <H>ESLint extension</H>
 
-      <p>If we install <Lnk path="https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint">ESLint VS Code extension</Lnk> we can see errors and warning highlight right in the editor.</p>
+      <p>
+        If we install{' '}
+        <Lnk path="https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint">
+          ESLint VS Code extension
+        </Lnk>{' '}
+        we can see errors and warning highlight right in the editor.
+      </p>
 
       <H>Automatic fix</H>
 
-      <p>ESLint may try to fix problems with <Code>{"eslint './posts/eslint.js' --fix"}</Code></p>
-
-      <H>Manual installation</H>
-
-      <p>We may install ESLint manually by <Code>sudo npm i -D eslint</Code> and then initialize configuration by <Code>eslint --init</Code> command.</p>
-
       <p>
-        Different style guides may be installed{' '}
-        <Lnk path="https://github.com/standard/standard">standard</Lnk> or{' '}
-        <Lnk path="https://github.com/airbnb/javascript">Airbnb</Lnk> or{' '}
-        <Lnk path="https://github.com/google/eslint-config-google">Google</Lnk>.
+        ESLint may try to fix problems with <Code>{"eslint './posts/eslint.js' --fix"}</Code>
       </p>
-
-      <p>Installation example.</p>
-
-      <p><LazyImg src="/imgs/esLint/ESLintInit.png"></LazyImg></p>
-
-      <p>Many dev dependencies are inserted into the <Code>package.json</Code> file and configuration file <Code>.eslintrc.js</Code> is generated.</p>
-
-      <Code block json>{`
-        // package.json
-        "devDependencies": {
-          "eslint": "^7.32.0",
-          "eslint-config-airbnb": "^19.0.2",
-          "eslint-config-standard": "^16.0.3",
-          "eslint-plugin-import": "^2.25.3",
-          "eslint-plugin-jsx-a11y": "^6.5.1",
-          "eslint-plugin-node": "^11.1.0",
-          "eslint-plugin-promise": "^5.2.0",
-          "eslint-plugin-react": "^7.27.1",
-          "eslint-plugin-react-hooks": "^4.3.0"
-        }
-      `}</Code>
-
-      <Code block js>{`
-      // .eslintrc.js
-      module.exports = {
-        env: {
-          browser: true,
-          es2021: true
-        },
-        extends: [
-          'plugin:react/jsx-runtime',
-          'standard'
-        ],
-        parser: '@typescript-eslint/parser',
-        parserOptions: {
-          ecmaFeatures: {
-            jsx: true
-          },
-          ecmaVersion: 12,
-          sourceType: 'module'
-        },
-        plugins: [
-          'react',
-          '@typescript-eslint'
-        ],
-        globals: {
-          React: true,
-          google: true,
-          mount: true,
-          mountWithRouter: true,
-          shallow: true,
-          shallowWithRouter: true,
-          context: true,
-          expect: true,
-          jsdom: true,
-          JSX: true,
-        },
-        rules: {
-          'comma-dangle': ['error', 'only-multiline'],
-          'react/no-unescaped-entities': 'off',
-          'space-before-function-paren': ['error', 'never'],
-          'react/prop-types': 'off',
-          'react/react-in-jsx-scope': 'off',
-          'no-template-curly-in-string': 'off',
-          'no-use-before-define': 'off',
-          'no-console': 'off',
-        },
-        settings: {
-          react: {
-            version: 'detect'
-          }
-        }
-      }
-      `}</Code>
-
-      <p><Code>eslintConfig</Code> can be removed from <Code>package.json</Code> if we use a separate <Code>.eslintrc.js</Code></p>
-
-      <p>If ESLint does not allow to start or build a project we may create <Code>.env</Code> file with following statement.</p>
-
-      <Code block none>{`
-      // .env
-      ESLINT_NO_DEV_ERRORS=true
-      DISABLE_ESLINT_PLUGIN=true
-      `}</Code>
 
       <H>Disable ESLint warnings</H>
 
       <p>To disable ESLint warnings we may type</p>
-        <ul>
-          <li> <Code>{'/* eslint-disable */'}</Code> at the top of the file</li>
-          <li> <Code>{'// eslint-disable-line'}</Code> on the same line</li>
-          <li> <Code>{'/* eslint-disable-next-line */'}</Code> or <Code>{'// eslint-disable-next-line'}</Code> before the line</li>
-        </ul>
-
-      <p>More information can be found on the <Lnk path="https://eslint.org/docs/user-guide/configuring/rules#disabling-rules">https://eslint.org</Lnk> page.</p>
-
-      <H>ESLint in Next.js</H>
-
       <ul>
-        <li>For some reason could not let linter work in Next.js</li>
-        <li>This <Lnk path='https://devinshoemaker.com/blog/next-js/configure-eslint'>guidline</Lnk> helped me</li>
+        <li>
+          <Code>{'/* eslint-disable */'}</Code> at the top of the file
+        </li>
+        <li>
+          <Code>{'// eslint-disable-line'}</Code> on the same line
+        </li>
+        <li>
+          <Code>{'/* eslint-disable-next-line */'}</Code> or{' '}
+          <Code>{'// eslint-disable-next-line'}</Code> before the line
+        </li>
       </ul>
 
-      <H>Plugins</H>
-
-      <ul>
-        <li><Lnk path='https://github.com/bfanger/eslint-plugin-only-warn'>eslint-plugin-only-warn</Lnk> - will warn on every rule, instead of throwing an error</li>
-      </ul>
+      <p>
+        More information can be found on the{' '}
+        <Lnk path="https://eslint.org/docs/user-guide/configuring/rules#disabling-rules">
+          https://eslint.org
+        </Lnk>{' '}
+        page.
+      </p>
 
       <H>Lint in npm script</H>
 
@@ -197,6 +91,201 @@ const postObj = {
           "server": "nodemon server.js",
           "dev": "concurrently \"npm run server\" \"npm run client\""
         },
+      `}</Code>
+
+      <H>Simple rules</H>
+
+      <Code block js>{`
+        // eslint.config.js
+
+        import { defineConfig } from 'eslint/config'
+        import globals from 'globals'
+        import pluginJs from '@eslint/js'
+        import prettierConfig from 'eslint-config-prettier'
+        import tseslint from 'typescript-eslint'
+        import pluginReactConfig from 'eslint-plugin-react/configs/recommended.js'
+
+        export default defineConfig([
+          {
+            ignores: ['**/node_modules/', 'build/**'],
+          },
+          prettierConfig,
+          pluginReactConfig,
+          {
+            languageOptions: {
+              globals: { ...globals.browser, ...globals.node },
+              parserOptions: {
+                project: ['tsconfig.json'],
+                tsconfigDirName: import.meta.dirname,
+                ecmaFeatures: { jsx: true },
+              },
+            },
+          },
+          { settings: { react: { version: 'detect' } } },
+          {
+            files: ['src/**/*.{js,mjs,cjs,ts,jsx,tsx}'],
+            extends: [pluginJs.configs.recommended],
+            rules: {
+              'no-unused-vars': 'warn',
+              'react/react-in-jsx-scope': 'off',
+              'react/display-name': 'off',
+              'react/prop-types': 'warn',
+            },
+          },
+          {
+            files: ['src/**/*.{ts,tsx}'],
+            extends: [...tseslint.configs.recommended],
+          },
+        ])
+      `}</Code>
+
+      <H>Rules from my project</H>
+
+      <Code block jsx>{`
+        import { defineConfig } from 'eslint/config'
+        import globals from 'globals'
+        import pluginJs from '@eslint/js'
+        import prettierConfig from 'eslint-config-prettier'
+        import tseslint from 'typescript-eslint'
+        import pluginReactConfig from 'eslint-plugin-react/configs/recommended.js'
+
+        export default defineConfig([
+          {
+            ignores: ['**/node_modules/', 'build/**'],
+          },
+          prettierConfig,
+          pluginReactConfig,
+          {
+            languageOptions: {
+              globals: { ...globals.browser, ...globals.node },
+              parserOptions: {
+                project: ['tsconfig.json'],
+                tsconfigDirName: import.meta.dirname,
+                ecmaFeatures: { jsx: true },
+              },
+            },
+          },
+          { settings: { react: { version: 'detect' } } },
+          // General rules for all files
+          {
+            files: ['src/**/*.{js,mjs,cjs,ts,jsx,tsx}'],
+            extends: [pluginJs.configs.all],
+            rules: {
+              // https://eslint.org/docs/v8.x/rules/
+              'padding-line-between-statements': [
+                'error',
+                // Blank line before return statement
+                { blankLine: 'always', prev: '*', next: 'return' },
+                // Blank line around block statement
+                { blankLine: 'always', prev: '*', next: 'block-like' },
+                { blankLine: 'always', prev: 'block-like', next: '*' },
+                // Blank line before throw statement
+                { blankLine: 'always', prev: '*', next: 'throw' },
+                // Blank line around declaration which spans over several lines
+                { blankLine: 'always', prev: 'multiline-const', next: '*' },
+                { blankLine: 'always', prev: 'multiline-let', next: '*' },
+                { blankLine: 'always', prev: 'multiline-var', next: '*' },
+                { blankLine: 'always', prev: '*', next: 'multiline-const' },
+                { blankLine: 'always', prev: '*', next: 'multiline-let' },
+                { blankLine: 'always', prev: '*', next: 'multiline-var' },
+                // Blank line around expression which spans over several lines
+                { blankLine: 'always', prev: 'multiline-expression', next: '*' },
+                { blankLine: 'always', prev: '*', next: 'multiline-expression' },
+              ],
+              curly: 'error',
+              'no-else-return': 'error',
+              'no-implicit-coercion': 'error',
+              eqeqeq: 'error',
+              'object-shorthand': 'error',
+              'jsx-quotes': ['error', 'prefer-single'],
+              'no-console': ['error', { allow: ['error', 'warn', 'info'] }],
+              'no-useless-rename': 'error',
+              'no-duplicate-imports': 'error',
+
+              // Turn off some rules from pluginJs.configs.all
+              'no-alert': 'off',
+              'no-useless-assignment': 'off',
+              'sort-keys': 'off',
+              'max-lines-per-function': 'off',
+              'no-ternary': 'off',
+              'arrow-body-style': 'off',
+              'no-inline-comments': 'off',
+              'capitalized-comments': 'off',
+              'no-magic-numbers': 'off',
+              'no-void': 'off',
+              'one-var': 'off',
+              'id-length': 'off',
+              'prefer-destructuring': 'off',
+              'max-statements': 'off',
+              'sort-imports': 'off',
+              'max-params': 'off',
+              'no-warning-comments': 'off',
+              'no-undefined': 'off',
+              'max-lines': 'off',
+              complexity: 'off',
+              'consistent-return': 'off',
+              'no-plusplus': 'off',
+              'func-style': 'off',
+              'prefer-arrow-callback': 'off',
+              'no-shadow': 'off',
+              radix: 'off',
+              'init-declarations': 'off',
+              'new-cap': 'off',
+              'no-unsafe-type-assertion': 'off',
+              'prefer-named-capture-group': 'off',
+              'react/react-in-jsx-scope': 'off',
+              'react/display-name': 'off',
+
+              // todo: warn some rules instead of error, maybe fix in future and put "error" back
+              'no-use-before-define': 'warn',
+              'require-unicode-regexp': 'warn',
+              'no-negated-condition': 'warn',
+              'no-empty-function': 'warn',
+              'no-promise-executor-return': 'warn',
+              'no-console': 'warn',
+              'no-unused-vars': 'warn',
+              'default-param-last': 'warn',
+              'require-await': 'warn',
+              'no-unused-expressions': 'warn',
+              'no-nested-ternary': 'warn',
+              'react/prop-types': 'warn',
+              camelcase: 'warn',
+              'no-restricted-syntax': [
+                'warn',
+                {
+                  selector: 'ReturnStatement > CallExpression',
+                  message:
+                    'Do not return expressions directly. Assign them to a variable first.',
+                },
+              ],
+            },
+          },
+          // TypeScript-specific rules
+          {
+            files: ['src/**/*.{ts,tsx}'],
+            extends: [...tseslint.configs.all],
+            rules: {
+              // https://typescript-eslint.io/rules/
+              '@typescript-eslint/no-unused-vars': ['error', { args: 'none' }],
+              '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
+              '@typescript-eslint/explicit-function-return-type': 'error',
+              '@typescript-eslint/consistent-type-exports': 'error',
+              '@typescript-eslint/consistent-type-imports': 'error',
+              '@typescript-eslint/no-import-type-side-effects': 'error',
+              '@typescript-eslint/naming-convention': 'off',
+              '@typescript-eslint/prefer-readonly-parameter-types': 'off',
+              '@typescript-eslint/strict-boolean-expressions': 'off', // Good to use, but too much changes required
+              '@typescript-eslint/no-unnecessary-type-parameters': 'off', // Check it later, it may make sense
+              '@typescript-eslint/no-magic-numbers': 'off',
+              '@typescript-eslint/prefer-destructuring': 'off',
+              '@typescript-eslint/max-params': 'off',
+              '@typescript-eslint/consistent-return': 'off',
+              '@typescript-eslint/indent': 'off', // Bad for performance
+              '@typescript-eslint/no-unsafe-type-assertion': 'off',
+              '@typescript-eslint/no-misused-spread': 'off',
+            },
+          },
+        ])
       `}</Code>
     </>
   )

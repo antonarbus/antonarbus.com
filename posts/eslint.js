@@ -2,7 +2,7 @@ import { Code, H, LazyImg, Lnk, jsxToStr } from '/components/post/reExport'
 
 const postObj = {
   title: 'eslint',
-  date: '2025.02.05',
+  date: '2025.05.02',
   tags: ['tools'],
   imgUrl: 'https://antonarbus.com/imgs/eslint.png',
   desc: 'eslint example configuration',

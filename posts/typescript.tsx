@@ -1376,7 +1376,7 @@ const postObj = {
       </ul>
       <Code block jsx>{`
         type Props = {
-          lang: 'en' | 'fi' | 'nl' | 'sv' | Record<never, never> & string
+          lang: 'en' | 'fi' | 'nl' | 'sv' | (string & {})
         }
       `}</Code>
       <H>as const</H>

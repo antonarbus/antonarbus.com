@@ -1613,6 +1613,69 @@ const postObj = {
           }
         `}</Code>
       </ul>
+      <H>Mapped types</H>
+      <Hs>Mapped types of union</Hs>
+      <Code block jsx>{`
+        type Fruit = "apple" | "banana" | "orange";
+
+        type NewType = {
+          [F in Fruit]: {
+            name: F
+          }
+        }
+
+        /**
+         * {
+         *   apple: { name: "apple" };
+         *   banana: { name: "banana" };
+         *   orange: { name: "orange" };
+         * }
+         */
+      `}</Code>
+      <Hs>Mapped types of object props</Hs>
+      <Code block jsx>{`
+        type Person = {
+          name: string;
+          age: number;
+        }
+
+        type NullablePerson = {
+          [P in keyof Person]: Person[P] | null;
+        };
+
+        /**
+         * {
+         *   name: string | null;
+         *   age: number | null;
+         * }
+         */
+      `}</Code>
+      <Hs>
+        Mapping non-string unions with <code>as</code>
+      </Hs>
+      <Code block jsx>{`
+        type Event =
+        | {
+            type: "click"
+            x: number
+            y: number
+          }
+        | {
+            type: "hover"
+            element: HTMLElement
+          }
+
+        type EventMap = {
+          [E in Event as E["type"]]: (event: E) => void
+        }
+
+        /**
+         * {
+         *   click: (event: { type: "click"; x: number; y: number; }) => void;
+         *   hover: (event: { type: "hover"; element: HTMLElement; }) => void;
+         * }
+         */
+      `}</Code>
     </>
   )
 }

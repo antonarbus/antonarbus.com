@@ -1122,6 +1122,22 @@ const postObj = {
       <Timer />
       `}</Code>
       <Timer />
+      <H>RefObject vs MutableRefObject</H>
+      <ul>
+        <li>
+          We can not mutate <code>RefObject</code>
+        </li>
+        <li>Actually we can in runtime, but TypeScript will complain at compile</li>
+      </ul>
+      <Code block jsx>{`
+        interface MutableRefObject<T> {
+          current: T
+        }
+
+        interface RefObject<T> {
+          readonly current: T
+        }
+      `}</Code>
       <H>Component in props</H>
       <Code block jsx>{`
       type ProfileProps = { name: string }

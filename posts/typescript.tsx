@@ -1138,6 +1138,22 @@ const postObj = {
           readonly current: T
         }
       `}</Code>
+      <ul>
+        <li>
+          type of <code>{'useRef<number>(5)'}</code> is <code>{'MutableRefObject<number>'}</code>
+        </li>
+        <li>
+          type of <code>{'useRef<number>()'}</code> is{' '}
+          <code>{'MutableRefObject<number | undefined>'}</code>
+        </li>
+        <li>
+          type of <code>{'useRef<number>(null)'}</code> is <code>{'RefObject<number>'}</code>
+        </li>
+        <li>
+          type of <code>{'useRef<number | null>(null)'}</code> is{' '}
+          <code>{'MutableRefObject<number | null>'}</code>
+        </li>
+      </ul>
       <H>Component in props</H>
       <Code block jsx>{`
       type ProfileProps = { name: string }

@@ -7,10 +7,18 @@ function ComponentWithoutState() {
   let likes = 0
   return (
     <>
-      <div>Likes <b>{likes}</b></div>
-      <button onClick={() => likes++} style={btnCss}>+1</button>
-      <button onClick={() => likes--} style={btnCss}>-1</button>
-      <button onClick={() => alert(likes)} style={btnCss}>Alert <b>likes</b></button>
+      <div>
+        Likes <b>{likes}</b>
+      </div>
+      <button onClick={() => likes++} style={btnCss}>
+        +1
+      </button>
+      <button onClick={() => likes--} style={btnCss}>
+        -1
+      </button>
+      <button onClick={() => alert(likes)} style={btnCss}>
+        Alert <b>likes</b>
+      </button>
     </>
   )
 }
@@ -21,10 +29,18 @@ function ComponentWithState() {
   const [likes, setLikes] = React.useState(0)
   return (
     <>
-      <div>Likes <b>{likes}</b></div>
-      <button onClick={() => setLikes(likes + 1)} style={btnCss}>+1</button>
-      <button onClick={() => setLikes(likes - 1)} style={btnCss}>-1</button>
-      <button onClick={() => alert(likes)} style={btnCss}>Alert <b>likes</b></button>
+      <div>
+        Likes <b>{likes}</b>
+      </div>
+      <button onClick={() => setLikes(likes + 1)} style={btnCss}>
+        +1
+      </button>
+      <button onClick={() => setLikes(likes - 1)} style={btnCss}>
+        -1
+      </button>
+      <button onClick={() => alert(likes)} style={btnCss}>
+        Alert <b>likes</b>
+      </button>
     </>
   )
 }
@@ -41,7 +57,9 @@ function StateMutation() {
 
   return (
     <>
-      <div>State value: <b>{JSON.stringify(state)}</b></div>
+      <div>
+        State value: <b>{JSON.stringify(state)}</b>
+      </div>
       <button onClick={mutateState}>Add value to array by mutation</button>&emsp;
       <button onClick={alertState}>Alert state</button>
     </>
@@ -57,7 +75,9 @@ function StateUpdate() {
 
   return (
     <>
-      <div>State value: <b>{JSON.stringify(state)}</b></div>
+      <div>
+        State value: <b>{JSON.stringify(state)}</b>
+      </div>
       <button onClick={updateState}>Add value to array by update</button>&emsp;
       <button onClick={alertState}>Alert state</button>
     </>
@@ -72,7 +92,9 @@ function UpdateStateSameAndDifferentValue() {
   const updateStateToNewValue = () => setState(state + 1)
   return (
     <>
-      <div>Value: <b>{state}</b></div>
+      <div>
+        Value: <b>{state}</b>
+      </div>
       <button onClick={updateStateToSameValue}>Update state to same value</button>&emsp;
       <button onClick={updateStateToNewValue}>Update state to new value</button>
     </>
@@ -89,7 +111,9 @@ function ParentWithState() {
   return (
     <div style={style}>
       <h1>Parent Component</h1>
-      <div>Count state variable: <b>{state}</b></div>
+      <div>
+        Count state variable: <b>{state}</b>
+      </div>
       <button onClick={updateState}>Update state from parent component</button>
       <Child state={state} setState={setState} />
     </div>
@@ -114,7 +138,7 @@ function SetStateWithPreviousValue() {
     for (let i = 0; i < 5; i++) setState(state + 1)
   }
   const addOne5TimesSync = () => {
-    for (let i = 0; i < 5; i++) setState(prevVal => prevVal + 1)
+    for (let i = 0; i < 5; i++) setState((prevVal) => prevVal + 1)
   }
   return (
     <>
@@ -135,9 +159,14 @@ const postObj = {
     <>
       <p>State variable change forces the whole component to render.</p>
 
-      <H>Without <Code>useState()</Code></H>
+      <H>
+        Without <Code>useState()</Code>
+      </H>
 
-      <p>We can see likes value change in alert, but not on the screen, because a function component runs and show updates only if its <i>state</i> variable is updated.</p>
+      <p>
+        We can see likes value change in alert, but not on the screen, because a function component
+        runs and show updates only if its <i>state</i> variable is updated.
+      </p>
 
       <Code block>{`
       function ComponentWithoutState() {
@@ -155,7 +184,9 @@ const postObj = {
 
       <ComponentWithoutState />
 
-      <H>With <Code>useState()</Code></H>
+      <H>
+        With <Code>useState()</Code>
+      </H>
 
       <Code block>{`
       import React from 'react'
@@ -178,16 +209,42 @@ const postObj = {
       <Hs>State init</Hs>
 
       <ul>
-        <li>Initialize <code>likes</code> state by <Code js >const [likes, setLikes] = React.useState(0)</Code></li>
-        <li><code>setLikes</code> is a function to change a state value</li>
-        <li>Pass a new state value as an argument <Code js >setLikes(likes + 1)</Code></li>
-        <li>Initial state <code>0</code> is passed as an argument in <Code js >useState(0)</Code></li>
+        <li>
+          Initialize <code>likes</code> state by{' '}
+          <Code js>const [likes, setLikes] = React.useState(0)</Code>
+        </li>
+        <li>
+          <code>setLikes</code> is a function to change a state value
+        </li>
+        <li>
+          Pass a new state value as an argument <Code js>setLikes(likes + 1)</Code>
+        </li>
+        <li>
+          Initial state <code>0</code> is passed as an argument in <Code js>useState(0)</Code>
+        </li>
       </ul>
 
-      <H><Code>setState(newValue)</Code></H>
+      <Hs>Initial state in callback</Hs>
 
       <ul>
-        <li>If we update a state, we need to provide a new value, otherwise React doesn't trigger a render.</li>
+        <li>Initial state can be computed in callback</li>
+      </ul>
+
+      <Code block jsx>{`
+        const [likes, setLikes] = React.useState(() => {
+          return 0
+        })
+      `}</Code>
+
+      <H>
+        <Code>setState(newValue)</Code>
+      </H>
+
+      <ul>
+        <li>
+          If we update a state, we need to provide a new value, otherwise React doesn't trigger a
+          render.
+        </li>
         <li>Just provide a new primitive value or new reference for an object.</li>
       </ul>
 
@@ -245,7 +302,10 @@ const postObj = {
 
       <H>State update with same value</H>
 
-      <p>If a state is set to the same value via <Code js >setState(sameVal)</Code> render does not happen.</p>
+      <p>
+        If a state is set to the same value via <Code js>setState(sameVal)</Code> render does not
+        happen.
+      </p>
 
       <Code block>{`
       function UpdateStateSameAndDifferentValue() {
@@ -266,7 +326,10 @@ const postObj = {
 
       <H>Update state from a child component</H>
 
-      <p>To update a parent component's state from a child component, the update function <code>setState</code> should be passed via props to a child component.</p>
+      <p>
+        To update a parent component's state from a child component, the update function{' '}
+        <code>setState</code> should be passed via props to a child component.
+      </p>
 
       <Code block>{`
       const style = { border: '2px solid grey', padding: '10px', margin: '10px', maxWidth: '500px' }
@@ -299,16 +362,34 @@ const postObj = {
 
       <H>State previous value</H>
 
-      <p>When we update a state with <Code js >setState(newValue)</Code> function, it is done asynchronously sometime in the future and we can not rely on updated state value in calculations.</p>
+      <p>
+        When we update a state with <Code js>setState(newValue)</Code> function, it is done
+        asynchronously sometime in the future and we can not rely on updated state value in
+        calculations.
+      </p>
 
-      <Hs>Async nature of <Code>setState()</Code></Hs>
+      <Hs>
+        Async nature of <Code>setState()</Code>
+      </Hs>
 
-      <p>For example we increment the state 5 times with <Code js >{'for (let i = 0; i < 5; i++) setState(state + 1)'}</Code></p>
-      <p>5 calls go into the end of <i>microtask queue</i> remembering current state value <Code>currentValue = 0</Code>. When they are executed in future they all will return <Code>0</Code></p>
+      <p>
+        For example we increment the state 5 times with{' '}
+        <Code js>{'for (let i = 0; i < 5; i++) setState(state + 1)'}</Code>
+      </p>
+      <p>
+        5 calls go into the end of <i>microtask queue</i> remembering current state value{' '}
+        <Code>currentValue = 0</Code>. When they are executed in future they all will return{' '}
+        <Code>0</Code>
+      </p>
 
-      <Hs><Code>{'setState(prevVal => prevVal + 1)'}</Code></Hs>
+      <Hs>
+        <Code>{'setState(prevVal => prevVal + 1)'}</Code>
+      </Hs>
 
-      <p>There is the second version of <Code js>setState()</Code> function with callback, which provides access to the current state value at the moment of function execution.</p>
+      <p>
+        There is the second version of <Code js>setState()</Code> function with callback, which
+        provides access to the current state value at the moment of function execution.
+      </p>
 
       <Code block>{`
       function SetStateWithPreviousValue() {

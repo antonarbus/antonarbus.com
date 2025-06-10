@@ -25,7 +25,9 @@ const postObj = {
 
       <H>Declaration</H>
 
-      <p><Code>{'new Map([iterable])'}</Code></p>
+      <p>
+        <Code>{'new Map([iterable])'}</Code>
+      </p>
 
       <Code block jsx>{`
       let map = new Map() // creates the map
@@ -39,7 +41,9 @@ const postObj = {
 
       <H>Add</H>
 
-      <p><Code>{'map.set(key, value)'}</Code></p>
+      <p>
+        <Code>{'map.set(key, value)'}</Code>
+      </p>
 
       <Code block jsx>{`
       map.set('1', 'str1') // a string key
@@ -51,10 +55,16 @@ const postObj = {
 
       <p>
         <ul>
-          <li><Code>{'map.get(key)'}</Code></li>
+          <li>
+            <Code>{'map.get(key)'}</Code>
+          </li>
           <li>returns the value by the key</li>
-          <li><code>undefined</code> if key doesn’t exist in map</li>
-          <li><Code>{'map[key]'}</Code> -  works, but isn’t the right way</li>
+          <li>
+            <code>undefined</code> if key doesn’t exist in map
+          </li>
+          <li>
+            <Code>{'map[key]'}</Code> - works, but isn’t the right way
+          </li>
         </ul>
       </p>
 
@@ -72,14 +82,20 @@ const postObj = {
       <Hs>Delete</Hs>
 
       <ul>
-        <li><Code>{'map.delete(key)'}</Code> - removes the value by the key</li>
-        <li><Code>{'map.clear() '}</Code> - removes everything from the map</li>
+        <li>
+          <Code>{'map.delete(key)'}</Code> - removes the value by the key
+        </li>
+        <li>
+          <Code>{'map.clear() '}</Code> - removes everything from the map
+        </li>
       </ul>
 
       <H>Has</H>
 
       <ul>
-        <li><Code>{'map.has(key)'}</Code> - returns true if the key exists, false otherwise</li>
+        <li>
+          <Code>{'map.has(key)'}</Code> - returns true if the key exists, false otherwise
+        </li>
       </ul>
 
       <H>Iteration</H>
@@ -109,7 +125,9 @@ const postObj = {
 
       <H>Chaining</H>
 
-      <p><code>map.set</code> call returns the map itself</p>
+      <p>
+        <code>map.set</code> call returns the map itself
+      </p>
 
       <Code block jsx>{`
         map.set('1', 'str1').set(1, 'num1').set(true, 'bool1')
@@ -159,11 +177,16 @@ const postObj = {
           <li>main advantages are that they have weak reference to objects</li>
           <li>they can easily be removed by garbage collector</li>
           <li>disadvantages are not having support for clear, size, keys, values…</li>
-          <li>idea is that object key stays in map if we even delete the object reference, it is not garbage collected</li>
+          <li>
+            idea is that object key stays in map if we even delete the object reference, it is not
+            garbage collected
+          </li>
           <li>but in weakMap if we kill the obj it will be also removed from the weakMap</li>
-          <li>If we’re working with an object that “belongs” to another code, maybe even a third-party library,
-            and would like to store some data associated with it,
-            that should only exist while the object is alive – then WeakMap is exactly what’s needed.</li>
+          <li>
+            If we’re working with an object that “belongs” to another code, maybe even a third-party
+            library, and would like to store some data associated with it, that should only exist
+            while the object is alive – then WeakMap is exactly what’s needed.
+          </li>
         </ul>
       </p>
 
@@ -186,6 +209,42 @@ const postObj = {
       obj2 = null
       weakMap.size // undefined
       // When obj gets garbage collected, weakMap will be removed as well   
+      `}</Code>
+
+      <H>Example</H>
+
+      <Code block jsx>{`
+        // example from work where we get data from db, put it into Map and then check something against it
+
+          const rowsFromDb = await q.execute()
+
+          type AppId = { hpi: boolean; hsi: boolean }
+          type RegisterAppIdMap = Map<number, AppId>
+
+          const registerAppIdMap = rowsFromDb.reduce<RegisterAppIdMap>((map, row) => {
+            const key = row.RegisterId
+
+            const current = map.get(key)
+
+            if (current === undefined) {
+              map.set(key, {
+                hpi: false,
+                hsi: false,
+              })
+            } else {
+              if (row.AppId === 'hpi') {
+                current.hpi = true
+              }
+
+              if (row.AppId === 'hsi') {
+                current.hsi = true
+              }
+            }
+
+            return map
+          }, new Map())
+
+          // then pass registerAppIdMap further
       `}</Code>
     </>
   )

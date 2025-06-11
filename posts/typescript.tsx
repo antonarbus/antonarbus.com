@@ -1170,7 +1170,6 @@ const postObj = {
       `}</Code>
       <Private isLoggedIn={true} Component={Profile} />
       <H>Generic type</H>
-      <i>Not clear what is it about, take a closer look later.</i>
       <Code block jsx>{`
       type ListProps<T> = {
         items: T[]
@@ -1192,6 +1191,27 @@ const postObj = {
       <List items={[1, 2, 3]} onClick={item => console.log(item)} />
       `}</Code>
       <List items={[1, 2, 3]} onClick={(item) => console.log(item)} />
+      <Hs>Generic constraint</Hs>
+      <Code block jsx>{`
+        function sayHello<T extends string>(name: T): string {
+          return \`Hello, \${name}!\`
+        }
+
+        // Usage
+        sayHello("Anton")    // ✅ OK
+
+        // sayHello(123)     // ❌ Error: number does not extend string
+      `}</Code>
+      <Hs>Default type</Hs>
+      <Code block jsx>{`
+        type Box<T = string> = {
+          value: T
+        }
+
+        // Usage
+        const box1: Box = { value: "Hello" }       // ✅ T is string by default
+        const box2: Box<number> = { value: 123 }   // ✅ T is explicitly number
+      `}</Code>
       <H>Never type</H>
       <p>
         If one type is applicable we can disallow other types with <i>never</i> type.
@@ -1501,8 +1521,22 @@ const postObj = {
       </ul>
       <LazyImg path="/imgs/prettify-type.png" />
       <H>Conditional type</H>
+      <Code block jsx>{`
+        type IsString<T> = T extends string ? "Yes" : "No"
+
+        type A = IsString<string>     // "Yes"
+        type B = IsString<number>     // "No"
+      `}</Code>
+      <Hs>Inferring Within Conditional Types</Hs>
+      <Code block jsx>{`
+        type ElementType<Element> = Element extends Array<infer Item> ? Item : Element;
+
+        type A = ElementType<string[]> // string
+        type B = ElementType<boolean> // boolean
+      `}</Code>
+      <Hs>Distributive conditional Types</Hs>
       <ul>
-        <li>In TypeScript, conditional types are distributive when applied to union types</li>
+        <li>Conditional types are distributive when applied to union types</li>
         <li>
           conditional type is applied individually to each member of the union, and the results are
           combined into a new union type

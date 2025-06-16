@@ -264,7 +264,6 @@ const postObj = {
 
       <ul>
         <li>
-          {' '}
           Download and install <Lnk path="https://www.autohotkey.com/">AutoHotkey</Lnk> key binding
           app for Windows.{' '}
         </li>
@@ -737,6 +736,110 @@ const postObj = {
         },
         // #endregion
       ]
+      `}</Code>
+
+      <H>Hammerspoon</H>
+
+      <ul>
+        <li>
+          <Lnk path="https://www.hammerspoon.org/">https://www.hammerspoon.org/</Lnk>
+        </li>
+      </ul>
+
+      <Code block jsx>{`
+        // init.lua
+        
+        -- =========================
+        -- 🧭 Vim Cursor Mode Config
+        -- =========================
+
+        -- Timeout (in seconds) before auto-exiting nav mode due to inactivity
+        local navTimeoutSeconds = 2
+
+        -- Mode and state tracking
+        local navMode = hs.hotkey.modal.new({}, nil)
+        local navModeActive = false
+        local navTimeoutTimer = nil
+
+        -- Visual overlay reference
+        local overlay = nil
+
+        -- === Visual Indicator ===
+        local function showOverlay()
+          local screen = hs.screen.mainScreen()
+          local frame = screen:frame()
+
+          local width, height = 100, 5
+          local x = frame.x + frame.w - width
+          local y = frame.y
+
+          overlay = hs.drawing.rectangle(hs.geometry.rect(x, y, width, height))
+          overlay:setFill(true)
+          overlay:setFillColor({red=1, green=0, blue=0, alpha=0.6})
+          overlay:setStroke(false)
+          overlay:bringToFront(true)
+          overlay:setLevel("status")
+          overlay:show()
+        end
+
+        local function hideOverlay()
+          if overlay then
+            overlay:delete()
+            overlay = nil
+          end
+        end
+
+        -- === Timeout Logic ===
+        local function resetNavTimeout()
+          if navTimeoutTimer then
+            navTimeoutTimer:stop()
+          end
+          navTimeoutTimer = hs.timer.doAfter(navTimeoutSeconds, function()
+            navMode:exit()
+          end)
+        end
+
+        -- === Mode Entry/Exit ===
+        function navMode:entered()
+          navModeActive = true
+          showOverlay()
+          resetNavTimeout()
+        end
+
+        function navMode:exited()
+          navModeActive = false
+          hideOverlay()
+          if navTimeoutTimer then
+            navTimeoutTimer:stop()
+            navTimeoutTimer = nil
+          end
+        end
+
+        -- === Toggle Key ===
+        hs.hotkey.bind({"cmd"}, "space", function()
+          if navModeActive then
+            navMode:exit()
+          else
+            navMode:enter()
+          end
+        end)
+
+        -- === Bindings (with timeout reset) ===
+        local function navKey(key, modifiers)
+          return function()
+            hs.eventtap.keyStroke(modifiers or {}, key)
+            resetNavTimeout()
+          end
+        end
+
+        navMode:bind({}, "j", navKey("left"))
+        navMode:bind({}, "i", navKey("up"))
+        navMode:bind({}, "k", navKey("down"))
+        navMode:bind({}, "l", navKey("right"))
+        navMode:bind({}, "u", navKey("delete"))
+        navMode:bind({}, "o", navKey("forwarddelete"))
+        navMode:bind({"alt"}, "j", navKey("left", {"alt"}))
+        navMode:bind({"alt"}, "l", navKey("right", {"alt"}))
       `}</Code>
     </>
   )

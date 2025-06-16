@@ -748,7 +748,7 @@ const postObj = {
 
       <Code block jsx>{`
         // init.lua
-        
+
         -- =========================
         -- 🧭 Vim Cursor Mode Config
         -- =========================
@@ -840,6 +840,8 @@ const postObj = {
         navMode:bind({}, "o", navKey("forwarddelete"))
         navMode:bind({"alt"}, "j", navKey("left", {"alt"}))
         navMode:bind({"alt"}, "l", navKey("right", {"alt"}))
+        navMode:bind({"alt"}, "u", navKey("delete", {"alt"}))         
+        navMode:bind({"alt"}, "o", navKey("forwarddelete", {"alt"}))
       `}</Code>
     </>
   )

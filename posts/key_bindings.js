@@ -744,6 +744,9 @@ const postObj = {
         <li>
           <Lnk path="https://www.hammerspoon.org/">https://www.hammerspoon.org/</Lnk>
         </li>
+        <li>
+          <Code>code ~/.hammerspoon/init.lua</Code>
+        </li>
       </ul>
 
       <Code block jsx>{`

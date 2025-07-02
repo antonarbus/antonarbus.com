@@ -38,16 +38,18 @@ const postObj = {
           -k \\
           -H "ltpa-token: AAECAzYЗRDkyNzVDNjdEfPluGUv4DJ2tMh/LTdU+/ywA==" \\
           -H "Content-Type: application/json" \\
-          https://local.domain.com:3010/public/administration/tt88001la2F00345
+          https://local.domain.com:3010/public/administration/tt88001la2F00345 \\
+        | jq
       `}</Code>
 
-      <Code block jsx>{`
+      <Code block bash>{`
         # hpi
         curl \\
           -k \\
           -H "cookie: LtpaToken=AAECAzY4NjRENzk0Njg2NTY0MzRDTj1BbnRvbjEgQXJidXMvTz1IZWVyb3OXI0hnSP7XOjg5aOG3AO4JKvm+iQ==" \\
           -H "Content-Type: application/json" \\
-          "https://api.dev.heeros.com/anton-windmill-service-v1/automation-rule?tt=00001&la=00001"
+          "https://api.dev.heeros.com/anton-windmill-service-v1/automation-rule?tt=00001&la=00001" \\
+        | jq  
       `}</Code>
 
       <H>Arguments</H>
@@ -86,15 +88,18 @@ const postObj = {
         <li>
           <code>-b cookies.txt</code> → Use saved cookies.
         </li>
+        <li>
+          <code>curl ... | jq</code> → Nice json format
+        </li>
       </ul>
 
       <Code block jsx>{`
         curl \\
-        -X POST https://api.example.com/upload \\
-        -H "Authorization: Bearer YOUR_TOKEN" \\
-        -H "Content-Type: application/json" \\
-        -d @data.json \\
-        -o response.json -v
+          -X POST https://api.example.com/upload \\
+          -H "Authorization: Bearer YOUR_TOKEN" \\
+          -H "Content-Type: application/json" \\
+          -d @data.json \\
+          -o response.json -v
 
         Explanation
         -X POST → Use the POST method.

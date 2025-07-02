@@ -33,11 +33,21 @@ const postObj = {
       </ul>
 
       <Code block bash>{`
+        # core
         curl \\ 
           -k \\
           -H "ltpa-token: AAECAzYЗRDkyNzVDNjdEfPluGUv4DJ2tMh/LTdU+/ywA==" \\
           -H "Content-Type: application/json" \\
           https://local.domain.com:3010/public/administration/tt88001la2F00345
+      `}</Code>
+
+      <Code block jsx>{`
+        # hpi
+        curl \\
+          -k \\
+          -H "cookie: LtpaToken=AAECAzY4NjRENzk0Njg2NTY0MzRDTj1BbnRvbjEgQXJidXMvTz1IZWVyb3OXI0hnSP7XOjg5aOG3AO4JKvm+iQ==" \\
+          -H "Content-Type: application/json" \\
+          "https://api.dev.heeros.com/anton-windmill-service-v1/automation-rule?tt=00001&la=00001"
       `}</Code>
 
       <H>Arguments</H>

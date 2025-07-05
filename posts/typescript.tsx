@@ -1742,6 +1742,44 @@ const postObj = {
          * }
          */
       `}</Code>
+      <H>tsconfig.json</H>
+      <p>Minimum config to let typescript check the project</p>
+      <Code block json>{`
+        // tsconfig.json
+
+        {
+          "compilerOptions": {
+            "noEmit": true,
+            "strict": true
+          },
+          "include": ["."]
+        }
+      `}</Code>
+      <H>TSX</H>
+      <ul>
+        <li>
+          <Lnk path="https://www.npmjs.com/package/tsx">tsx</Lnk> is the easiest way to run
+          TypeScript in Node.js
+        </li>
+        <li>
+          <Code jsx>$ npm install -D tsx</Code> install tsx
+        </li>
+        <li>
+          Or run it from npm <Code>npx tsx ./script.ts</Code>
+        </li>
+      </ul>
+      <Code block ts>{`
+        // hello-world.ts
+
+        const returnHelloWorld = (): string => {
+          return 'hello world'
+        }
+
+        console.log(returnHelloWorld())
+      `}</Code>
+      <Code inline jsx>
+        npx tsx ./hello-world.ts
+      </Code>
     </>
   )
 }

@@ -26,222 +26,269 @@ const postObj = {
 
       <Code block json>{`
       {
-        "machine_specific": {
-          "krbn-cee609c8-9b7f-430a-b018-9b91e0d62d3e": { "enable_multitouch_extension": true }
-        },
-        "profiles": [
+  "machine_specific": {
+    "krbn-cee609c8-9b7f-430a-b018-9b91e0d62d3e": {
+      "enable_multitouch_extension": true
+    }
+  },
+  "profiles": [
+    {
+      "complex_modifications": {
+        "rules": [
           {
-            "complex_modifications": {
-              "rules": [
-                {
-                  "description": "Play/pause button should only control iTunes.",
-                  "manipulators": [
-                    {
-                      "from": { "key_code": "f8" },
-                      "to": [
-                        { "shell_command": "osascript -e 'tell application \\"Music\\" to playpause'" }
-                      ],
-                      "type": "basic"
-                    }
-                  ]
-                },
-                {
-                  "description": "Change caps_lock to command+control+option+shift.",
-                  "manipulators": [
-                    {
-                      "from": {
-                        "key_code": "caps_lock",
-                        "modifiers": { "optional": ["any"] }
-                      },
-                      "to": [
-                        {
-                          "key_code": "left_shift",
-                          "modifiers": ["left_command", "left_option"]
-                        }
-                      ],
-                      "type": "basic"
-                    }
-                  ]
-                },
-                {
-                  "description": "my own shortcuts",
-                  "manipulators": [
-                    {
-                      "description": "Up",
-                      "from": {
-                        "modifiers": {
-                          "mandatory": ["left_command", "left_option", "left_shift"],
-                          "optional": ["any"]
-                        },
-                        "simultaneous": [{ "key_code": "i" }]
-                      },
-                      "to": [{ "key_code": "up_arrow" }],
-                      "type": "basic"
-                    },
-                    {
-                      "description": "Left",
-                      "from": {
-                        "key_code": "j",
-                        "modifiers": {
-                          "mandatory": ["left_command", "left_option", "left_shift"],
-                          "optional": ["any"]
-                        }
-                      },
-                      "to": [{ "key_code": "left_arrow" }],
-                      "type": "basic"
-                    },
-                    {
-                      "description": "Down",
-                      "from": {
-                        "key_code": "k",
-                        "modifiers": {
-                          "mandatory": ["left_command", "left_option", "left_shift"],
-                          "optional": ["any"]
-                        }
-                      },
-                      "to": [{ "key_code": "down_arrow" }],
-                      "type": "basic"
-                    },
-                    {
-                      "description": "Down",
-                      "from": {
-                        "key_code": "comma",
-                        "modifiers": {
-                          "mandatory": ["left_command", "left_option", "left_shift"],
-                          "optional": ["any"]
-                        }
-                      },
-                      "to": [{ "key_code": "down_arrow" }],
-                      "type": "basic"
-                    },
-                    {
-                      "description": "Up",
-                      "from": {
-                        "key_code": "i",
-                        "modifiers": {
-                          "mandatory": ["left_command", "left_option", "left_shift"],
-                          "optional": ["any"]
-                        }
-                      },
-                      "to": [{ "key_code": "up_arrow" }],
-                      "type": "basic"
-                    },
-                    {
-                      "description": "Right",
-                      "from": {
-                        "key_code": "l",
-                        "modifiers": {
-                          "mandatory": ["left_command", "left_option", "left_shift"],
-                          "optional": ["any"]
-                        }
-                      },
-                      "to": [{ "key_code": "right_arrow" }],
-                      "type": "basic"
-                    },
-                    {
-                      "description": "Backspace",
-                      "from": {
-                        "key_code": "u",
-                        "modifiers": {
-                          "mandatory": ["left_command", "left_option", "left_shift"],
-                          "optional": ["any"]
-                        }
-                      },
-                      "to": [{ "key_code": "delete_or_backspace" }],
-                      "type": "basic"
-                    },
-                    {
-                      "description": "Delete",
-                      "from": {
-                        "key_code": "o",
-                        "modifiers": {
-                          "mandatory": ["left_command", "left_option", "left_shift"],
-                          "optional": ["any"]
-                        }
-                      },
-                      "to": [{ "key_code": "delete_forward" }],
-                      "type": "basic"
-                    },
-                    {
-                      "description": "Home",
-                      "from": {
-                        "key_code": "h",
-                        "modifiers": {
-                          "mandatory": ["left_command", "left_option", "left_shift"],
-                          "optional": ["any"]
-                        }
-                      },
-                      "to": [{ "key_code": "home" }],
-                      "type": "basic"
-                    },
-                    {
-                      "description": "End",
-                      "from": {
-                        "key_code": "semicolon",
-                        "modifiers": {
-                          "mandatory": ["left_command", "left_option", "left_shift"],
-                          "optional": ["any"]
-                        }
-                      },
-                      "to": [{ "key_code": "end" }],
-                      "type": "basic"
-                    },
-                    {
-                      "description": "backtick",
-                      "from": { "key_code": "equal_sign" },
-                      "to": [{ "key_code": "equal_sign" }, { "key_code": "spacebar" }],
-                      "type": "basic"
-                    },
-                    {
-                      "description": "left curly brace",
-                      "from": {
-                        "key_code": "8",
-                        "modifiers": { "mandatory": ["left_command"] }
-                      },
-                      "to": [
-                        {
-                          "key_code": "8",
-                          "modifiers": ["left_shift", "left_option"]
-                        }
-                      ],
-                      "type": "basic"
-                    },
-                    {
-                      "description": "right curly brace",
-                      "from": {
-                        "key_code": "9",
-                        "modifiers": { "mandatory": ["left_command"] }
-                      },
-                      "to": [
-                        {
-                          "key_code": "9",
-                          "modifiers": ["left_shift", "left_option"]
-                        }
-                      ],
-                      "type": "basic"
-                    }
-                  ]
-                }
-              ]
-            },
-            "devices": [
+            "description": "Play/pause button should only control iTunes.",
+            "manipulators": [
               {
-                "identifiers": {
-                  "is_keyboard": true,
-                  "product_id": 834,
-                  "vendor_id": 1452
-                },
-                "manipulate_caps_lock_led": false
+                "from": { "key_code": "f8" },
+                "to": [
+                  { "shell_command": "osascript -e 'tell application \\"Music\\" to playpause'" }
+                ],
+                "type": "basic"
               }
-            ],
-            "name": "Default profile",
-            "selected": true,
-            "virtual_hid_keyboard": {
-              "keyboard_type_v2": "ansi"
-            }
+            ]
+          },
+          {
+            "description": "Change caps_lock to command+control+option+shift.",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "caps_lock",
+                  "modifiers": { "optional": ["any"] }
+                },
+                "to": [
+                  {
+                    "key_code": "left_shift",
+                    "modifiers": ["left_command", "left_option"]
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "frontmost_application_unless",
+                    "bundle_identifiers": [
+                      "^org.vim.MacVim",
+                      "^org.neovim.Neovim",
+                      "^com.apple.Terminal",
+                      "^com.googlecode.iterm2",
+                      "^org.alacritty",
+                      "^net.kovidgoyal.kitty",
+                      "^com.jetbrains.*",
+                      "^com.tinyapp.VimR"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "my own shortcuts",
+            "manipulators": [
+              {
+                "description": "Up",
+                "from": {
+                  "modifiers": {
+                    "mandatory": ["left_command", "left_option", "left_shift"],
+                    "optional": ["any"]
+                  },
+                  "simultaneous": [{ "key_code": "i" }]
+                },
+                "to": [{ "key_code": "up_arrow" }],
+                "type": "basic"
+              },
+              {
+                "description": "Left",
+                "from": {
+                  "key_code": "j",
+                  "modifiers": {
+                    "mandatory": ["left_command", "left_option", "left_shift"],
+                    "optional": ["any"]
+                  }
+                },
+                "to": [{ "key_code": "left_arrow" }],
+                "type": "basic"
+              },
+              {
+                "description": "Down",
+                "from": {
+                  "key_code": "k",
+                  "modifiers": {
+                    "mandatory": ["left_command", "left_option", "left_shift"],
+                    "optional": ["any"]
+                  }
+                },
+                "to": [{ "key_code": "down_arrow" }],
+                "type": "basic"
+              },
+              {
+                "description": "Down",
+                "from": {
+                  "key_code": "comma",
+                  "modifiers": {
+                    "mandatory": ["left_command", "left_option", "left_shift"],
+                    "optional": ["any"]
+                  }
+                },
+                "to": [{ "key_code": "down_arrow" }],
+                "type": "basic"
+              },
+              {
+                "description": "Up",
+                "from": {
+                  "key_code": "i",
+                  "modifiers": {
+                    "mandatory": ["left_command", "left_option", "left_shift"],
+                    "optional": ["any"]
+                  }
+                },
+                "to": [{ "key_code": "up_arrow" }],
+                "type": "basic"
+              },
+              {
+                "description": "Right",
+                "from": {
+                  "key_code": "l",
+                  "modifiers": {
+                    "mandatory": ["left_command", "left_option", "left_shift"],
+                    "optional": ["any"]
+                  }
+                },
+                "to": [{ "key_code": "right_arrow" }],
+                "type": "basic"
+              },
+              {
+                "description": "Backspace",
+                "from": {
+                  "key_code": "u",
+                  "modifiers": {
+                    "mandatory": ["left_command", "left_option", "left_shift"],
+                    "optional": ["any"]
+                  }
+                },
+                "to": [{ "key_code": "delete_or_backspace" }],
+                "type": "basic"
+              },
+              {
+                "description": "Delete",
+                "from": {
+                  "key_code": "o",
+                  "modifiers": {
+                    "mandatory": ["left_command", "left_option", "left_shift"],
+                    "optional": ["any"]
+                  }
+                },
+                "to": [{ "key_code": "delete_forward" }],
+                "type": "basic"
+              },
+              {
+                "description": "Home",
+                "from": {
+                  "key_code": "h",
+                  "modifiers": {
+                    "mandatory": ["left_command", "left_option", "left_shift"],
+                    "optional": ["any"]
+                  }
+                },
+                "to": [{ "key_code": "home" }],
+                "type": "basic"
+              },
+              {
+                "description": "End",
+                "from": {
+                  "key_code": "semicolon",
+                  "modifiers": {
+                    "mandatory": ["left_command", "left_option", "left_shift"],
+                    "optional": ["any"]
+                  }
+                },
+                "to": [{ "key_code": "end" }],
+                "type": "basic"
+              },
+              {
+                "description": "backtick",
+                "from": { "key_code": "equal_sign" },
+                "to": [{ "key_code": "equal_sign" }, { "key_code": "spacebar" }],
+                "type": "basic"
+              },
+              {
+                "description": "left curly brace",
+                "from": {
+                  "key_code": "8",
+                  "modifiers": { "mandatory": ["left_command"] }
+                },
+                "to": [
+                  {
+                    "key_code": "8",
+                    "modifiers": ["left_shift", "left_option"]
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "description": "right curly brace",
+                "from": {
+                  "key_code": "9",
+                  "modifiers": { "mandatory": ["left_command"] }
+                },
+                "to": [
+                  {
+                    "key_code": "9",
+                    "modifiers": ["left_shift", "left_option"]
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "CapsLock to Control only in Vim apps",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "caps_lock",
+                  "modifiers": { "optional": ["any"] }
+                },
+                "to": [
+                  {
+                    "key_code": "left_control"
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "frontmost_application_if",
+                    "bundle_identifiers": [
+                      "^org.vim.MacVim",
+                      "^org.neovim.Neovim",
+                      "^com.apple.Terminal",
+                      "^com.googlecode.iterm2",
+                      "^org.alacritty",
+                      "^net.kovidgoyal.kitty",
+                      "^com.jetbrains.*",
+                      "^com.tinyapp.VimR"
+                    ]
+                  }
+                ]
+              }
+            ]
           }
         ]
-      }
+      },
+      "devices": [
+        {
+          "identifiers": {
+            "is_keyboard": true,
+            "product_id": 834,
+            "vendor_id": 1452
+          },
+          "manipulate_caps_lock_led": false
+        }
+      ],
+      "name": "Default profile",
+      "selected": true,
+      "virtual_hid_keyboard": { "keyboard_type_v2": "ansi" }
+    }
+  ]
+}
       `}</Code>
 
       <p>

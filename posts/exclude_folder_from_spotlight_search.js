@@ -1,28 +1,14 @@
-import {
-  Code,
-  H,
-  Hs,
-  LazyImg,
-  Lnk,
-  React,
-  useEffect,
-  useState,
-  useRef,
-  useCallback,
-  useMemo,
-  jsxToStr,
-  ComponentFromHtmlString
-} from '/components/post/reExport'
+import { Code, H, React, jsxToStr } from '/components/post/reExport'
 
 const postObj = {
-  title: 'exclude node_modules from spotlight index',
+  title: 'exclude folder from spotlight search',
   date: '2025.07.13',
   tags: ['mac'],
   imgUrl: 'https://antonarbus.com/imgs/xxx.png',
-  desc: 'exclude node_modules from spotlight index',
+  desc: 'exclude folder from spotlight search',
   body: (
     <>
-      <H>Exclude node_modules from spotlight index</H>
+      <H>Exclude node_modules from spotlight</H>
 
       <ul>
         <li>

@@ -16,9 +16,6 @@ const postObj = {
         <li>
           <kbd>i</kbd> insert mode after cursor
         </li>
-        <li>
-          <kbd>esc</kbd> normal mode (my custom shortcut <kbd>k</kbd> <kbd>j</kbd>)
-        </li>
       </ul>
 
       <H>Short cursor movement</H>
@@ -98,14 +95,35 @@ const postObj = {
         </li>
       </ul>
 
-      <H>Commands</H>
+      <H>Tutor</H>
+
       <ul>
         <li>
-          <Code>
-            vim <i>file name</i>
-          </Code>{' '}
-          open file
+          <Code>:Tutor</Code> launch tutor
         </li>
+      </ul>
+
+      <H>Exit</H>
+
+      <ul>
+        <li>
+          <kbd>Esc</kbd> <Code>:q!</Code> quit without save
+        </li>
+        <li>
+          <kbd>Esc</kbd> <Code>:wq</Code> quit & save
+        </li>
+      </ul>
+
+      <H>Delete</H>
+
+      <ul>
+        <li>
+          <kbd>x</kbd> delete unwanted char under cursor
+        </li>
+      </ul>
+
+      <H>Commands</H>
+      <ul>
         <li>
           <kbd>Esc</kbd> <kbd>:</kbd> <kbd>w</kbd> exit
         </li>
@@ -122,7 +140,7 @@ const postObj = {
         <li>
           <Lnk path="https://marketplace.visualstudio.com/items?itemName=vscodevim.vim">
             vim plugin for vscode
-          </Lnk>{' '}
+          </Lnk>
         </li>
         <li>
           <Lnk path="https://marketplace.visualstudio.com/items?itemName=vintharas.learn-vim">

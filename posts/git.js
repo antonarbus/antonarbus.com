@@ -537,6 +537,9 @@ const postObj = {
           </Code>{' '}
           push & track remote branch
         </li>
+        <li>
+          <Code>git config --global push.autoSetupRemote true</Code> set remote branch automatically
+        </li>
       </ul>
 
       <Hs>Show remote branch tracking</Hs>

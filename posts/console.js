@@ -26,6 +26,33 @@ const postObj = {
         console.timeLog(timerName) // logs the current value of a timer
         console.timeEnd(timerEnd) // stops a timer
       `}</Code>
+
+      <H>Deeply nested object</H>
+
+      <ul>
+        <li>In node you may not log very nested object</li>
+        <li>
+          Tt will not show you deeply nested props <Code>{'a: { b: { c: [Object] } }'}</Code>
+        </li>
+        <li>
+          {'console.dir(obj, { depth: null })'} prints the full object structure with unlimited
+          nesting.
+        </li>
+      </ul>
+
+      <Code block jsx>{`
+        console.dir({
+          a: {
+            b: {
+              c: {
+                d: {
+                  e: {},
+                },
+              },
+            },
+          },
+        }, { depth: null })
+      `}</Code>
     </>
   )
 }

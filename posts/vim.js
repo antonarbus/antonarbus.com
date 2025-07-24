@@ -7,18 +7,63 @@ const postObj = {
   desc: 'vim text editor',
   body: (
     <>
+      <H>Tutor</H>
+
+      <ul>
+        <li>
+          <Code>:Tutor</Code> launch tutor
+        </li>
+      </ul>
+
       <H>Modes</H>
 
       <ul>
         <li>
-          <kbd>a</kbd> insert mode before cursor
+          <kbd>a</kbd> insert mode (type/edit text) - caret before cursor
         </li>
         <li>
-          <kbd>i</kbd> insert mode after cursor
+          <kbd>i</kbd> insert mode - caret after cursor
+        </li>
+        <li>
+          <kbd>Esc</kbd> normal mode (navigate and manipulate text)
         </li>
       </ul>
 
-      <H>Short cursor movement</H>
+      <H>Exit</H>
+
+      <ul>
+        <li>
+          <kbd>:w</kbd> write
+        </li>
+        <li>
+          <kbd>:q</kbd> quite
+        </li>
+        <li>
+          <kbd>:wq</kbd> write & quit
+        </li>
+        <li>
+          <kbd>:x</kbd> write & quit
+        </li>
+        <li>
+          <kbd>:q!</kbd> quit without save
+        </li>
+      </ul>
+
+      <H>Undo, Redo</H>
+
+      <ul>
+        <li>
+          <kbd>u</kbd> undo the last command
+        </li>
+        <li>
+          <kbd>U</kbd> undo all for the line
+        </li>
+        <li>
+          <kbd>ctrl</kbd> <kbd>r</kbd> redo
+        </li>
+      </ul>
+
+      <H>Char cursor movement</H>
 
       <ul>
         <li>
@@ -35,82 +80,51 @@ const postObj = {
         </li>
       </ul>
 
-      <H>word cursor movement</H>
+      <H>Motions</H>
 
       <ul>
         <li>
-          <kbd>w</kbd> jump to next word
+          <kbd>w</kbd> jump forward to the start of a word
         </li>
         <li>
-          <kbd>e</kbd> jump to the end next word
+          <kbd>e</kbd> jump forward to the end of a word
         </li>
         <li>
-          <kbd>b</kbd> jump back to previous word
+          <kbd>b</kbd> jump back to the start of a word
         </li>
         <li>
-          <kbd>g</kbd> <kbd>e</kbd> jump back to the end of previous word
+          <kbd>ge</kbd> jump back to the end of of a word
+        </li>
+        <li>
+          <kbd>$</kbd> jump forward to the end of a line
+        </li>
+        <li>
+          <kbd>0</kbd> jump backwards to the start of a line
         </li>
       </ul>
 
-      <H>WORD cursor movement</H>
+      <H>Repeat motion</H>
 
       <ul>
         <li>
-          <i>WORD</i> - word + special chars, like <code>sum(2,3)</code>
-        </li>
-        <li>
-          <kbd>W</kbd> jump to next WORD
-        </li>
-        <li>
-          <kbd>E</kbd> jump to the end next WORD
-        </li>
-        <li>
-          <kbd>B</kbd> jump back to previous WORD
-        </li>
-        <li>
-          <kbd>g</kbd> <kbd>E</kbd> jump back to the end of previous WORD
+          <kbd>3w</kbd> jump forward to the end of a word 3 times
         </li>
       </ul>
 
-      <H>Move to special char</H>
+      <H>Cursor location</H>
 
       <ul>
         <li>
-          <Code>{'f{char}'}</Code> find & jump to next char in a line
+          <kbd>15G</kbd> jumps to line #15
         </li>
         <li>
-          <Code>{'F{char}'}</Code> find & jump to prev char in a line
+          <kbd>gg</kbd> jumps to the start of file
         </li>
         <li>
-          <Code>{'t{char}'}</Code> find & jump before next char in a line
+          <kbd>G</kbd> jumps to the end of file
         </li>
         <li>
-          <Code>{'T{char}'}</Code> find & jump before prev char in a line
-        </li>
-        <li>
-          <kbd>;</kbd> go to next found char
-        </li>
-        <li>
-          <kbd>,</kbd> go to prev found char
-        </li>
-      </ul>
-
-      <H>Tutor</H>
-
-      <ul>
-        <li>
-          <Code>:Tutor</Code> launch tutor
-        </li>
-      </ul>
-
-      <H>Exit</H>
-
-      <ul>
-        <li>
-          <kbd>Esc</kbd> <Code>:q!</Code> quit without save
-        </li>
-        <li>
-          <kbd>Esc</kbd> <Code>:wq</Code> quit & save
+          <kbd>Ctrl</kbd> <kbd>g</kbd> show cursor position + file name
         </li>
       </ul>
 
@@ -118,20 +132,59 @@ const postObj = {
 
       <ul>
         <li>
-          <kbd>x</kbd> delete unwanted char under cursor
+          <kbd>x</kbd> delete char under cursor
+        </li>
+        <li>
+          <kbd>d</kbd> [number] motion - delete operator
+        </li>
+        <li>
+          <kbd>dw</kbd> delete to the beginning of next word
+        </li>
+        <li>
+          <kbd>d2w</kbd> delete 2 words
+        </li>
+        <li>
+          <kbd>de</kbd> delete to the end of the word
+        </li>
+        <li>
+          <kbd>db</kbd> delete to the start of the word
+        </li>
+        <li>
+          <kbd>d0</kbd> delete to the start of the line
+        </li>
+        <li>
+          <kbd>d$</kbd> delete to the end of the line
+        </li>
+        <li>
+          <kbd>dd</kbd> delete whole line
+        </li>
+        <li>
+          <kbd>2dd</kbd> delete 2 lines
         </li>
       </ul>
 
-      <H>Commands</H>
+      <H>Paste</H>
+
       <ul>
         <li>
-          <kbd>Esc</kbd> <kbd>:</kbd> <kbd>w</kbd> exit
+          <kbd>p</kbd> paste deleted text after cursor
         </li>
         <li>
-          <kbd>Esc</kbd> <kbd>:</kbd> <kbd>w</kbd> <kbd>q</kbd> <kbd>Enter</kbd>save & exit
+          <kbd>P</kbd> paste deleted text before cursor
+        </li>
+      </ul>
+
+      <H>Replace</H>
+
+      <ul>
+        <li>
+          <kbd>r</kbd> go into replace mode, then <kbd>a</kbd> to replace with <code>a</code>
         </li>
         <li>
-          <kbd>Esc</kbd> <kbd>:</kbd> <kbd>x</kbd> save & exit
+          <kbd>c</kbd> [number] motion - replace operator, deletes and enters into Insert mode
+        </li>
+        <li>
+          <kbd>ce</kbd> deletes to the end of the word and enters into Insert mode
         </li>
       </ul>
 

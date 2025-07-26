@@ -111,17 +111,20 @@ const postObj = {
         </li>
       </ul>
 
-      <H>Cursor location</H>
+      <H>Cursor location in file</H>
 
       <ul>
         <li>
           <kbd>15G</kbd> jumps to line #15
         </li>
         <li>
-          <kbd>gg</kbd> jumps to the start of file
+          <kbd>:15</kbd> jumps to line #15
         </li>
         <li>
-          <kbd>G</kbd> jumps to the end of file
+          <kbd>gg</kbd> jumps to first line
+        </li>
+        <li>
+          <kbd>G</kbd> jumps to last line
         </li>
         <li>
           <kbd>Ctrl</kbd> <kbd>g</kbd> show cursor position + file name

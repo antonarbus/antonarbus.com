@@ -127,7 +127,7 @@ const postObj = {
           <kbd>G</kbd> jumps to last line
         </li>
         <li>
-          <kbd>Ctrl</kbd> <kbd>g</kbd> show cursor position + file name
+          <kbd>Ctrl+g</kbd> show cursor position + file name
         </li>
       </ul>
 
@@ -191,7 +191,60 @@ const postObj = {
         </li>
       </ul>
 
+      <H>Search</H>
+
+      <ul>
+        <li>
+          <kbd>/</kbd> phrase search prompt, then <kbd>Enter</kbd>
+        </li>
+        <li>
+          <kbd>?</kbd> phrase search prompt in backwards direction
+        </li>
+        <li>
+          <kbd>n</kbd> find next
+        </li>
+        <li>
+          <kbd>N</kbd> find next in reverse direction
+        </li>
+        <li>
+          <kbd>Ctrl+o</kbd> go back to older position
+        </li>
+        <li>
+          <kbd>Ctrl+i</kbd> go back to newer position
+        </li>
+      </ul>
+
+      <H>Jump to matching bracket</H>
+
+      <ul>
+        <li>Place cursor on bracket</li>
+        <li>
+          <kbd>%</kbd> jumps to closing bracket
+        </li>
+      </ul>
+
+      <H>Find and replace</H>
+
+      <ul>
+        <li>
+          <Code>:s/old/new/</Code> replaces "old" with "new" occurrence in line
+        </li>
+        <li>
+          <Code>:s/old/new/g</Code> replaces "old" with "new" all occurrences in line
+        </li>
+        <li>
+          <Code>:1,5s/old/new/g</Code> replaces "old" with "new" all occurrences in 1...5 lines
+        </li>
+        <li>
+          <Code>:%s/old/new/g</Code> replaces "old" with "new" in file
+        </li>
+        <li>
+          <Code>:%s/old/new/gc</Code> replaces "old" with "new" in file with prompt
+        </li>
+      </ul>
+
       <H>Useful</H>
+
       <ul>
         <li>
           <Lnk path="https://marketplace.visualstudio.com/items?itemName=vscodevim.vim">
@@ -212,6 +265,7 @@ const postObj = {
       </ul>
 
       <H>NeoVim</H>
+
       <ul>
         <li>
           <Lnk path="https://neovim.io/">https://neovim.io/</Lnk> is Vim-based text editor

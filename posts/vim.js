@@ -19,22 +19,49 @@ const postObj = {
 
       <ul>
         <li>
-          <kbd>a</kbd> insert mode (type/edit text) - caret before cursor
+          <kbd>a</kbd> put caret after cursor (Insert/Edit mode)
         </li>
         <li>
-          <kbd>i</kbd> insert mode - caret after cursor
+          <kbd>a</kbd> put caret at the end of the line
+        </li>
+        <li>
+          <kbd>i</kbd> put caret before cursor
+        </li>
+        <li>
+          <kbd>I</kbd> put caret at the start of the line
+        </li>
+        <li>
+          <kbd>o</kbd> add line below and put caret
+        </li>
+        <li>
+          <kbd>O</kbd> add line above and put caret
         </li>
         <li>
           <kbd>Esc</kbd> normal mode (navigate and manipulate text)
+        </li>
+        <li>
+          <kbd>v</kbd> visual mode - select
+        </li>
+      </ul>
+
+      <H>Write</H>
+
+      <ul>
+        <li>
+          <kbd>:w</kbd> write
+        </li>
+        <li>
+          <kbd>:w TEST</kbd> write under TEST name
+        </li>
+        <li>
+          <kbd>v</kbd> motion <kbd>:w</kbd> <code>FILENAME</code> saves the Visually selected lines
+          in file FILENAME.
         </li>
       </ul>
 
       <H>Exit</H>
 
       <ul>
-        <li>
-          <kbd>:w</kbd> write
-        </li>
         <li>
           <kbd>:q</kbd> quite
         </li>
@@ -177,11 +204,38 @@ const postObj = {
         </li>
       </ul>
 
+      <H>Copy</H>
+
+      <ul>
+        <li>
+          <kbd>y</kbd> copy highlighted text
+          <kbd>yw</kbd> copy to the word's end
+        </li>
+      </ul>
+
+      <H>Copy / Paste</H>
+
+      <ul>
+        <li>
+          Select text in visual mode <kbd>v</kbd>
+        </li>
+        <li>
+          <kbd>y</kbd> copy highlighted text
+        </li>
+        <li>
+          <kbd>p</kbd> paste after cursor or <kbd>P</kbd> before
+        </li>
+      </ul>
+
       <H>Replace</H>
 
       <ul>
         <li>
-          <kbd>r</kbd> go into replace mode, then <kbd>a</kbd> to replace with <code>a</code>
+          <kbd>r</kbd> go into replace mode of single char, then <kbd>a</kbd> to replace with{' '}
+          <code>a</code>
+        </li>
+        <li>
+          <kbd>R</kbd> go into global replace mode
         </li>
         <li>
           <kbd>c</kbd> [number] motion - replace operator, deletes and enters into Insert mode
@@ -240,6 +294,28 @@ const postObj = {
         </li>
         <li>
           <Code>:%s/old/new/gc</Code> replaces "old" with "new" in file with prompt
+        </li>
+      </ul>
+
+      <H>External command</H>
+
+      <ul>
+        <li>
+          <kbd>:!ls</kbd> show files
+        </li>
+        <li>
+          <kbd>:!rm FILENAME</kbd> remove FILENAME file
+        </li>
+      </ul>
+
+      <H>Read content and paste</H>
+
+      <ul>
+        <li>
+          <code>:r TEST</code> reads content from the file TEST and pastes below the cursor
+        </li>
+        <li>
+          <code>:r !ls</code> reads content from external command and pastes below the cursor
         </li>
       </ul>
 

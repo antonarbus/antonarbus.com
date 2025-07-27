@@ -150,6 +150,13 @@ const postObj = {
         <li>
           <kbd>0</kbd> jump backwards to the start of a line
         </li>
+        <li>
+          <kbd>^</kbd> almost the same as <kbd>0</kbd>, but does not take white spaces into account
+        </li>
+        <li>
+          <kbd>W</kbd> <kbd>E</kbd> <kbd>B</kbd> <kbd>gE</kbd> works the same, but splits words by
+          white space, while lowercased versions split works also with dot, paren, quote
+        </li>
       </ul>
 
       <H>Repeat motion</H>
@@ -193,6 +200,12 @@ const postObj = {
           <kbd>G</kbd> jumps to last line
         </li>
         <li>
+          <kbd>Ctrl+o</kbd> jump back in history
+        </li>
+        <li>
+          <kbd>Ctrl+i</kbd> jump forward in history
+        </li>
+        <li>
           <kbd>Ctrl+g</kbd> show cursor position + file name
         </li>
       </ul>
@@ -216,7 +229,25 @@ const postObj = {
         <li>and press green label character</li>
       </ul>
 
-      <H>Find & To</H>
+      <H>Find</H>
+
+      <ul>
+        <li>
+          <kbd>f</kbd> puts you in Find mode
+        </li>
+        <li>type a char and cursor will jump to the next typed char</li>
+        <li>
+          <kbd>fx</kbd> jumps to the next "x"
+        </li>
+        <li>
+          <kbd>3fx</kbd> jumps to the 3rd "x" from you
+        </li>
+        <kbd>F</kbd> does the same, but backwards
+      </ul>
+
+      <H>To</H>
+
+      <p>Same as Find mode, but put cursor before the found char</p>
 
       <ul>
         <li>

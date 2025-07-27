@@ -15,14 +15,14 @@ const postObj = {
         </li>
       </ul>
 
-      <H>Modes</H>
+      <H>Insert mode (text)</H>
 
       <ul>
         <li>
-          <kbd>a</kbd> put caret after cursor (Insert/Edit mode)
+          <kbd>a</kbd> put caret after cursor
         </li>
         <li>
-          <kbd>a</kbd> put caret at the end of the line
+          <kbd>A</kbd> put caret at the end of the line
         </li>
         <li>
           <kbd>i</kbd> put caret before cursor
@@ -37,6 +37,9 @@ const postObj = {
           <kbd>O</kbd> add line above and put caret
         </li>
         <li>
+          <kbd>ge</kbd> go to the last insertion point
+        </li>
+        <li>
           <kbd>Esc</kbd> normal mode (navigate and manipulate text)
         </li>
         <li>
@@ -44,14 +47,36 @@ const postObj = {
         </li>
       </ul>
 
-      <H>Write</H>
+      <H>Visual mode (selection)</H>
+
+      <ul>
+        <li>
+          <kbd>v</kbd> visual mode
+        </li>
+      </ul>
+
+      <H>Command mode</H>
+
+      <ul>
+        <li>
+          <kbd>:</kbd> command mode
+        </li>
+        <li>
+          <kbd>:q!</kbd> exit without save
+        </li>
+      </ul>
+
+      <H>Save</H>
 
       <ul>
         <li>
           <kbd>:w</kbd> write
         </li>
         <li>
-          <kbd>:w TEST</kbd> write under TEST name
+          <kbd>:w TEST.txt</kbd> write under TEST name
+        </li>
+        <li>
+          <kbd>:write TEST.txt</kbd> same
         </li>
         <li>
           <kbd>v</kbd> motion <kbd>:w</kbd> <code>FILENAME</code> saves the Visually selected lines
@@ -76,6 +101,20 @@ const postObj = {
         </li>
       </ul>
 
+      <H>Navigate in list</H>
+
+      <ul>
+        <li>
+          <kbd>Tab</kbd> move down in list
+        </li>
+        <li>
+          <kbd>Ctrl+y</kbd> accept
+        </li>
+        <li>
+          <kbd>Arrow Down</kbd> accept
+        </li>
+      </ul>
+
       <H>Undo, Redo</H>
 
       <ul>
@@ -87,23 +126,6 @@ const postObj = {
         </li>
         <li>
           <kbd>ctrl</kbd> <kbd>r</kbd> redo
-        </li>
-      </ul>
-
-      <H>Char cursor movement</H>
-
-      <ul>
-        <li>
-          <kbd>j</kbd> up
-        </li>
-        <li>
-          <kbd>k</kbd> down
-        </li>
-        <li>
-          <kbd>h</kbd> left
-        </li>
-        <li>
-          <kbd>l</kbd> right
         </li>
       </ul>
 
@@ -138,7 +160,24 @@ const postObj = {
         </li>
       </ul>
 
-      <H>Cursor location in file</H>
+      <H>Cursor movement</H>
+
+      <ul>
+        <li>
+          <kbd>j</kbd> up
+        </li>
+        <li>
+          <kbd>k</kbd> down
+        </li>
+        <li>
+          <kbd>h</kbd> left
+        </li>
+        <li>
+          <kbd>l</kbd> right
+        </li>
+      </ul>
+
+      <H>Jump to line</H>
 
       <ul>
         <li>
@@ -156,6 +195,82 @@ const postObj = {
         <li>
           <kbd>Ctrl+g</kbd> show cursor position + file name
         </li>
+      </ul>
+
+      <H>Jump to matching bracket</H>
+
+      <ul>
+        <li>Place cursor on bracket</li>
+        <li>
+          <kbd>%</kbd> jumps to closing bracket
+        </li>
+      </ul>
+
+      <H>Seek</H>
+
+      <ul>
+        <li>
+          <kbd>s</kbd> seek mode
+        </li>
+        <li>you may jump to any visible text simply by typing part of it</li>
+        <li>and press green label character</li>
+      </ul>
+
+      <H>Find & To</H>
+
+      <ul>
+        <li>
+          <kbd>f</kbd> & <kbd>t</kbd> searches for next char
+        </li>
+        <li>did not understand why it is useful</li>
+        <li>to be continued...</li>
+      </ul>
+
+      <ul>
+        <li>
+          <kbd>f</kbd> find mode
+        </li>
+        <li>you may jump to any visible text simply by typing part of it</li>
+        <li>and press green label character</li>
+      </ul>
+
+      <H>Scroll</H>
+
+      <ul>
+        <li>
+          <kbd>Ctrl+d</kbd> scroll down 50%
+        </li>
+        <li>
+          <kbd>Ctrl+u</kbd> scroll up 50%
+        </li>
+        <li>
+          <kbd>Ctrl+f</kbd> scroll down 100%
+        </li>
+        <li>
+          <kbd>Ctrl+b</kbd> scroll up 100%
+        </li>
+        <li>
+          5<kbd>Ctrl+f</kbd> scroll down 5 screens
+        </li>
+        <li>
+          <kbd>Ctrl+e</kbd> scroll down 1 line
+        </li>
+        <li>
+          <kbd>Ctrl+y</kbd> scroll up 1 line
+        </li>
+        <li>
+          <kbd>zt</kbd> scroll up to move active line almost to the top
+        </li>
+        <li>
+          <kbd>zb</kbd> scroll down to move active line almost to the bottom
+        </li>
+        <li>
+          <kbd>zz</kbd> scroll to move active line to the middle
+        </li>
+      </ul>
+
+      <ul>
+        <li></li>
       </ul>
 
       <H>Delete</H>
@@ -268,15 +383,6 @@ const postObj = {
         </li>
       </ul>
 
-      <H>Jump to matching bracket</H>
-
-      <ul>
-        <li>Place cursor on bracket</li>
-        <li>
-          <kbd>%</kbd> jumps to closing bracket
-        </li>
-      </ul>
-
       <H>Find and replace</H>
 
       <ul>
@@ -350,6 +456,19 @@ const postObj = {
           <Lnk path="https://www.lazyvim.org/installation">LazyVim </Lnk> is opinionated popular
           Neovim setup
         </li>
+      </ul>
+
+      <H>Font</H>
+
+      <ul>
+        <li>
+          <Lnk path="https://www.nerdfonts.com/font-downloads">
+            https://www.nerdfonts.com/font-downloads
+          </Lnk>
+        </li>
+        <li>Download FiraCode Nerd Font, unzip, install all fonts</li>
+        <li>Open iTerm2, then Preferences, then Profiles, then Text, pick FiraCode Nerd Font</li>
+        <li>Restart the terminal</li>
       </ul>
     </>
   )

@@ -11,6 +11,78 @@ const postObj = {
 
       <LazyImg src="/imgs/gitFlow.png" noShadow></LazyImg>
 
+      <H>Terminology</H>
+
+      <ul>
+        <li>
+          <strong>Repository (repo)</strong> — A directory containing your project and its entire
+          version history tracked by Git (<code>.git</code> folder).
+        </li>
+        <li>
+          <strong>Commit</strong> — A snapshot of your project at a point in time. Identified by a
+          unique SHA hash.
+        </li>
+        <li>
+          <strong>Branch</strong> — A movable pointer to a commit, usually representing a line of
+          development (e.g., <code>main</code>, <code>feature/foo</code>).
+        </li>
+        <li>
+          <strong>HEAD</strong> — A reference to the <strong>current commit</strong> checked out in
+          your working directory (usually points to the tip of a branch).
+        </li>
+        <li>
+          <strong>Working Tree / Working Directory</strong> — The actual files and folders on your
+          filesystem — includes committed and uncommitted (edited) files.
+        </li>
+        <li>
+          <strong>Staging Area / Index</strong> — An intermediate area where changes are placed
+          before committing. You "add" files to the index with <code>git add</code>.
+        </li>
+        <li>
+          <strong>Remote</strong> — A version of your repository hosted elsewhere (e.g., GitHub,
+          GitLab). Common remote name: <code>origin</code>.
+        </li>
+        <li>
+          <strong>Fetch</strong> — Downloads commits, branches, and tags from a remote repo but{' '}
+          <strong>does not merge</strong> them into your current branch.
+        </li>
+        <li>
+          <strong>Pull</strong> — <code>fetch</code> + <code>merge</code> — updates your current
+          branch with changes from the remote.
+        </li>
+        <li>
+          <strong>Push</strong> — Uploads local commits to a remote repository.
+        </li>
+        <li>
+          <strong>Merge</strong> — Combines the histories of two branches.
+        </li>
+        <li>
+          <strong>Rebase</strong> — Rewrites commit history by moving or replaying commits onto
+          another base commit.
+        </li>
+        <li>
+          <strong>Detached HEAD</strong> — When HEAD points directly to a commit instead of a branch
+          — you’re "not on any branch".
+        </li>
+        <li>
+          <strong>Tag</strong> — A named reference to a specific commit, often used to mark
+          releases.
+        </li>
+        <li>
+          <strong>Conflict</strong> — Happens when Git cannot automatically merge changes. Must be
+          resolved manually.
+        </li>
+        <li>
+          <strong>Diff</strong> — Shows the changes between commits, branches, or the working tree.
+        </li>
+        <li>
+          <strong>Log</strong> — A list of commits in the current branch.
+        </li>
+        <li>
+          <strong>Blame</strong> — Shows which commit and author last modified each line in a file.
+        </li>
+      </ul>
+
       <H>Configuration</H>
 
       <ul>

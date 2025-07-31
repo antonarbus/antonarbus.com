@@ -66,6 +66,17 @@ const postObj = {
         </li>
       </ul>
 
+      <H>Open project in NeoVim</H>
+
+      <ul>
+        <li>
+          Navigate to you project in terminal with <kbd>cd</kbd>
+        </li>
+        <li>
+          Type <code>nvim</code>
+        </li>
+      </ul>
+
       <H>Save</H>
 
       <ul>
@@ -454,6 +465,45 @@ const postObj = {
         <li>
           <code>:r !ls</code> reads content from external command and pastes below the cursor
         </li>
+      </ul>
+
+      <H>Search files</H>
+
+      <ul>
+        <li>
+          <kbd>Space</kbd> <kbd>Space</kbd> opens a fuzzy search in current project
+        </li>
+        <li>search is case insensitive, until you type a capital letter</li>
+        <li>
+          <code>phrase1 phrase2</code>
+          type one <code>phrase1</code>, get search results, hit <kbd>Space</kbd>, type second{' '}
+          <code>phrase2</code>, already visible results will be narrowed by fuzzy search with second
+          phrase, super convenient
+        </li>
+        <li>
+          <kbd>Alt+s</kbd> seek mode (may need to enable <kbd>Alt</kbd> first{' '}
+          <Code>iTerm2 → Preferences → Profiles → [your profile] → Keyboard</Code> and set Left
+          Option Key to: <code>Esc+</code>)
+        </li>
+        <li>
+          <kbd>Ctrl+j</kbd> <kbd>Ctrl+k</kbd> move down/up in the list
+        </li>
+        <li>
+          <kbd>Ctrl+h</kbd> backspace
+        </li>
+        <li>
+          <kbd>Tab</kbd> select multiple results
+        </li>
+        <li>
+          <kbd>Enter</kbd> confirm selection
+        </li>
+        <li>
+          <kbd>Esc</kbd> <kbd>Esc</kbd> exit from search mode
+        </li>
+      </ul>
+
+      <ul>
+        <li></li>
       </ul>
 
       <H>Useful</H>

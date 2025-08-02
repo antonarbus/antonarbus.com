@@ -554,13 +554,14 @@ const postObj = {
           val2: number
         }, // object
         arg6: string[], // array of strings
-        arg7: {
+        arg7: [string, ...string[]] // non empty array
+        arg8: {
           first: string
           last: string
         }[], // arr of objects
-        arg8: 'loading' | 'success' | 'error', // union of specific strings
-        arg9: () => void, // function returning undefined
-        arg10?: string, // optional
+        arg9: 'loading' | 'success' | 'error', // union of specific strings
+        arg10: () => void, // function returning undefined
+        arg11?: string, // optional
       ): void {
         console.log(arguments)
       }
@@ -571,6 +572,7 @@ const postObj = {
         true,
         1,
         { val1: 'hi', val2: 5 },
+        ['a', 'b'],
         ['a', 'b'],
         [{ first: 'John', last: 'Dow' }, { first: 'Jane', last: 'Blake' }],
         'error',

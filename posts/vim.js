@@ -1,4 +1,4 @@
-import { Code, H, Lnk, jsxToStr } from '/components/post/reExport'
+import { Code, H, Hs, Lnk, jsxToStr } from '/components/post/reExport'
 
 const postObj = {
   title: 'vim',
@@ -131,6 +131,9 @@ const postObj = {
       <ul>
         <li>
           <kbd>u</kbd> undo the last command
+        </li>
+        <li>
+          <kbd>Ctrl+u</kbd> undo in Insert mode
         </li>
         <li>
           <kbd>U</kbd> undo all for the line
@@ -467,18 +470,56 @@ const postObj = {
         </li>
       </ul>
 
-      <H>Search files</H>
+      <H>Search file </H>
+
+      <Hs>In Current Working Directory</Hs>
 
       <ul>
         <li>
-          <kbd>Space</kbd> <kbd>Space</kbd> opens a fuzzy search in current project
+          <code>Current Working Directory</code> (CWD) is the directory where your terminal was in
+          when you typed <code>nvim</code>
         </li>
-        <li>search is case insensitive, until you type a capital letter</li>
         <li>
-          <code>phrase1 phrase2</code>
-          type one <code>phrase1</code>, get search results, hit <kbd>Space</kbd>, type second{' '}
-          <code>phrase2</code>, already visible results will be narrowed by fuzzy search with second
-          phrase, super convenient
+          <kbd>Space</kbd> <kbd>fF</kbd> files fuzzy search in (CWD)
+        </li>
+        <li>
+          To check where you are, type <code>:pwd</code> (Print Working Directory)
+        </li>
+        <li>
+          To change CWD <code>:cd path/to/directory</code>
+        </li>
+        <li>
+          To change CWD just in one tab <code>:lcd path/to/directory</code>
+        </li>
+      </ul>
+
+      <Hs>Search files in Root Directory</Hs>
+
+      <ul>
+        <li>
+          <code>Root Directory</code> is where <code>package.json</code> or{' '}
+          <code>tsconfig.json</code>
+        </li>
+        <li>
+          <kbd>Space</kbd> <kbd>Space</kbd> files fuzzy search in current project
+        </li>
+        <li>
+          <kbd>Space</kbd> <kbd>ff</kbd> same
+        </li>
+        <li>
+          Root Directory may be confusing, coz they may change silently. Imagine you are in a
+          monorepo with multiple tsconfig.json files and you will have different{' '}
+          <code>Current Working Directory</code> depending on which file you are working on. In this
+          case you may want to search relative to CWD
+        </li>
+
+        <Hs>Search gotchas</Hs>
+
+        <li>Search is case insensitive, until you type a capital letter</li>
+        <li>
+          <code>phrase1 phrase2</code> - type <code>phrase1</code> first, get search results, hit{' '}
+          <kbd>Space</kbd>, type second <code>phrase2</code>, already visible results will be
+          narrowed by fuzzy search with second phrase, super convenient
         </li>
         <li>
           <kbd>Alt+s</kbd> seek mode (may need to enable <kbd>Alt</kbd> first{' '}
@@ -500,10 +541,6 @@ const postObj = {
         <li>
           <kbd>Esc</kbd> <kbd>Esc</kbd> exit from search mode
         </li>
-      </ul>
-
-      <ul>
-        <li></li>
       </ul>
 
       <H>Useful</H>

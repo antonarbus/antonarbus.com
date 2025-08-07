@@ -520,7 +520,7 @@ const postObj = {
           If we hover over a variable we can see{' '}
           <Lnk path="https://www.typescriptlang.org/docs/handbook/type-inference.html">
             {' '}
-            type inference{' '}
+            type inference
           </Lnk>
         </li>
         <LazyImg src="/imgs/ts/typeInference.png"></LazyImg>
@@ -1743,6 +1743,56 @@ const postObj = {
          *   hover: (event: { type: "hover"; element: HTMLElement; }) => void;
          * }
          */
+      `}</Code>
+      <H>Augmenting</H>
+      <ul>
+        <li>Extending existing types/interfaces without replacing them.</li>
+        <li>
+          Should be done via <code>interface</code> (it does not replace, but merge).
+        </li>
+      </ul>
+      <Hs>Global augmentation</Hs>
+      <Code block jsx>{`
+        // global.d.ts
+        declare global {
+          interface Window {
+            myCustomProperty: string
+          }
+        }
+
+
+        // This line ensures the file is treated as a module
+        export {}
+      `}</Code>
+      <Hs>Module augmentation</Hs>
+      <Code block jsx>{`
+        // types/express/index.d.ts
+        import 'express'
+
+        declare module 'express' {
+          interface Request {
+            userId?: string
+          }
+        }
+
+        // This line ensures the file is treated as a module
+        export {}
+      `}</Code>
+      <H>Add global type</H>
+      <Code block jsx>{`
+        // global.d.ts
+
+        declare global {
+          type TODO = any
+
+          type MyGlobalType = {
+            id: string
+            name: string
+          }
+        }
+
+        // This line ensures the file is treated as a module
+        export {}
       `}</Code>
       <H>tsconfig.json</H>
       <p>Minimum config to let typescript check the project</p>

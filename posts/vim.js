@@ -283,31 +283,19 @@ const postObj = {
 
       <ul>
         <li>
-          <kbd>Ctrl+d</kbd> scroll down 50%
+          <kbd>Ctrl+d/u</kbd> scroll down/up 50%
         </li>
         <li>
-          <kbd>Ctrl+u</kbd> scroll up 50%
+          <kbd>Ctrl+f/b</kbd> scroll down/up 100%
         </li>
         <li>
-          <kbd>Ctrl+f</kbd> scroll down 100%
+          <kbd>5</kbd> <kbd>Ctrl+f</kbd> scroll down 5 screens
         </li>
         <li>
-          <kbd>Ctrl+b</kbd> scroll up 100%
+          <kbd>Ctrl+e/y</kbd> scroll down/up 1 line
         </li>
         <li>
-          5<kbd>Ctrl+f</kbd> scroll down 5 screens
-        </li>
-        <li>
-          <kbd>Ctrl+e</kbd> scroll down 1 line
-        </li>
-        <li>
-          <kbd>Ctrl+y</kbd> scroll up 1 line
-        </li>
-        <li>
-          <kbd>zt</kbd> scroll up to move active line almost to the top
-        </li>
-        <li>
-          <kbd>zb</kbd> scroll down to move active line almost to the bottom
+          <kbd>z</kbd> <kbd>t/b</kbd>scroll up/down to move active line almost to the top/bottom
         </li>
         <li>
           <kbd>zz</kbd> scroll to move active line to the middle
@@ -472,7 +460,7 @@ const postObj = {
 
       <H>Search file </H>
 
-      <Hs>In Current Working Directory</Hs>
+      <Hs>Search files in Current Working Directory</Hs>
 
       <ul>
         <li>
@@ -540,6 +528,65 @@ const postObj = {
         </li>
         <li>
           <kbd>Esc</kbd> <kbd>Esc</kbd> exit from search mode
+        </li>
+      </ul>
+
+      <H>Explorer</H>
+
+      <ul>
+        <li>
+          <kbd>Space+e</kbd> open file explorer at Root Directory
+        </li>
+        <li>
+          <kbd>Space+E</kbd> open file explorer at CWD
+        </li>
+        <li>
+          <kbd>j</kbd>/<kbd>k</kbd> down/up
+        </li>
+        <li>
+          <kbd>3j</kbd> jump down 3 lines
+        </li>
+        <li>
+          <kbd>Enter</kbd> expand/collapse folder
+        </li>
+        <li>
+          <kbd>Backspace</kbd> go to parent folder
+        </li>
+        <li>
+          <kbd>Enter</kbd> expand/collapse folder
+        </li>
+        <li>
+          <kbd>Tab</kbd> multiple select
+        </li>
+        <li>
+          <kbd>Ctrl</kbd> <kbd>f/b</kbd> scroll down/up
+        </li>
+        <li>
+          <kbd>i</kbd> jump to search field in Insert mode to search for a specific file
+        </li>
+        <li>
+          <kbd>Alt+s</kbd> seek mode during Insert mode
+        </li>
+        <li>
+          <kbd>s</kbd> seek mode also covers the explorer window
+        </li>
+        <li>
+          <kbd>d</kbd> delete file
+        </li>
+        <li>
+          <kbd>a</kbd> add file/folder
+        </li>
+        <li>
+          <kbd>r</kbd> rename
+        </li>
+        <li>
+          <kbd>y</kbd>/<kbd>p</kbd> copy/paste
+        </li>
+        <li>
+          <kbd>m</kbd> move file
+        </li>
+        <li>
+          <kbd>?</kbd> being focused on explorer - help window with other useful shortcuts
         </li>
       </ul>
 

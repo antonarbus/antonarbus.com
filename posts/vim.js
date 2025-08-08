@@ -15,6 +15,51 @@ const postObj = {
         </li>
       </ul>
 
+      <H>Verb, count, motion</H>
+
+      <ul>
+        <li>count + verb + count + motion</li>
+        <li>navigation is the default verb, can be omitted</li>
+      </ul>
+
+      <H>Motions</H>
+
+      <ul>
+        <li>
+          <kbd>w</kbd> jump forward to the start of a word
+        </li>
+        <li>
+          <kbd>e</kbd> jump forward to the end of a word
+        </li>
+        <li>
+          <kbd>b</kbd> jump back to the start of a word
+        </li>
+        <li>
+          <kbd>ge</kbd> jump back to the end of of a word
+        </li>
+        <li>
+          <kbd>$</kbd> jump forward to the end of a line
+        </li>
+        <li>
+          <kbd>0</kbd> jump backwards to the start of a line
+        </li>
+        <li>
+          <kbd>^</kbd> same as <kbd>0</kbd>, but does not take white spaces into account
+        </li>
+        <li>
+          <kbd>W</kbd> <kbd>E</kbd> <kbd>B</kbd> <kbd>gE</kbd> works the same, but splits words by
+          white space, while lowercased versions split works also with dot, paren, quote
+        </li>
+      </ul>
+
+      <H>Count + motion = Repeat motion</H>
+
+      <ul>
+        <li>
+          <kbd>3w</kbd> jump forward to the end of a word 3 times
+        </li>
+      </ul>
+
       <H>Insert mode (text)</H>
 
       <ul>
@@ -143,44 +188,6 @@ const postObj = {
         </li>
       </ul>
 
-      <H>Motions</H>
-
-      <ul>
-        <li>
-          <kbd>w</kbd> jump forward to the start of a word
-        </li>
-        <li>
-          <kbd>e</kbd> jump forward to the end of a word
-        </li>
-        <li>
-          <kbd>b</kbd> jump back to the start of a word
-        </li>
-        <li>
-          <kbd>ge</kbd> jump back to the end of of a word
-        </li>
-        <li>
-          <kbd>$</kbd> jump forward to the end of a line
-        </li>
-        <li>
-          <kbd>0</kbd> jump backwards to the start of a line
-        </li>
-        <li>
-          <kbd>^</kbd> almost the same as <kbd>0</kbd>, but does not take white spaces into account
-        </li>
-        <li>
-          <kbd>W</kbd> <kbd>E</kbd> <kbd>B</kbd> <kbd>gE</kbd> works the same, but splits words by
-          white space, while lowercased versions split works also with dot, paren, quote
-        </li>
-      </ul>
-
-      <H>Repeat motion</H>
-
-      <ul>
-        <li>
-          <kbd>3w</kbd> jump forward to the end of a word 3 times
-        </li>
-      </ul>
-
       <H>Cursor movement</H>
 
       <ul>
@@ -233,47 +240,38 @@ const postObj = {
         </li>
       </ul>
 
-      <H>Seek</H>
-
-      <ul>
-        <li>
-          <kbd>s</kbd> seek mode
-        </li>
-        <li>you may jump to any visible text simply by typing part of it</li>
-        <li>and press green label character</li>
-      </ul>
-
       <H>Find</H>
 
       <ul>
         <li>
           <kbd>f</kbd> puts you in Find mode
         </li>
-        <li>type a char and cursor will jump to the next typed char</li>
+        <li>type a char and cursor jumps to the next typed char</li>
         <li>
-          <kbd>fx</kbd> jumps to the next "x"
+          <kbd>f</kbd> jumps to the next <code>x</code>
         </li>
         <li>
-          <kbd>3fx</kbd> jumps to the 3rd "x" from you
+          <kbd>3fx</kbd> jumps to the 3rd <code>x</code> from you
         </li>
-        <kbd>F</kbd> does the same, but backwards
+        <kbd>F</kbd> same, but backwards
       </ul>
 
       <H>To</H>
 
-      <p>Same as Find mode, but put cursor before the found char</p>
-
       <ul>
         <li>
-          <kbd>f</kbd> & <kbd>t</kbd> searches for next char
+          <kbd>t</kbd> same as Find mode, but puts cursor before the found char
         </li>
-        <li>did not understand why it is useful</li>
-        <li>to be continued...</li>
+        <li>
+          <kbd>t</kbd> searches for next char
+        </li>
       </ul>
 
+      <H>Seek</H>
+
       <ul>
         <li>
-          <kbd>f</kbd> find mode
+          <kbd>s</kbd> seek mode
         </li>
         <li>you may jump to any visible text simply by typing part of it</li>
         <li>and press green label character</li>
@@ -302,18 +300,14 @@ const postObj = {
         </li>
       </ul>
 
-      <ul>
-        <li></li>
-      </ul>
-
-      <H>Delete</H>
+      <H>Delete (verb)</H>
 
       <ul>
-        <li>
-          <kbd>x</kbd> delete char under cursor
-        </li>
         <li>
           <kbd>d</kbd> [number] motion - delete operator
+        </li>
+        <li>
+          <kbd>dh</kbd> delete the character to the left of the cursor.
         </li>
         <li>
           <kbd>dw</kbd> delete to the beginning of next word
@@ -334,10 +328,98 @@ const postObj = {
           <kbd>d$</kbd> delete to the end of the line
         </li>
         <li>
-          <kbd>dd</kbd> delete whole line
+          <kbd>dd</kbd> delete whole line (shortcut)
         </li>
         <li>
           <kbd>2dd</kbd> delete 2 lines
+        </li>
+        <li>
+          <kbd>d2fe</kbd> delete to the second <code>e</code>, including <code>e</code>
+        </li>
+        <li>
+          <kbd>d2ta</kbd> delete to the second <code>a</code>
+        </li>
+        <li>
+          <kbd>dsfoos</kbd> the label <code>s</code> that pops up when you use Seek mode to seek to{' '}
+          <code>foo</code>. Note that Seek mode jumps to the beginning of the word
+        </li>
+        <li>
+          <kbd>D</kbd> delete to the end of the line (shortcut)
+        </li>
+      </ul>
+
+      <H>Change (verb)</H>
+
+      <ul>
+        <li>
+          <kbd>c</kbd> change
+        </li>
+        <li>deletes and inters into Insert mode</li>
+        <li>
+          same as <kbd>d</kbd> + motion + <kbd>i</kbd>
+        </li>
+        <li>
+          <kbd>cw</kbd> deletes to the end of the word & enters into Insert mode
+        </li>
+        <li>
+          <kbd>cc</kbd> changes whole line (shortcut)
+        </li>
+        <li>
+          <kbd>C</kbd> changes to the end of the line (shortcut)
+        </li>
+      </ul>
+
+      <H>Delete char (verb)</H>
+
+      <ul>
+        <li>
+          <kbd>x</kbd> delete char under cursor
+        </li>
+        <li>
+          <kbd>5x</kbd> delete 5 chars
+        </li>
+        <li>
+          <kbd>X</kbd> delete char before cursor
+        </li>
+      </ul>
+
+      <H>Replace char (verb)</H>
+
+      <ul>
+        <li>
+          <kbd>r</kbd> go into replace mode of single char, then <kbd>a</kbd> to replace with{' '}
+          <code>a</code>
+        </li>
+        <li>
+          <kbd>R</kbd> go into global replace mode
+        </li>
+      </ul>
+
+      <H>Join lines</H>
+
+      <ul>
+        <li>
+          <kbd>J</kbd> join lines merging white spaces
+        </li>
+        <li>
+          <kbd>gJ</kbd> join lines keeping white spaces
+        </li>
+      </ul>
+
+      <H>UpperCase & LowerCase</H>
+
+      <ul>
+        <li>
+          <kbd>~</kbd> inverts case under the cursor
+        </li>
+        <li>
+          <kbd>gU</kbd> upper case mode
+        </li>
+        <li>
+          <kbd>gu</kbd> lower case mode
+        </li>
+        <li>
+          <kbd>gUU</kbd> / <kbd>guu</kbd> same, for whole line
         </li>
       </ul>
 
@@ -372,24 +454,6 @@ const postObj = {
         </li>
         <li>
           <kbd>p</kbd> paste after cursor or <kbd>P</kbd> before
-        </li>
-      </ul>
-
-      <H>Replace</H>
-
-      <ul>
-        <li>
-          <kbd>r</kbd> go into replace mode of single char, then <kbd>a</kbd> to replace with{' '}
-          <code>a</code>
-        </li>
-        <li>
-          <kbd>R</kbd> go into global replace mode
-        </li>
-        <li>
-          <kbd>c</kbd> [number] motion - replace operator, deletes and enters into Insert mode
-        </li>
-        <li>
-          <kbd>ce</kbd> deletes to the end of the word and enters into Insert mode
         </li>
       </ul>
 
@@ -588,6 +652,15 @@ const postObj = {
         <li>
           <kbd>?</kbd> being focused on explorer - help window with other useful shortcuts
         </li>
+      </ul>
+
+      <H>mini.files</H>
+
+      <ul>
+        <li>
+          Go to LazyVim extras by <kbd>x</kbd> from the dashboard
+        </li>
+        <li></li>
       </ul>
 
       <H>Useful</H>

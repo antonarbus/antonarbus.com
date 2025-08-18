@@ -171,23 +171,6 @@ const postObj = {
         </li>
       </ul>
 
-      <H>Undo, Redo</H>
-
-      <ul>
-        <li>
-          <kbd>u</kbd> undo the last command
-        </li>
-        <li>
-          <kbd>Ctrl+u</kbd> undo in Insert mode
-        </li>
-        <li>
-          <kbd>U</kbd> undo all for the line
-        </li>
-        <li>
-          <kbd>ctrl</kbd> <kbd>r</kbd> redo
-        </li>
-      </ul>
-
       <H>Cursor movement</H>
 
       <ul>
@@ -237,6 +220,22 @@ const postObj = {
         <li>Place cursor on bracket</li>
         <li>
           <kbd>%</kbd> jumps to closing bracket
+        </li>
+      </ul>
+
+      <H>Jump sentence</H>
+
+      <ul>
+        <li>
+          <kbd>{'('}</kbd> / <kbd>{')'}</kbd> jump to beginning/end of the sentence
+        </li>
+      </ul>
+
+      <H>Jump paragraph</H>
+
+      <ul>
+        <li>
+          <kbd>{'{'}</kbd> / <kbd>{'}'}</kbd> jump to beginning/end of the paragraph
         </li>
       </ul>
 
@@ -307,7 +306,7 @@ const postObj = {
           <kbd>d</kbd> [number] motion - delete operator
         </li>
         <li>
-          <kbd>dh</kbd> delete the character to the left of the cursor.
+          <kbd>dh</kbd>/<kbd>dl</kbd> delete the character to the left/right of the cursor.
         </li>
         <li>
           <kbd>dw</kbd> delete to the beginning of next word
@@ -348,27 +347,6 @@ const postObj = {
         </li>
       </ul>
 
-      <H>Change (verb)</H>
-
-      <ul>
-        <li>
-          <kbd>c</kbd> change
-        </li>
-        <li>deletes and inters into Insert mode</li>
-        <li>
-          same as <kbd>d</kbd> + motion + <kbd>i</kbd>
-        </li>
-        <li>
-          <kbd>cw</kbd> deletes to the end of the word & enters into Insert mode
-        </li>
-        <li>
-          <kbd>cc</kbd> changes whole line (shortcut)
-        </li>
-        <li>
-          <kbd>C</kbd> changes to the end of the line (shortcut)
-        </li>
-      </ul>
-
       <H>Delete char (verb)</H>
 
       <ul>
@@ -380,6 +358,26 @@ const postObj = {
         </li>
         <li>
           <kbd>X</kbd> delete char before cursor
+        </li>
+      </ul>
+
+      <H>Change (verb)</H>
+
+      <ul>
+        <li>
+          <kbd>c</kbd> - deletes and inters into Insert mode
+        </li>
+        <li>
+          same as <kbd>d</kbd> + motion + <kbd>i</kbd>
+        </li>
+        <li>
+          <kbd>cw</kbd> deletes to the end of the word & enters into Insert mode
+        </li>
+        <li>
+          <kbd>cc</kbd> changes whole line (shortcut)
+        </li>
+        <li>
+          <kbd>C</kbd> changes to the end of the line (shortcut)
         </li>
       </ul>
 
@@ -413,13 +411,70 @@ const postObj = {
           <kbd>~</kbd> inverts case under the cursor
         </li>
         <li>
-          <kbd>gU</kbd> upper case mode
+          <kbd>gU</kbd>/<kbd>gu</kbd> upper/lower case mode
         </li>
         <li>
-          <kbd>gu</kbd> lower case mode
+          <kbd>gUU</kbd>/<kbd>guu</kbd> same, for whole line
+        </li>
+      </ul>
+
+      <H>Dot repeat</H>
+
+      <ul>
+        <li>
+          <kbd>.</kbd> repeats the verb
         </li>
         <li>
-          <kbd>gUU</kbd> / <kbd>guu</kbd> same, for whole line
+          <kbd>2.</kbd> repeats the verb two times (if you removed 3 lines with <kbd>3dd</kbd>,{' '}
+          <kbd>2.</kbd> will not remove 6 lines, but 2)
+        </li>
+      </ul>
+
+      <H>Record command</H>
+
+      <ul>
+        <li>
+          <kbd>qq</kbd> start recording
+        </li>
+        <li>
+          <kbd>q</kbd> stop recording
+        </li>
+        <li>
+          <kbd>qQ</kbd> continue recording
+        </li>
+        <li>
+          <kbd>Q</kbd> play recording
+        </li>
+      </ul>
+
+      <H>Undo, Redo</H>
+
+      <ul>
+        <li>
+          <kbd>u</kbd> undo the last command
+        </li>
+        <li>
+          <kbd>U</kbd> undo all for the line
+        </li>
+        <li>
+          <kbd>C-r</kbd> redo
+        </li>
+        <li>
+          <kbd>C-u</kbd> undo in Insert mode
+        </li>
+      </ul>
+
+      <H>Copy</H>
+
+      <ul>
+        <li>
+          Select text in visual mode <kbd>v</kbd>
+        </li>
+        <li>
+          <kbd>y</kbd> copy highlighted text
+        </li>
+        <li>
+          <kbd>yw</kbd> copy to the word's end
         </li>
       </ul>
 
@@ -431,29 +486,6 @@ const postObj = {
         </li>
         <li>
           <kbd>P</kbd> paste deleted text before cursor
-        </li>
-      </ul>
-
-      <H>Copy</H>
-
-      <ul>
-        <li>
-          <kbd>y</kbd> copy highlighted text
-          <kbd>yw</kbd> copy to the word's end
-        </li>
-      </ul>
-
-      <H>Copy / Paste</H>
-
-      <ul>
-        <li>
-          Select text in visual mode <kbd>v</kbd>
-        </li>
-        <li>
-          <kbd>y</kbd> copy highlighted text
-        </li>
-        <li>
-          <kbd>p</kbd> paste after cursor or <kbd>P</kbd> before
         </li>
       </ul>
 
@@ -656,11 +688,61 @@ const postObj = {
 
       <H>mini.files</H>
 
+      <p>Like explorer, but more Vim-ish</p>
+
+      <Hs>Installation</Hs>
+
       <ul>
         <li>
           Go to LazyVim extras by <kbd>x</kbd> from the dashboard
         </li>
-        <li></li>
+        <li>
+          Move your cursor to the line that contains <code>mini.files</code>
+        </li>
+        <li>
+          Press <kbd>x</kbd> to install and restart NeoVim
+        </li>
+      </ul>
+
+      <Hs>Usage</Hs>
+
+      <ul>
+        <li>
+          <kbd>Space</kbd>
+          <kbd>fm</kbd> open dir of current file at explorer
+        </li>
+        <li>
+          <kbd>Space</kbd>
+          <kbd>fM</kbd> open the directory where your terminal was in when you typed{' '}
+          <code>nvim</code> (CWD)
+        </li>
+        <li>
+          <kbd>j</kbd>/<kbd>k</kbd> move up/down
+        </li>
+        <li>
+          <kbd>h</kbd>/<kbd>l</kbd> move out/in
+        </li>
+        <li>
+          <kbd>o</kbd> add file/folder
+        </li>
+        <li>
+          <kbd>dd</kbd> delete
+        </li>
+        <li>
+          <kbd>i</kbd> go to Insert mode to rename
+        </li>
+        <li>
+          <kbd>yy</kbd> copy
+        </li>
+        <li>
+          <kbd>p</kbd> paste
+        </li>
+        <li>
+          <kbd>q</kbd> close the explorer view
+        </li>
+        <li>
+          <kbd>=</kbd> save changes
+        </li>
       </ul>
 
       <H>Useful</H>

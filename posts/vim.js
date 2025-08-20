@@ -188,7 +188,7 @@ const postObj = {
         </li>
       </ul>
 
-      <H>Jump to line</H>
+      <H>Jump by line</H>
 
       <ul>
         <li>
@@ -214,6 +214,42 @@ const postObj = {
         </li>
       </ul>
 
+      <H>Jump by sentence</H>
+
+      <ul>
+        <li>
+          <kbd>{'('}</kbd> / <kbd>{')'}</kbd> jump to start/end of the sentence
+        </li>
+      </ul>
+
+      <H>Jump by paragraph</H>
+
+      <ul>
+        <li>
+          <kbd>{'{'}</kbd> / <kbd>{'}'}</kbd> jump to start/end of the paragraph
+        </li>
+      </ul>
+
+      <H>Jump by bracket</H>
+
+      <ul>
+        <li>
+          <kbd>{'['}</kbd> / <kbd>{']'}</kbd> open go to prev/next menu
+        </li>
+        <li>
+          <kbd>{'])'}</kbd> go to block's <code>{')'}</code>
+        </li>
+        <li>
+          <kbd>{']}'}</kbd> go to block's <code>{'}'}</code>
+        </li>
+        <li>
+          <kbd>{']>'}</kbd> go to block's <code>{'>'}</code>
+        </li>
+        <li>
+          <kbd>{']%'}</kbd> go to block's brace (universal, works for <Code>{'<>()[]{}'}</Code>)
+        </li>
+      </ul>
+
       <H>Jump to matching bracket</H>
 
       <ul>
@@ -223,19 +259,93 @@ const postObj = {
         </li>
       </ul>
 
-      <H>Jump sentence</H>
+      <H>Jump by variable instance</H>
 
       <ul>
         <li>
-          <kbd>{'('}</kbd> / <kbd>{')'}</kbd> jump to beginning/end of the sentence
+          <kbd>{'[['}</kbd>/<kbd>{']]'}</kbd> jumps to prev/next variable instances
         </li>
       </ul>
 
-      <H>Jump paragraph</H>
+      <H>Jump by function</H>
 
       <ul>
         <li>
-          <kbd>{'{'}</kbd> / <kbd>{'}'}</kbd> jump to beginning/end of the paragraph
+          <kbd>{'[f'}</kbd>/<kbd>{']f'}</kbd> jumps to prev/next function start
+        </li>
+        <li>
+          <kbd>{'[F'}</kbd>/<kbd>{']F'}</kbd> jumps to prev/next function end
+        </li>
+      </ul>
+
+      <H>Jump by parameter</H>
+
+      <ul>
+        <li>
+          <kbd>{'[a'}</kbd>/<kbd>{']a'}</kbd> jumps to prev/next parameter start
+        </li>
+        <li>
+          <kbd>{'[A'}</kbd>/<kbd>{']A'}</kbd> jumps to prev/next parameter end
+        </li>
+      </ul>
+
+      <H>Jump by method</H>
+
+      <ul>
+        <li>
+          <kbd>{'[m'}</kbd>/<kbd>{']m'}</kbd> jumps to prev/next method start
+        </li>
+        <li>
+          <kbd>{'[M'}</kbd>/<kbd>{']M'}</kbd> jumps to prev/next method end
+        </li>
+      </ul>
+
+      <H>Jump by class</H>
+
+      <ul>
+        <li>
+          <kbd>{'[c'}</kbd>/<kbd>{']c'}</kbd> jumps to prev/next class start
+        </li>
+        <li>
+          <kbd>{'[C'}</kbd>/<kbd>{']C'}</kbd> jumps to prev/next class end
+        </li>
+      </ul>
+
+      <H>Jump by scope</H>
+
+      <ul>
+        <li>
+          <kbd>{'[i'}</kbd>/<kbd>{']i'}</kbd> jumps to start/end of scope
+        </li>
+      </ul>
+
+      <H>Jump by error, warning, spell, diagnostic</H>
+
+      <ul>
+        <li>
+          <kbd>{'[e'}</kbd>/<kbd>{']e'}</kbd> jumps to prev/next error
+        </li>
+        <li>
+          <kbd>{'[w'}</kbd>/<kbd>{']w'}</kbd> jumps to prev/next warning
+        </li>
+        <li>
+          <kbd>{'[s'}</kbd>/<kbd>{']s'}</kbd> jumps to prev/next spell issue (<Code>Space+us</Code>{' '}
+          to enable spell check)
+        </li>
+        <li>
+          <kbd>{'[d'}</kbd>/<kbd>{']d'}</kbd> jumps to prev/next diagnostic message
+        </li>
+        <li>
+          <kbd>{'[t'}</kbd>/<kbd>{']t'}</kbd> jumps to prev/next TODO or FIXME comment
+        </li>
+      </ul>
+
+      <H>Jump by hunk (changes)</H>
+
+      <ul>
+        <li>Hunk - modifications that haven't been staged or committed yet</li>
+        <li>
+          <kbd>{'[h'}</kbd>/<kbd>{']h'}</kbd> jumps to prev/next changes
         </li>
       </ul>
 
@@ -299,6 +409,20 @@ const postObj = {
         </li>
       </ul>
 
+      <H>Delete char (verb)</H>
+
+      <ul>
+        <li>
+          <kbd>x</kbd> delete char under cursor
+        </li>
+        <li>
+          <kbd>5x</kbd> delete 5 chars
+        </li>
+        <li>
+          <kbd>X</kbd> delete char before cursor
+        </li>
+      </ul>
+
       <H>Delete (verb)</H>
 
       <ul>
@@ -345,19 +469,14 @@ const postObj = {
         <li>
           <kbd>D</kbd> delete to the end of the line (shortcut)
         </li>
-      </ul>
-
-      <H>Delete char (verb)</H>
-
-      <ul>
         <li>
-          <kbd>x</kbd> delete char under cursor
+          <kbd>diq</kbd>/<kbd>daq</kbd> delete inside nearest quotes / including quotes
         </li>
         <li>
-          <kbd>5x</kbd> delete 5 chars
+          <kbd>dib</kbd>/<kbd>dab</kbd> delete inside nearest brackets / including brackets
         </li>
         <li>
-          <kbd>X</kbd> delete char before cursor
+          <kbd>diw</kbd>/<kbd>daw</kbd> delete nearest word / word and whitespaces around
         </li>
       </ul>
 
@@ -378,6 +497,15 @@ const postObj = {
         </li>
         <li>
           <kbd>C</kbd> changes to the end of the line (shortcut)
+        </li>
+        <li>
+          <kbd>ciq</kbd>/<kbd>caq</kbd> changes inside nearest quotes / including quotes
+        </li>
+        <li>
+          <kbd>cib</kbd>/<kbd>cab</kbd> changes inside nearest brackets / including brackets
+        </li>
+        <li>
+          <kbd>ciw</kbd>/<kbd>caw</kbd> changes nearest word / word and whitespaces around
         </li>
       </ul>
 

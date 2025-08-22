@@ -92,11 +92,14 @@ const postObj = {
         </li>
       </ul>
 
-      <H>Visual mode (selection)</H>
+      <H>Select</H>
 
       <ul>
         <li>
           <kbd>v</kbd> visual mode
+        </li>
+        <li>
+          <kbd>S</kbd> select with Seeking Surrounding Objects
         </li>
       </ul>
 
@@ -188,7 +191,21 @@ const postObj = {
         </li>
       </ul>
 
-      <H>Jump by line</H>
+      <H>Cursor history</H>
+
+      <ul>
+        <li>
+          <kbd>Ctrl+o</kbd> jump back in history location
+        </li>
+        <li>
+          <kbd>Ctrl+i</kbd> jump forward in history location
+        </li>
+        <li>
+          <kbd>Ctrl+g</kbd> show cursor position + file name
+        </li>
+      </ul>
+
+      <H>Jump by line (go to)</H>
 
       <ul>
         <li>
@@ -202,15 +219,6 @@ const postObj = {
         </li>
         <li>
           <kbd>G</kbd> jumps to last line
-        </li>
-        <li>
-          <kbd>Ctrl+o</kbd> jump back in history
-        </li>
-        <li>
-          <kbd>Ctrl+i</kbd> jump forward in history
-        </li>
-        <li>
-          <kbd>Ctrl+g</kbd> show cursor position + file name
         </li>
       </ul>
 
@@ -386,6 +394,42 @@ const postObj = {
         <li>and press green label character</li>
       </ul>
 
+      <H>Seek in object</H>
+
+      <ul>
+        <li>May seek inside text object where your cursor is</li>
+        <li>
+          <kbd>vS</kbd>/<kbd>dS</kbd>/<kbd>cS</kbd>/<kbd>yS</kbd> select/delete/change/copy & enter
+          into SEEK mode
+        </li>
+        <li>Green labels will surround the text part, a,b,c,d,e... from the inner to outer</li>
+      </ul>
+
+      <H>Seek remote</H>
+
+      <ul>
+        <li>
+          May for ex copy something from remote place <kbd>r</kbd>
+        </li>
+        <li>
+          <kbd>yr</kbd> (enters into Seek mode) + <code>phrase</code> + <kbd>ib</kbd> (inside
+          brackets)
+        </li>
+        <li>cursor comes back to the initial place</li>
+      </ul>
+
+      <H>Seek remote object</H>
+
+      <ul>
+        <li>
+          Copy something from remote object with <kbd>R</kbd> (capital)
+        </li>
+        <li>
+          <kbd>yR</kbd> (enters into Seek mode) + <code>phrase</code> + <code>a</code> (tag)
+        </li>
+        <li>Cursor does not come back</li>
+      </ul>
+
       <H>Scroll</H>
 
       <ul>
@@ -507,6 +551,9 @@ const postObj = {
         <li>
           <kbd>ciw</kbd>/<kbd>caw</kbd> changes nearest word / word and whitespaces around
         </li>
+        <li>
+          <kbd>cag</kbd> changes whole file
+        </li>
       </ul>
 
       <H>Replace char (verb)</H>
@@ -592,17 +639,29 @@ const postObj = {
         </li>
       </ul>
 
-      <H>Copy</H>
+      <H>Copy (yank)</H>
 
       <ul>
         <li>
           Select text in visual mode <kbd>v</kbd>
         </li>
         <li>
-          <kbd>y</kbd> copy highlighted text
+          <kbd>y</kbd> copy highlighted text (yank)
         </li>
         <li>
           <kbd>yw</kbd> copy to the word's end
+        </li>
+        <li>
+          <kbd>yiq</kbd>/<kbd>yaq</kbd> copy inside nearest quotes / including quotes
+        </li>
+        <li>
+          <kbd>yib</kbd>/<kbd>yab</kbd> copy inside nearest brackets / including brackets
+        </li>
+        <li>
+          <kbd>yiw</kbd>/<kbd>yaw</kbd> copy nearest word / word and whitespaces around
+        </li>
+        <li>
+          <kbd>yig</kbd> copy whole file
         </li>
       </ul>
 
@@ -917,6 +976,29 @@ const postObj = {
         <li>Download FiraCode Nerd Font, unzip, install all fonts</li>
         <li>Open iTerm2, then Preferences, then Profiles, then Text, pick FiraCode Nerd Font</li>
         <li>Restart the terminal</li>
+      </ul>
+
+      <H>Dashboard</H>
+
+      <ul>
+        <li>
+          <code>:lua Snacks.dashboard()</code> open dashboard from editor
+        </li>
+      </ul>
+
+      <H>Plugins</H>
+
+      <ul>
+        <li>
+          The Lazy Extras mode can be accessed by pressing <kbd>x</kbd> from the dashboard or
+        </li>
+        <li>
+          <code>:LazyExtras</code> from the editor
+        </li>
+        <li>
+          Navigate and press <kbd>x</kbd> to pick
+        </li>
+        <li>Relaunch neo vim</li>
       </ul>
     </>
   )

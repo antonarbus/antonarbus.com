@@ -409,13 +409,13 @@ const postObj = {
 
       <ul>
         <li>
-          May for ex copy something from remote place <kbd>r</kbd>
+          May for ex copy (yank) something from remote place <kbd>r</kbd>
         </li>
         <li>
           <kbd>yr</kbd> (enters into Seek mode) + <code>phrase</code> + <kbd>ib</kbd> (inside
           brackets)
         </li>
-        <li>cursor comes back to the initial place</li>
+        <li>Cursor comes back to the initial place</li>
       </ul>
 
       <H>Seek remote object</H>
@@ -428,6 +428,43 @@ const postObj = {
           <kbd>yR</kbd> (enters into Seek mode) + <code>phrase</code> + <code>a</code> (tag)
         </li>
         <li>Cursor does not come back</li>
+        <li>
+          Personally did not understand why it is helpful, better to jump to place, select & yank
+        </li>
+      </ul>
+
+      <H>Surrounding Pair</H>
+
+      <ul>
+        <li>
+          To change quotation marks or brackets, or content inside enable <code>mini.surround</code>{' '}
+          extra plugin
+        </li>
+        <li>Select some text</li>
+        <li>
+          <kbd>gsa</kbd> add surrounding to selection
+        </li>
+        <li>
+          <kbd>"</kbd>/<kbd>'</kbd>/<kbd>`</kbd> add quotation mark around
+        </li>
+        <li>
+          <kbd>{'('}</kbd>/<kbd>{'{'}</kbd>/<kbd>{'['}</kbd> add braces with empty spaces
+        </li>
+        <li>
+          <kbd>{')'}</kbd>/<kbd>{'}'}</kbd>/<kbd>{']'}</kbd> add braces without empty spaces
+        </li>
+        <li>
+          Instead of selecting the text first may do directly <kbd>gsaiB"</kbd> to add quotation
+          marks inside braces at your cursor
+        </li>
+        <li>
+          <kbd>gsa$"</kbd> will surround text between the cursor and the end of the line with double
+          quotation marks
+        </li>
+        <li>
+          <kbd>gsaSb'</kbd> will surround text that you select with the label <code>b</code> after
+          an <code>S</code> operation with single quotation marks
+        </li>
       </ul>
 
       <H>Scroll</H>
@@ -877,7 +914,7 @@ const postObj = {
 
       <p>Like explorer, but more Vim-ish</p>
 
-      <Hs>Installation</Hs>
+      <Hs>mini.files Installation</Hs>
 
       <ul>
         <li>
@@ -891,7 +928,7 @@ const postObj = {
         </li>
       </ul>
 
-      <Hs>Usage</Hs>
+      <Hs>mini.files Usage</Hs>
 
       <ul>
         <li>

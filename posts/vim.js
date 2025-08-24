@@ -87,16 +87,13 @@ const postObj = {
         <li>
           <kbd>Esc</kbd> normal mode (navigate and manipulate text)
         </li>
-        <li>
-          <kbd>v</kbd> visual mode - select
-        </li>
       </ul>
 
       <H>Select</H>
 
       <ul>
         <li>
-          <kbd>v</kbd> visual mode
+          <kbd>v</kbd> select text in visual mode
         </li>
         <li>
           <kbd>S</kbd> select with Seeking Surrounding Objects
@@ -145,6 +142,63 @@ const postObj = {
         </li>
         <li>
           <kbd>grm</kbd> → shrink back.
+        </li>
+      </ul>
+
+      <H>Copy (yank)</H>
+
+      <ul>
+        <li>
+          <kbd>y</kbd> copy highlighted text (yank)
+        </li>
+        <li>
+          <kbd>yw</kbd> copy to the word's end
+        </li>
+        <li>
+          <kbd>yiq</kbd>/<kbd>yaq</kbd> copy inside nearest quotes / including quotes
+        </li>
+        <li>
+          <kbd>yib</kbd>/<kbd>yab</kbd> copy inside nearest brackets / including brackets
+        </li>
+        <li>
+          <kbd>yiw</kbd>/<kbd>yaw</kbd> copy nearest word / word and whitespaces around
+        </li>
+        <li>
+          <kbd>yig</kbd> copy whole file
+        </li>
+      </ul>
+
+      <H>Paste</H>
+
+      <ul>
+        <li>
+          <kbd>p</kbd> paste deleted text after cursor
+        </li>
+        <li>
+          <kbd>5p</kbd> paste 5 times
+        </li>
+        <li>
+          <kbd>P</kbd> paste deleted text before cursor
+        </li>
+        <li>
+          In Insert mode to paste <code>Ctrl+r</code> followed by <kbd>+</kbd>
+        </li>
+      </ul>
+
+      <H>Undo, Redo</H>
+
+      <ul>
+        <li>
+          <kbd>u</kbd> undo the last command
+        </li>
+        <li>
+          <kbd>U</kbd> undo all for the line
+        </li>
+        <li>
+          <kbd>C-r</kbd> redo
+        </li>
+        <li>
+          <kbd>C-u</kbd> undo in Insert mode
         </li>
       </ul>
 
@@ -725,60 +779,6 @@ const postObj = {
         </li>
         <li>
           <kbd>Q</kbd> play recording
-        </li>
-      </ul>
-
-      <H>Undo, Redo</H>
-
-      <ul>
-        <li>
-          <kbd>u</kbd> undo the last command
-        </li>
-        <li>
-          <kbd>U</kbd> undo all for the line
-        </li>
-        <li>
-          <kbd>C-r</kbd> redo
-        </li>
-        <li>
-          <kbd>C-u</kbd> undo in Insert mode
-        </li>
-      </ul>
-
-      <H>Copy (yank)</H>
-
-      <ul>
-        <li>
-          Select text in visual mode <kbd>v</kbd>
-        </li>
-        <li>
-          <kbd>y</kbd> copy highlighted text (yank)
-        </li>
-        <li>
-          <kbd>yw</kbd> copy to the word's end
-        </li>
-        <li>
-          <kbd>yiq</kbd>/<kbd>yaq</kbd> copy inside nearest quotes / including quotes
-        </li>
-        <li>
-          <kbd>yib</kbd>/<kbd>yab</kbd> copy inside nearest brackets / including brackets
-        </li>
-        <li>
-          <kbd>yiw</kbd>/<kbd>yaw</kbd> copy nearest word / word and whitespaces around
-        </li>
-        <li>
-          <kbd>yig</kbd> copy whole file
-        </li>
-      </ul>
-
-      <H>Paste</H>
-
-      <ul>
-        <li>
-          <kbd>p</kbd> paste deleted text after cursor
-        </li>
-        <li>
-          <kbd>P</kbd> paste deleted text before cursor
         </li>
       </ul>
 

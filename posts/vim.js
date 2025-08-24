@@ -415,7 +415,7 @@ const postObj = {
         <li>
           <kbd>3fx</kbd> jumps to the 3rd <code>x</code> from you
         </li>
-        <kbd>F</kbd> same, but backwards
+        <kbd>F</kbd>/<kbd>,</kbd> same, but backwards
       </ul>
 
       <H>To</H>
@@ -509,6 +509,30 @@ const postObj = {
         <li>
           <kbd>gsaSb'</kbd> will surround text that you select with the label <code>b</code> after
           an <code>S</code> operation with single quotation marks
+        </li>
+        <li>
+          <kbd>gsdb</kbd> delete surrounding braces
+        </li>
+        <li>
+          <kbd>gsdq</kbd> delete surrounding quotes
+        </li>
+        <li>
+          <kbd>{'gsd['}</kbd> delete surrounding square brackets
+        </li>
+        <li>
+          <kbd>{'2gsd{'}</kbd> delete the second set of curly braces from cursor position
+        </li>
+        <li>
+          <kbd>gsr"'</kbd> replace double quotes with single
+        </li>
+        <li>
+          <kbd>gsfb</kbd>/<kbd>gsFb</kbd> jump to next/prev bracket
+        </li>
+        <li>
+          <kbd>gsfb</kbd> highlight paired braces
+        </li>
+        <li>
+          <kbd>gsat</kbd> add tags around selection
         </li>
       </ul>
 

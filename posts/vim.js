@@ -103,6 +103,51 @@ const postObj = {
         </li>
       </ul>
 
+      <H>Expand selection</H>
+
+      <ul>
+        <li>
+          there is no native vim way, but can use <code>treesitter</code> plugin
+        </li>
+        <li>
+          Create or edit <code>~/.config/nvim/lua/plugins/treesitter.lua</code>
+        </li>
+
+        <Code block jsx>{`
+          return {
+            "nvim-treesitter/nvim-treesitter",
+            opts = function(_, opts)
+              opts.incremental_selection = vim.tbl_deep_extend("force", opts.incremental_selection or {}, {
+                enable = true,
+                keymaps = {
+                  init_selection = "gnn", -- start at node under cursor
+                  node_incremental = "grn", -- expand outward
+                  node_decremental = "grm", -- shrink inward
+                  scope_incremental = "grc", -- expand to scope (func/class)
+                },
+              })
+            end,
+          }
+        `}</Code>
+
+        <li>
+          Run <code>:Lazy</code> sync and restart Neovim
+        </li>
+        <li>Put cursor inside some code.</li>
+        <li>
+          Type: <kbd>gnn</kbd> → selection starts.
+        </li>
+        <li>
+          Then: <kbd>grn</kbd> → expand outward.
+        </li>
+        <li>
+          Again: <kbd>grn</kbd> → expand more.
+        </li>
+        <li>
+          <kbd>grm</kbd> → shrink back.
+        </li>
+      </ul>
+
       <H>Command mode</H>
 
       <ul>

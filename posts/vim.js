@@ -93,7 +93,24 @@ const postObj = {
 
       <ul>
         <li>
-          <kbd>v</kbd> select text in visual mode
+          <kbd>v</kbd> granule text selection in Visual mode
+        </li>
+        <li>
+          <kbd>V</kbd> line text selection in Visual mode
+        </li>
+        <li>
+          <kbd>C-v</kbd> block vertical text selection (handy for csv data), <kbd>$</kbd> - expands
+          the selection to the longest line
+        </li>
+        <li>Or just click and drag mouse</li>
+        <li>
+          <kbd>Esc</kbd>/<kbd>v</kbd> exit Visual mode
+        </li>
+        <li>
+          <kbd>gv</kbd> go back to prev selection
+        </li>
+        <li>
+          <kbd>o</kbd> in Visual mode - jump to the start/end of selection
         </li>
         <li>
           <kbd>S</kbd> select with Seeking Surrounding Objects
@@ -128,7 +145,7 @@ const postObj = {
         `}</Code>
 
         <li>
-          Run <code>:Lazy</code> sync and restart Neovim
+          Run <code>:Lazy</code> sync, then restart NeoVim
         </li>
         <li>Put cursor inside some code.</li>
         <li>
@@ -145,11 +162,66 @@ const postObj = {
         </li>
       </ul>
 
+      <H>Registers</H>
+
+      <ul>
+        <li>Registers are different named clipboards where you copy text</li>
+        <li>
+          <kbd>{'"'}</kbd> open register list
+        </li>
+        <li>
+          <kbd>"ayy</kbd> copy line into named <code>a</code> register
+        </li>
+        <li>
+          <kbd>"ap</kbd> paste from the <code>a</code> register
+        </li>
+        <li>you may also delete and replace into the register</li>
+        <li>adding again to the same named register replaces the content</li>
+        <li>
+          <kbd>"Ay</kbd> copy into upper-cased named <code>A</code> register appends text into
+          existing <code>a</code> register
+        </li>
+        <li>
+          System clipboard is synched with <code>+</code> and <code>*</code> registers
+        </li>
+        <li>
+          <kbd>Space</kbd>
+          <kbd>s</kbd>
+          <kbd>"</kbd> show all registers and add content to <code>+</code> register with{' '}
+          <kbd>Enter</kbd>
+        </li>
+        <li>
+          <kbd>Ctrl+r</kbd> show same menu in Insert mode
+        </li>
+        <li>
+          last copied test is always available at <code>0</code> register and you may paste it with{' '}
+          <kbd>"0p</kbd>
+        </li>
+        <li>
+          Last typed text goes into <code>.</code> register
+        </li>
+        <li>
+          Last deleted small text goes into <code>-</code> register
+        </li>
+        <li>
+          The name of the file that you are currently editing goes into <code>%</code> register
+        </li>
+        <li>
+          <code>:let @c=@.</code> copy <code>.</code> register to named <code>c</code> register
+        </li>
+      </ul>
+
       <H>Copy (yank)</H>
 
       <ul>
         <li>
           <kbd>y</kbd> copy highlighted text (yank)
+        </li>
+        <li>
+          <kbd>yy</kbd> copy whole line
+        </li>
+        <li>
+          <kbd>Y</kbd> copy to the end of the line
         </li>
         <li>
           <kbd>yw</kbd> copy to the word's end
@@ -183,6 +255,12 @@ const postObj = {
         <li>
           In Insert mode to paste <code>Ctrl+r</code> followed by <kbd>+</kbd>
         </li>
+      </ul>
+
+      <H>Yanky.nvim Plugin</H>
+
+      <ul>
+        <li>... check it later</li>
       </ul>
 
       <H>Undo, Redo</H>
@@ -613,20 +691,6 @@ const postObj = {
         </li>
       </ul>
 
-      <H>Delete char (verb)</H>
-
-      <ul>
-        <li>
-          <kbd>x</kbd> delete char under cursor
-        </li>
-        <li>
-          <kbd>5x</kbd> delete 5 chars
-        </li>
-        <li>
-          <kbd>X</kbd> delete char before cursor
-        </li>
-      </ul>
-
       <H>Delete (verb)</H>
 
       <ul>
@@ -681,6 +745,20 @@ const postObj = {
         </li>
         <li>
           <kbd>diw</kbd>/<kbd>daw</kbd> delete nearest word / word and whitespaces around
+        </li>
+      </ul>
+
+      <H>Delete char (verb)</H>
+
+      <ul>
+        <li>
+          <kbd>x</kbd> delete char under cursor
+        </li>
+        <li>
+          <kbd>5x</kbd> delete 5 chars
+        </li>
+        <li>
+          <kbd>X</kbd> delete char before cursor
         </li>
       </ul>
 
@@ -769,16 +847,28 @@ const postObj = {
 
       <ul>
         <li>
-          <kbd>qq</kbd> start recording
+          <kbd>qq</kbd> start recording and store commands into <code>q</code> named register
         </li>
         <li>
           <kbd>q</kbd> stop recording
         </li>
         <li>
-          <kbd>qQ</kbd> continue recording
+          <kbd>qQ</kbd> continue recording (append commands to <code>q</code> register)
         </li>
         <li>
-          <kbd>Q</kbd> play recording
+          <kbd>Q</kbd> play most recent recording
+        </li>
+        <li>
+          <kbd>@a</kbd> play back recording stored at <code>a</code> register saved previously by{' '}
+          <kbd>qa</kbd>
+        </li>
+        <li>
+          <kbd>@@</kbd> replay whichever register you most recently played
+        </li>
+        <li>
+          To edit the recording just past it from the register by <kbd>"qp</kbd> if it was written
+          to the named <code>q</code> register, then modify the text and copy it back to the{' '}
+          <code>q</code> register by <kbd>"qyiw</kbd>
         </li>
       </ul>
 
@@ -993,7 +1083,7 @@ const postObj = {
           Move your cursor to the line that contains <code>mini.files</code>
         </li>
         <li>
-          Press <kbd>x</kbd> to install and restart NeoVim
+          Press <kbd>x</kbd> to install, then restart NeoVim
         </li>
       </ul>
 
@@ -1104,7 +1194,61 @@ const postObj = {
         <li>
           Navigate and press <kbd>x</kbd> to pick
         </li>
-        <li>Relaunch neo vim</li>
+        <li>Relaunch NeoVim</li>
+      </ul>
+
+      <H>Buffers</H>
+
+      <ul>
+        <li>
+          <kbd>H</kbd>/<kbd>L</kbd> switch buffers visible in the currently active window
+        </li>
+        <li>
+          <kbd>{'[b'}</kbd>/<kbd>{']b'}</kbd> same
+        </li>
+        <li>
+          <kbd>Space</kbd> <kbd>,</kbd> open current buffer list
+        </li>
+        <li>
+          <kbd>Ctrl+x</kbd> close buffer from the list
+        </li>
+        <li>
+          <kbd>Space</kbd> <kbd>`</kbd> switch to previous buffer
+        </li>
+        <li>
+          <kbd>Space</kbd> <kbd>bb</kbd> same
+        </li>
+        <li>
+          <kbd>Space</kbd> <kbd>bd</kbd> close (delete) buffer
+        </li>
+        <li>
+          <kbd>Space</kbd> <kbd>bD</kbd> close (delete) buffer & window split
+        </li>
+        <li>
+          <kbd>Space</kbd> <kbd>bp</kbd> pin a buffer
+        </li>
+        <li>
+          <kbd>Space</kbd> <kbd>bl</kbd>/<kbd>br</kbd>/<kbd>bo</kbd>/<kbd>bP</kbd> close to
+          left/right/others/pinned buffers split
+        </li>
+        <li>
+          <kbd>Space</kbd>
+          <kbd>.</kbd> open scratch buffer where you may write notes. Scratch buffers are tied to
+          the current working directory.
+        </li>
+        <li>
+          <kbd>Space</kbd>
+          <kbd>S</kbd> open scratch buffer list
+        </li>
+      </ul>
+
+      <H>Windows</H>
+
+      <ul>
+        <li>Window in Vim is a pane or split</li>
+        <li>
+          <code>Space+wv</code>/<code>Space+ws</code> split vertically/horizontally
+        </li>
       </ul>
     </>
   )

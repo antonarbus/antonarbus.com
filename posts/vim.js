@@ -1204,7 +1204,7 @@ const postObj = {
           <kbd>H</kbd>/<kbd>L</kbd> switch buffers visible in the currently active window
         </li>
         <li>
-          <kbd>{'[b'}</kbd>/<kbd>{']b'}</kbd> same
+          <kbd>{'[b'}</kbd>/<kbd>{']b'}</kbd> same, switch buffers
         </li>
         <li>
           <kbd>Space</kbd> <kbd>,</kbd> open current buffer list
@@ -1216,7 +1216,7 @@ const postObj = {
           <kbd>Space</kbd> <kbd>`</kbd> switch to previous buffer
         </li>
         <li>
-          <kbd>Space</kbd> <kbd>bb</kbd> same
+          <kbd>Space</kbd> <kbd>bb</kbd> same, switch to previous buffer
         </li>
         <li>
           <kbd>Space</kbd> <kbd>bd</kbd> close (delete) buffer
@@ -1247,7 +1247,86 @@ const postObj = {
       <ul>
         <li>Window in Vim is a pane or split</li>
         <li>
-          <code>Space+wv</code>/<code>Space+ws</code> split vertically/horizontally
+          <code>Space w v/s</code> split vertically/horizontally
+        </li>
+        <li>Same works in mini.files plugin</li>
+        <li>
+          <kbd>Ctrl+v/s</kbd> open in vertically/horizontally split from explorer
+        </li>
+        <li>
+          <kbd>Ctrl+h/j/k/l</kbd> move between windows
+        </li>
+        <li>
+          <kbd>Space w h/j/k/l</kbd> same, move between windows
+        </li>
+        <li>
+          <kbd>Space w q</kbd> close window
+        </li>
+        <li>
+          <kbd>Space w d</kbd> same, close window
+        </li>
+        <li>
+          <kbd>Space w o</kbd> close other windows
+        </li>
+        <li>Resize split with mouse by dragging middle bar</li>
+        <li>
+          <kbd>{'Space w </>/+/-'}</kbd> same, resize split window
+        </li>
+        <li>
+          <kbd>Space w =</kbd> reset split windows to equal size
+        </li>
+        <li>
+          <kbd>Space w Space</kbd> go into Hydra mode, it will keep the menu open, now you may keep
+          pressing <kbd>{'>>>>>'}</kbd> to continuously resize
+        </li>
+        <li>
+          <kbd>Space u z</kbd> go into Zen mode, center the window and dim all around
+        </li>
+      </ul>
+
+      <H>Tabs</H>
+
+      <p>Skipped, did not understand why it is needed...</p>
+
+      <H>Fold</H>
+
+      <ul>
+        <li>
+          <kbd>z c/a</kbd> fold / unfold
+        </li>
+        <li>
+          <kbd>za</kbd> toggle folding
+        </li>
+        <li>
+          <kbd>zR</kbd> unfold all
+        </li>
+        <li>
+          <kbd>zO</kbd> unfold all folds under cursor
+        </li>
+      </ul>
+
+      <H>Session</H>
+
+      <ul>
+        <li>Session keeps information about windows, splits and tabs</li>
+        <li>
+          <kbd>Space qq</kbd> to exit LazyVim
+        </li>
+        <li>
+          <code>cd</code> to the project and open NeoVim by <code>nvim</code>
+        </li>
+        <li>
+          <kbd>s</kbd> to restore the last session
+        </li>
+        <li>
+          <kbd>Space qs</kbd> same, restore session
+        </li>
+        <li>
+          <kbd>Space qS</kbd> open session list, can be useful to see last opened projects
+        </li>
+        <li>
+          <kbd>Space qd</kbd> close without saving the session, useful when you temporarily opened
+          NeoVim and close it
         </li>
       </ul>
     </>

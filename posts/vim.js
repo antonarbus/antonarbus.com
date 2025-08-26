@@ -260,7 +260,23 @@ const postObj = {
       <H>Yanky.nvim Plugin</H>
 
       <ul>
-        <li>... check it later</li>
+        <li>
+          Install it from <code>:LazyExtras</code> and pushing <kbd>x</kbd> in front of it, then
+          reload NeoVim
+        </li>
+        <li>
+          <kbd>Space p</kbd> opens the clipboard history list
+        </li>
+        <li>
+          <kbd>{'p[y[y[y…'}</kbd>/<kbd>{'p]y]y]y…'}</kbd> pastes previous/next clipboard entries in
+          cycle
+        </li>
+        <li>
+          <kbd>{'[p'}</kbd>/<kbd>{']p'}</kbd> pastes indented above/below current line
+        </li>
+        <li>
+          <kbd>{'>p/<p/>P/<P'}</kbd> put after/before and indent right/left
+        </li>
       </ul>
 
       <H>Undo, Redo</H>

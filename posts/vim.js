@@ -539,6 +539,9 @@ const postObj = {
         <li>
           <kbd>{'[t'}</kbd>/<kbd>{']t'}</kbd> jumps to prev/next TODO or FIXME comment
         </li>
+        <li>
+          <kbd>Space cd</kbd> show full error message under cursor
+        </li>
       </ul>
 
       <H>Jump by hunk (changes)</H>
@@ -1211,6 +1214,9 @@ const postObj = {
           Navigate and press <kbd>x</kbd> to pick
         </li>
         <li>Relaunch NeoVim</li>
+        <li>
+          <kbd>Space cm</kbd> open Mason, some other plugin list, alternative to LazyExtras
+        </li>
       </ul>
 
       <H>Buffers</H>
@@ -1345,6 +1351,141 @@ const postObj = {
           NeoVim and close it
         </li>
       </ul>
+
+      <H>Language server</H>
+
+      <ul>
+        <li>
+          <code>:LspRestart</code> restart the language server
+        </li>
+        <li>
+          <code>:checkhealth</code>/<code>:LazyHealth</code> health of various installed plugins (do
+          not expect all to be green) (there are overlaps, LazyHealth is easier to read)
+        </li>
+        <li>
+          <kbd>Space xx/xX</kbd> show diagnostic window with list of errors
+        </li>
+      </ul>
+
+      <H>Code action</H>
+
+      <ul>
+        <li>
+          <kbd>Space ca</kbd> open code actions
+        </li>
+      </ul>
+
+      <H>Notice</H>
+
+      <ul>
+        <li>
+          NeoVim has a notice window in the top right corner where some important messages pops up
+          once in a while
+        </li>
+        <li>
+          <kbd>Space cna</kbd> show list of messages
+        </li>
+      </ul>
+
+      <H>ESLint</H>
+
+      <ul>
+        <li>
+          Lint plugin for NeoVim <code>nvim-lint</code>
+        </li>
+        <li>
+          Add file <code>~/.config/nvim/lua/plugins/nvim-lint.lua</code>
+        </li>
+      </ul>
+
+      <Code block lua>{`
+        return {
+          "mfussenegger/nvim-lint",
+          event = { "BufReadPre", "BufNewFile" },
+          config = function()
+            local lint = require("lint")
+
+            lint.linters_by_ft = {
+              javascript = { "eslint" },
+              typescript = { "eslint" },
+              javascriptreact = { "eslint" },
+              typescriptreact = { "eslint" },
+            }
+
+            -- Always use the project's local eslint
+            lint.linters.eslint = lint.linters.eslint or {}
+            lint.linters.eslint.prefer_local = "node_modules/.bin"
+
+            -- Prefer the nearest folder that actually has the eslint binary;
+            -- otherwise fall back to a folder with an ESLint config; else git root.
+            lint.linters.eslint.cwd = function(bufnr)
+              local bufpath = vim.api.nvim_buf_get_name(bufnr)
+              local start = vim.fs.dirname(bufpath)
+
+              -- 1) nearest node_modules/.bin/eslint
+              local bin = vim.fs.find("node_modules/.bin/eslint", { path = start, upward = true })[1]
+              if bin then
+                -- strip trailing /node_modules/.bin/eslint -> project root
+                return (bin:gsub("/node_modules/.bin/eslint$", ""))
+              end
+
+              -- 2) nearest ESLint config
+              local cfg = vim.fs.find({
+                "eslint.config.js",
+                "eslint.config.cjs",
+                ".eslintrc",
+                ".eslintrc.json",
+                ".eslintrc.js",
+                ".eslintrc.cjs",
+              }, { path = start, upward = true })[1]
+              if cfg then
+                return vim.fs.dirname(cfg)
+              end
+
+              -- 3) git root, then current cwd
+              local git = vim.fs.find(".git", { path = start, upward = true })[1]
+              return git and vim.fs.dirname(git) or vim.loop.cwd()
+            end
+
+            vim.api.nvim_create_autocmd({ "BufWritePost", "BufEnter", "InsertLeave" }, {
+              callback = function()
+                lint.try_lint()
+              end,
+            })
+          end,
+        }
+      `}</Code>
+
+      <H>Formatter</H>
+
+      <ul>
+        <li>
+          Lint plugin for NeoVim <code>conform</code>
+        </li>
+        <li>
+          Add file <code>~/.config/nvim/lua/plugins/conform.lua</code>
+        </li>
+      </ul>
+
+      <Code block lua>{`
+        return {
+          "stevearc/conform.nvim",
+          opts = {
+            formatters_by_ft = {
+              javascript = { "prettier" },
+              javascriptreact = { "prettier" },
+              typescript = { "prettier" },
+              typescriptreact = { "prettier" },
+              json = { "prettier" },
+              css = { "prettier" },
+              html = { "prettier" },
+              yaml = { "prettier" },
+              markdown = { "prettier" },
+              -- add more filetypes if needed
+            },
+          },
+        }
+      `}</Code>
     </>
   )
 }

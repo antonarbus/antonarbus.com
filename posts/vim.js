@@ -7,6 +7,17 @@ const postObj = {
   desc: 'vim text editor',
   body: (
     <>
+      <H>LazyVim</H>
+
+      <ul>
+        <li>
+          Notes are based on this resource
+          <Lnk path="https://lazyvim-ambitious-devs.phillips.codes/course/chapter-1/">
+            https://lazyvim-ambitious-devs.phillips.codes/course/chapter-1/
+          </Lnk>
+        </li>
+      </ul>
+
       <H>Tutor</H>
 
       <ul>
@@ -99,8 +110,8 @@ const postObj = {
           <kbd>V</kbd> line text selection in Visual mode
         </li>
         <li>
-          <kbd>C-v</kbd> block vertical text selection (handy for csv data), <kbd>$</kbd> - expands
-          the selection to the longest line
+          <kbd>Ctrl+v</kbd> block vertical text selection (handy for csv data), <kbd>$</kbd> -
+          expands the selection to the longest line
         </li>
         <li>Or just click and drag mouse</li>
         <li>
@@ -170,10 +181,10 @@ const postObj = {
           <kbd>{'"'}</kbd> open register list
         </li>
         <li>
-          <kbd>"ayy</kbd> copy line into named <code>a</code> register
+          <kbd>" a y y</kbd> copy line into named <code>a</code> register
         </li>
         <li>
-          <kbd>"ap</kbd> paste from the <code>a</code> register
+          <kbd>" a p</kbd> paste from the <code>a</code> register
         </li>
         <li>you may also delete and replace into the register</li>
         <li>adding again to the same named register replaces the content</li>
@@ -185,9 +196,7 @@ const postObj = {
           System clipboard is synched with <code>+</code> and <code>*</code> registers
         </li>
         <li>
-          <kbd>Space</kbd>
-          <kbd>s</kbd>
-          <kbd>"</kbd> show all registers and add content to <code>+</code> register with{' '}
+          <kbd>Space s "</kbd> show all registers and add content to <code>+</code> register with{' '}
           <kbd>Enter</kbd>
         </li>
         <li>
@@ -195,7 +204,7 @@ const postObj = {
         </li>
         <li>
           last copied test is always available at <code>0</code> register and you may paste it with{' '}
-          <kbd>"0p</kbd>
+          <kbd>" 0 p</kbd>
         </li>
         <li>
           Last typed text goes into <code>.</code> register
@@ -553,6 +562,95 @@ const postObj = {
         </li>
       </ul>
 
+      <H>Go back/forward</H>
+
+      <ul>
+        <li>
+          <kbd>Ctrl+o/i</kbd> go back/forward
+        </li>
+      </ul>
+
+      <H>Go to definition</H>
+
+      <ul>
+        <li>
+          <kbd>gd</kbd> go to definition
+        </li>
+      </ul>
+
+      <H>Go to reference</H>
+
+      <ul>
+        <li>
+          <kbd>gr</kbd> go to reference, shows the list of all files which uses the variable
+        </li>
+        <li>
+          <kbd>Space s R</kbd> resumes your previous list
+        </li>
+        <li>
+          <kbd>Alt+t</kbd> open all results in Trouble
+        </li>
+      </ul>
+
+      <H>Go to symbol</H>
+
+      <ul>
+        <li>
+          <kbd>Space s s</kbd> show list of symbols in file
+        </li>
+        <li>
+          <kbd>Space c s</kbd> same, but another view, on the right side
+        </li>
+        <li>
+          <kbd>Space s S</kbd> show list of symbols in project
+        </li>
+      </ul>
+
+      <H>Show context info</H>
+
+      <ul>
+        <li>
+          <kbd>K</kbd> show info (for ex. function signature from LSP)
+        </li>
+      </ul>
+
+      <H>Marks</H>
+
+      <ul>
+        <li>
+          <kbd>m a</kbd> mark line with <code>a</code>
+        </li>
+        <li>
+          <kbd>' a</kbd> jump to the mark <code>a</code> within the file
+        </li>
+        <li>
+          <kbd>m A</kbd> mark line globally with <code>A</code>, can jump to it from any file
+        </li>
+        <li>
+          <kbd>'</kbd> open list with marks
+        </li>
+        <li>
+          <kbd>Space s m</kbd> same, but different view with search
+        </li>
+        <li>
+          <code>:delmarks a</code> delete the mark <code>a</code>
+        </li>
+        <li>
+          <code>:delm a</code> same, delete the mark <code>a</code>
+        </li>
+        <li>
+          <kbd>' .</kbd> jumps to the last place I inserted or changed text
+        </li>
+      </ul>
+
+      <H>Jump to last edited text</H>
+
+      <ul>
+        <li>
+          <kbd>' .</kbd> jumps to the last place I inserted or changed text
+        </li>
+      </ul>
+
       <H>Find</H>
 
       <ul>
@@ -595,8 +693,8 @@ const postObj = {
       <ul>
         <li>May seek inside text object where your cursor is</li>
         <li>
-          <kbd>vS</kbd>/<kbd>dS</kbd>/<kbd>cS</kbd>/<kbd>yS</kbd> select/delete/change/copy & enter
-          into SEEK mode
+          <kbd>v S</kbd>/<kbd>d S</kbd>/<kbd>c S</kbd>/<kbd>y S</kbd> select/delete/change/copy &
+          enter into SEEK mode
         </li>
         <li>Green labels will surround the text part, a,b,c,d,e... from the inner to outer</li>
       </ul>
@@ -608,7 +706,7 @@ const postObj = {
           May for ex copy (yank) something from remote place <kbd>r</kbd>
         </li>
         <li>
-          <kbd>yr</kbd> (enters into Seek mode) + <code>phrase</code> + <kbd>ib</kbd> (inside
+          <kbd>y r</kbd> (enters into Seek mode) + <code>phrase</code> + <kbd>i b</kbd> (inside
           brackets)
         </li>
         <li>Cursor comes back to the initial place</li>
@@ -620,10 +718,10 @@ const postObj = {
         <li>
           Copy something from remote object with <kbd>R</kbd> (capital)
         </li>
+        <li>Cursor comes back to original position</li>
         <li>
-          <kbd>yR</kbd> (enters into Seek mode) + <code>phrase</code> + <code>a</code> (tag)
+          <kbd>y R</kbd> (enters into Seek mode) + <code>phrase</code> + <code>a</code> (tag)
         </li>
-        <li>Cursor does not come back</li>
         <li>
           Personally did not understand why it is helpful, better to jump to place, select & yank
         </li>
@@ -891,11 +989,12 @@ const postObj = {
         </li>
       </ul>
 
-      <H>Search</H>
+      <H>Search in file</H>
 
       <ul>
         <li>
-          <kbd>/</kbd> phrase search prompt, then <kbd>Enter</kbd>
+          <kbd>/</kbd> phrase search prompt, then <kbd>Enter</kbd> to jump to the first found match,
+          or <kbd>Esc</kbd> to cancel it
         </li>
         <li>
           <kbd>?</kbd> phrase search prompt in backwards direction
@@ -911,6 +1010,57 @@ const postObj = {
         </li>
         <li>
           <kbd>Ctrl+i</kbd> go back to newer position
+        </li>
+        <li>Search is case insensitive until you put uppercase letter</li>
+        <li>
+          Include <code>\C</code> in your search phrase to make search case sensitive when you are
+          interested only in lower cased results for ex.
+        </li>
+      </ul>
+
+      <H>Regexp in search</H>
+
+      <ul>
+        <li>RegExp in Vim is strange</li>
+        <li>
+          <code>.</code> any char, <code>load..g</code> finds <code>loading</code>
+        </li>
+        <li>
+          <code>\.</code> searches for <code>.</code> dot char
+        </li>
+        <li>
+          <code>\S</code> not whitespace char
+        </li>
+        <li>
+          <code>.*</code> match any string
+        </li>
+        <li>
+          <code>\S\+</code> match any word without spaces
+        </li>
+        <li>
+          <code>\=</code> optional, for ex <code>https\=:</code> will match <code>http</code> &{' '}
+          <code>https</code>
+        </li>
+        <li>
+          <code>\V</code> disable regexp for following search string
+        </li>
+      </ul>
+
+      <H>Search in project</H>
+
+      <ul>
+        <li>Telescope and RipGrep to be installed</li>
+        <li>
+          Maybe need to enable Telescope plugin via <code>:LazyExtras</code>
+        </li>
+        <li>
+          <code>brew install ripgrep</code> install, it was not installed for me
+        </li>
+        <li>
+          <kbd>Space /</kbd> open search prompt
+        </li>
+        <li>
+          <kbd>Space s g</kbd> same
         </li>
       </ul>
 

@@ -1046,6 +1046,46 @@ const postObj = {
         </li>
       </ul>
 
+      <H>Search and replace in file with Nvim-rip-substitute</H>
+
+      <ul>
+        <li>It is the plugin which has familiar dialog and easy to use</li>
+        <li>
+          Create <code>~/.config/nvim/lua/plugins/rip-substitute.lua</code> and restart NeoVim
+          <Code block jsx>{`
+            return {
+              "chrisgrieser/nvim-rip-substitute",
+              keys = {
+                {
+                  "g/",
+                  function()
+                    require("rip-substitute").sub()
+                  end,
+                  mode = { "n", "x" },
+                  desc = "Rip Substitute",
+                },
+              },
+            }
+          `}</Code>
+        </li>
+        <li>
+          <kbd>g /</kbd> open dialog in the lower right corner{' '}
+        </li>
+        <li>
+          First line is for search, second line is for replace, use <kbd>j/k</kbd> to jump between
+          them
+        </li>
+        <li>
+          <kbd>Enter</kbd> in Normal mode or the <span>Ctrl+Enter</span> in Insert mode to perform
+          the subtitution
+        </li>
+        <li>Use up/down arrows in Norma mode to select a previous substitution</li>
+        <li>
+          It supports RegExp by default <code>{'ba(r|z|n)'}</code> will find <code>bar</code>,{' '}
+          <code>baz</code>, <code>ban</code>
+        </li>
+      </ul>
+
       <H>Search in project</H>
 
       <ul>
@@ -1064,23 +1104,93 @@ const postObj = {
         </li>
       </ul>
 
-      <H>Find and replace</H>
+      <H>Find and replace in file Vim way</H>
 
       <ul>
         <li>
-          <Code>:s/old/new/</Code> replaces "old" with "new" occurrence in line
+          <Code>:substitute</Code> / <Code>:s</Code> enter into substitute mode
         </li>
         <li>
-          <Code>:s/old/new/g</Code> replaces "old" with "new" all occurrences in line
+          <Code>:s/old/new</Code> replaces "old" with "new" first occurrence in line where your
+          cursor is
         </li>
         <li>
-          <Code>:1,5s/old/new/g</Code> replaces "old" with "new" all occurrences in 1...5 lines
+          <Code>:.s/old/new</Code> same, but specifically indicate that operation is done on the
+          same line, can be ommited as it is the default behaivor
         </li>
         <li>
-          <Code>:%s/old/new/g</Code> replaces "old" with "new" in file
+          <Code>:s/old/new/g</Code> replaces "old" with "new" all occurrences in line where your
+          cursor is
         </li>
         <li>
-          <Code>:%s/old/new/gc</Code> replaces "old" with "new" in file with prompt
+          <Code>:%s/old/new</Code> replaces first occurrences in every line of "old" with "new" in
+          whole file
+        </li>
+        <li>
+          <Code>:%s/old/new/g</Code> same, but all occurrences
+        </li>
+        <li>
+          <Code>:5s/old/new/g</Code> replaces "old" with "new" at line 5
+        </li>
+        <li>
+          <Code>5G</Code> maybe it is easier to jump to line 5 and then make replacement
+        </li>
+        <li>
+          <Code>:2,5s/old/new/g</Code> replaces "old" with "new" all occurrences in 2...5 lines
+        </li>
+        <li>
+          <Code>:,50s/old/new/g</Code> replaces "old" with "new" all occurrences from current line
+          to line #50
+        </li>
+        <li>
+          <Code>:,/text/s/old/new/g</Code> replaces "old" with "new" from current line to the first
+          line with <code>text</code> including the line
+        </li>
+        <li>
+          <Code>:%s/old/new/gc</Code> replaces "old" with "new" in file with prompt, useful when you
+          need to skip some replacements
+        </li>
+        <li>
+          <Code>:%s/old/new/gc</Code> <code>c</code> prompt flag, replaces "old" with "new" in file
+          with prompt, useful when you need to skip some replacements
+        </li>
+        <li>
+          <Code>:%s/old/new/gI</Code> <code>I</code> case sensitive flag
+        </li>
+        <li>
+          <Code>:s//new</Code> if you omit search phrase, it replaces whatever pattern you last
+          searched with "new"
+        </li>
+        <li>
+          <Code>:s</Code> without any pattern or replacement, it will repeat the last pattern and
+          replacement you did, but it will not use any previous flags, so most useful would be{' '}
+          <code>:%sg</code> which means “repeat the last substitution on the entire file, globally.”
+        </li>
+      </ul>
+
+      <H>Find and replace project wise</H>
+
+      <ul>
+        <li>
+          <kbd>Space s r</kbd> open 'ripgrep' dialog
+        </li>
+        <li>
+          <kbd>j</kbd>/<kbd>k</kbd> jump between fields
+        </li>
+        <li>As you type you get instant live update with proposed changes</li>
+        <li>
+          To accept changes you need to go back into normal mode with <kbd>Esc</kbd> and then{' '}
+          <code>\r</code> to apply replacement
+        </li>
+        <li>
+          You may modify replacement in preview window or even skip some replacements by deleting
+          the preview line by <kbd>dd</kbd>. After that <kbd>\s</kbd> to sync changes.
+        </li>
+        <li>
+          Press <kbd>Enter</kbd> over like in preview to jump to a source file
+        </li>
+        <li>
+          <kbd>\t</kbd> open search history and <kbd>Enter</kbd> to reuse it
         </li>
       </ul>
 

@@ -98,6 +98,12 @@ const postObj = {
         <li>
           <kbd>Esc</kbd> normal mode (navigate and manipulate text)
         </li>
+        <li>
+          <code>Ctrl+o</code> go back into Normal mode for one operation only
+        </li>
+        <li>
+          <code>Ctrl+u</code> undo for current line in Insert mode
+        </li>
       </ul>
 
       <H>Select</H>
@@ -200,7 +206,7 @@ const postObj = {
           <kbd>Enter</kbd>
         </li>
         <li>
-          <kbd>Ctrl+r</kbd> show same menu in Insert mode
+          <kbd>Ctrl+r</kbd> show same registers menu in Insert mode
         </li>
         <li>
           last copied test is always available at <code>0</code> register and you may paste it with{' '}
@@ -655,16 +661,15 @@ const postObj = {
 
       <ul>
         <li>
-          <kbd>f</kbd> puts you in Find mode
+          <kbd>fx</kbd> puts you in Find mode and jumps to the nearest <code>x</code>
         </li>
-        <li>type a char and cursor jumps to the next typed char</li>
         <li>
-          <kbd>f</kbd> jumps to the next <code>x</code>
+          <kbd>;</kbd>/<kbd>,</kbd> jumps to the next/prev one
         </li>
         <li>
           <kbd>3fx</kbd> jumps to the 3rd <code>x</code> from you
         </li>
-        <kbd>F</kbd>/<kbd>,</kbd> same, but backwards
+        <kbd>F</kbd> searches backwards
       </ul>
 
       <H>To</H>
@@ -1746,6 +1751,124 @@ const postObj = {
           },
         }
       `}</Code>
+
+      <H>Commenting</H>
+
+      <ul>
+        <li>
+          <kbd>gcc</kbd> comment/uncomment line
+        </li>
+        <li>
+          <kbd>gc5j</kbd> comment 5 lines below
+        </li>
+        <li>
+          <kbd>5gcc</kbd> same, comment 5 lines below, bit easier
+        </li>
+        <li>
+          <kbd>gcap</kbd> comment out an entire block separated by newlines
+        </li>
+        <li>
+          <kbd>gcSh</kbd> comment out the function surrounded by the <code>h</code> labels after the{' '}
+          <kbd>S</kbd> is invoked
+        </li>
+        <li>
+          <kbd>V5jgc</kbd> commenting can be applied on visual mode, select 5 lines and then comment
+          them
+        </li>
+        <li>
+          <kbd>gco</kbd>/<kbd>gcO</kbd> add comment below/above
+        </li>
+      </ul>
+
+      <H>Indent</H>
+
+      <ul>
+        <li>
+          <kbd>{'>>'}</kbd>/<kbd>{'<<'}</kbd> indent the line where cursor is
+        </li>
+        <li>
+          Select text and <kbd>{'>'}</kbd>/<kbd>{'<'}</kbd> to indent
+        </li>
+        <li>Indentation is always applied automatically with formatting on save</li>
+        <li>
+          <code>gqag</code> format the entire file
+        </li>
+        <li>
+          Also may select text and hit <kbd>=</kbd> to apply indentation
+        </li>
+        <li>
+          In Insert mode <code>Ctrl+t/d</code> to indent (“add tab” and “dedent”)
+        </li>
+      </ul>
+
+      <H>Wrap</H>
+
+      <ul>
+        <li>
+          <kbd>gww</kbd> wrap line to 80 chars
+        </li>
+        <li>
+          <kbd>gwip</kbd> wrap paragraph
+        </li>
+        <li>
+          <kbd>gwig</kbd> wrap file
+        </li>
+        <li>
+          <code>{':set textwidth=<number>'}</code> set wrap width
+        </li>
+      </ul>
+
+      <H>Spell check</H>
+
+      <ul>
+        <li>
+          <Code>Space us</Code> enable/disable spell check
+        </li>
+        <li>
+          <code>{'[s'}</code>/<code>{']s'}</code> next/prev misspelled word
+        </li>
+        <li>
+          <code>z=</code> show suggestion
+        </li>
+      </ul>
+
+      <H>Snippets & Abbreviations</H>
+
+      <ul>
+        <li>
+          <Lnk path="https://lazyvim-ambitious-devs.phillips.codes/course/chapter-14/#_abbreviations_and_filetype_configuration">
+            check later...
+          </Lnk>
+        </li>
+      </ul>
+
+      <H>Terminal in vim</H>
+
+      <ul>
+        <li>
+          <kbd>Ctrl+/</kbd> open Vim's terminal (Vim has it's own terminal)
+        </li>
+        <li>
+          <code>Esc</code> exit from Insert to Normal mode (that is how zsh is configured)
+        </li>
+        <li>
+          <kbd>a</kbd>/<kbd>i</kbd> go into Insert mode
+        </li>
+      </ul>
+
+      <H>Git in</H>
+
+      <ul>
+        <li>
+          <kbd>Space gs</kbd> opens list of changed files
+        </li>
+        <li>
+          <kbd>Space gc</kbd> opens list of commits
+        </li>
+        <li>
+          <kbd>Space ghS</kbd> stage current file
+        </li>
+      </ul>
     </>
   )
 }

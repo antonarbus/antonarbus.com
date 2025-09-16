@@ -304,10 +304,10 @@ const postObj = {
           <kbd>U</kbd> undo all for the line
         </li>
         <li>
-          <kbd>C-r</kbd> redo
+          <kbd>Ctrl+r</kbd> redo
         </li>
         <li>
-          <kbd>C-u</kbd> undo in Insert mode
+          <kbd>Ctrl+u</kbd> undo in Insert mode
         </li>
       </ul>
 
@@ -1494,38 +1494,36 @@ const postObj = {
           <kbd>{'[b'}</kbd>/<kbd>{']b'}</kbd> same, switch buffers
         </li>
         <li>
-          <kbd>Space</kbd> <kbd>,</kbd> open current buffer list
+          <kbd>Space ,</kbd> open current buffer list
         </li>
         <li>
           <kbd>Ctrl+x</kbd> close buffer from the list
         </li>
         <li>
-          <kbd>Space</kbd> <kbd>`</kbd> switch to previous buffer
+          <kbd>Space `</kbd> switch to previous buffer
         </li>
         <li>
-          <kbd>Space</kbd> <kbd>bb</kbd> same, switch to previous buffer
+          <kbd>Space bb</kbd> same, switch to previous buffer
         </li>
         <li>
-          <kbd>Space</kbd> <kbd>bd</kbd> close (delete) buffer
+          <kbd>Space bd</kbd> close (delete) buffer
         </li>
         <li>
-          <kbd>Space</kbd> <kbd>bD</kbd> close (delete) buffer & window split
+          <kbd>Space bD</kbd> close (delete) buffer & window split
         </li>
         <li>
-          <kbd>Space</kbd> <kbd>bp</kbd> pin a buffer
+          <kbd>Space bp</kbd> pin a buffer
         </li>
         <li>
           <kbd>Space</kbd> <kbd>bl</kbd>/<kbd>br</kbd>/<kbd>bo</kbd>/<kbd>bP</kbd> close to
           left/right/others/pinned buffers split
         </li>
         <li>
-          <kbd>Space</kbd>
-          <kbd>.</kbd> open scratch buffer where you may write notes. Scratch buffers are tied to
-          the current working directory.
+          <kbd>Space .</kbd> open scratch buffer where you may write notes. Scratch buffers are tied
+          to the current working directory.
         </li>
         <li>
-          <kbd>Space</kbd>
-          <kbd>S</kbd> open scratch buffer list
+          <kbd>Space S</kbd> open scratch buffer list
         </li>
       </ul>
 
@@ -1879,6 +1877,35 @@ const postObj = {
         </li>
         <li>
           <kbd>Space ghu</kbd> unstage hunk
+        </li>
+        <li>
+          <kbd>Space ghb</kbd> git blame, check commit for the active line
+        </li>
+        <li>
+          <kbd>Space ghp</kbd> preview the hunk, what has been changed
+        </li>
+        <li>
+          <kbd>Space ghd</kbd> show diff between the current file (right) and the staging index file
+          (left)
+        </li>
+        <li>
+          <kbd>Space ghD</kbd> show diff between the current file and the last commit
+        </li>
+        <li>
+          <code>:diffoff</code> disable diff mode, then <kbd>Space bd</kbd> to close the buffer
+        </li>
+        <li>
+          <code>brew install lazygit</code> install and learn LazyGit, useful plugin to work with
+          Git
+        </li>
+        <li>
+          <kbd>Space gg</kbd> open LazyGit (after installation)
+        </li>
+        <li>
+          <Lnk path="https://lazyvim-ambitious-devs.phillips.codes/course/chapter-15/#_editing_diffs">
+            Continue
+          </Lnk>{' '}
+          reading about Git...
         </li>
       </ul>
     </>

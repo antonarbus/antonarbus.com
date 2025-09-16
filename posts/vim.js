@@ -1443,6 +1443,10 @@ const postObj = {
           <Lnk path="https://www.lazyvim.org/installation">LazyVim </Lnk> is opinionated popular
           Neovim setup
         </li>
+        <li>
+          <Lnk path="https://www.lazyvim.org/keymaps">LazyVim </Lnk>
+          keybindings
+        </li>
       </ul>
 
       <H>Font</H>

@@ -1866,7 +1866,19 @@ const postObj = {
           <kbd>Space gc</kbd> opens list of commits
         </li>
         <li>
-          <kbd>Space ghS</kbd> stage current file
+          <kbd>Space ghs</kbd> stage hunk
+        </li>
+        <li>
+          <kbd>Space ghS</kbd> stage file
+        </li>
+        <li>
+          <kbd>Space ghr</kbd> reset hunk
+        </li>
+        <li>
+          <kbd>Space ghR</kbd> reset file
+        </li>
+        <li>
+          <kbd>Space ghu</kbd> unstage hunk
         </li>
       </ul>
     </>

@@ -46,7 +46,7 @@ const postObj = {
           <kbd>b</kbd> jump back to the start of a word
         </li>
         <li>
-          <kbd>ge</kbd> jump back to the end of of a word
+          <kbd>ge</kbd> jump back to the end of a word
         </li>
         <li>
           <kbd>$</kbd> jump forward to the end of a line
@@ -55,7 +55,7 @@ const postObj = {
           <kbd>0</kbd> jump backwards to the start of a line
         </li>
         <li>
-          <kbd>^</kbd> same as <kbd>0</kbd>, but does not take white spaces into account
+          <kbd>^</kbd> jump backwards to the first non-white char
         </li>
         <li>
           <kbd>W</kbd> <kbd>E</kbd> <kbd>B</kbd> <kbd>gE</kbd> works the same, but splits words by
@@ -67,7 +67,7 @@ const postObj = {
 
       <ul>
         <li>
-          <kbd>3w</kbd> jump forward to the end of a word 3 times
+          <kbd>3w</kbd> jump forward to the start of a word 3 times
         </li>
       </ul>
 
@@ -93,7 +93,7 @@ const postObj = {
           <kbd>O</kbd> add line above and put caret
         </li>
         <li>
-          <kbd>ge</kbd> go to the last insertion point
+          <kbd>gi</kbd> go to the last insertion point
         </li>
         <li>
           <kbd>Esc</kbd> normal mode (navigate and manipulate text)
@@ -166,16 +166,16 @@ const postObj = {
         </li>
         <li>Put cursor inside some code.</li>
         <li>
-          Type: <kbd>gnn</kbd> → selection starts.
+          Type: <kbd>gnn</kbd> selection starts.
         </li>
         <li>
-          Then: <kbd>grn</kbd> → expand outward.
+          Then: <kbd>grn</kbd> expand outward.
         </li>
         <li>
-          Again: <kbd>grn</kbd> → expand more.
+          Again: <kbd>grn</kbd> expand more.
         </li>
         <li>
-          <kbd>grm</kbd> → shrink back.
+          <kbd>grm</kbd> shrink back.
         </li>
       </ul>
 
@@ -187,10 +187,10 @@ const postObj = {
           <kbd>{'"'}</kbd> open register list
         </li>
         <li>
-          <kbd>" a y y</kbd> copy line into named <code>a</code> register
+          <kbd>"ayy</kbd> copy line into named <code>a</code> register
         </li>
         <li>
-          <kbd>" a p</kbd> paste from the <code>a</code> register
+          <kbd>"ap</kbd> paste from the <code>a</code> register
         </li>
         <li>you may also delete and replace into the register</li>
         <li>adding again to the same named register replaces the content</li>
@@ -202,15 +202,15 @@ const postObj = {
           System clipboard is synched with <code>+</code> and <code>*</code> registers
         </li>
         <li>
-          <kbd>Space s "</kbd> show all registers and add content to <code>+</code> register with{' '}
+          <kbd>Space s"</kbd> show all registers and add content to <code>+</code> register with{' '}
           <kbd>Enter</kbd>
         </li>
         <li>
           <kbd>Ctrl+r</kbd> show same registers menu in Insert mode
         </li>
         <li>
-          last copied test is always available at <code>0</code> register and you may paste it with{' '}
-          <kbd>" 0 p</kbd>
+          last copied text is always available at <code>0</code> register and you may paste it with{' '}
+          <kbd>"0p</kbd>
         </li>
         <li>
           Last typed text goes into <code>.</code> register
@@ -290,7 +290,10 @@ const postObj = {
           <kbd>{'[p'}</kbd>/<kbd>{']p'}</kbd> pastes indented above/below current line
         </li>
         <li>
-          <kbd>{'>p/<p/>P/<P'}</kbd> put after/before and indent right/left
+          <kbd>
+            {'>p'}/{'<p'}/{'P'}/{'<P'}
+          </kbd>{' '}
+          put after/before and indent right/left
         </li>
       </ul>
 
@@ -386,10 +389,10 @@ const postObj = {
 
       <ul>
         <li>
-          <kbd>j</kbd> up
+          <kbd>j</kbd> down
         </li>
         <li>
-          <kbd>k</kbd> down
+          <kbd>k</kbd> up
         </li>
         <li>
           <kbd>h</kbd> left
@@ -545,8 +548,8 @@ const postObj = {
           <kbd>{'[w'}</kbd>/<kbd>{']w'}</kbd> jumps to prev/next warning
         </li>
         <li>
-          <kbd>{'[s'}</kbd>/<kbd>{']s'}</kbd> jumps to prev/next spell issue (<Code>Space+us</Code>{' '}
-          to enable spell check)
+          <kbd>{'[s'}</kbd>/<kbd>{']s'}</kbd> jumps to prev/next spell issue (<kbd>Space us</kbd> to
+          enable spell check)
         </li>
         <li>
           <kbd>{'[d'}</kbd>/<kbd>{']d'}</kbd> jumps to prev/next diagnostic message
@@ -591,7 +594,7 @@ const postObj = {
           <kbd>gr</kbd> go to reference, shows the list of all files which uses the variable
         </li>
         <li>
-          <kbd>Space s R</kbd> resumes your previous list
+          <kbd>Space sR</kbd> resumes your previous list
         </li>
         <li>
           <kbd>Alt+t</kbd> open all results in Trouble
@@ -602,13 +605,13 @@ const postObj = {
 
       <ul>
         <li>
-          <kbd>Space s s</kbd> show list of symbols in file
+          <kbd>Space ss</kbd> show list of symbols in file
         </li>
         <li>
-          <kbd>Space c s</kbd> same, but another view, on the right side
+          <kbd>Space cs</kbd> same, but another view, on the right side
         </li>
         <li>
-          <kbd>Space s S</kbd> show list of symbols in project
+          <kbd>Space sS</kbd> show list of symbols in project
         </li>
       </ul>
 
@@ -624,19 +627,19 @@ const postObj = {
 
       <ul>
         <li>
-          <kbd>m a</kbd> mark line with <code>a</code>
+          <kbd>ma</kbd> mark line with <code>a</code>
         </li>
         <li>
-          <kbd>' a</kbd> jump to the mark <code>a</code> within the file
+          <kbd>'a</kbd> jump to the mark <code>a</code> within the file
         </li>
         <li>
-          <kbd>m A</kbd> mark line globally with <code>A</code>, can jump to it from any file
+          <kbd>mA</kbd> mark line globally with <code>A</code>, can jump to it from any file
         </li>
         <li>
           <kbd>'</kbd> open list with marks
         </li>
         <li>
-          <kbd>Space s m</kbd> same, but different view with search
+          <kbd>Space sm</kbd> same, but different view with search
         </li>
         <li>
           <code>:delmarks a</code> delete the mark <code>a</code>
@@ -645,7 +648,7 @@ const postObj = {
           <code>:delm a</code> same, delete the mark <code>a</code>
         </li>
         <li>
-          <kbd>' .</kbd> jumps to the last place I inserted or changed text
+          <kbd>'.</kbd> jumps to the last place I inserted or changed text
         </li>
       </ul>
 
@@ -653,7 +656,7 @@ const postObj = {
 
       <ul>
         <li>
-          <kbd>' .</kbd> jumps to the last place I inserted or changed text
+          <kbd>'.</kbd> jumps to the last place I inserted or changed text
         </li>
       </ul>
 
@@ -669,7 +672,9 @@ const postObj = {
         <li>
           <kbd>3fx</kbd> jumps to the 3rd <code>x</code> from you
         </li>
-        <kbd>F</kbd> searches backwards
+        <li>
+          <kbd>F</kbd> searches backwards
+        </li>
       </ul>
 
       <H>To</H>
@@ -698,8 +703,8 @@ const postObj = {
       <ul>
         <li>May seek inside text object where your cursor is</li>
         <li>
-          <kbd>v S</kbd>/<kbd>d S</kbd>/<kbd>c S</kbd>/<kbd>y S</kbd> select/delete/change/copy &
-          enter into SEEK mode
+          <kbd>vS</kbd>/<kbd>dS</kbd>/<kbd>cS</kbd>/<kbd>yS</kbd> select/delete/change/copy & enter
+          into SEEK mode
         </li>
         <li>Green labels will surround the text part, a,b,c,d,e... from the inner to outer</li>
       </ul>
@@ -711,7 +716,7 @@ const postObj = {
           May for ex copy (yank) something from remote place <kbd>r</kbd>
         </li>
         <li>
-          <kbd>y r</kbd> (enters into Seek mode) + <code>phrase</code> + <kbd>i b</kbd> (inside
+          <kbd>yr</kbd> (enters into Seek mode) + <code>phrase</code> + <kbd>ib</kbd> (inside
           brackets)
         </li>
         <li>Cursor comes back to the initial place</li>
@@ -725,7 +730,7 @@ const postObj = {
         </li>
         <li>Cursor comes back to original position</li>
         <li>
-          <kbd>y R</kbd> (enters into Seek mode) + <code>phrase</code> + <code>a</code> (tag)
+          <kbd>yR</kbd> (enters into Seek mode) + <code>phrase</code> + <code>a</code> (tag)
         </li>
         <li>
           Personally did not understand why it is helpful, better to jump to place, select & yank
@@ -806,7 +811,7 @@ const postObj = {
           <kbd>Ctrl+e/y</kbd> scroll down/up 1 line
         </li>
         <li>
-          <kbd>z</kbd> <kbd>t/b</kbd>scroll up/down to move active line almost to the top/bottom
+          <kbd>z</kbd> <kbd>t/b</kbd> scroll up/down to move active line almost to the top/bottom
         </li>
         <li>
           <kbd>zz</kbd> scroll to move active line to the middle
@@ -1074,7 +1079,7 @@ const postObj = {
           `}</Code>
         </li>
         <li>
-          <kbd>g /</kbd> open dialog in the lower right corner{' '}
+          <kbd>g/</kbd> open dialog in the lower right corner
         </li>
         <li>
           First line is for search, second line is for replace, use <kbd>j/k</kbd> to jump between
@@ -1082,7 +1087,7 @@ const postObj = {
         </li>
         <li>
           <kbd>Enter</kbd> in Normal mode or the <span>Ctrl+Enter</span> in Insert mode to perform
-          the subtitution
+          the substitution
         </li>
         <li>Use up/down arrows in Norma mode to select a previous substitution</li>
         <li>
@@ -1105,7 +1110,7 @@ const postObj = {
           <kbd>Space /</kbd> open search prompt
         </li>
         <li>
-          <kbd>Space s g</kbd> same
+          <kbd>Space sg</kbd> same
         </li>
       </ul>
 
@@ -1177,7 +1182,7 @@ const postObj = {
 
       <ul>
         <li>
-          <kbd>Space s r</kbd> open 'ripgrep' dialog
+          <kbd>Space sr</kbd> open 'ripgrep' dialog
         </li>
         <li>
           <kbd>j</kbd>/<kbd>k</kbd> jump between fields
@@ -1231,7 +1236,7 @@ const postObj = {
           when you typed <code>nvim</code>
         </li>
         <li>
-          <kbd>Space</kbd> <kbd>fF</kbd> files fuzzy search in (CWD)
+          <kbd>Space fF</kbd> files fuzzy search in (CWD)
         </li>
         <li>
           To check where you are, type <code>:pwd</code> (Print Working Directory)
@@ -1252,10 +1257,10 @@ const postObj = {
           <code>tsconfig.json</code>
         </li>
         <li>
-          <kbd>Space</kbd> <kbd>Space</kbd> files fuzzy search in current project
+          <kbd>Space Space</kbd> files fuzzy search in current project
         </li>
         <li>
-          <kbd>Space</kbd> <kbd>ff</kbd> same
+          <kbd>Space ff</kbd> same
         </li>
         <li>
           Root Directory may be confusing, coz they may change silently. Imagine you are in a
@@ -1290,7 +1295,7 @@ const postObj = {
           <kbd>Enter</kbd> confirm selection
         </li>
         <li>
-          <kbd>Esc</kbd> <kbd>Esc</kbd> exit from search mode
+          <kbd>Esc Esc</kbd> exit from search mode
         </li>
       </ul>
 
@@ -1298,10 +1303,10 @@ const postObj = {
 
       <ul>
         <li>
-          <kbd>Space+e</kbd> open file explorer at Root Directory
+          <kbd>Space e</kbd> open file explorer at Root Directory
         </li>
         <li>
-          <kbd>Space+E</kbd> open file explorer at CWD
+          <kbd>Space E</kbd> open file explorer at CWD
         </li>
         <li>
           <kbd>j</kbd>/<kbd>k</kbd> down/up
@@ -1322,7 +1327,7 @@ const postObj = {
           <kbd>Tab</kbd> multiple select
         </li>
         <li>
-          <kbd>Ctrl</kbd> <kbd>f/b</kbd> scroll down/up
+          <kbd>Ctrl+f/b</kbd> scroll down/up
         </li>
         <li>
           <kbd>i</kbd> jump to search field in Insert mode to search for a specific file
@@ -1375,12 +1380,10 @@ const postObj = {
 
       <ul>
         <li>
-          <kbd>Space</kbd>
-          <kbd>fm</kbd> open dir of current file at explorer
+          <kbd>Space fm</kbd> open dir of current file at explorer
         </li>
         <li>
-          <kbd>Space</kbd>
-          <kbd>fM</kbd> open the directory where your terminal was in when you typed{' '}
+          <kbd>Space fM</kbd> open the directory where your terminal was in when you typed{' '}
           <code>nvim</code> (CWD)
         </li>
         <li>
@@ -1519,8 +1522,7 @@ const postObj = {
           <kbd>Space bp</kbd> pin a buffer
         </li>
         <li>
-          <kbd>Space</kbd> <kbd>bl</kbd>/<kbd>br</kbd>/<kbd>bo</kbd>/<kbd>bP</kbd> close to
-          left/right/others/pinned buffers split
+          <kbd>Space bl/br/bo/bP</kbd> close to left/right/others/pinned buffers split
         </li>
         <li>
           <kbd>Space .</kbd> open scratch buffer where you may write notes. Scratch buffers are tied
@@ -1549,27 +1551,27 @@ const postObj = {
           <kbd>Space w h/j/k/l</kbd> same, move between windows
         </li>
         <li>
-          <kbd>Space w q</kbd> close window
+          <kbd>Space wq</kbd> close window
         </li>
         <li>
-          <kbd>Space w d</kbd> same, close window
+          <kbd>Space wd</kbd> same, close window
         </li>
         <li>
-          <kbd>Space w o</kbd> close other windows
+          <kbd>Space wo</kbd> close other windows
         </li>
         <li>Resize split with mouse by dragging middle bar</li>
         <li>
           <kbd>{'Space w </>/+/-'}</kbd> same, resize split window
         </li>
         <li>
-          <kbd>Space w =</kbd> reset split windows to equal size
+          <kbd>Space w=</kbd> reset split windows to equal size
         </li>
         <li>
           <kbd>Space w Space</kbd> go into Hydra mode, it will keep the menu open, now you may keep
           pressing <kbd>{'>>>>>'}</kbd> to continuously resize
         </li>
         <li>
-          <kbd>Space u z</kbd> go into Zen mode, center the window and dim all around
+          <kbd>Space uz</kbd> go into Zen mode, center the window and dim all around
         </li>
       </ul>
 
@@ -1858,7 +1860,7 @@ const postObj = {
         </li>
       </ul>
 
-      <H>Git in</H>
+      <H>Git integration</H>
 
       <ul>
         <li>

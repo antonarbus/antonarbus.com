@@ -7,13 +7,13 @@ const postObj = {
   desc: 'key bindings on mac and windows',
   body: (
     <>
-      <H>Karabiner-Elements app for Mac</H>
+      <H>Karabiner-Elements</H>
 
       <ul>
         <li>
           Download and install{' '}
           <Lnk path="https://karabiner-elements.pqrs.org">Karabiner-Elements</Lnk> key binding app
-          for Mac{' '}
+          for Mac
         </li>
         <li>
           Modify its configuration json file at <Code>code ~/.config/karabiner/karabiner.json</Code>
@@ -25,329 +25,325 @@ const postObj = {
       </ul>
 
       <Code block json>{`
-{
-  "machine_specific": {
-    "krbn-cee609c8-9b7f-430a-b018-9b91e0d62d3e": {
-      "enable_multitouch_extension": true
-    }
-  },
-  "profiles": [
-    {
-      "complex_modifications": {
-        "rules": [
-          {
-            "description": "Play/pause button should only control iTunes.",
-            "manipulators": [
-              {
-                "from": { "key_code": "f8" },
-                "to": [
-                  { "shell_command": "osascript -e 'tell application \\"Music\\" to playpause'" }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "Change caps_lock to HYPER key",
-            "manipulators": [
-              {
-                "from": {
-                  "key_code": "caps_lock",
-                  "modifiers": {
-                    "optional": ["any"]
-                  }
-                },
-                "to": [
-                  {
-                    "key_code": "left_control",
-                    "modifiers": ["left_command", "left_option"]
-                  }
-                ],
-                "to_if_alone": [
-                  {
-                    "key_code": "escape"
-                  }
-                ],
-                "type": "basic",
-                "conditions": [
-                  {
-                    "type": "frontmost_application_unless",
-                    "bundle_identifiers": [
-                      "^org.vim.MacVim",
-                      "^org.neovim.Neovim",
-                      "^com.apple.Terminal",
-                      "^com.googlecode.iterm2",
-                      "^org.alacritty",
-                      "^net.kovidgoyal.kitty",
-                      "^com.jetbrains.*",
-                      "^com.tinyapp.VimR"
-                    ]
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "description": "my own shortcuts",
-            "manipulators": [
-              {
-                "type": "basic",
-                "description": "UP (Vim)",
-                "from": {
-                  "key_code": "k",
-                  "modifiers": {
-                    "mandatory": ["left_control", "left_command", "left_option"],
-                    "optional": ["any"]
-                  }
-                },
-                "to": [{ "key_code": "up_arrow" }]
-              },
-              {
-                "type": "basic",
-                "description": "LEFT (Vim)",
-                "from": {
-                  "key_code": "h",
-                  "modifiers": {
-                    "mandatory": ["left_control", "left_command", "left_option"],
-                    "optional": ["any"]
-                  }
-                },
-                "to": [{ "key_code": "left_arrow" }]
-              },
-              {
-                "type": "basic",
-                "description": "DOWN (Vim)",
-                "from": {
-                  "key_code": "j",
-                  "modifiers": {
-                    "mandatory": ["left_control", "left_command", "left_option"],
-                    "optional": ["any"]
-                  }
-                },
-                "to": [{ "key_code": "down_arrow" }]
-              },
-              {
-                "type": "basic",
-                "description": "RIGHT (Vim)",
-                "from": {
-                  "key_code": "l",
-                  "modifiers": {
-                    "mandatory": ["left_control", "left_command", "left_option"],
-                    "optional": ["any"]
-                  }
-                },
-                "to": [{ "key_code": "right_arrow" }]
-              },
-              {
-                "type": "basic",
-                "description": "Delete backspace",
-                "from": {
-                  "key_code": "u",
-                  "modifiers": {
-                    "mandatory": ["left_control", "left_command", "left_option"],
-                    "optional": ["any"]
-                  }
-                },
-                "to": [{ "key_code": "delete_or_backspace" }]
-              },
-              {
-                "type": "basic",
-                "description": "Delete forward",
-                "from": {
-                  "key_code": "o",
-                  "modifiers": {
-                    "mandatory": ["left_control", "left_command", "left_option"],
-                    "optional": ["any"]
-                  }
-                },
-                "to": [{ "key_code": "delete_forward" }]
-              },
-              {
-                "description": "Delete word under cursor (Vim binding)",
-                "type": "basic",
-                "from": {
-                  "key_code": "d",
-                  "modifiers": {
-                    "mandatory": ["left_control", "left_command", "left_option"],
-                    "optional": ["any"]
-                  }
-                },
-                "to": [
-                  { "key_code": "left_arrow", "modifiers": ["option"] },
-                  { "key_code": "right_arrow", "modifiers": ["option", "shift"] },
-                  { "key_code": "delete_or_backspace" }
-                ]
-              },
-              {
-                "description": "Delete word under cursor (own binding)",
-                "type": "basic",
-                "from": {
-                  "key_code": "i",
-                  "modifiers": {
-                    "mandatory": ["left_control", "left_command", "left_option"],
-                    "optional": ["any"]
-                  }
-                },
-                "to": [
-                  { "key_code": "left_arrow", "modifiers": ["option"] },
-                  { "key_code": "right_arrow", "modifiers": ["option", "shift"] },
-                  { "key_code": "delete_or_backspace" }
-                ]
-              },
-              {
-                "description": "ö",
-                "type": "basic",
-                "from": {
-                  "key_code": "semicolon",
-                  "modifiers": {
-                    "mandatory": ["left_control", "left_command", "left_option"]
-                  }
-                },
-                "to": [{ "key_code": "u", "modifiers": ["right_option"] }, { "key_code": "o" }]
-              },
-              {
-                "description": "Ö",
-                "type": "basic",
-                "from": {
-                  "key_code": "semicolon",
-                  "modifiers": {
-                    "mandatory": ["left_control", "left_option", "left_command", "left_shift"]
-                  }
-                },
-                "to": [
-                  { "key_code": "u", "modifiers": ["right_option"] },
-                  { "key_code": "o", "modifiers": ["left_shift"] }
-                ]
-              },
-              {
-                "description": "ä",
-                "type": "basic",
-                "from": {
-                  "key_code": "quote",
-                  "modifiers": {
-                    "mandatory": ["left_control", "left_command", "left_option"]
-                  }
-                },
-                "to": [{ "key_code": "u", "modifiers": ["left_option"] }, { "key_code": "a" }]
-              },
-              {
-                "description": "Ä",
-                "type": "basic",
-                "from": {
-                  "key_code": "quote",
-                  "modifiers": {
-                    "mandatory": ["left_control", "left_command", "left_option", "left_shift"]
-                  }
-                },
-                "to": [
-                  { "key_code": "u", "modifiers": ["left_option"] },
-                  { "key_code": "a", "modifiers": ["left_shift"] }
-                ]
-              },
-              {
-                "type": "basic",
-                "description": "å",
-                "from": {
-                  "key_code": "open_bracket",
-                  "modifiers": {
-                    "mandatory": ["left_control", "left_command", "left_option"]
-                  }
-                },
-                "to": [{ "key_code": "a", "modifiers": ["left_option"] }]
-              },
-              {
-                "type": "basic",
-                "description": "Å",
-                "from": {
-                  "key_code": "open_bracket",
-                  "modifiers": {
-                    "mandatory": ["left_control", "left_command", "left_option", "left_shift"]
-                  }
-                },
-                "to": [{ "key_code": "a", "modifiers": ["left_option", "left_shift"] }]
-              },
-              {
-                "description": "left curly brace",
-                "from": {
-                  "key_code": "8",
-                  "modifiers": { "mandatory": ["right_command"] }
-                },
-                "to": [
-                  {
-                    "key_code": "8",
-                    "modifiers": ["right_shift", "right_option"]
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "description": "right curly brace",
-                "from": {
-                  "key_code": "9",
-                  "modifiers": { "mandatory": ["right_command"] }
-                },
-                "to": [
-                  {
-                    "key_code": "9",
-                    "modifiers": ["right_shift", "right_option"]
-                  }
-                ],
-                "type": "basic"
-              }
-            ]
-          },
-          {
-            "description": "CapsLock to Control (Vim only)",
-            "manipulators": [
-              {
-                "type": "basic",
-                "from": {
-                  "key_code": "caps_lock",
-                  "modifiers": { "optional": ["any"] }
-                },
-                "to": [
-                  {
-                    "key_code": "left_control"
-                  }
-                ],
-                "conditions": [
-                  {
-                    "type": "frontmost_application_if",
-                    "bundle_identifiers": [
-                      "^org.vim.MacVim",
-                      "^org.neovim.Neovim",
-                      "^com.apple.Terminal",
-                      "^com.googlecode.iterm2",
-                      "^org.alacritty",
-                      "^net.kovidgoyal.kitty",
-                      "^com.jetbrains.*",
-                      "^com.tinyapp.VimR"
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      "devices": [
         {
-          "identifiers": {
-            "is_keyboard": true,
-            "product_id": 834,
-            "vendor_id": 1452
+          "machine_specific": {
+            "krbn-cee609c8-9b7f-430a-b018-9b91e0d62d3e": {
+              "enable_multitouch_extension": true
+            }
           },
-          "manipulate_caps_lock_led": false
+          "profiles": [
+            {
+              "complex_modifications": {
+                "rules": [
+                  {
+                    "description": "Play/pause button should only control iTunes.",
+                    "manipulators": [
+                      {
+                        "from": { "key_code": "f8" },
+                        "to": [
+                          { "shell_command": "osascript -e 'tell application \\"Music\\" to playpause'" }
+                        ],
+                        "type": "basic"
+                      }
+                    ]
+                  },
+                  {
+                    "description": "Change caps_lock to HYPER key",
+                    "manipulators": [
+                      {
+                        "from": {
+                          "key_code": "caps_lock",
+                          "modifiers": {
+                            "optional": ["any"]
+                          }
+                        },
+                        "to": [
+                          {
+                            "key_code": "left_control",
+                            "modifiers": ["left_command", "left_option"]
+                          }
+                        ],
+                        "to_if_alone": [
+                          {
+                            "key_code": "escape"
+                          }
+                        ],
+                        "conditions": [
+                          {
+                            "type": "frontmost_application_unless",
+                            "bundle_identifiers": [
+                              "^org.vim.MacVim",
+                              "^org.neovim.Neovim",
+                              "^com.apple.Terminal",
+                              "^com.googlecode.iterm2",
+                              "^org.alacritty",
+                              "^net.kovidgoyal.kitty",
+                              "^com.jetbrains.*",
+                              "^com.tinyapp.VimR"
+                            ]
+                          }
+                        ],
+                        "type": "basic"
+                      }
+                    ]
+                  },
+                  {
+                    "description": "CapsLock to Control (Vim only)",
+                    "manipulators": [
+                      {
+                        "type": "basic",
+                        "from": {
+                          "key_code": "caps_lock",
+                          "modifiers": { "optional": ["any"] }
+                        },
+                        "to": [
+                          {
+                            "key_code": "left_control"
+                          }
+                        ],
+                        "to_if_alone": [
+                          {
+                            "key_code": "escape"
+                          }
+                        ],
+                        "conditions": [
+                          {
+                            "type": "frontmost_application_if",
+                            "bundle_identifiers": [
+                              "^org.vim.MacVim",
+                              "^org.neovim.Neovim",
+                              "^com.apple.Terminal",
+                              "^com.googlecode.iterm2",
+                              "^org.alacritty",
+                              "^net.kovidgoyal.kitty",
+                              "^com.jetbrains.*",
+                              "^com.tinyapp.VimR"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "description": "Custom Anton's shortcuts",
+                    "manipulators": [
+                      {
+                        "description": "UP (Vim)",
+                        "type": "basic",
+                        "from": {
+                          "key_code": "k",
+                          "modifiers": {
+                            "mandatory": ["left_control", "left_command", "left_option"],
+                            "optional": ["any"]
+                          }
+                        },
+                        "to": [{ "key_code": "up_arrow" }]
+                      },
+                      {
+                        "description": "LEFT (Vim)",
+                        "type": "basic",
+                        "from": {
+                          "key_code": "h",
+                          "modifiers": {
+                            "mandatory": ["left_control", "left_command", "left_option"],
+                            "optional": ["any"]
+                          }
+                        },
+                        "to": [{ "key_code": "left_arrow" }]
+                      },
+                      {
+                        "description": "DOWN (Vim)",
+                        "type": "basic",
+                        "from": {
+                          "key_code": "j",
+                          "modifiers": {
+                            "mandatory": ["left_control", "left_command", "left_option"],
+                            "optional": ["any"]
+                          }
+                        },
+                        "to": [{ "key_code": "down_arrow" }]
+                      },
+                      {
+                        "description": "RIGHT (Vim)",
+                        "type": "basic",
+                        "from": {
+                          "key_code": "l",
+                          "modifiers": {
+                            "mandatory": ["left_control", "left_command", "left_option"],
+                            "optional": ["any"]
+                          }
+                        },
+                        "to": [{ "key_code": "right_arrow" }]
+                      },
+                      {
+                        "description": "Delete backspace",
+                        "type": "basic",
+                        "from": {
+                          "key_code": "u",
+                          "modifiers": {
+                            "mandatory": ["left_control", "left_command", "left_option"],
+                            "optional": ["any"]
+                          }
+                        },
+                        "to": [{ "key_code": "delete_or_backspace" }]
+                      },
+                      {
+                        "description": "Delete forward",
+                        "type": "basic",
+                        "from": {
+                          "key_code": "o",
+                          "modifiers": {
+                            "mandatory": ["left_control", "left_command", "left_option"],
+                            "optional": ["any"]
+                          }
+                        },
+                        "to": [{ "key_code": "delete_forward" }]
+                      },
+                      {
+                        "description": "Delete word under cursor (Vim binding)",
+                        "type": "basic",
+                        "from": {
+                          "key_code": "d",
+                          "modifiers": {
+                            "mandatory": ["left_control", "left_command", "left_option"],
+                            "optional": ["any"]
+                          }
+                        },
+                        "to": [
+                          { "key_code": "left_arrow", "modifiers": ["option"] },
+                          { "key_code": "right_arrow", "modifiers": ["option", "shift"] },
+                          { "key_code": "delete_or_backspace" }
+                        ]
+                      },
+                      {
+                        "description": "Delete word under cursor (own binding)",
+                        "type": "basic",
+                        "from": {
+                          "key_code": "i",
+                          "modifiers": {
+                            "mandatory": ["left_control", "left_command", "left_option"],
+                            "optional": ["any"]
+                          }
+                        },
+                        "to": [
+                          { "key_code": "left_arrow", "modifiers": ["option"] },
+                          { "key_code": "right_arrow", "modifiers": ["option", "shift"] },
+                          { "key_code": "delete_or_backspace" }
+                        ]
+                      },
+                      {
+                        "description": "ö",
+                        "type": "basic",
+                        "from": {
+                          "key_code": "semicolon",
+                          "modifiers": {
+                            "mandatory": ["left_control", "left_command", "left_option"]
+                          }
+                        },
+                        "to": [{ "key_code": "u", "modifiers": ["right_option"] }, { "key_code": "o" }]
+                      },
+                      {
+                        "description": "Ö",
+                        "type": "basic",
+                        "from": {
+                          "key_code": "semicolon",
+                          "modifiers": {
+                            "mandatory": ["left_control", "left_option", "left_command", "left_shift"]
+                          }
+                        },
+                        "to": [
+                          { "key_code": "u", "modifiers": ["right_option"] },
+                          { "key_code": "o", "modifiers": ["left_shift"] }
+                        ]
+                      },
+                      {
+                        "description": "ä",
+                        "type": "basic",
+                        "from": {
+                          "key_code": "quote",
+                          "modifiers": {
+                            "mandatory": ["left_control", "left_command", "left_option"]
+                          }
+                        },
+                        "to": [{ "key_code": "u", "modifiers": ["left_option"] }, { "key_code": "a" }]
+                      },
+                      {
+                        "description": "Ä",
+                        "type": "basic",
+                        "from": {
+                          "key_code": "quote",
+                          "modifiers": {
+                            "mandatory": ["left_control", "left_command", "left_option", "left_shift"]
+                          }
+                        },
+                        "to": [
+                          { "key_code": "u", "modifiers": ["left_option"] },
+                          { "key_code": "a", "modifiers": ["left_shift"] }
+                        ]
+                      },
+                      {
+                        "description": "å",
+                        "type": "basic",
+                        "from": {
+                          "key_code": "open_bracket",
+                          "modifiers": {
+                            "mandatory": ["left_control", "left_command", "left_option"]
+                          }
+                        },
+                        "to": [{ "key_code": "a", "modifiers": ["left_option"] }]
+                      },
+                      {
+                        "description": "Å",
+                        "type": "basic",
+                        "from": {
+                          "key_code": "open_bracket",
+                          "modifiers": {
+                            "mandatory": ["left_control", "left_command", "left_option", "left_shift"]
+                          }
+                        },
+                        "to": [{ "key_code": "a", "modifiers": ["left_option", "left_shift"] }]
+                      },
+                      {
+                        "description": "Backtick \`",
+                        "type": "basic",
+                        "from": { "key_code": "non_us_backslash" },
+                        "to": [{ "key_code": "grave_accent_and_tilde" }]
+                      },
+                      {
+                        "description": "Tilde ~",
+                        "type": "basic",
+                        "from": { "key_code": "non_us_backslash", "modifiers": { "mandatory": ["shift"] } },
+                        "to": [{ "key_code": "grave_accent_and_tilde", "modifiers": ["shift"] }]
+                      },
+                      {
+                        "description": "Backslash \\",
+                        "type": "basic",
+                        "from": { "key_code": "grave_accent_and_tilde" },
+                        "to": [
+                          { "key_code": "p", "modifiers": ["right_command", "right_option", "right_shift"] }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "devices": [
+                {
+                  "identifiers": {
+                    "is_keyboard": true,
+                    "product_id": 834,
+                    "vendor_id": 1452
+                  },
+                  "manipulate_caps_lock_led": false
+                }
+              ],
+              "name": "Default profile",
+              "selected": true,
+              "virtual_hid_keyboard": { "keyboard_type_v2": "ansi" }
+            }
+          ]
         }
-      ],
-      "name": "Default profile",
-      "selected": true,
-      "virtual_hid_keyboard": { "keyboard_type_v2": "ansi" }
-    }
-  ]
-}
 
-      
       `}</Code>
 
       <p>

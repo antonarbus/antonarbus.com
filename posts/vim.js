@@ -37,10 +37,10 @@ const postObj = {
 
       <ul>
         <li>
-          <kbd>w</kbd> jump forward to the start of a word
+          <kbd>w</kbd> jump to next word
         </li>
         <li>
-          <kbd>e</kbd> jump forward to the end of a word
+          <kbd>e</kbd> jump to the end of a next word
         </li>
         <li>
           <kbd>b</kbd> jump back to the start of a word
@@ -49,13 +49,13 @@ const postObj = {
           <kbd>ge</kbd> jump back to the end of a word
         </li>
         <li>
-          <kbd>$</kbd> jump forward to the end of a line
+          <kbd>$</kbd> jump to the end of a line
         </li>
         <li>
-          <kbd>0</kbd> jump backwards to the start of a line
+          <kbd>0</kbd> jump to very start of a line
         </li>
         <li>
-          <kbd>^</kbd> jump backwards to the first non-white char
+          <kbd>^</kbd> jump to start of the lIne (first char)
         </li>
         <li>
           <kbd>W</kbd> <kbd>E</kbd> <kbd>B</kbd> <kbd>gE</kbd> works the same, but splits words by
@@ -75,22 +75,13 @@ const postObj = {
 
       <ul>
         <li>
-          <kbd>a</kbd> put caret after cursor
+          <kbd>a</kbd>/<kbd>A</kbd> put caret after cursor/line
         </li>
         <li>
-          <kbd>A</kbd> put caret at the end of the line
+          <kbd>i</kbd>/<kbd>I</kbd> put caret before cursor/line
         </li>
         <li>
-          <kbd>i</kbd> put caret before cursor
-        </li>
-        <li>
-          <kbd>I</kbd> put caret at the start of the line
-        </li>
-        <li>
-          <kbd>o</kbd> add line below and put caret
-        </li>
-        <li>
-          <kbd>O</kbd> add line above and put caret
+          <kbd>o</kbd>/<kbd>O</kbd> add lINe below/above and put caret
         </li>
         <li>
           <kbd>gi</kbd> go to the last insertion point

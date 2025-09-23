@@ -417,10 +417,13 @@ const postObj = {
           <kbd>:15</kbd> jumps to line #15
         </li>
         <li>
-          <kbd>gg</kbd> jumps to first line
+          <kbd>gg</kbd> jumps up to first line
         </li>
         <li>
-          <kbd>G</kbd> jumps to last line
+          <kbd>G</kbd> jumps down to last line
+        </li>
+        <li>
+          <kbd>M</kbd> jumps down to the middle of visible text (not scrolling)
         </li>
       </ul>
 
@@ -606,6 +609,29 @@ const postObj = {
         </li>
       </ul>
 
+      <H>Scroll</H>
+
+      <ul>
+        <li>
+          <kbd>Ctrl+d/u</kbd> scroll down/up 50%
+        </li>
+        <li>
+          <kbd>Ctrl+f/b</kbd> scroll down/up 100%
+        </li>
+        <li>
+          <kbd>5</kbd> <kbd>Ctrl+f</kbd> scroll down 5 screens
+        </li>
+        <li>
+          <kbd>Ctrl+e/y</kbd> scroll down/up 1 line
+        </li>
+        <li>
+          <kbd>z</kbd> <kbd>t/b</kbd> scroll up/down to move active line almost to the top/bottom
+        </li>
+        <li>
+          <kbd>zz</kbd> scroll to move active line to the middle
+        </li>
+      </ul>
+
       <H>Show context info</H>
 
       <ul>
@@ -783,29 +809,6 @@ const postObj = {
         </li>
         <li>
           <kbd>gsat</kbd> add tags around selection
-        </li>
-      </ul>
-
-      <H>Scroll</H>
-
-      <ul>
-        <li>
-          <kbd>Ctrl+d/u</kbd> scroll down/up 50%
-        </li>
-        <li>
-          <kbd>Ctrl+f/b</kbd> scroll down/up 100%
-        </li>
-        <li>
-          <kbd>5</kbd> <kbd>Ctrl+f</kbd> scroll down 5 screens
-        </li>
-        <li>
-          <kbd>Ctrl+e/y</kbd> scroll down/up 1 line
-        </li>
-        <li>
-          <kbd>z</kbd> <kbd>t/b</kbd> scroll up/down to move active line almost to the top/bottom
-        </li>
-        <li>
-          <kbd>zz</kbd> scroll to move active line to the middle
         </li>
       </ul>
 
@@ -1080,7 +1083,7 @@ const postObj = {
           <kbd>Enter</kbd> in Normal mode or the <span>Ctrl+Enter</span> in Insert mode to perform
           the substitution
         </li>
-        <li>Use up/down arrows in Norma mode to select a previous substitution</li>
+        <li>Use up/down arrows in Normal mode to select a previous substitution</li>
         <li>
           It supports RegExp by default <code>{'ba(r|z|n)'}</code> will find <code>bar</code>,{' '}
           <code>baz</code>, <code>ban</code>
@@ -1169,7 +1172,7 @@ const postObj = {
         </li>
       </ul>
 
-      <H>Find and replace project wise</H>
+      <H>Find and replace in project</H>
 
       <ul>
         <li>
@@ -1789,7 +1792,10 @@ const postObj = {
           <code>gqag</code> format the entire file
         </li>
         <li>
-          Also may select text and hit <kbd>=</kbd> to apply indentation
+          Also may select text and hit <kbd>=</kbd> to fix indentation
+        </li>
+        <li>
+          <kbd>{'= ='}</kbd> fix indentation for active line
         </li>
         <li>
           In Insert mode <code>Ctrl+t/d</code> to indent (“add tab” and “dedent”)

@@ -250,13 +250,10 @@ const postObj = {
 
       <ul>
         <li>
-          <kbd>p</kbd> paste deleted text after cursor
+          <kbd>p</kbd>/<kbd>P</kbd> paste deleted text after/before cursor
         </li>
         <li>
           <kbd>5p</kbd> paste 5 times
-        </li>
-        <li>
-          <kbd>P</kbd> paste deleted text before cursor
         </li>
         <li>
           In Insert mode to paste <code>Ctrl+r</code> followed by <kbd>+</kbd>
@@ -312,7 +309,7 @@ const postObj = {
           <kbd>:</kbd> command mode
         </li>
         <li>
-          <kbd>:q!</kbd> exit without save
+          <kbd>:q!</kbd> force exit without save
         </li>
       </ul>
 
@@ -343,6 +340,9 @@ const postObj = {
           <kbd>v</kbd> motion <kbd>:w</kbd> <code>FILENAME</code> saves the Visually selected lines
           in file FILENAME.
         </li>
+        <li>
+          <kbd>Ctrl+s</kbd> save file
+        </li>
       </ul>
 
       <H>Exit</H>
@@ -359,6 +359,12 @@ const postObj = {
         </li>
         <li>
           <kbd>:q!</kbd> quit without save
+        </li>
+        <li>
+          <kbd>:qall</kbd> quit from all buffers
+        </li>
+        <li>
+          <kbd>Space qq</kbd> to exit LazyVim
         </li>
       </ul>
 
@@ -466,9 +472,11 @@ const postObj = {
       <H>Jump to matching bracket</H>
 
       <ul>
-        <li>Place cursor on bracket</li>
         <li>
           <kbd>%</kbd> jumps to closing bracket
+        </li>
+        <li>
+          <kbd>%</kbd> press again, jumps to opening bracket
         </li>
       </ul>
 
@@ -919,11 +927,10 @@ const postObj = {
 
       <ul>
         <li>
-          <kbd>r</kbd> go into replace mode of single char, then <kbd>a</kbd> to replace with{' '}
-          <code>a</code>
+          <kbd>r</kbd> replace mode of single char
         </li>
         <li>
-          <kbd>R</kbd> go into global replace mode
+          <kbd>R</kbd> global replace mode
         </li>
       </ul>
 

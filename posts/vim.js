@@ -13,6 +13,7 @@ const postObj = {
         <li>
           Notes are based on this resource
           <Lnk path="https://lazyvim-ambitious-devs.phillips.codes/course/chapter-1/">
+            {' '}
             https://lazyvim-ambitious-devs.phillips.codes/course/chapter-1/
           </Lnk>
         </li>
@@ -37,10 +38,10 @@ const postObj = {
 
       <ul>
         <li>
-          <kbd>w</kbd> jump to next word
+          <kbd>w</kbd> jump forward to the start of a word
         </li>
         <li>
-          <kbd>e</kbd> jump to the end of a next word
+          <kbd>e</kbd> jump forward to the end of a word
         </li>
         <li>
           <kbd>b</kbd> jump back to the start of a word
@@ -49,13 +50,13 @@ const postObj = {
           <kbd>ge</kbd> jump back to the end of a word
         </li>
         <li>
-          <kbd>$</kbd> jump to the end of a line
+          <kbd>$</kbd> jump forward to the end of a line
         </li>
         <li>
-          <kbd>0</kbd> jump to very start of a line
+          <kbd>0</kbd> jump backwards to the start of a line
         </li>
         <li>
-          <kbd>^</kbd> jump to start of the lIne (first char)
+          <kbd>^</kbd> same as <kbd>0</kbd>, but does not take white spaces into account
         </li>
         <li>
           <kbd>W</kbd> <kbd>E</kbd> <kbd>B</kbd> <kbd>gE</kbd> works the same, but splits words by
@@ -67,7 +68,7 @@ const postObj = {
 
       <ul>
         <li>
-          <kbd>3w</kbd> jump forward to the start of a word 3 times
+          <kbd>3w</kbd> jump forward to the end of a word 3 times
         </li>
       </ul>
 
@@ -75,16 +76,22 @@ const postObj = {
 
       <ul>
         <li>
-          <kbd>a</kbd>/<kbd>A</kbd> put caret after cursor/line
+          <kbd>a</kbd> after cursor
         </li>
         <li>
-          <kbd>i</kbd>/<kbd>I</kbd> put caret before cursor/line
+          <kbd>A</kbd> end of the line
         </li>
         <li>
-          <kbd>o</kbd>/<kbd>O</kbd> add lINe below/above and put caret
+          <kbd>i</kbd> before cursor
         </li>
         <li>
-          <kbd>gi</kbd> go to the last insertion point
+          <kbd>I</kbd> start of the line
+        </li>
+        <li>
+          <kbd>o</kbd>/<kbd>O</kbd> new line below/above
+        </li>
+        <li>
+          <kbd>ge</kbd> go to the last insertion point
         </li>
         <li>
           <kbd>Esc</kbd> normal mode (navigate and manipulate text)
@@ -200,7 +207,7 @@ const postObj = {
           <kbd>Ctrl+r</kbd> show same registers menu in Insert mode
         </li>
         <li>
-          last copied text is always available at <code>0</code> register and you may paste it with{' '}
+          Last copied text is available at <code>0</code> register and you may paste it with{' '}
           <kbd>"0p</kbd>
         </li>
         <li>
@@ -278,10 +285,8 @@ const postObj = {
           <kbd>{'[p'}</kbd>/<kbd>{']p'}</kbd> pastes indented above/below current line
         </li>
         <li>
-          <kbd>
-            {'>p'}/{'<p'}/{'P'}/{'<P'}
-          </kbd>{' '}
-          put after/before and indent right/left
+          <kbd>{'>p'}</kbd>/<kbd>{'<p'}</kbd>/<kbd>{'>P'}</kbd>/<kbd>{'<P'}</kbd> put after/before
+          and indent right/left
         </li>
       </ul>
 
@@ -386,10 +391,10 @@ const postObj = {
 
       <ul>
         <li>
-          <kbd>j</kbd> down
+          <kbd>j</kbd> up
         </li>
         <li>
-          <kbd>k</kbd> up
+          <kbd>k</kbd> down
         </li>
         <li>
           <kbd>h</kbd> left
@@ -423,10 +428,10 @@ const postObj = {
           <kbd>:15</kbd> jumps to line #15
         </li>
         <li>
-          <kbd>gg</kbd> jumps up to first line
+          <kbd>gg</kbd> jumps to first line
         </li>
         <li>
-          <kbd>G</kbd> jumps down to last line
+          <kbd>G</kbd> jumps to last line
         </li>
         <li>
           <kbd>M</kbd> jumps down to the middle of visible text (not scrolling)
@@ -474,9 +479,6 @@ const postObj = {
       <ul>
         <li>
           <kbd>%</kbd> jumps to closing bracket
-        </li>
-        <li>
-          <kbd>%</kbd> press again, jumps to opening bracket
         </li>
       </ul>
 
@@ -614,29 +616,6 @@ const postObj = {
         </li>
         <li>
           <kbd>Space sS</kbd> show list of symbols in project
-        </li>
-      </ul>
-
-      <H>Scroll</H>
-
-      <ul>
-        <li>
-          <kbd>Ctrl+d/u</kbd> scroll down/up 50%
-        </li>
-        <li>
-          <kbd>Ctrl+f/b</kbd> scroll down/up 100%
-        </li>
-        <li>
-          <kbd>5</kbd> <kbd>Ctrl+f</kbd> scroll down 5 screens
-        </li>
-        <li>
-          <kbd>Ctrl+e/y</kbd> scroll down/up 1 line
-        </li>
-        <li>
-          <kbd>z</kbd> <kbd>t/b</kbd> scroll up/down to move active line almost to the top/bottom
-        </li>
-        <li>
-          <kbd>zz</kbd> scroll to move active line to the middle
         </li>
       </ul>
 
@@ -820,6 +799,29 @@ const postObj = {
         </li>
       </ul>
 
+      <H>Scroll</H>
+
+      <ul>
+        <li>
+          <kbd>Ctrl+d/u</kbd> scroll down/up 50%
+        </li>
+        <li>
+          <kbd>Ctrl+f/b</kbd> scroll down/up 100%
+        </li>
+        <li>
+          <kbd>5</kbd> <kbd>Ctrl+f</kbd> scroll down 5 screens
+        </li>
+        <li>
+          <kbd>Ctrl+e/y</kbd> scroll down/up 1 line
+        </li>
+        <li>
+          <kbd>z</kbd> <kbd>t/b</kbd>scroll up/down to move active line almost to the top/bottom
+        </li>
+        <li>
+          <kbd>zz</kbd> scroll to move active line to the middle
+        </li>
+      </ul>
+
       <H>Delete (verb)</H>
 
       <ul>
@@ -927,10 +929,11 @@ const postObj = {
 
       <ul>
         <li>
-          <kbd>r</kbd> replace mode of single char
+          <kbd>r</kbd> go into replace mode of single char, then <kbd>a</kbd> to replace with{' '}
+          <code>a</code>
         </li>
         <li>
-          <kbd>R</kbd> global replace mode
+          <kbd>R</kbd> go into global replace mode
         </li>
       </ul>
 
@@ -1864,7 +1867,7 @@ const postObj = {
         </li>
       </ul>
 
-      <H>Git integration</H>
+      <H>Git in</H>
 
       <ul>
         <li>

@@ -23,7 +23,7 @@ const postObj = {
 
       <ul>
         <li>
-          <Code>:Tutor</Code> launch tutor
+          <kbd>:Tutor</kbd> launch tutor
         </li>
       </ul>
 
@@ -97,10 +97,10 @@ const postObj = {
           <kbd>Esc</kbd> normal mode (navigate and manipulate text)
         </li>
         <li>
-          <code>Ctrl+o</code> go back into Normal mode for one operation only
+          <kbd>Ctrl+o</kbd> go back into Normal mode for one operation only
         </li>
         <li>
-          <code>Ctrl+u</code> undo for current line in Insert mode
+          <kbd>Ctrl+u</kbd> undo for current line in Insert mode
         </li>
       </ul>
 
@@ -160,7 +160,7 @@ const postObj = {
         `}</Code>
 
         <li>
-          Run <code>:Lazy</code> sync, then restart NeoVim
+          Run <kbd>:Lazy</kbd> sync, then restart NeoVim
         </li>
         <li>Put cursor inside some code.</li>
         <li>
@@ -220,7 +220,7 @@ const postObj = {
           The name of the file that you are currently editing goes into <code>%</code> register
         </li>
         <li>
-          <code>:let @c=@.</code> copy <code>.</code> register to named <code>c</code> register
+          <kbd>:let @c=@.</kbd> copy <code>.</code> register to named <code>c</code> register
         </li>
       </ul>
 
@@ -263,7 +263,7 @@ const postObj = {
           <kbd>5p</kbd> paste 5 times
         </li>
         <li>
-          In Insert mode to paste <code>Ctrl+r</code> followed by <kbd>+</kbd>
+          In Insert mode to paste <kbd>Ctrl+r</kbd> followed by <kbd>+</kbd>
         </li>
       </ul>
 
@@ -271,7 +271,7 @@ const postObj = {
 
       <ul>
         <li>
-          Install it from <code>:LazyExtras</code> and pushing <kbd>x</kbd> in front of it, then
+          Install it from <kbd>:LazyExtras</kbd> and pushing <kbd>x</kbd> in front of it, then
           reload NeoVim
         </li>
         <li>
@@ -325,7 +325,7 @@ const postObj = {
           Navigate to you project in terminal with <kbd>cd</kbd>
         </li>
         <li>
-          Type <code>nvim</code>
+          Type <kbd>nvim</kbd>
         </li>
       </ul>
 
@@ -646,10 +646,10 @@ const postObj = {
           <kbd>Space sm</kbd> same, but different view with search
         </li>
         <li>
-          <code>:delmarks a</code> delete the mark <code>a</code>
+          <kbd>:delmarks a</kbd> delete the mark <code>a</code>
         </li>
         <li>
-          <code>:delm a</code> same, delete the mark <code>a</code>
+          <kbd>:delm a</kbd> same, delete the mark <code>a</code>
         </li>
         <li>
           <kbd>'.</kbd> jumps to the last place I inserted or changed text
@@ -720,7 +720,7 @@ const postObj = {
           May for ex copy (yank) something from remote place <kbd>r</kbd>
         </li>
         <li>
-          <kbd>yr</kbd> (enters into Seek mode) + <code>phrase</code> + <kbd>ib</kbd> (inside
+          <kbd>yr</kbd> (enters into Seek mode) + <kbd>phrase</kbd> + <kbd>ib</kbd> (inside
           brackets)
         </li>
         <li>Cursor comes back to the initial place</li>
@@ -734,7 +734,7 @@ const postObj = {
         </li>
         <li>Cursor comes back to original position</li>
         <li>
-          <kbd>yR</kbd> (enters into Seek mode) + <code>phrase</code> + <code>a</code> (tag)
+          <kbd>yR</kbd> (enters into Seek mode) + <kbd>phrase</kbd> + <kbd>a</kbd> (tag)
         </li>
         <li>
           Personally did not understand why it is helpful, better to jump to place, select & yank
@@ -1027,7 +1027,7 @@ const postObj = {
         </li>
         <li>Search is case insensitive until you put uppercase letter</li>
         <li>
-          Include <code>\C</code> in your search phrase to make search case sensitive when you are
+          Include <kbd>\C</kbd> in your search phrase to make search case sensitive when you are
           interested only in lower cased results for ex.
         </li>
       </ul>
@@ -1037,26 +1037,26 @@ const postObj = {
       <ul>
         <li>RegExp in Vim is strange</li>
         <li>
-          <code>.</code> any char, <code>load..g</code> finds <code>loading</code>
+          <kbd>.</kbd> any char, <code>load..g</code> finds <code>loading</code>
         </li>
         <li>
-          <code>\.</code> searches for <code>.</code> dot char
+          <kbd>\.</kbd> searches for <code>.</code> dot char
         </li>
         <li>
-          <code>\S</code> not whitespace char
+          <kbd>\S</kbd> not whitespace char
         </li>
         <li>
-          <code>.*</code> match any string
+          <kbd>.*</kbd> match any string
         </li>
         <li>
-          <code>\S\+</code> match any word without spaces
+          <kbd>\S\+</kbd> match any word without spaces
         </li>
         <li>
-          <code>\=</code> optional, for ex <code>https\=:</code> will match <code>http</code> &{' '}
+          <kbd>\=</kbd> optional, for ex <kbd>https\=:</kbd> will match <code>http</code> &{' '}
           <code>https</code>
         </li>
         <li>
-          <code>\V</code> disable regexp for following search string
+          <kbd>\V</kbd> disable regexp for following search string
         </li>
       </ul>
 
@@ -1095,7 +1095,7 @@ const postObj = {
         </li>
         <li>Use up/down arrows in Normal mode to select a previous substitution</li>
         <li>
-          It supports RegExp by default <code>{'ba(r|z|n)'}</code> will find <code>bar</code>,{' '}
+          It supports RegExp by default <kbd>{'ba(r|z|n)'}</kbd> will find <code>bar</code>,{' '}
           <code>baz</code>, <code>ban</code>
         </li>
       </ul>
@@ -1105,7 +1105,7 @@ const postObj = {
       <ul>
         <li>Telescope and RipGrep to be installed</li>
         <li>
-          Maybe need to enable Telescope plugin via <code>:LazyExtras</code>
+          Maybe need to enable Telescope plugin via <kbd>:LazyExtras</kbd>
         </li>
         <li>
           <code>brew install ripgrep</code> install, it was not installed for me
@@ -1122,61 +1122,61 @@ const postObj = {
 
       <ul>
         <li>
-          <Code>:substitute</Code> / <Code>:s</Code> enter into substitute mode
+          <kbd>:substitute</kbd> / <kbd>:s</kbd> enter into substitute mode
         </li>
         <li>
-          <Code>:s/old/new</Code> replaces "old" with "new" first occurrence in line where your
+          <kbd>:s/old/new</kbd> replaces "old" with "new" first occurrence in line where your cursor
+          is
+        </li>
+        <li>
+          <kbd>:.s/old/new</kbd> same, but specifically indicate that operation is done on the same
+          line, can be omitted as it is the default behavior
+        </li>
+        <li>
+          <kbd>:s/old/new/g</kbd> replaces "old" with "new" all occurrences in line where your
           cursor is
         </li>
         <li>
-          <Code>:.s/old/new</Code> same, but specifically indicate that operation is done on the
-          same line, can be ommited as it is the default behaivor
-        </li>
-        <li>
-          <Code>:s/old/new/g</Code> replaces "old" with "new" all occurrences in line where your
-          cursor is
-        </li>
-        <li>
-          <Code>:%s/old/new</Code> replaces first occurrences in every line of "old" with "new" in
+          <kbd>:%s/old/new</kbd> replaces first occurrences in every line of "old" with "new" in
           whole file
         </li>
         <li>
-          <Code>:%s/old/new/g</Code> same, but all occurrences
+          <kbd>:%s/old/new/g</kbd> same, but all occurrences
         </li>
         <li>
-          <Code>:5s/old/new/g</Code> replaces "old" with "new" at line 5
+          <kbd>:5s/old/new/g</kbd> replaces "old" with "new" at line 5
         </li>
         <li>
-          <Code>5G</Code> maybe it is easier to jump to line 5 and then make replacement
+          <kbd>5G</kbd> maybe it is easier to jump to line 5 and then make replacement
         </li>
         <li>
-          <Code>:2,5s/old/new/g</Code> replaces "old" with "new" all occurrences in 2...5 lines
+          <kbd>:2,5s/old/new/g</kbd> replaces "old" with "new" all occurrences in 2...5 lines
         </li>
         <li>
-          <Code>:,50s/old/new/g</Code> replaces "old" with "new" all occurrences from current line
-          to line #50
+          <kbd>:,50s/old/new/g</kbd> replaces "old" with "new" all occurrences from current line to
+          line #50
         </li>
         <li>
-          <Code>:,/text/s/old/new/g</Code> replaces "old" with "new" from current line to the first
+          <kbd>:,/text/s/old/new/g</kbd> replaces "old" with "new" from current line to the first
           line with <code>text</code> including the line
         </li>
         <li>
-          <Code>:%s/old/new/gc</Code> replaces "old" with "new" in file with prompt, useful when you
+          <kbd>:%s/old/new/gc</kbd> replaces "old" with "new" in file with prompt, useful when you
           need to skip some replacements
         </li>
         <li>
-          <Code>:%s/old/new/gc</Code> <code>c</code> prompt flag, replaces "old" with "new" in file
+          <kbd>:%s/old/new/gc</kbd> <code>c</code> prompt flag, replaces "old" with "new" in file
           with prompt, useful when you need to skip some replacements
         </li>
         <li>
-          <Code>:%s/old/new/gI</Code> <code>I</code> case sensitive flag
+          <kbd>:%s/old/new/gI</kbd> <code>I</code> case sensitive flag
         </li>
         <li>
-          <Code>:s//new</Code> if you omit search phrase, it replaces whatever pattern you last
+          <kbd>:s//new</kbd> if you omit search phrase, it replaces whatever pattern you last
           searched with "new"
         </li>
         <li>
-          <Code>:s</Code> without any pattern or replacement, it will repeat the last pattern and
+          <kbd>:s</kbd> without any pattern or replacement, it will repeat the last pattern and
           replacement you did, but it will not use any previous flags, so most useful would be{' '}
           <code>:%sg</code> which means “repeat the last substitution on the entire file, globally.”
         </li>
@@ -1194,7 +1194,7 @@ const postObj = {
         <li>As you type you get instant live update with proposed changes</li>
         <li>
           To accept changes you need to go back into normal mode with <kbd>Esc</kbd> and then{' '}
-          <code>\r</code> to apply replacement
+          <kbd>\r</kbd> to apply replacement
         </li>
         <li>
           You may modify replacement in preview window or even skip some replacements by deleting
@@ -1223,10 +1223,10 @@ const postObj = {
 
       <ul>
         <li>
-          <code>:r TEST</code> reads content from the file TEST and pastes below the cursor
+          <kbd>:r TEST</kbd> reads content from the file TEST and pastes below the cursor
         </li>
         <li>
-          <code>:r !ls</code> reads content from external command and pastes below the cursor
+          <kbd>:r !ls</kbd> reads content from external command and pastes below the cursor
         </li>
       </ul>
 
@@ -1243,13 +1243,13 @@ const postObj = {
           <kbd>Space fF</kbd> files fuzzy search in (CWD)
         </li>
         <li>
-          To check where you are, type <code>:pwd</code> (Print Working Directory)
+          To check where you are, type <kbd>:pwd</kbd> (Print Working Directory)
         </li>
         <li>
-          To change CWD <code>:cd path/to/directory</code>
+          To change CWD <kbd>:cd path/to/directory</kbd>
         </li>
         <li>
-          To change CWD just in one tab <code>:lcd path/to/directory</code>
+          To change CWD just in one tab <kbd>:lcd path/to/directory</kbd>
         </li>
       </ul>
 
@@ -1388,7 +1388,7 @@ const postObj = {
         </li>
         <li>
           <kbd>Space fM</kbd> open the directory where your terminal was in when you typed{' '}
-          <code>nvim</code> (CWD)
+          <kbd>nvim</kbd> (CWD)
         </li>
         <li>
           <kbd>j</kbd>/<kbd>k</kbd> move up/down
@@ -1433,7 +1433,7 @@ const postObj = {
           </Lnk>
         </li>
         <li>
-          <Code>vimtutor</Code> terminal app to learn vim on most Unix operating systems
+          <kbd>vimtutor</kbd> terminal app to learn vim on most Unix operating systems
         </li>
         <li>
           <Lnk path="https://vim.rtorr.com/">cheatsheet</Lnk>
@@ -1473,7 +1473,7 @@ const postObj = {
 
       <ul>
         <li>
-          <code>:lua Snacks.dashboard()</code> open dashboard from editor
+          <kbd>:lua Snacks.dashboard()</kbd> open dashboard from editor
         </li>
       </ul>
 
@@ -1484,7 +1484,7 @@ const postObj = {
           The Lazy Extras mode can be accessed by pressing <kbd>x</kbd> from the dashboard or
         </li>
         <li>
-          <code>:LazyExtras</code> from the editor
+          <kbd>:LazyExtras</kbd> from the editor
         </li>
         <li>
           Navigate and press <kbd>x</kbd> to pick
@@ -1542,7 +1542,7 @@ const postObj = {
       <ul>
         <li>Window in Vim is a pane or split</li>
         <li>
-          <code>Space w v/s</code> split vertically/horizontally
+          <kbd>Space w v/s</kbd> split vertically/horizontally
         </li>
         <li>Same works in mini.files plugin</li>
         <li>
@@ -1608,7 +1608,7 @@ const postObj = {
           <kbd>Space qq</kbd> to exit LazyVim
         </li>
         <li>
-          <code>cd</code> to the project and open NeoVim by <code>nvim</code>
+          <kbd>cd</kbd> to the project and open NeoVim by <kbd>nvim</kbd>
         </li>
         <li>
           <kbd>s</kbd> to restore the last session
@@ -1629,11 +1629,11 @@ const postObj = {
 
       <ul>
         <li>
-          <code>:LspRestart</code> restart the language server
+          <kbd>:LspRestart</kbd> restart the language server
         </li>
         <li>
-          <code>:checkhealth</code>/<code>:LazyHealth</code> health of various installed plugins (do
-          not expect all to be green) (there are overlaps, LazyHealth is easier to read)
+          <kbd>:checkhealth</kbd>/<kbd>:LazyHealth</kbd> health of various installed plugins (do not
+          expect all to be green) (there are overlaps, LazyHealth is easier to read)
         </li>
         <li>
           <kbd>Space xx/xX</kbd> show diagnostic window with list of errors
@@ -1799,7 +1799,7 @@ const postObj = {
         </li>
         <li>Indentation is always applied automatically with formatting on save</li>
         <li>
-          <code>gqag</code> format the entire file
+          <kbd>gqag</kbd> format the entire file
         </li>
         <li>
           Also may select text and hit <kbd>=</kbd> to fix indentation
@@ -1808,7 +1808,7 @@ const postObj = {
           <kbd>{'= ='}</kbd> fix indentation for active line
         </li>
         <li>
-          In Insert mode <code>Ctrl+t/d</code> to indent (“add tab” and “dedent”)
+          In Insert mode <kbd>Ctrl+t/d</kbd> to indent (“add tab” and “dedent”)
         </li>
       </ul>
 
@@ -1825,7 +1825,7 @@ const postObj = {
           <kbd>gwig</kbd> wrap file
         </li>
         <li>
-          <code>{':set textwidth=<number>'}</code> set wrap width
+          <kbd>{':set textwidth=<number>'}</kbd> set wrap width
         </li>
       </ul>
 
@@ -1833,13 +1833,13 @@ const postObj = {
 
       <ul>
         <li>
-          <Code>Space us</Code> enable/disable spell check
+          <kbd>Space us</kbd> enable/disable spell check
         </li>
         <li>
-          <code>{'[s'}</code>/<code>{']s'}</code> next/prev misspelled word
+          <kbd>{'[s'}</kbd>/<kbd>{']s'}</kbd> next/prev misspelled word
         </li>
         <li>
-          <code>z=</code> show suggestion
+          <kbd>z=</kbd> show suggestion
         </li>
       </ul>
 
@@ -1860,7 +1860,7 @@ const postObj = {
           <kbd>Ctrl+/</kbd> open Vim's terminal (Vim has it's own terminal)
         </li>
         <li>
-          <code>Esc</code> exit from Insert to Normal mode (that is how zsh is configured)
+          <kbd>Esc</kbd> exit from Insert to Normal mode (that is how zsh is configured)
         </li>
         <li>
           <kbd>a</kbd>/<kbd>i</kbd> go into Insert mode
@@ -1905,7 +1905,7 @@ const postObj = {
           <kbd>Space ghD</kbd> show diff between the current file and the last commit
         </li>
         <li>
-          <code>:diffoff</code> disable diff mode, then <kbd>Space bd</kbd> to close the buffer
+          <kbd>:diffoff</kbd> disable diff mode, then <kbd>Space bd</kbd> to close the buffer
         </li>
         <li>
           <code>brew install lazygit</code> install and learn LazyGit, useful plugin to work with

@@ -16,7 +16,7 @@ import {
 
 const postObj = {
   title: 'xxx',
-  date: '2025.07.xx',
+  date: '2025.09.xx',
   tags: ['xxx', 'xxx'],
   imgUrl: 'https://antonarbus.com/imgs/xxx.png',
   desc: 'xxx',

@@ -62,10 +62,6 @@ const postObj = {
           <kbd>W</kbd> <kbd>E</kbd> <kbd>B</kbd> <kbd>gE</kbd> works the same, but splits words by
           white space, while lowercased versions split works also with dot, paren, quote
         </li>
-        <li>
-          <kbd>E</kbd>/<kbd>B</kbd> to start/end of lIne (re-mapped key from <kbd>%</kbd>/
-          <kbd>^</kbd> as they are hard to press)
-        </li>
       </ul>
 
       <H>Count + motion = Repeat motion</H>
@@ -112,7 +108,7 @@ const postObj = {
           <kbd>V</kbd> line text selection in Visual mode
         </li>
         <li>
-          If selected something and press <kbd>V</kbd> the selection will expand to grab all lines
+          <kbd>V</kbd> selects whole line under cursor
         </li>
         <li>
           <kbd>Ctrl+v</kbd> block vertical text selection (handy for csv data), <kbd>$</kbd> -

@@ -38,29 +38,33 @@ const postObj = {
 
       <ul>
         <li>
-          <kbd>w</kbd> jump forward to the start of a word
+          <kbd>w</kbd> forward to start of a word
         </li>
         <li>
-          <kbd>e</kbd> jump forward to the end of a word
+          <kbd>e</kbd> forward to end of a word
         </li>
         <li>
-          <kbd>b</kbd> jump back to the start of a word
+          <kbd>b</kbd> back to start of a word
         </li>
         <li>
-          <kbd>ge</kbd> jump back to the end of a word
+          <kbd>ge</kbd> back to end of a word
         </li>
         <li>
-          <kbd>$</kbd> jump forward to the end of a line
+          <kbd>$</kbd> forward to the end of a line
         </li>
         <li>
-          <kbd>0</kbd> jump backwards to the start of a line
+          <kbd>0</kbd> back to the start of a line
         </li>
         <li>
-          <kbd>^</kbd> same as <kbd>0</kbd>, but does not take white spaces into account
+          <kbd>^</kbd> back to start of a line not taking white spaces into account
         </li>
         <li>
           <kbd>W</kbd> <kbd>E</kbd> <kbd>B</kbd> <kbd>gE</kbd> works the same, but splits words by
           white space, while lowercased versions split works also with dot, paren, quote
+        </li>
+        <li>
+          <kbd>E</kbd>/<kbd>B</kbd> to start/end of lIne (re-mapped key from <kbd>%</kbd>/
+          <kbd>^</kbd> as they are hard to press)
         </li>
       </ul>
 
@@ -68,7 +72,7 @@ const postObj = {
 
       <ul>
         <li>
-          <kbd>3w</kbd> jump forward to the end of a word 3 times
+          <kbd>3w</kbd> forward to the end of a word 3 times
         </li>
       </ul>
 
@@ -76,16 +80,10 @@ const postObj = {
 
       <ul>
         <li>
-          <kbd>a</kbd> after cursor
+          <kbd>a</kbd>/<kbd>A</kbd> after cursor/line
         </li>
         <li>
-          <kbd>A</kbd> end of the line
-        </li>
-        <li>
-          <kbd>i</kbd> before cursor
-        </li>
-        <li>
-          <kbd>I</kbd> start of the line
+          <kbd>i</kbd>/<kbd>I</kbd> before cursor/line
         </li>
         <li>
           <kbd>o</kbd>/<kbd>O</kbd> new line below/above
@@ -112,6 +110,9 @@ const postObj = {
         </li>
         <li>
           <kbd>V</kbd> line text selection in Visual mode
+        </li>
+        <li>
+          If selected something and press <kbd>V</kbd> the selection will expand to grab all lines
         </li>
         <li>
           <kbd>Ctrl+v</kbd> block vertical text selection (handy for csv data), <kbd>$</kbd> -
@@ -735,9 +736,6 @@ const postObj = {
         <li>Cursor comes back to original position</li>
         <li>
           <kbd>yR</kbd> (enters into Seek mode) + <kbd>phrase</kbd> + <kbd>a</kbd> (tag)
-        </li>
-        <li>
-          Personally did not understand why it is helpful, better to jump to place, select & yank
         </li>
       </ul>
 

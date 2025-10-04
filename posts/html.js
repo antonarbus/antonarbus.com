@@ -19,10 +19,10 @@ const postObj = {
   date: '2025.10.04',
   tags: ['html'],
   imgUrl: 'https://antonarbus.com/imgs/xxx.png',
-  desc: 'xxx',
+  desc: 'Random html tags, attributes and features',
   body: (
     <>
-      <H>inert</H>
+      <H>inert attribute</H>
 
       <ul>
         <li>Prevents the click, focus events</li>

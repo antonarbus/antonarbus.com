@@ -28,9 +28,9 @@ const postObj = {
         <li>
           <code>zoom: 5</code> is the same as <code>scale: 5</code>
         </li>
-        <li>But it respects css flow and push other elements</li>
+        <li>But it respects css flow and pushes other elements</li>
         <li>
-          <code>scale</code> meanwhile just scales element in place, kind of it has absolute
+          <code>scale</code> meanwhile just scales an element in place, kind of it has absolute
           position
         </li>
       </ul>

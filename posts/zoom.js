@@ -15,12 +15,27 @@ import {
 } from '/components/post/reExport'
 
 const postObj = {
-  title: 'xxx',
-  date: '2025.10.xx',
-  tags: ['xxx', 'xxx'],
+  title: 'zoom',
+  date: '2025.10.05',
+  tags: ['css'],
   imgUrl: 'https://antonarbus.com/imgs/xxx.png',
-  desc: 'xxx',
-  body: <>xyz</>
+  desc: 'zoom css property',
+  body: (
+    <>
+      <H>Zoom</H>
+
+      <ul>
+        <li>
+          <code>zoom: 5</code> is the same as <code>scale: 5</code>
+        </li>
+        <li>But it respects css flow and push other elements</li>
+        <li>
+          <code>scale</code> meanwhile just scales element in place, kind of it has absolute
+          position
+        </li>
+      </ul>
+    </>
+  )
 }
 
 export default postObj

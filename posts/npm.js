@@ -196,7 +196,7 @@ const postObj = {
 
       <ul>
         <li>Nowadays peer dependencies are tried to be installed automatically</li>
-        <li>Before npm v7 they where not installed automatically</li>
+        <li>Before npm v7 they were not installed automatically, it was a user responsibility</li>
         <li>
           <Code>npm config get legacy-peer-deps</Code> check peer dep config
         </li>

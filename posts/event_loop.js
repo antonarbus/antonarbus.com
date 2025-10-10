@@ -137,30 +137,31 @@ const postObj = {
 
       <H>Event loop with React</H>
 
-<pre>
+      <pre style={{ whiteSpace: 'pre-wrap' }}>
+        {`
+        1. Call stack (synchronous code):
+          - synchronous code
+          - onClick handler runs
+          - dispatch() updates Redux state
+          - React schedules re-render
+          - React reconciles component tree
+          - React updates the actual DOM
+          - Call stack empties
 
-1. Call stack (synchronous code):
-    - synchronous code
-    - onClick handler runs
-    - dispatch() updates Redux state
-    - React schedules re-render
-    - React reconciles component tree
-    - React updates the actual DOM
-    - Call stack empties
+      2. Microtasks queue:
+          - Promise.resolve.then() callbacks
+          - queueMicrotask() callbacks
 
-2. Microtasks queue:
-    - Promise.resolve.then() callbacks
-    - queueMicrotask() callbacks
+      3. Browser rendering cycle:
+          - Style recalculation (CSS)
+          - Layout calculation (positions/sizes)
+          - requestAnimationFrame callbacks
+          - Paint pixels to screen
 
-3. Browser rendering cycle:
-    - Style recalculation (CSS)
-    - Layout calculation (positions/sizes)
-    - requestAnimationFrame callbacks
-    - Paint pixels to screen
-
-4. Macrotasks queue:
-    - setTimeout, setInterval callbacks
-</pre>
+      4. Macrotasks queue:
+          - setTimeout, setInterval callbacks
+        `}
+      </pre>
 
       <H>Web workers</H>
 

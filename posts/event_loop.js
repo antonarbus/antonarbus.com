@@ -177,23 +177,23 @@ const postObj = {
         {`
           Call stack (synchronous code):
             1. code1
-            2. setTimeout(code2)
-            3. Promise.resolve().then(code3)
-            4. store.dispatch('some action')
-            5. requestAnimationFrame(code4)
+            2. setTimeout(callback2) or setInterval(callback2)
+            3. Promise.resolve().then(callback3) or queueMicrotask(callback3)
+            4. react.setState('new value') or store.dispatch('some action')
+            5. requestAnimationFrame(callback4)
             6. code5
 
           Execution order
           
           Call stack (synchronous code):
             - code1 runs
-            - setTimeout(code2) schedules a macrotask (runs later)
-            - Promise.resolve().then(code3) schedules a microtask (runs soon)
+            - setTimeout(callback2) schedules a macrotask (runs later)
+            - Promise.resolve().then(callback3) schedules a microtask (runs soon)
             - store.dispatch('some action') runs
                 React updates its internal state immediately
                 React schedules a re-render (virtual DOM diff + DOM update)
                 These updates happen synchronously inside the same call stack (before it empties)
-            - requestAnimationFrame(code4) schedules a callback for the next frame
+            - requestAnimationFrame(callback4) schedules a callback for the next frame
             - code5 runs
             - call stack empties
           Microtasks queue:
@@ -204,11 +204,11 @@ const postObj = {
             - layout calculation (positions and sizes)
             - paint current frame (if React changed something)
           Before paint:
-            - requestAnimationFrame callbacks (→ code4) run
+            - requestAnimationFrame callbacks (→ callback4) run
           Paint:
             - browser paints the next frame
           Next macrotask:
-            - setTimeout callback (→ code2) runs in a new event-loop tick
+            - setTimeout callback (→ callback2) runs in a new event-loop tick
         `}
       </pre>
 

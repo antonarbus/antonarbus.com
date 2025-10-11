@@ -4,7 +4,7 @@ function Cmpt0() {
   function func() {
     alert(1) // synchronous call
     setTimeout(() => alert(2)) // macrotask sent to the end of the queue
-    Promise.resolve().then(res => alert(3)) // microtask
+    Promise.resolve().then((res) => alert(3)) // microtask
     alert(4) // regular synchronous call
     // 1 --> 4 --> 3 --> 2
   }
@@ -34,7 +34,8 @@ function Cmpt2() {
   const ref = React.useRef()
 
   function countToBln() {
-    let count = 0; const start = Date.now()
+    let count = 0
+    const start = Date.now()
     for (let j = 0; j < 1e9; j++) count++
     ref.current.innerHTML = count
     alert(`Done in ${Date.now() - start} ms`)
@@ -52,7 +53,9 @@ function Cmpt3() {
   const ref = React.useRef()
 
   function func() {
-    let i = 0; let j = 0; const start = Date.now()
+    let i = 0
+    let j = 0
+    const start = Date.now()
 
     function countToMln() {
       for (let k = 0; k < 1e6; k++) i++
@@ -93,12 +96,21 @@ const postObj = {
       <H>Event loop</H>
 
       <ul>
-        <li>best explanation ever -  <Lnk path='https://youtu.be/eiC58R16hb8?si=uv2bOdlrUJJEgP1J&t=652'>https://youtu.be/eiC58R16hb8?si=uv2bOdlrUJJEgP1J&t=652</Lnk></li>
-        <li>JS execution flow is based on an endless <i>event loop</i></li>
+        <li>
+          best explanation ever -{' '}
+          <Lnk path="https://youtu.be/eiC58R16hb8?si=uv2bOdlrUJJEgP1J&t=652">
+            https://youtu.be/eiC58R16hb8?si=uv2bOdlrUJJEgP1J&t=652
+          </Lnk>
+        </li>
+        <li>
+          JS execution flow is based on an endless <i>event loop</i>
+        </li>
         <li>JS executes tasks one by one starting from the oldest</li>
         <li>When there are no tasks anymore JS waits for new ones</li>
         <li>Task may come while the engine is busy, then it's queued</li>
-        <li>Queue of tasks is called <i>macrotask queue</i></li>
+        <li>
+          Queue of tasks is called <i>macrotask queue</i>
+        </li>
         <li>Rendering happens only after the task is completed, before another macrotask</li>
         <li>If a task takes long, the browser is blocked & raises the "page unresponsive” alert</li>
       </ul>
@@ -108,7 +120,10 @@ const postObj = {
       <ul>
         <li>Scripts we call</li>
         <li>Event handlers</li>
-        <li>Scripts are added to the end of the <i>macrotask queue</i> by <Code>{'setTimeout(func)'}</Code> with no delay</li>
+        <li>
+          Scripts are added to the end of the <i>macrotask queue</i> by{' '}
+          <Code>{'setTimeout(func)'}</Code> with no delay
+        </li>
       </ul>
 
       <H>Microtasks</H>
@@ -116,50 +131,84 @@ const postObj = {
       <ul>
         <li>After every macrotask, tasks from microtask queue are executed</li>
         <li>It's done before running other macrotasks or rendering or event handling</li>
-        <li>It guarantees that the environment is the same between microtasks (no mouse coordinate changes, no new network data, etc) </li>
-        <li>Microtask is a script called by promise handlers <Code>.then/catch/finally()</Code> or <Code>queueMicrotask(func)</Code> or observers</li>
-        <li>Microtasks are used behind of <code>await</code> as well</li>
+        <li>
+          It guarantees that the environment is the same between microtasks (no mouse coordinate
+          changes, no new network data, etc){' '}
+        </li>
+        <li>
+          Microtask is a script called by promise handlers <Code>.then/catch/finally()</Code> or{' '}
+          <Code>queueMicrotask(func)</Code> or observers
+        </li>
+        <li>
+          Microtasks are used behind of <code>await</code> as well
+        </li>
       </ul>
 
       <Hs>queueMicrotask()</Hs>
 
-      <p>So if we'd like to execute a function asynchronously (after the current code), but before changes are rendered or new events handled, we can schedule it with <Code>{'queueMicrotask(() => { func() })'}</Code></p>
+      <p>
+        So if we'd like to execute a function asynchronously (after the current code), but before
+        changes are rendered or new events handled, we can schedule it with{' '}
+        <Code>{'queueMicrotask(() => { func() })'}</Code>
+      </p>
 
       <H>Event loop sequence</H>
 
       <ol>
-        <li>M<span style={{ color: 'red', fontWeight: 600 }}>a</span>crotask (script, event handler) <br /></li>
-        <li>M<span style={{ color: 'red', fontWeight: 600 }}>i</span>crotask (promise handlers & <Code>queueMicrotask(func)</Code>) <br /></li>
-        <li>Render <br /></li>
-        <li>M<span style={{ color: 'red', fontWeight: 600 }}>a</span>crotask set by <Code>setTimeout(func)</Code> <br /></li>
+        <li>
+          M<span style={{ color: 'red', fontWeight: 600 }}>a</span>crotask (script, event handler){' '}
+          <br />
+        </li>
+        <li>
+          M<span style={{ color: 'red', fontWeight: 600 }}>i</span>crotask (promise handlers &{' '}
+          <Code>queueMicrotask(func)</Code>) <br />
+        </li>
+        <li>
+          Render <br />
+        </li>
+        <li>
+          M<span style={{ color: 'red', fontWeight: 600 }}>a</span>crotask set by{' '}
+          <Code>setTimeout(func)</Code> <br />
+        </li>
         <li>... again & again</li>
       </ol>
 
-      <H>Event loop with React</H>
-
       <pre style={{ whiteSpace: 'pre-wrap' }}>
         {`
-        1. Call stack (synchronous code):
-          - synchronous code
-          - onClick handler runs
-          - dispatch() updates Redux state
-          - React schedules re-render
-          - React reconciles component tree
-          - React updates the actual DOM
-          - Call stack empties
+          Call stack (synchronous code):
+            1. code1
+            2. setTimeout(code2)
+            3. Promise.resolve().then(code3)
+            4. store.dispatch('some action')
+            5. requestAnimationFrame(code4)
+            6. code5
 
-      2. Microtasks queue:
-          - Promise.resolve.then() callbacks
-          - queueMicrotask() callbacks
-
-      3. Browser rendering cycle:
-          - Style recalculation (CSS)
-          - Layout calculation (positions/sizes)
-          - requestAnimationFrame callbacks
-          - Paint pixels to screen
-
-      4. Macrotasks queue:
-          - setTimeout, setInterval callbacks
+          Execution order
+          
+          Call stack (synchronous code):
+            - code1 runs
+            - setTimeout(code2) schedules a macrotask (runs later)
+            - Promise.resolve().then(code3) schedules a microtask (runs soon)
+            - store.dispatch('some action') runs
+                React updates its internal state immediately
+                React schedules a re-render (virtual DOM diff + DOM update)
+                These updates happen synchronously inside the same call stack (before it empties)
+            - requestAnimationFrame(code4) schedules a callback for the next frame
+            - code5 runs
+            - call stack empties
+          Microtasks queue:
+            - resolved Promise callbacks queued earlier
+            - code3 (Promise callback) runs now
+          Browser rendering cycle:
+            - style recalculation (CSS)
+            - layout calculation (positions and sizes)
+            - paint current frame (if React changed something)
+          Before paint:
+            - requestAnimationFrame callbacks (→ code4) run
+          Paint:
+            - browser paints the next frame
+          Next macrotask:
+            - setTimeout callback (→ code2) runs in a new event-loop tick
         `}
       </pre>
 
@@ -178,8 +227,15 @@ const postObj = {
       <H>in NodeJS</H>
 
       <ul>
-        <li><Code>process.nextTick(func)</Code> executes function on the current iteration of the event loop, after the current operation ends, before <Code>setTimeout()</Code> and <Code>setImmediate()</Code></li>
-        <li><Code>setImmediate(func)</Code> is the same as <Code>setTimeout(func, 0)</Code> and executes in the next iteration of the event loop, as soon as possible</li>
+        <li>
+          <Code>process.nextTick(func)</Code> executes function on the current iteration of the
+          event loop, after the current operation ends, before <Code>setTimeout()</Code> and{' '}
+          <Code>setImmediate()</Code>
+        </li>
+        <li>
+          <Code>setImmediate(func)</Code> is the same as <Code>setTimeout(func, 0)</Code> and
+          executes in the next iteration of the event loop, as soon as possible
+        </li>
       </ul>
 
       <H>Examples</H>
@@ -188,7 +244,9 @@ const postObj = {
 
       <Cmpt0 />
 
-      <Code block jsx> {`
+      <Code block jsx>
+        {' '}
+        {`
       function Cmpt0() {
         function func() {
           alert(1) // synchronous call
@@ -200,9 +258,12 @@ const postObj = {
         return <button onClick={func}>Click</button>
       }
       const toRender0 = <Cmpt0 />
-      `}</Code>
+      `}
+      </Code>
 
-      <Hs>Count to billion without <Code> setTimeout()</Code></Hs>
+      <Hs>
+        Count to billion without <Code> setTimeout()</Code>
+      </Hs>
 
       <ul>
         <li>Run whole code at one time</li>
@@ -213,7 +274,9 @@ const postObj = {
 
       <Cmpt2 />
 
-      <Code block jsx> {`
+      <Code block jsx>
+        {' '}
+        {`
       function Cmpt2() {
         const ref = React.useRef()
       
@@ -232,21 +295,35 @@ const postObj = {
         )
       }
       const toRender2 = <Cmpt2 />
-      `}</Code>
+      `}
+      </Code>
 
-      <Hs>Count to billion with<Code>setTimeout()</Code></Hs>
+      <Hs>
+        Count to billion with<Code>setTimeout()</Code>
+      </Hs>
 
       <ul>
         <li>Split code into parts and queue them: 1 mln + 1 mln + ... up to 1 bln</li>
-        <li>Splitting with <Code>setTimeout()</Code> we make multiple macrotasks and changes are painted in-between</li>
-        <li>If an onclick event appears while the engine is busy it is queued mixed together with main counting tasks</li>
+        <li>
+          Splitting with <Code>setTimeout()</Code> we make multiple macrotasks and changes are
+          painted in-between
+        </li>
+        <li>
+          If an onclick event appears while the engine is busy it is queued mixed together with main
+          counting tasks
+        </li>
         <li>Page is responsive</li>
-        <li>There's in-browser minimal delay of 4ms for many nested setTimeout calls and the earlier we schedule task via setTimeout, the faster it runs</li>
+        <li>
+          There's in-browser minimal delay of 4ms for many nested setTimeout calls and the earlier
+          we schedule task via setTimeout, the faster it runs
+        </li>
       </ul>
 
       <Cmpt3 />
 
-      <Code block jsx> {`
+      <Code block jsx>
+        {' '}
+        {`
       function Cmpt3() {
         const ref = React.useRef()
       
@@ -281,7 +358,8 @@ const postObj = {
         )
       }
       const toRender3 = <Cmpt3 />
-      `}</Code>
+      `}
+      </Code>
 
       <Hs>All microtasks runs before render</Hs>
 
@@ -313,9 +391,7 @@ const postObj = {
 
       <Hs>Let event bubble</Hs>
 
-      <p>
-        Schedule an action until the event bubbled up and was handled on all levels.
-      </p>
+      <p>Schedule an action until the event bubbled up and was handled on all levels.</p>
 
       <Code block jsx>{`
       menu.onclick = function() {

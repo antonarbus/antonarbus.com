@@ -176,39 +176,48 @@ const postObj = {
       <pre style={{ whiteSpace: 'pre-wrap' }}>
         {`
           Call stack (synchronous code):
-            1. code1
-            2. setTimeout(callback2) or setInterval(callback2)
-            3. Promise.resolve().then(callback3) or queueMicrotask(callback3)
-            4. react.setState('new value') or store.dispatch('some action')
-            5. requestAnimationFrame(callback4)
-            6. code5
+            1) code1
+            2) setTimeout(callback2) or setInterval(callback2)
+            3) Promise.resolve().then(callback3) or queueMicrotask(callback3)
+            4) react.setState('new value') or store.dispatch('some action')
+            5) requestAnimationFrame(callback4)
+            6) code5
 
           Execution order
-          
+
           Call stack (synchronous code):
             - code1 runs
             - setTimeout(callback2) schedules a macrotask (runs later)
             - Promise.resolve().then(callback3) schedules a microtask (runs soon)
             - store.dispatch('some action') runs
-                React updates its internal state immediately
-                React schedules a re-render (virtual DOM diff + DOM update)
-                These updates happen synchronously inside the same call stack (before it empties)
+                React updates state and commits DOM changes synchronously (in this same stack)
+                React useLayoutEffect callbacks run here synchronously after DOM mutations
             - requestAnimationFrame(callback4) schedules a callback for the next frame
             - code5 runs
             - call stack empties
+
           Microtasks queue:
-            - resolved Promise callbacks queued earlier
-            - code3 (Promise callback) runs now
-          Browser rendering cycle:
+            - all previously queued microtasks
+            - callback3 (Promise/queueMicrotask) runs now
+            - (microtasks can enqueue more microtasks; the queue is fully drained before painting)
+            - 🕒 this happens **before the browser paints**
+
+          Browser rendering cycle (current frame):
             - style recalculation (CSS)
-            - layout calculation (positions and sizes)
-            - paint current frame (if React changed something)
-          Before paint:
-            - requestAnimationFrame callbacks (→ callback4) run
-          Paint:
-            - browser paints the next frame
+            - layout (positions and sizes)
+            - DOM updates from React are now visible
+            - PAINT #1!!! current frame (if anything visually changed)
+            - React \`useEffect\` callbacks run after paint (asynchronously via MessageChannel or similar)
+
+          Next frame:
+            - requestAnimationFrame(callback4) runs (just before this frame's paint)
+            - PAINT #2!!! next frame (≈16 ms at 60 Hz):
+            - 🕒 if nothing changed in the UI, the browser may skip actual repaint work,
+                  but requestAnimationFrame() still fires on the next refresh tick (~16 ms)
+                  as long as the page is visible
+
           Next macrotask:
-            - setTimeout callback (→ callback2) runs in a new event-loop tick
+            - setTimeout / setInterval callback (→ callback2) runs in a new event-loop tick
         `}
       </pre>
 

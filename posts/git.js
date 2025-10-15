@@ -862,6 +862,27 @@ const postObj = {
         </li>
       </ul>
 
+      <H>Reset one branch to match another</H>
+
+      <ul>
+        <li>
+          For ex. we made some mistakes in <code>dev</code> branch and wish to roll back and make it
+          the same as <code>main</code>
+        </li>
+        <li>
+          <code>git checkout dev</code>
+        </li>
+        <li>
+          <code>git fetch origin</code>
+        </li>
+        <li>
+          <code>git reset --hard origin/main</code>
+        </li>
+        <li>
+          <code>git push --force origin dev</code>
+        </li>
+      </ul>
+
       <H>Restore vs Reset</H>
 
       <ul>

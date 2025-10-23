@@ -1,33 +1,100 @@
+import { Suspense, use } from 'react'
 import { Code, Lnk, useState, jsxToStr, H } from '/components/post/reExport'
 import randomNumFromTo from '/functions/randomNumFromTo'
 import sleeper from '/functions/sleeper'
 import axios from 'axios'
+import { ErrorBoundary } from 'react-error-boundary'
 
 // #region
+async function getTitle({ postNum }) {
+  const { data } = await axios(`https://jsonplaceholder.typicode.com/posts/${postNum}`)
+  await sleeper(1000)
+  return data
+}
+
 function ComponentWithUseState() {
-  const [state, setState] = useState({ loading: false, errorMsg: '', title: '', postNum: -1 })
+  const [show, setShow] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+  const [content, setContent] = useState(null)
 
-  function getTitle() {
+  function handleGetTitle() {
     const postNum = randomNumFromTo(1, 150)
-    const url = `https://jsonplaceholder.typicode.com/posts/${postNum}`
 
-    setState({ ...state, loading: true, postNum, errorMsg: '' })
-    axios(url)
+    setShow(true)
+    setLoading(true)
+    setError(null)
+    setContent(null)
+
+    axios(`https://jsonplaceholder.typicode.com/posts/${postNum}`)
       .then(sleeper(1000))
-      .then((res) => setState({ loading: false, errorMsg: '', title: res.data.title, postNum }))
-      .catch(() => setState({ loading: false, errorMsg: 'ERROR', title: '', postNum }))
+      .then((res) => {
+        setLoading(false)
+        setContent(res.data)
+      })
+      .catch((error) => {
+        setLoading(false)
+        setError(error)
+      })
   }
 
   return (
     <>
       <div>
-        <button onClick={getTitle}>Get random post title</button>
+        <button onClick={handleGetTitle}>Get random post title</button>
       </div>
-      <div>Post #{state.postNum} </div>
-      <div>Title: {state.loading ? 'Loading...' : state.title} </div>
+      {show && (
+        <>
+          {loading ? (
+            <p>Loading...</p>
+          ) : error ? (
+            <p style={{ color: 'red' }}>⚠️Something went wrong</p>
+          ) : (
+            content && (
+              <>
+                <div>Post #{content.id} </div>
+                <div>Title: {content.title} </div>
+              </>
+            )
+          )}
+        </>
+      )}
+    </>
+  )
+}
+
+function TitleDisplay({ titlePromise }) {
+  const titleContent = use(titlePromise)
+
+  return (
+    <>
+      <div>Post #{titleContent.id} </div>
+      <div>Title: {titleContent.title} </div>
+    </>
+  )
+}
+
+function ComponentWithUse() {
+  const [titlePromise, setTitlePromise] = useState(null)
+  const [show, setShow] = useState(false)
+
+  return (
+    <>
       <div>
-        <span style={{ color: 'red' }}>{state.errorMsg}</span>
+        <button
+          onClick={() => {
+            setShow(true)
+            setTitlePromise(getTitle({ postNum: randomNumFromTo(1, 150) }))
+          }}
+        >
+          Get random post title
+        </button>
       </div>
+      <ErrorBoundary fallback={<p>⚠️Something went wrong</p>}>
+        <Suspense fallback={<p>Loading...</p>}>
+          {show && <TitleDisplay titlePromise={titlePromise} />}
+        </Suspense>
+      </ErrorBoundary>
     </>
   )
 }
@@ -99,6 +166,8 @@ const postObj = {
       <ComponentWithUseState />
 
       <H>Via React.use()</H>
+
+      <ComponentWithUse />
     </>
   )
 }

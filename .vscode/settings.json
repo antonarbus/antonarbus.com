@@ -1,5 +1,11 @@
 {
-  "standard.enable": true,
+  "standard.enable": false,
+  "biome.enabled": false,
+  "prettier.enable": true,
+  "eslint.enable": false,
+
+  "editor.formatOnSave": true,
+
   "cSpell.words": [
     "accum",
     "addgroup",

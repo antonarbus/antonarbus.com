@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import Router from 'next/router'
+import Head from 'next/head'
 import { Date } from './Date.js'
 import { Tags } from './Tags.js'
 import { Back } from './Back.js'
@@ -76,9 +77,12 @@ export function OnePost(props) {
   // console.log(props)
   return (
     <>
+      <Head>
+        <title>{props.post.title}</title>
+      </Head>
       <article>
         <Back />
-        <title>{props.post.title}</title>
+        <h1 className="post-title">{props.post.title}</h1>
         <Resizable
           enable={{
             right: true
@@ -207,7 +211,7 @@ export function OnePost(props) {
           border-radius: 4px;
         }
 
-        title {
+        .post-title {
           display: block;
           margin: 25px 0px;
           font-size: 24px;

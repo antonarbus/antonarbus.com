@@ -1,4 +1,4 @@
-import { Code, Lnk, useState, jsxToStr } from '/components/post/reExport'
+import { Code, Lnk, useState, jsxToStr, H } from '/components/post/reExport'
 import randomNumFromTo from '/functions/randomNumFromTo'
 import sleeper from '/functions/sleeper'
 import axios from 'axios'
@@ -14,16 +14,20 @@ function ComponentWithUseState() {
     setState({ ...state, loading: true, postNum, errorMsg: '' })
     axios(url)
       .then(sleeper(1000))
-      .then(res => setState({ loading: false, errorMsg: '', title: res.data.title, postNum }))
+      .then((res) => setState({ loading: false, errorMsg: '', title: res.data.title, postNum }))
       .catch(() => setState({ loading: false, errorMsg: 'ERROR', title: '', postNum }))
   }
 
   return (
     <>
-      <div><button onClick={getTitle}>Get random post title</button></div>
-      <div>Post #{state.postNum}  </div>
+      <div>
+        <button onClick={getTitle}>Get random post title</button>
+      </div>
+      <div>Post #{state.postNum} </div>
       <div>Title: {state.loading ? 'Loading...' : state.title} </div>
-      <div><span style={{ color: 'red' }}>{state.errorMsg}</span></div>
+      <div>
+        <span style={{ color: 'red' }}>{state.errorMsg}</span>
+      </div>
     </>
   )
 }
@@ -36,11 +40,13 @@ const postObj = {
   desc: 'Fetch data in React with loading indicator',
   body: (
     <>
+      <H>Via React.useEffect()</H>
+
       <p>
         Let's fetch data from{' '}
         <Lnk path={'https://jsonplaceholder.typicode.com/guide/'}> jsonplaceholder </Lnk>
-        and set a state with <Code>useState()</Code> hook upon success or error, which
-        will lead to a render.
+        and set a state with <Code>useState()</Code> hook upon success or error, which will lead to
+        a render.
       </p>
 
       <p>
@@ -56,7 +62,11 @@ const postObj = {
         }
       `}</Code>
 
-      <p><Lnk path={'https://jsonplaceholder.typicode.com/guide/'}>Jsonplaceholder</Lnk> returns 100 items, so every time we ask data under number 101 and more we get an error for our http request.</p>
+      <p>
+        <Lnk path={'https://jsonplaceholder.typicode.com/guide/'}>Jsonplaceholder</Lnk> returns 100
+        items, so every time we ask data under number 101 and more we get an error for our http
+        request.
+      </p>
 
       <Code block>{`
       import axios from 'axios'
@@ -88,6 +98,7 @@ const postObj = {
 
       <ComponentWithUseState />
 
+      <H>Via React.use()</H>
     </>
   )
 }

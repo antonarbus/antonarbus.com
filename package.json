@@ -9,6 +9,7 @@
     "lint": "next lint",
     "test": "jest --watch",
     "mocha": "mocha",
+    "update-packages": "npx npm-check-updates -i",
     "build-docker": "docker compose -f docker-compose.prod.yml build",
     "build-docker-no-cache": "docker compose -f docker-compose.prod.yml build --no-cache",
     "start-docker": "docker compose -f docker-compose.prod.yml up"

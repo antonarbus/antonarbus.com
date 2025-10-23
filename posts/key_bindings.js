@@ -25,7 +25,8 @@ const postObj = {
       </ul>
 
       <Code block json>{`
-        {
+
+      {
           "machine_specific": {
             "krbn-cee609c8-9b7f-430a-b018-9b91e0d62d3e": {
               "enable_multitouch_extension": true
@@ -33,15 +34,34 @@ const postObj = {
           },
           "profiles": [
             {
+              "devices": [
+                {
+                  "identifiers": {
+                    "is_keyboard": true,
+                    "product_id": 834,
+                    "vendor_id": 1452
+                  },
+                  "manipulate_caps_lock_led": false
+                }
+              ],
+              "name": "Default profile",
+              "selected": true,
+              "virtual_hid_keyboard": {
+                "keyboard_type_v2": "ansi"
+              },
               "complex_modifications": {
                 "rules": [
                   {
                     "description": "Play/pause button should only control iTunes.",
                     "manipulators": [
                       {
-                        "from": { "key_code": "f8" },
+                        "from": {
+                          "key_code": "f8"
+                        },
                         "to": [
-                          { "shell_command": "osascript -e 'tell application \\"Music\\" to playpause'" }
+                          {
+                            "shell_command": "osascript -e 'tell application \\"Music\\" to playpause'"
+                          }
                         ],
                         "type": "basic"
                       }
@@ -51,6 +71,36 @@ const postObj = {
                     "description": "Change caps_lock to HYPER key",
                     "manipulators": [
                       {
+                        "description": "HYPER key in browsers (no Esc on single press)",
+                        "from": {
+                          "key_code": "caps_lock",
+                          "modifiers": {
+                            "optional": ["any"]
+                          }
+                        },
+                        "to": [
+                          {
+                            "key_code": "left_control",
+                            "modifiers": ["left_command", "left_option"]
+                          }
+                        ],
+                        "conditions": [
+                          {
+                            "type": "frontmost_application_if",
+                            "bundle_identifiers": [
+                              "^com.apple.Safari",
+                              "^com.google.Chrome",
+                              "^org.mozilla.firefox",
+                              "^com.microsoft.edgemac",
+                              "^com.brave.Browser",
+                              "^com.operasoftware.Opera"
+                            ]
+                          }
+                        ],
+                        "type": "basic"
+                      },
+                      {
+                        "description": "HYPER key in other apps (Esc on single press)",
                         "from": {
                           "key_code": "caps_lock",
                           "modifiers": {
@@ -79,7 +129,13 @@ const postObj = {
                               "^org.alacritty",
                               "^net.kovidgoyal.kitty",
                               "^com.jetbrains.*",
-                              "^com.tinyapp.VimR"
+                              "^com.tinyapp.VimR",
+                              "^com.apple.Safari",
+                              "^com.google.Chrome",
+                              "^org.mozilla.firefox",
+                              "^com.microsoft.edgemac",
+                              "^com.brave.Browser",
+                              "^com.operasoftware.Opera"
                             ]
                           }
                         ],
@@ -94,7 +150,9 @@ const postObj = {
                         "type": "basic",
                         "from": {
                           "key_code": "caps_lock",
-                          "modifiers": { "optional": ["any"] }
+                          "modifiers": {
+                            "optional": ["any"]
+                          }
                         },
                         "to": [
                           {
@@ -125,7 +183,183 @@ const postObj = {
                     ]
                   },
                   {
-                    "description": "Custom Anton's shortcuts",
+                    "description": "Mouse cursor control (Fn + hjkl)",
+                    "manipulators": [
+                      {
+                        "description": "Fn + K = Cursor UP",
+                        "type": "basic",
+                        "from": {
+                          "key_code": "k",
+                          "modifiers": {
+                            "mandatory": ["fn"]
+                          }
+                        },
+                        "to": [
+                          {
+                            "mouse_key": {
+                              "y": -368
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "description": "Fn + H = Cursor LEFT",
+                        "type": "basic",
+                        "from": {
+                          "key_code": "h",
+                          "modifiers": {
+                            "mandatory": ["fn"]
+                          }
+                        },
+                        "to": [
+                          {
+                            "mouse_key": {
+                              "x": -368
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "description": "Fn + J = Cursor DOWN",
+                        "type": "basic",
+                        "from": {
+                          "key_code": "j",
+                          "modifiers": {
+                            "mandatory": ["fn"]
+                          }
+                        },
+                        "to": [
+                          {
+                            "mouse_key": {
+                              "y": 368
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "description": "Fn + L = Cursor RIGHT",
+                        "type": "basic",
+                        "from": {
+                          "key_code": "l",
+                          "modifiers": {
+                            "mandatory": ["fn"]
+                          }
+                        },
+                        "to": [
+                          {
+                            "mouse_key": {
+                              "x": 368
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "description": "Fn + Cmd + K = Cursor UP (Fast)",
+                        "type": "basic",
+                        "from": {
+                          "key_code": "k",
+                          "modifiers": {
+                            "mandatory": ["fn", "left_command"]
+                          }
+                        },
+                        "to": [
+                          {
+                            "mouse_key": {
+                              "y": -1536
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "description": "Fn + Cmd + H = Cursor LEFT (Fast)",
+                        "type": "basic",
+                        "from": {
+                          "key_code": "h",
+                          "modifiers": {
+                            "mandatory": ["fn", "left_command"]
+                          }
+                        },
+                        "to": [
+                          {
+                            "mouse_key": {
+                              "x": -1536
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "description": "Fn + Cmd + J = Cursor DOWN (Fast)",
+                        "type": "basic",
+                        "from": {
+                          "key_code": "j",
+                          "modifiers": {
+                            "mandatory": ["fn", "left_command"]
+                          }
+                        },
+                        "to": [
+                          {
+                            "mouse_key": {
+                              "y": 1536
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "description": "Fn + Cmd + L = Cursor RIGHT (Fast)",
+                        "type": "basic",
+                        "from": {
+                          "key_code": "l",
+                          "modifiers": {
+                            "mandatory": ["fn", "left_command"]
+                          }
+                        },
+                        "to": [
+                          {
+                            "mouse_key": {
+                              "x": 1536
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "description": "Mouse clicks (Fn + m, Fn + comma)",
+                    "manipulators": [
+                      {
+                        "description": "Fn + m to left-click",
+                        "type": "basic",
+                        "from": {
+                          "key_code": "m",
+                          "modifiers": {
+                            "mandatory": ["fn"]
+                          }
+                        },
+                        "to": [
+                          {
+                            "pointing_button": "button1"
+                          }
+                        ]
+                      },
+                      {
+                        "description": "Fn + , to right-click",
+                        "type": "basic",
+                        "from": {
+                          "key_code": "comma",
+                          "modifiers": {
+                            "mandatory": ["fn"]
+                          }
+                        },
+                        "to": [
+                          {
+                            "pointing_button": "button2"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "description": "Vim-style navigation (Hyper + hjkl)",
                     "manipulators": [
                       {
                         "description": "UP (Vim)",
@@ -137,7 +371,11 @@ const postObj = {
                             "optional": ["any"]
                           }
                         },
-                        "to": [{ "key_code": "up_arrow" }]
+                        "to": [
+                          {
+                            "key_code": "up_arrow"
+                          }
+                        ]
                       },
                       {
                         "description": "LEFT (Vim)",
@@ -149,7 +387,11 @@ const postObj = {
                             "optional": ["any"]
                           }
                         },
-                        "to": [{ "key_code": "left_arrow" }]
+                        "to": [
+                          {
+                            "key_code": "left_arrow"
+                          }
+                        ]
                       },
                       {
                         "description": "DOWN (Vim)",
@@ -161,7 +403,11 @@ const postObj = {
                             "optional": ["any"]
                           }
                         },
-                        "to": [{ "key_code": "down_arrow" }]
+                        "to": [
+                          {
+                            "key_code": "down_arrow"
+                          }
+                        ]
                       },
                       {
                         "description": "RIGHT (Vim)",
@@ -173,8 +419,17 @@ const postObj = {
                             "optional": ["any"]
                           }
                         },
-                        "to": [{ "key_code": "right_arrow" }]
-                      },
+                        "to": [
+                          {
+                            "key_code": "right_arrow"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "description": "Delete operations (Hyper + u, o, i)",
+                    "manipulators": [
                       {
                         "description": "Delete backspace",
                         "type": "basic",
@@ -185,7 +440,11 @@ const postObj = {
                             "optional": ["any"]
                           }
                         },
-                        "to": [{ "key_code": "delete_or_backspace" }]
+                        "to": [
+                          {
+                            "key_code": "delete_or_backspace"
+                          }
+                        ]
                       },
                       {
                         "description": "Delete forward",
@@ -197,22 +456,10 @@ const postObj = {
                             "optional": ["any"]
                           }
                         },
-                        "to": [{ "key_code": "delete_forward" }]
-                      },
-                      {
-                        "description": "Delete word under cursor (Vim binding)",
-                        "type": "basic",
-                        "from": {
-                          "key_code": "d",
-                          "modifiers": {
-                            "mandatory": ["left_control", "left_command", "left_option"],
-                            "optional": ["any"]
-                          }
-                        },
                         "to": [
-                          { "key_code": "left_arrow", "modifiers": ["option"] },
-                          { "key_code": "right_arrow", "modifiers": ["option", "shift"] },
-                          { "key_code": "delete_or_backspace" }
+                          {
+                            "key_code": "delete_forward"
+                          }
                         ]
                       },
                       {
@@ -226,11 +473,24 @@ const postObj = {
                           }
                         },
                         "to": [
-                          { "key_code": "left_arrow", "modifiers": ["option"] },
-                          { "key_code": "right_arrow", "modifiers": ["option", "shift"] },
-                          { "key_code": "delete_or_backspace" }
+                          {
+                            "key_code": "left_arrow",
+                            "modifiers": ["option"]
+                          },
+                          {
+                            "key_code": "right_arrow",
+                            "modifiers": ["option", "shift"]
+                          },
+                          {
+                            "key_code": "delete_or_backspace"
+                          }
                         ]
-                      },
+                      }
+                    ]
+                  },
+                  {
+                    "description": "Swedish characters (Hyper + ;, ', [)",
+                    "manipulators": [
                       {
                         "description": "ö",
                         "type": "basic",
@@ -240,7 +500,15 @@ const postObj = {
                             "mandatory": ["left_control", "left_command", "left_option"]
                           }
                         },
-                        "to": [{ "key_code": "u", "modifiers": ["right_option"] }, { "key_code": "o" }]
+                        "to": [
+                          {
+                            "key_code": "u",
+                            "modifiers": ["right_option"]
+                          },
+                          {
+                            "key_code": "o"
+                          }
+                        ]
                       },
                       {
                         "description": "Ö",
@@ -252,8 +520,14 @@ const postObj = {
                           }
                         },
                         "to": [
-                          { "key_code": "u", "modifiers": ["right_option"] },
-                          { "key_code": "o", "modifiers": ["left_shift"] }
+                          {
+                            "key_code": "u",
+                            "modifiers": ["right_option"]
+                          },
+                          {
+                            "key_code": "o",
+                            "modifiers": ["left_shift"]
+                          }
                         ]
                       },
                       {
@@ -265,7 +539,15 @@ const postObj = {
                             "mandatory": ["left_control", "left_command", "left_option"]
                           }
                         },
-                        "to": [{ "key_code": "u", "modifiers": ["left_option"] }, { "key_code": "a" }]
+                        "to": [
+                          {
+                            "key_code": "u",
+                            "modifiers": ["left_option"]
+                          },
+                          {
+                            "key_code": "a"
+                          }
+                        ]
                       },
                       {
                         "description": "Ä",
@@ -277,8 +559,14 @@ const postObj = {
                           }
                         },
                         "to": [
-                          { "key_code": "u", "modifiers": ["left_option"] },
-                          { "key_code": "a", "modifiers": ["left_shift"] }
+                          {
+                            "key_code": "u",
+                            "modifiers": ["left_option"]
+                          },
+                          {
+                            "key_code": "a",
+                            "modifiers": ["left_shift"]
+                          }
                         ]
                       },
                       {
@@ -290,7 +578,12 @@ const postObj = {
                             "mandatory": ["left_control", "left_command", "left_option"]
                           }
                         },
-                        "to": [{ "key_code": "a", "modifiers": ["left_option"] }]
+                        "to": [
+                          {
+                            "key_code": "a",
+                            "modifiers": ["left_option"]
+                          }
+                        ]
                       },
                       {
                         "description": "Å",
@@ -301,49 +594,43 @@ const postObj = {
                             "mandatory": ["left_control", "left_command", "left_option", "left_shift"]
                           }
                         },
-                        "to": [{ "key_code": "a", "modifiers": ["left_option", "left_shift"] }]
-                      },
-                      {
-                        "description": "Backtick \`",
-                        "type": "basic",
-                        "from": { "key_code": "non_us_backslash" },
-                        "to": [{ "key_code": "grave_accent_and_tilde" }]
-                      },
-                      {
-                        "description": "Tilde ~",
-                        "type": "basic",
-                        "from": { "key_code": "non_us_backslash", "modifiers": { "mandatory": ["shift"] } },
-                        "to": [{ "key_code": "grave_accent_and_tilde", "modifiers": ["shift"] }]
-                      },
-                      {
-                        "description": "Backslash \\",
-                        "type": "basic",
-                        "from": { "key_code": "grave_accent_and_tilde" },
                         "to": [
-                          { "key_code": "p", "modifiers": ["right_command", "right_option", "right_shift"] }
+                          {
+                            "key_code": "a",
+                            "modifiers": ["left_option", "left_shift"]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "description": "Password insertion (Hyper + p)",
+                    "manipulators": [
+                      {
+                        "description": "Hyper + P  to insert a secret",
+                        "type": "basic",
+                        "from": {
+                          "key_code": "p",
+                          "modifiers": {
+                            "mandatory": ["left_control", "left_command", "left_option"],
+                            "optional": ["any"]
+                          }
+                        },
+                        "to": [
+                          {
+                            "shell_command": "printf 'password' | pbcopy && osascript -e 'tell application \\"System Events\\" to keystroke \\"v\\" using command down'"
+                          }
                         ]
                       }
                     ]
                   }
                 ]
-              },
-              "devices": [
-                {
-                  "identifiers": {
-                    "is_keyboard": true,
-                    "product_id": 834,
-                    "vendor_id": 1452
-                  },
-                  "manipulate_caps_lock_led": false
-                }
-              ],
-              "name": "Default profile",
-              "selected": true,
-              "virtual_hid_keyboard": { "keyboard_type_v2": "ansi" }
+              }
             }
           ]
         }
 
+      
       `}</Code>
 
       <p>

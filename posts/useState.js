@@ -151,7 +151,7 @@ function SetStateWithPreviousValue() {
 // #endregion
 
 const postObj = {
-  title: 'useState',
+  title: 'React.useState',
   date: '2021.09.25',
   tags: ['react', 'basics', 'hook'],
   desc: 'useState hook in React',

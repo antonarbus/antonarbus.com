@@ -1,4 +1,17 @@
-import { Code, H, Hs, LazyImg, Lnk, React, useEffect, useState, useRef, useCallback, useMemo, jsxToStr } from '/components/post/reExport'
+import {
+  Code,
+  H,
+  Hs,
+  LazyImg,
+  Lnk,
+  React,
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+  useMemo,
+  jsxToStr
+} from '/components/post/reExport'
 import { motion, AnimatePresence, useCycle } from 'framer-motion'
 import { Button } from '@mui/material'
 
@@ -12,13 +25,7 @@ const Example1 = () => (
   </motion.div>
 )
 
-const Example2 = () => (
-  <motion.button
-    whileHover={{ scale: 1.2 }}
-  >
-    Animated hover
-  </motion.button>
-)
+const Example2 = () => <motion.button whileHover={{ scale: 1.2 }}>Animated hover</motion.button>
 
 const Example3 = () => (
   <Button
@@ -43,8 +50,8 @@ const containerVariants = {
 const Example4 = () => (
   <motion.div
     variants={containerVariants}
-    initial='hidden'
-    animate='visible'
+    initial="hidden"
+    animate="visible"
     css={{ fontSize: '30px' }}
   >
     Animated text
@@ -54,20 +61,17 @@ const Example4 = () => (
 const Example5 = ({ children }) => (
   <motion.div
     variants={containerVariants}
-    initial='hidden'
-    animate='visible'
+    initial="hidden"
+    animate="visible"
     css={{ fontSize: '30px' }}
   >
     Parent motion
-    { children }
+    {children}
   </motion.div>
 )
 
 const Example6 = ({ children }) => (
-  <motion.div
-    variants={containerVariants}
-    css={{ color: 'grey' }}
-  >
+  <motion.div variants={containerVariants} css={{ color: 'grey' }}>
     Child motion
   </motion.div>
 )
@@ -85,15 +89,12 @@ const childVariants = {
 const Example7 = ({ children }) => (
   <motion.div
     variants={parentVariants}
-    initial='hidden'
-    animate='visible'
+    initial="hidden"
+    animate="visible"
     css={{ fontSize: '30px', overflow: 'hidden' }}
   >
     Parent motion
-    <motion.div
-      variants={childVariants}
-      css={{ color: 'grey', fontSize: '16px' }}
-    >
+    <motion.div variants={childVariants} css={{ color: 'grey', fontSize: '16px' }}>
       Child motion
     </motion.div>
   </motion.div>
@@ -120,45 +121,31 @@ const childVariants2 = {
 const Example8 = ({ children }) => (
   <motion.div
     variants={parentVariants2}
-    initial='hidden'
-    animate='visible'
+    initial="hidden"
+    animate="visible"
     css={{ fontSize: '30px', overflow: 'hidden' }}
   >
     Parent motion
-    <motion.div
-      variants={childVariants2}
-      css={{ color: 'grey', fontSize: '16px' }}
-    >
+    <motion.div variants={childVariants2} css={{ color: 'grey', fontSize: '16px' }}>
       Child motion 1
     </motion.div>
-    <motion.div
-      variants={childVariants2}
-      css={{ color: 'grey', fontSize: '16px' }}
-    >
+    <motion.div variants={childVariants2} css={{ color: 'grey', fontSize: '16px' }}>
       Child motion 2
     </motion.div>
-    <motion.div
-      variants={childVariants2}
-      css={{ color: 'grey', fontSize: '16px' }}
-    >
+    <motion.div variants={childVariants2} css={{ color: 'grey', fontSize: '16px' }}>
       Child motion 3
     </motion.div>
   </motion.div>
 )
 
 const Example9 = () => (
-  <motion.button
-    whileHover={{ scale: [1.2, 1, 1.2, 1, 1.2, 1, 1.2, 1, 1.2, 1, 1.2] }}
-  >
+  <motion.button whileHover={{ scale: [1.2, 1, 1.2, 1, 1.2, 1, 1.2, 1, 1.2, 1, 1.2] }}>
     Animated hover with keyframes
   </motion.button>
 )
 
 const Example10 = () => (
-  <motion.button
-    whileHover={{ scale: 1.2 }}
-    transition={{ repeat: Infinity }}
-  >
+  <motion.button whileHover={{ scale: 1.2 }} transition={{ repeat: Infinity }}>
     Animated hover with yo-yo
   </motion.button>
 )
@@ -170,11 +157,7 @@ const Example11 = () => {
     <>
       <AnimatePresence>
         {isShow && (
-          <motion.h2
-            initial={{ x: '-100vw' }}
-            animate={{ x: 0 }}
-            exit={{ x: '100vw' }}
-          >
+          <motion.h2 initial={{ x: '-100vw' }} animate={{ x: 0 }} exit={{ x: '100vw' }}>
             Animated text
           </motion.h2>
         )}
@@ -233,8 +216,7 @@ const Example13 = () => {
           ease: 'easeInOut'
         }
       }}
-    >
-    </motion.div>
+    ></motion.div>
   )
 }
 
@@ -297,8 +279,7 @@ const Example15 = () => {
         }}
         variants={variants}
         animate={animation}
-      >
-      </motion.div>
+      ></motion.div>
       <button onClick={() => cycleAnimation()}>Change animation variant</button>
     </>
   )
@@ -377,7 +358,7 @@ function Example16() {
 const postObj = {
   title: 'framer motion',
   date: '2023.02.04',
-  tags: ['React', 'css', 'animation'],
+  tags: ['react', 'css', 'animation'],
   imgUrl: 'https://antonarbus.com/imgs/framer_motion.png',
   desc: 'framer motion library for animation in React',
   body: (
@@ -385,17 +366,37 @@ const postObj = {
       <H>Installation</H>
 
       <ul>
-        <li><Lnk path='https://www.framer.com/motion/introduction/#quick-start'>https://www.framer.com/motion/introduction/#quick-start</Lnk></li>
-        <li><Code bash>npm i framer-motion</Code> - install</li>
-        <li><Code>{'import { motion } from "framer-motion"'}</Code> - import</li>
+        <li>
+          <Lnk path="https://www.framer.com/motion/introduction/#quick-start">
+            https://www.framer.com/motion/introduction/#quick-start
+          </Lnk>
+        </li>
+        <li>
+          <Code bash>npm i framer-motion</Code> - install
+        </li>
+        <li>
+          <Code>{'import { motion } from "framer-motion"'}</Code> - import
+        </li>
       </ul>
 
       <H>Some info</H>
 
       <ul>
-        <li><Lnk path='https://egghead.io/lessons/react-create-micro-interactions-with-framer-motion-gesture-props'>https://egghead.io/lessons/react-create-micro-interactions-with-framer-motion-gesture-props</Lnk></li>
-        <li><Lnk path='https://www.youtube.com/playlist?list=PLNG2YBDrzK-yhlQtfsrzzQvaLDVj-pMXI'>https://www.youtube.com/playlist?list=PLNG2YBDrzK-yhlQtfsrzzQvaLDVj-pMXI</Lnk></li>
-        <li><Lnk path='https://www.youtube.com/playlist?list=PL4cUxeGkcC9iHDnQfTHEVVceOEBsOf07i'>https://www.youtube.com/playlist?list=PL4cUxeGkcC9iHDnQfTHEVVceOEBsOf07i</Lnk></li>
+        <li>
+          <Lnk path="https://egghead.io/lessons/react-create-micro-interactions-with-framer-motion-gesture-props">
+            https://egghead.io/lessons/react-create-micro-interactions-with-framer-motion-gesture-props
+          </Lnk>
+        </li>
+        <li>
+          <Lnk path="https://www.youtube.com/playlist?list=PLNG2YBDrzK-yhlQtfsrzzQvaLDVj-pMXI">
+            https://www.youtube.com/playlist?list=PLNG2YBDrzK-yhlQtfsrzzQvaLDVj-pMXI
+          </Lnk>
+        </li>
+        <li>
+          <Lnk path="https://www.youtube.com/playlist?list=PL4cUxeGkcC9iHDnQfTHEVVceOEBsOf07i">
+            https://www.youtube.com/playlist?list=PL4cUxeGkcC9iHDnQfTHEVVceOEBsOf07i
+          </Lnk>
+        </li>
       </ul>
 
       <H>Simple animation</H>
@@ -448,7 +449,11 @@ const postObj = {
       <H>Variants</H>
 
       <ul>
-        <li>Variants allows to extract <code>initial</code>, <code>animate</code> & <code>transition</code> props into an external object and reference it in multiple components.</li>
+        <li>
+          Variants allows to extract <code>initial</code>, <code>animate</code> &{' '}
+          <code>transition</code> props into an external object and reference it in multiple
+          components.
+        </li>
         <li>It makes code cleaner</li>
       </ul>
 
@@ -477,7 +482,10 @@ const postObj = {
       <ul>
         <li>If we have a parent motions element with enabled variants</li>
         <li>And it has children with another motions elements with same variant prop</li>
-        <li>Then children will inherit <code>initial</code> and <code>animate</code> props from the parent, unless not specified other values</li>
+        <li>
+          Then children will inherit <code>initial</code> and <code>animate</code> props from the
+          parent, unless not specified other values
+        </li>
       </ul>
 
       <Code block jsx>{`
@@ -523,7 +531,10 @@ const postObj = {
         <li>By default animations starts at the same time everywhere</li>
         <li>Usually we want parent to animate and only after start children animation</li>
         <li>We may play with delays, but that is not elegant</li>
-        <li>With <code>variants</code> we can use <Code>when</Code> prop of <code>transition</code> with <Code>beforeChildren</Code> value to achieve it</li>
+        <li>
+          With <code>variants</code> we can use <Code>when</Code> prop of <code>transition</code>{' '}
+          with <Code>beforeChildren</Code> value to achieve it
+        </li>
       </ul>
 
       <Code block jsx>{`
@@ -643,7 +654,9 @@ const postObj = {
 
       <ul>
         <li>Before we just animated a component's appetence </li>
-        <li>With <Code>AnimatePresence</Code> can animate also removal of a component</li>
+        <li>
+          With <Code>AnimatePresence</Code> can animate also removal of a component
+        </li>
       </ul>
 
       <Code block jsx>{`
@@ -893,8 +906,13 @@ const postObj = {
       <H>Layout & Custom prop</H>
 
       <ul>
-        <li>with <code>custom</code> prop we may send data to variants for dynamic animation</li>
-        <li>with <code>layoutId</code> prop we may animate movements of siblings when this element is added or removed</li>
+        <li>
+          with <code>custom</code> prop we may send data to variants for dynamic animation
+        </li>
+        <li>
+          with <code>layoutId</code> prop we may animate movements of siblings when this element is
+          added or removed
+        </li>
       </ul>
 
       <Code block jsx>{`
@@ -970,7 +988,6 @@ const postObj = {
       `}</Code>
 
       <Example16 />
-
     </>
   )
 }

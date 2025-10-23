@@ -129,7 +129,7 @@ export const MultipleRefs = ({ externalRef }) => {
 // #endregion
 
 const postObj = {
-  title: 'useRef',
+  title: 'React.useRef',
   date: '2022.03.28',
   tags: ['react', 'hook'],
   desc: 'useRef hook',

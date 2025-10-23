@@ -1,4 +1,14 @@
-import { Code, Hs, LazyImg, Lnk, useEffect, useState, useRef, useLayoutEffect, jsxToStr } from '/components/post/reExport'
+import {
+  Code,
+  Hs,
+  LazyImg,
+  Lnk,
+  useEffect,
+  useState,
+  useRef,
+  useLayoutEffect,
+  jsxToStr
+} from '/components/post/reExport'
 import syncWait from '/functions/syncWait'
 import useIsInitRender from '/functions/useIsInitRender'
 
@@ -23,7 +33,10 @@ function Component() {
 
   return (
     <>
-      <div> State: <b>{state.toString()}</b> </div>
+      <div>
+        {' '}
+        State: <b>{state.toString()}</b>{' '}
+      </div>
       <button onClick={toggleState}>Toggle state</button>
       <div ref={ref}></div>
     </>
@@ -31,7 +44,7 @@ function Component() {
 }
 
 const postObj = {
-  title: 'useLayoutEffect',
+  title: 'React.useLayoutEffect',
   date: '2021.10.22',
   tags: ['react', 'hook', 'basics'],
   desc: 'useLayoutEffect hook in react',
@@ -39,10 +52,10 @@ const postObj = {
     <>
       <ul>
         <li>
-          <Code js >useEffect()</Code> runs a callback after component is rendered
+          <Code js>useEffect()</Code> runs a callback after component is rendered
         </li>
         <li>
-          <Code js >useLayoutEffect()</Code> runs callback after component is executed, DOM is
+          <Code js>useLayoutEffect()</Code> runs callback after component is executed, DOM is
           calculated, but before it really shows on a screen
         </li>
         <li>
@@ -58,8 +71,8 @@ const postObj = {
 
       <p>
         Let's synchronously delay message with 2s with{' '}
-        <Code js >useLayoutEffect(func, [state])</Code> &{' '}
-        <Code js >useEffect(func, [state])</Code> and check the difference.
+        <Code js>useLayoutEffect(func, [state])</Code> & <Code js>useEffect(func, [state])</Code>{' '}
+        and check the difference.
       </p>
 
       <Code block>{`
@@ -109,8 +122,8 @@ const postObj = {
       </p>
 
       <p>
-        <Code js >useLayoutEffect()</Code> callback is executed first, then state change renders
-        on screen, then <Code js >useEffect()</Code> callback is executed.
+        <Code js>useLayoutEffect()</Code> callback is executed first, then state change renders on
+        screen, then <Code js>useEffect()</Code> callback is executed.
       </p>
     </>
   )

@@ -8,16 +8,15 @@ const ContextParent = createContext()
 const ContextA = createContext()
 const ContextB = createContext()
 
-function Parent1 () {
+function Parent1() {
   return (
     <ContextParent.Provider value={{ data: 'data in context from context Parent' }}>
-      <A data='data in props from Parent' />
+      <A data="data in props from Parent" />
       <Age />
     </ContextParent.Provider>
-
   )
 }
-function A (props) {
+function A(props) {
   return (
     <ContextA.Provider value={'context A'}>
       <div style={style}>
@@ -27,7 +26,7 @@ function A (props) {
     </ContextA.Provider>
   )
 }
-function B (props) {
+function B(props) {
   return (
     <ContextB.Provider value={'context B'}>
       <div style={style}>
@@ -35,10 +34,9 @@ function B (props) {
         <C data={props.data} />
       </div>
     </ContextB.Provider>
-
   )
 }
-function C (props) {
+function C(props) {
   return (
     <div style={style}>
       C
@@ -46,30 +44,29 @@ function C (props) {
     </div>
   )
 }
-function D (props) {
+function D(props) {
   const contextParent = useContext(ContextParent)
   const contextA = useContext(ContextA)
   const contextB = useContext(ContextB)
   return (
     <div style={style}>
-      D
-      <div>{props.data}</div>
-      <div>{contextParent.data} & {contextA} & {contextB}</div>
+      D<div>{props.data}</div>
+      <div>
+        {contextParent.data} & {contextA} & {contextB}
+      </div>
     </div>
   )
 }
-function Age () {
+function Age() {
   const contextParent = useContext(ContextParent)
-  return (
-    <div style={style}>{contextParent.data}</div>
-  )
+  return <div style={style}>{contextParent.data}</div>
 }
 // #endregion
 
 // #region useContext() & state
 const Context2 = createContext('')
 
-function Parent2 () {
+function Parent2() {
   const [string, setString] = useState(shortid())
 
   const contextValue = {
@@ -82,21 +79,25 @@ function Parent2 () {
     <Context2.Provider value={contextValue}>
       <div style={contextValue.style}>
         <div>Parent</div>
-        <div>String from context: <b>{contextValue.string}</b></div>
+        <div>
+          String from context: <b>{contextValue.string}</b>
+        </div>
         <button onClick={() => contextValue.setString(shortid())}>Change string</button>
-        <Child2 name='Child 1' />
-        <Child2 name='Child 2' />
+        <Child2 name="Child 1" />
+        <Child2 name="Child 2" />
       </div>
     </Context2.Provider>
   )
 }
 
-function Child2 (props) {
+function Child2(props) {
   const contextValue = useContext(Context2)
   return (
     <div style={contextValue.style}>
       <div>{props.data}</div>
-      <div>String from context: <b>{contextValue.string}</b></div>
+      <div>
+        String from context: <b>{contextValue.string}</b>
+      </div>
       <button onClick={() => contextValue.setString(shortid())}>Change string</button>
     </div>
   )
@@ -106,12 +107,12 @@ function Child2 (props) {
 // #region same with useReducer()
 const Context3 = createContext('')
 
-function reducer (state, action) {
+function reducer(state, action) {
   if (action === 'randomize string') return shortid()
   return state
 }
 
-function Parent3 () {
+function Parent3() {
   const [string, dispatch] = useReducer(reducer, shortid())
 
   const contextValue = {
@@ -124,21 +125,25 @@ function Parent3 () {
     <Context3.Provider value={contextValue}>
       <div style={contextValue.style}>
         <div>Parent</div>
-        <div>String from context: <b>{contextValue.string}</b></div>
+        <div>
+          String from context: <b>{contextValue.string}</b>
+        </div>
         <button onClick={() => contextValue.dispatch('randomize string')}>Change string</button>
-        <Child3 name='Child 1' />
-        <Child3 name='Child 2' />
+        <Child3 name="Child 1" />
+        <Child3 name="Child 2" />
       </div>
     </Context3.Provider>
   )
 }
 
-function Child3 (props) {
+function Child3(props) {
   const contextValue = useContext(Context3)
   return (
     <div style={contextValue.style}>
       <div>{props.data}</div>
-      <div>String from context: <b>{contextValue.string}</b></div>
+      <div>
+        String from context: <b>{contextValue.string}</b>
+      </div>
       <button onClick={() => contextValue.dispatch('randomize string')}>Change string</button>
     </div>
   )
@@ -146,24 +151,39 @@ function Child3 (props) {
 // #endregion
 
 const postObj = {
-  title: 'useContext',
+  title: 'React.useContext',
   date: '2021.09.26',
   tags: ['react', 'basics'],
   desc: 'useContext react hook',
   body: (
     <>
-      <H>Pass props vs <Code>useContext()</Code></H>
+      <H>
+        Pass props vs <Code>useContext()</Code>
+      </H>
 
       <ul>
         <li>In a project we may have multiple nested components</li>
         <li>Data should be passed between components, for example...</li>
-        <li>Pass <Code>'data in props from Parent'</Code> string through all components tree in props, which creates <i>prop drilling</i> issue</li>
+        <li>
+          Pass <Code>'data in props from Parent'</Code> string through all components tree in props,
+          which creates <i>prop drilling</i> issue
+        </li>
         <li>If we have many variables it may produce a mess in code</li>
         <li>We can pass data in a smarter way</li>
-        <li>Create <Code>Context</Code> variable outside components with <Code js >{'Context = createContext()'}</Code></li>
-        <li>Wrap components in <Code html >{'<Context.Provider value={value}>'}</Code></li>
-        <li>Passed <Code>value</Code> will be available in all children components</li>
-        <li><Code>value</Code> can be retrieved from the context with hook <Code js >{'useContext(Context)'}</Code></li>
+        <li>
+          Create <Code>Context</Code> variable outside components with{' '}
+          <Code js>{'Context = createContext()'}</Code>
+        </li>
+        <li>
+          Wrap components in <Code html>{'<Context.Provider value={value}>'}</Code>
+        </li>
+        <li>
+          Passed <Code>value</Code> will be available in all children components
+        </li>
+        <li>
+          <Code>value</Code> can be retrieved from the context with hook{' '}
+          <Code js>{'useContext(Context)'}</Code>
+        </li>
         <li>Multiple contexts are allowed</li>
       </ul>
 
@@ -237,9 +257,14 @@ const postObj = {
 
       <Parent1 />
 
-      <H>Pass state in <Code>useContext()</Code></H>
+      <H>
+        Pass state in <Code>useContext()</Code>
+      </H>
 
-      <p>Same idea as above, but pass a state variable into <Code html >{'<Context.Provider value={state}>'}</Code> </p>
+      <p>
+        Same idea as above, but pass a state variable into{' '}
+        <Code html>{'<Context.Provider value={state}>'}</Code>{' '}
+      </p>
 
       <Code block>{`
         import { createContext, useContext, useState, useReducer } from "react"
@@ -283,9 +308,14 @@ const postObj = {
 
       <Parent2 />
 
-      <H><Code>useContext()</Code> with <Code>useReducer()</Code></H>
+      <H>
+        <Code>useContext()</Code> with <Code>useReducer()</Code>
+      </H>
 
-      <p>Same as above, but instead of <Code js >useState()</Code> hook <Code js >useReducer()</Code> is used.</p>
+      <p>
+        Same as above, but instead of <Code js>useState()</Code> hook <Code js>useReducer()</Code>{' '}
+        is used.
+      </p>
 
       <Code block>{`
         import { createContext, useContext, useState, useReducer } from "react"

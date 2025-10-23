@@ -1,4 +1,17 @@
-import { Code, H, Hs, LazyImg, Lnk, React, useEffect, useState, useRef, useCallback, useMemo, jsxToStr } from '/components/post/reExport'
+import {
+  Code,
+  H,
+  Hs,
+  LazyImg,
+  Lnk,
+  React,
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+  useMemo,
+  jsxToStr
+} from '/components/post/reExport'
 import { css } from '@emotion/react'
 
 function Component() {
@@ -22,14 +35,17 @@ function Component() {
 const postObj = {
   title: 'emotion css prop',
   date: '2022.10.10',
-  tags: ['css', 'React'],
+  tags: ['css', 'react'],
   imgUrl: 'https://antonarbus.com/imgs/emotion.png',
   desc: 'emotion css prop',
   body: (
     <>
       <H>CSS prop in Emotion library</H>
 
-      <p><Lnk url='https://emotion.sh/docs/css-prop'>The css Prop</Lnk> can take styles as template literals or object.</p>
+      <p>
+        <Lnk url="https://emotion.sh/docs/css-prop">The css Prop</Lnk> can take styles as template
+        literals or object.
+      </p>
 
       <Code block jsx>{`
       import { css } from '@emotion/react'
@@ -147,7 +163,10 @@ const postObj = {
 
       <H>webpack</H>
 
-      <p><code>css</code> prop from emotion does not work in react with webpack automatically, like it works with vite for ex. To let it work on top of the file need to put...</p>
+      <p>
+        <code>css</code> prop from emotion does not work in react with webpack automatically, like
+        it works with vite for ex. To let it work on top of the file need to put...
+      </p>
 
       <Code block jsx>{`
       /** @jsxImportSource @emotion/react */

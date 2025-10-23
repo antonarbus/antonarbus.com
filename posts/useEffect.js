@@ -153,7 +153,7 @@ function MyChild(props) {
 // #endregion
 
 const postObj = {
-  title: 'useEffect',
+  title: 'React.useEffect',
   date: '2021.10.15',
   tags: ['react', 'basics', 'hook'],
   desc: 'useEffect hook in React',

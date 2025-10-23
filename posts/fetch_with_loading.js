@@ -90,7 +90,7 @@ function ComponentWithUse() {
           Get random post title
         </button>
       </div>
-      <ErrorBoundary fallback={<p>⚠️Something went wrong</p>}>
+      <ErrorBoundary fallback={<p>⚠️Something went wrong</p>} resetKeys={[titlePromise]}>
         <Suspense fallback={<p>Loading...</p>}>
           {show && <TitleDisplay titlePromise={titlePromise} />}
         </Suspense>
@@ -235,7 +235,7 @@ function ComponentWithUse() {
           Get random post title
         </button>
       </div>
-      <ErrorBoundary fallback={<p>⚠️Something went wrong</p>}>
+      <ErrorBoundary fallback={<p>⚠️Something went wrong</p>} resetKeys={[titlePromise]}>
         <Suspense fallback={<p>Loading...</p>}>
           {show && <TitleDisplay titlePromise={titlePromise} />}
         </Suspense>

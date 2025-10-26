@@ -6,6 +6,12 @@
 
   "editor.formatOnSave": true,
 
+  "terraform.languageServer.enable": true,
+  "terraform.experimentalFeatures.validateOnSave": true,
+  "[terraform]": {
+    "editor.formatOnSave": true
+  },
+
   "cSpell.words": [
     "accum",
     "addgroup",

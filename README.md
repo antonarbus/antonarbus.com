@@ -13,7 +13,7 @@ This project uses **Terraform** to manage all Google Cloud infrastructure as cod
 ### Prerequisites
 
 1. Google Cloud account with project `antonarbus`
-2. Terraform installed ([Installation guide](terraform/about-terraform.md))
+2. Terraform installed (see [terraform/README.md](terraform/README.md) for installation instructions)
 3. GitHub Actions secret `GCP_SA_KEY` configured (see below)
 
 ### Infrastructure Management
@@ -117,8 +117,7 @@ Everything in the `/terraform` directory:
 
 ## 📚 Documentation
 
-- **Terraform Setup Guide**: [terraform/README.md](terraform/README.md)
-- **Terraform Beginner's Guide**: [terraform/about-terraform.md](terraform/about-terraform.md)
+- **Terraform Guide** (with beginner basics): [terraform/README.md](terraform/README.md)
 - **Infrastructure Configuration**: [terraform/main.tf](terraform/main.tf) (with detailed comments)
 
 ---

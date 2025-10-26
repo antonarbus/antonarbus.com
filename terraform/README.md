@@ -1,241 +1,164 @@
-# Terraform Configuration for Google Cloud Run
+# Terraform Configuration for antonarbus.com
 
-This directory contains Terraform configuration to automate the setup of Google Cloud infrastructure for antonarbus.com.
+This directory contains Terraform configuration to manage all Google Cloud infrastructure for antonarbus.com.
 
-## What This Terraform Configuration Creates
+## Quick Reference
 
-1. **Artifact Registry Repository** - Docker repository for storing container images
-2. **Cloud Run Service** - Serverless container service with:
-   - Minimum 0 instances (scales to zero)
-   - Unauthenticated access allowed
-   - Configurable CPU and memory limits
-3. **IAM Service Accounts** - Two service accounts:
-   - `github-actions-sa` - For GitHub Actions to deploy
-   - `cloud-run-sa` - For the Cloud Run service itself
-4. **IAM Roles** - Proper permissions for GitHub Actions to deploy
+```bash
+# First time
+terraform init                   # Initialize (download plugins)
+terraform plan                   # Preview changes
+terraform apply                  # Create/update infrastructure
 
-## Prerequisites
+# Daily use
+terraform plan                   # Preview changes
+terraform apply                  # Apply changes
+terraform output                 # Show URLs, emails, etc.
 
-1. **Install Terraform** (version >= 1.0)
+# View state
+terraform state list             # List all resources
+terraform state show <resource>  # Show resource details
+
+# Troubleshooting
+terraform validate               # Check syntax
+terraform fmt                    # Format files
+export TF_LOG=DEBUG             # Enable debug logging
+```
+
+## What This Configuration Manages
+
+- ✅ **Cloud Run Service** (`cloud-run`) - Serverless container with auto-scaling
+- ✅ **Artifact Registry** (`artifact-registry`) - Docker image storage
+- ✅ **Service Accounts** - `github-actions-sa` and `cloud-run-sa`
+- ✅ **IAM Permissions** - Proper roles for deployments and service access
+- ✅ **Custom Domain Mapping** - `antonarbus.com` → Cloud Run
+- ✅ **Health Probes** - Startup and liveness checks
+
+## Quick Start
+
+### Prerequisites
+
+1. **Install Terraform** (>= 1.0):
    ```bash
-   # macOS
-   brew install terraform
-
-   # Or download from: https://www.terraform.io/downloads
+   brew tap hashicorp/tap
+   brew install hashicorp/tap/terraform
    ```
 
-2. **Install Google Cloud SDK**
+2. **Install Google Cloud SDK**:
    ```bash
-   # macOS
    brew install google-cloud-sdk
    ```
 
-3. **Authenticate with Google Cloud**
+3. **Authenticate**:
    ```bash
    gcloud auth application-default login
-   gcloud config set project antonarbus
+
+   # Enable required APIs
+   gcloud services enable run.googleapis.com \
+     artifactregistry.googleapis.com \
+     iam.googleapis.com
    ```
 
-4. **Enable Required APIs**
-   ```bash
-   gcloud services enable run.googleapis.com
-   gcloud services enable artifactregistry.googleapis.com
-   gcloud services enable iam.googleapis.com
-   ```
+### First Time Setup
 
-## Initial Setup
-
-1. **Copy the example variables file**
-   ```bash
-   cd terraform
-   cp terraform.tfvars.example terraform.tfvars
-   ```
-
-2. **Edit `terraform.tfvars`** (optional - defaults should work)
-   Customize any values if needed. The defaults match your current setup.
-
-3. **Initialize Terraform**
-   ```bash
-   terraform init
-   ```
-
-## Usage
-
-### Plan (Preview Changes)
-See what Terraform will create/modify without actually making changes:
 ```bash
+cd terraform
+terraform init
 terraform plan
-```
-
-### Apply (Create/Update Infrastructure)
-Apply the configuration to create/update resources:
-```bash
-terraform apply
-```
-
-Type `yes` when prompted to confirm.
-
-### Show Outputs
-After applying, view important output values:
-```bash
+terraform apply  # Type "yes" when prompted
 terraform output
 ```
 
-This will show:
-- Cloud Run service URL
-- Service account emails
-- Artifact Registry path
-- Docker image path
+## Daily Usage
 
-### Destroy (Delete All Resources)
-To remove all Terraform-managed resources:
+**To modify infrastructure** (CPU, memory, scaling):
+1. Edit `variables.tf`
+2. Run `terraform plan` to preview
+3. Run `terraform apply` to apply
+
+**Example:**
 ```bash
-terraform destroy
+# Edit variables.tf: memory_limit = "1Gi"
+terraform plan
+terraform apply
 ```
 
-**WARNING**: This will delete your Cloud Run service, Artifact Registry, and service accounts!
+## GitHub Actions Setup (One-time)
 
-## Important Notes
-
-### First-Time Deployment
-
-When running Terraform for the first time, the Cloud Run service will try to deploy with a placeholder image. You have two options:
-
-**Option 1: Import existing resources**
-If you already have these resources created manually:
 ```bash
-# Import existing Artifact Registry
-terraform import google_artifact_registry_repository.docker_repo projects/antonarbus/locations/us-central1/repositories/artifact-registry
+# Create service account key
+gcloud iam service-accounts keys create ~/github-key.json \
+  --iam-account=github-actions-sa@antonarbus.iam.gserviceaccount.com
 
-# Import existing Cloud Run service
-terraform import google_cloud_run_v2_service.main projects/antonarbus/locations/us-central1/services/cloud-run
-
-# Import existing service accounts
-terraform import google_service_account.github_actions projects/antonarbus/serviceAccounts/github-actions-sa@antonarbus.iam.gserviceaccount.com
-terraform import google_service_account.cloud_run_service projects/antonarbus/serviceAccounts/cloud-run-sa@antonarbus.iam.gserviceaccount.com
+# Add to GitHub: Settings → Secrets → Actions → New secret "GCP_SA_KEY"
+# Delete local key
+rm ~/github-key.json
 ```
 
-**Option 2: Fresh start**
-If starting fresh, you may need to push an initial image to Artifact Registry before the Cloud Run service can fully deploy.
+## Understanding Terraform
 
-### GitHub Actions Integration
+**What is Terraform?**
+Infrastructure as Code (IaC) - define cloud infrastructure in files instead of clicking through web consoles.
 
-After applying Terraform:
-
-1. **Create a service account key** (one-time only):
-   ```bash
-   gcloud iam service-accounts keys create ~/github-actions-key.json \
-     --iam-account=github-actions-sa@antonarbus.iam.gserviceaccount.com
-   ```
-
-2. **Add the key to GitHub Secrets**:
-   - Copy the contents of `~/github-actions-key.json`
-   - Go to GitHub repo → Settings → Secrets and variables → Actions
-   - Create secret named `GCP_SA_KEY` with the JSON content
-   - Delete the local key file: `rm ~/github-actions-key.json`
-
-3. Your existing GitHub Actions workflow will continue to work as-is!
-
-### Custom Domain
-
-The custom domain mapping is commented out in `main.tf`. To enable:
-
-1. Uncomment the `google_cloud_run_domain_mapping` resource in `main.tf`
-2. Uncomment the `custom_domain` variable in `variables.tf`
-3. Set your domain in `terraform.tfvars`
-4. Run `terraform apply`
-5. Configure DNS records as shown in Google Cloud Console
-
-## Terraform State
-
-Terraform keeps track of your infrastructure in a state file (`terraform.tfstate`). This file:
-- Is stored locally by default
-- Contains sensitive information
-- Should **NOT** be committed to git (already in `.gitignore`)
-
-For production use, consider storing state remotely:
-- Google Cloud Storage
-- Terraform Cloud
-- Other remote backends
-
-Example GCS backend configuration:
-```hcl
-terraform {
-  backend "gcs" {
-    bucket = "antonarbus-terraform-state"
-    prefix = "prod"
-  }
-}
+**How it works:**
+```
+Your .tf files  →  Terraform  →  Google Cloud
+(what you want)    (reads)       (creates resources)
 ```
 
-## Benefits Over Manual Configuration
+**State file (`terraform.tfstate`):**
+Terraform's memory of your infrastructure. Contains sensitive data - never commit to git.
 
-1. **Reproducibility** - Can recreate entire infrastructure with one command
-2. **Version Control** - Infrastructure changes are tracked in git
-3. **Documentation** - The code documents your infrastructure
-4. **Safety** - Preview changes with `terraform plan` before applying
-5. **Automation** - Can be integrated into CI/CD pipelines
-6. **Drift Detection** - Terraform can detect manual changes
+**Reading `terraform plan` output:**
+- `+` = will be created
+- `~` = will be modified
+- `-` = will be deleted
+- `+/-` = will be replaced
 
-## Programmatic Enhancements
+**Key tips:**
+- Always run `terraform plan` before `apply` - it shows what will happen
+- Terraform is idempotent - running `apply` multiple times is safe
+- Manual changes are detected and can be reverted
+- Change `variables.tf` to modify settings (CPU, memory, etc.)
 
-Terraform supports programmatic patterns:
+## File Structure
 
-### Using Locals for Computed Values
-```hcl
-locals {
-  common_labels = {
-    environment = "production"
-    managed_by  = "terraform"
-    project     = "antonarbus"
-  }
-}
 ```
-
-### Using Loops
-```hcl
-variable "iam_roles" {
-  default = [
-    "roles/run.admin",
-    "roles/artifactregistry.admin"
-  ]
-}
-
-resource "google_project_iam_member" "github_actions" {
-  for_each = toset(var.iam_roles)
-  project  = var.project_id
-  role     = each.value
-  member   = "serviceAccount:${google_service_account.github_actions.email}"
-}
+terraform/
+├── main.tf              # Infrastructure definition
+├── variables.tf         # Configuration variables
+├── outputs.tf          # Values shown after apply
+├── .gitignore          # Excludes secrets from git
+└── terraform.tfstate   # State (gitignored)
 ```
-
-### Using Conditionals
-```hcl
-resource "google_cloud_run_domain_mapping" "main" {
-  count = var.enable_custom_domain ? 1 : 0
-  # ...
-}
-```
-
-## Additional Resources
-
-- [Terraform Google Provider Docs](https://registry.terraform.io/providers/hashicorp/google/latest/docs)
-- [Terraform Language Documentation](https://www.terraform.io/language)
-- [Google Cloud Run Terraform Resource](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloud_run_v2_service)
 
 ## Troubleshooting
 
-### "Resource already exists" error
-If you get errors about existing resources, use `terraform import` (see First-Time Deployment section above).
-
-### Permission denied errors
-Ensure your gcloud account has Owner or Editor role:
+**"Permission denied"**
 ```bash
-gcloud projects get-iam-policy antonarbus
+gcloud auth application-default login
 ```
 
-### API not enabled
-Enable required APIs:
+**"API not enabled"**
 ```bash
-gcloud services enable run.googleapis.com artifactregistry.googleapis.com iam.googleapis.com
+gcloud services enable <service-name>.googleapis.com
 ```
+
+**"Resource already exists"**
+```bash
+# Import existing resource
+terraform import google_artifact_registry_repository.docker_repo \
+  projects/antonarbus/locations/us-central1/repositories/artifact-registry
+```
+
+**Debug mode**
+```bash
+export TF_LOG=DEBUG
+terraform plan
+```
+
+## Learn More
+
+- [Google Provider](https://registry.terraform.io/providers/hashicorp/google/latest/docs)
+- [Cloud Run Resource](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloud_run_v2_service)
+- [Terraform Language](https://www.terraform.io/language)

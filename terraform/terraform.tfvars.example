@@ -1,0 +1,16 @@
+# Example terraform.tfvars file
+# Copy this to terraform.tfvars and customize as needed
+
+project_id              = "antonarbus"
+region                  = "us-central1"
+artifact_registry_name  = "artifact-registry"
+cloud_run_service_name  = "cloud-run"
+docker_image_name       = "docker-image"
+github_actions_sa_name  = "github-actions-sa"
+cloud_run_sa_name       = "cloud-run-sa"
+min_instances           = 0
+max_instances           = 100
+cpu_limit               = "1"
+memory_limit            = "512Mi"
+container_port          = 8080
+# custom_domain         = "antonarbus.com"

@@ -10,6 +10,7 @@ env:
   REGION: 'us-central1'
   ARTIFACTS_REGISTRY_NAME: 'artifact-registry'
   DOCKER_IMAGE_NAME: 'docker-image'
+  SERVICE_NAME: 'cloud-run'  # Managed by Terraform
 
 jobs:
   deploy:
@@ -47,7 +48,7 @@ jobs:
       - name: Deploy to Cloud Run
         uses: google-github-actions/deploy-cloudrun@v2
         with:
-          service: cloud-run  # Managed by Terraform - always deploy to "cloud-run"
+          service: ${{ env.SERVICE_NAME }}  # Managed by Terraform - only updates container image
           image: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACTS_REGISTRY_NAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ env.IMAGE_VERSION }}
           region: ${{ env.REGION }}
           project_id: ${{ env.PROJECT_ID }}

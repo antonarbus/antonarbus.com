@@ -48,14 +48,9 @@ output "docker_image_path" {
   # 3. GitHub Actions workflows (already configured in your workflow file)
 }
 
-# TEMPORARILY COMMENTED OUT - domain mapping not managed by Terraform yet
-# output "custom_domain" {
-#   description = "Custom domain mapped to your Cloud Run service"
-#   value       = google_cloud_run_domain_mapping.main.name
-#   # Example: antonarbus.com
-#   # After Terraform creates this mapping:
-#   # 1. Go to: Cloud Console > Cloud Run > Manage Custom Domains
-#   # 2. Copy the DNS records shown (usually CNAME or A records)
-#   # 3. Add those DNS records at your domain registrar
-#   # 4. Wait for DNS propagation (can take up to 48 hours, usually faster)
-# }
+output "custom_domain" {
+  description = "Custom domain mapped to your Cloud Run service"
+  value       = google_cloud_run_domain_mapping.main.name
+  # Example: antonarbus.com
+  # The DNS records should already be configured from the previous setup
+}

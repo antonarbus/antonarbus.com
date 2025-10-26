@@ -181,25 +181,19 @@ resource "google_cloud_run_v2_service_iam_member" "public_access" {
 # CUSTOM DOMAIN MAPPING
 # ==============================================================================
 # Maps your custom domain (antonarbus.com) to the Cloud Run service
-# After applying this, you need to configure DNS records at your domain registrar
-# Google Cloud will show you what DNS records to add
+# This will import and update the existing domain mapping to point to cloud-run
 
-# TEMPORARILY COMMENTED OUT
-# The domain mapping already exists for cloud-run-master
-# After we switch the GitHub workflow to use "cloud-run" instead of "cloud-run-master",
-# we'll update the existing domain mapping or recreate it via Terraform
+resource "google_cloud_run_domain_mapping" "main" {
+  name     = var.custom_domain  # Domain: "antonarbus.com"
+  location = var.region         # Same region as Cloud Run service
 
-# resource "google_cloud_run_domain_mapping" "main" {
-#   name     = var.custom_domain  # Domain: "antonarbus.com"
-#   location = var.region         # Same region as Cloud Run service
-#
-#   # Project namespace
-#   metadata {
-#     namespace = var.project_id
-#   }
-#
-#   # Which Cloud Run service this domain points to
-#   spec {
-#     route_name = google_cloud_run_v2_service.main.name
-#   }
-# }
+  # Project namespace
+  metadata {
+    namespace = var.project_id
+  }
+
+  # Which Cloud Run service this domain points to
+  spec {
+    route_name = google_cloud_run_v2_service.main.name
+  }
+}

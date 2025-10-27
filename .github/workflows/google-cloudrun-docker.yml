@@ -46,13 +46,19 @@ jobs:
           tags: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACTS_REGISTRY_NAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ env.IMAGE_VERSION }}
 
       - name: Deploy to Cloud Run
-        uses: google-github-actions/deploy-cloudrun@v2
-        with:
-          service: ${{ env.SERVICE_NAME }}  # Managed by Terraform - only updates container image
-          image: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACTS_REGISTRY_NAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ env.IMAGE_VERSION }}
-          region: ${{ env.REGION }}
-          project_id: ${{ env.PROJECT_ID }}
+        run: |
+          # Update only the container image, preserving Terraform-managed configuration
+          # This prevents overwriting health probes, scaling settings, etc.
+          gcloud run services update ${{ env.SERVICE_NAME }} \
+            --image ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACTS_REGISTRY_NAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ env.IMAGE_VERSION }} \
+            --region ${{ env.REGION }} \
+            --project ${{ env.PROJECT_ID }} \
+            --labels managed-by=github-actions,commit-sha=${{ github.sha }}
 
       - name: 'Show output'
-        run: |2-
-          echo ${{ steps.deploy.outputs.url }}
+        run: |
+          echo "Deployment successful!"
+          gcloud run services describe ${{ env.SERVICE_NAME }} \
+            --region ${{ env.REGION }} \
+            --project ${{ env.PROJECT_ID }} \
+            --format="value(status.url)"

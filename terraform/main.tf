@@ -158,10 +158,10 @@ resource "google_cloud_run_v2_service" "main" {
           path = "/"                # HTTP GET request to root path
           port = var.container_port # Port 8080
         }
-        initial_delay_seconds = 0 # Start checking immediately
-        timeout_seconds       = 1 # Each check times out after 1 second
-        period_seconds        = 3 # Check every 3 seconds
-        failure_threshold     = 3 # Fail after 3 consecutive failures
+        initial_delay_seconds = 10 # Wait 10 seconds before first check (Next.js startup time)
+        timeout_seconds       = 3  # Each check times out after 3 seconds
+        period_seconds        = 5  # Check every 5 seconds
+        failure_threshold     = 3  # Fail after 3 consecutive failures
       }
 
       # Liveness probe: Checks if the container is still healthy

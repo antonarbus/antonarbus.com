@@ -44,11 +44,21 @@ terraform apply
 
 ## CI/CD with GitHub Actions
 
-Container is automatically built, dockerized, uploaded to Artifact Registry, and deployed to Cloud Run on push to master branch.
+**Two automated workflows:**
 
-**Workflow**: `.github/workflows/google-cloudrun-docker.yml`
+1. **Terraform Validation** (`.github/workflows/terraform-check.yml`)
+   - Runs on every PR that changes Terraform files
+   - Validates Terraform syntax and formatting
+   - Runs `terraform plan` and comments on PR with changes
+   - Prevents merging invalid Terraform code
 
-**Environment variables** (configured in workflow):
+2. **Build and Deploy** (`.github/workflows/google-cloudrun-docker.yml`)
+   - Runs on push to master branch
+   - Builds Docker image and pushes to Artifact Registry
+   - Deploys container to Cloud Run
+   - Updates only the container image (infrastructure managed by Terraform)
+
+**Environment variables** (configured in workflows):
 - `PROJECT_ID`: `antonarbus`
 - `REGION`: `us-central1`
 - `ARTIFACTS_REGISTRY_NAME`: `artifact-registry`

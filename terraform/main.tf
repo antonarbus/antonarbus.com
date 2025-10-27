@@ -7,7 +7,7 @@
 # 1. ✅ Artifact Registry - Docker image storage
 # 2. ✅ GitHub Actions Service Account - For CI/CD deployments
 # 3. ✅ Cloud Run Service Account - For the running app
-# 4. ✅ 5 IAM Permissions - Permissions for GitHub Actions SA
+# 4. ✅ 6 IAM Permissions - Permissions for GitHub Actions SA
 # 5. ✅ Cloud Run Service - Your app (named cloud-run)
 # 6. ✅ Public Access - Makes your site publicly accessible
 # 7. ✅ Domain Mapping - Maps antonarbus.com to the service
@@ -109,6 +109,14 @@ resource "google_project_iam_member" "github_actions_storage_admin" {
 resource "google_project_iam_member" "github_actions_iam_viewer" {
   project = var.project_id
   role    = "roles/iam.securityReviewer"
+  member  = "serviceAccount:${google_service_account.github_actions.email}"
+}
+
+# Give GitHub Actions permission to enable/disable APIs
+# "roles/serviceusage.serviceUsageAdmin" allows: enable/disable Google Cloud APIs
+resource "google_project_iam_member" "github_actions_service_usage_admin" {
+  project = var.project_id
+  role    = "roles/serviceusage.serviceUsageAdmin"
   member  = "serviceAccount:${google_service_account.github_actions.email}"
 }
 

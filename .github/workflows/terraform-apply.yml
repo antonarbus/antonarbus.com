@@ -49,16 +49,22 @@ jobs:
         run: |
           gcloud config set project ${{ env.PROJECT_ID }}
 
-          # Enable IAM API (required for Terraform to manage service accounts)
-          echo "Enabling IAM API..."
-          gcloud services enable iam.googleapis.com --project=${{ env.PROJECT_ID }}
+          # Enable required APIs for Terraform operations
+          echo "Enabling required Google Cloud APIs..."
+          gcloud services enable \
+            iam.googleapis.com \
+            cloudresourcemanager.googleapis.com \
+            --project=${{ env.PROJECT_ID }}
 
-          # Wait a moment for API to fully activate
-          echo "Waiting for API activation..."
-          sleep 10
+          # Wait for APIs to fully activate
+          echo "Waiting for API activation to propagate..."
+          sleep 15
 
           echo "Project configuration:"
           gcloud config list
+
+          echo "Enabled services:"
+          gcloud services list --enabled --project=${{ env.PROJECT_ID }} | grep -E "(iam|cloudresourcemanager)"
 
       - name: 'Terraform Format Check'
         id: fmt

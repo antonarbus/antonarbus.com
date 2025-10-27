@@ -18,17 +18,28 @@ This project uses **Terraform** to manage all Google Cloud infrastructure as cod
 
 ### Infrastructure Management
 
-All infrastructure is managed via Terraform. To make changes:
+All infrastructure is managed via Terraform and **automatically applied via CI/CD**.
 
-```bash
-cd terraform
+**To modify infrastructure** (CPU, memory, scaling, etc.):
 
-# Preview changes
-terraform plan
+1. **Create a branch and edit Terraform files**:
+   ```bash
+   git checkout -b update-infrastructure
+   # Edit terraform/*.tf files
+   git add terraform/
+   git commit -m "feat: update infrastructure configuration"
+   git push origin update-infrastructure
+   ```
 
-# Apply changes
-terraform apply
-```
+2. **Create Pull Request**:
+   - `terraform-check.yml` runs automatically
+   - Shows `terraform plan` output in PR comments
+   - Team reviews infrastructure changes
+
+3. **Merge to master**:
+   - `terraform-apply.yml` runs automatically
+   - Applies infrastructure changes
+   - No manual `terraform apply` needed!
 
 **What Terraform manages:**
 - ✅ Cloud Run service (`cloud-run`)
@@ -37,22 +48,30 @@ terraform apply
 - ✅ Custom domain mapping (`antonarbus.com`)
 - ✅ Health probes and scaling configuration
 
-**To modify infrastructure** (CPU, memory, scaling, etc.):
-1. Edit `terraform/variables.tf`
-2. Run `terraform apply`
-3. Changes are applied automatically
+**Local development** (optional):
+```bash
+cd terraform
+terraform plan   # Preview changes locally
+# terraform apply is done by CI/CD
+```
 
 ## CI/CD with GitHub Actions
 
-**Two automated workflows:**
+**Three automated workflows:**
 
-1. **Terraform Validation** (`.github/workflows/terraform-check.yml`)
+1. **Terraform Check** (`.github/workflows/terraform-check.yml`) - PR validation
    - Runs on every PR that changes Terraform files
    - Validates Terraform syntax and formatting
    - Runs `terraform plan` and comments on PR with changes
    - Prevents merging invalid Terraform code
 
-2. **Build and Deploy** (`.github/workflows/google-cloudrun-docker.yml`)
+2. **Terraform Apply** (`.github/workflows/terraform-apply.yml`) - Infrastructure deployment
+   - Runs on push to master (after PR merge)
+   - Automatically applies Terraform changes
+   - Updates infrastructure configuration
+   - **Fully automated - no manual terraform apply needed!**
+
+3. **Build and Deploy** (`.github/workflows/google-cloudrun-docker.yml`) - Application deployment
    - Runs on push to master branch
    - Builds Docker image and pushes to Artifact Registry
    - Deploys container to Cloud Run

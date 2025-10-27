@@ -1,14 +1,9 @@
-name: 'Terraform CI'
+name: 'Terraform Check'
 
-# Run on pull requests and pushes to master
+# Run on pull requests to validate changes before merge
+# terraform-apply.yml will actually apply changes after merge
 on:
   pull_request:
-    paths:
-      - 'terraform/**'
-      - '.github/workflows/terraform-check.yml'
-  push:
-    branches:
-      - master
     paths:
       - 'terraform/**'
       - '.github/workflows/terraform-check.yml'

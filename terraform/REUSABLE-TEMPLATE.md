@@ -168,8 +168,11 @@ terraform apply  # Type "yes"
 # Uncomment backend block in backend.tf
 terraform init -migrate-state  # Type "yes"
 
-# Clean up
+# Clean up local state files
 rm -f terraform.tfstate terraform.tfstate.backup
+
+# Format Terraform files (prevents CI/CD failures)
+terraform fmt -recursive
 ```
 
 ### 6. Setup GitHub Actions
@@ -425,6 +428,7 @@ project/
 ✅ **Health Checks** - Startup and liveness probes configured
 ✅ **Auto-scaling** - Scale to zero for cost savings
 ✅ **CI/CD Validation** - Prevent invalid Terraform from merging
+✅ **Automated Formatting** - `terraform fmt` in workflow prevents merge issues
 ✅ **Comprehensive Docs** - Multiple guides for different scenarios
 ✅ **Production Ready** - Used in real production environments
 

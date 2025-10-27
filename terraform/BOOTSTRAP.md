@@ -152,9 +152,20 @@ gcloud projects get-iam-policy antonarbus \
 5. **Remove local state files** (no longer needed):
    ```bash
    rm -f terraform.tfstate terraform.tfstate.backup
+
+   # Also check for any stray state files
+   find .. -maxdepth 2 -name "*.tfstate*" -type f 2>/dev/null
+   # If any found, remove them
    ```
 
-6. **Commit the changes to git**:
+6. **Format Terraform files** (prevents CI/CD failures):
+   ```bash
+   terraform fmt -recursive
+   ```
+
+   This ensures all Terraform files are properly formatted. The CI/CD workflow validates formatting and will fail if files aren't formatted correctly.
+
+7. **Commit the changes to git**:
    ```bash
    cd ..
    git add terraform/backend.tf terraform/BOOTSTRAP.md
@@ -219,6 +230,23 @@ After bootstrap, verify everything works:
 ---
 
 ## Troubleshooting
+
+### GitHub Actions Fails with "Terraform files are not properly formatted"
+
+After pushing changes, if the terraform-check workflow fails:
+
+```bash
+# Fix formatting
+cd terraform
+terraform fmt -recursive
+
+# Commit and push
+git add .
+git commit -m "style: format Terraform files"
+git push
+```
+
+The CI/CD workflow validates formatting with `terraform fmt -check`. Always run `terraform fmt -recursive` before committing Terraform changes.
 
 ### "Error creating Bucket: googleapi: Error 409: already exists"
 

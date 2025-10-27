@@ -2,8 +2,8 @@
 # TERRAFORM CONFIGURATION
 # ==============================================================================
 # This file defines all the Google Cloud infrastructure for antonarbus.com
-# It creates 9 new resources:
-
+# It creates these resources:
+#
 # 1. ✅ Artifact Registry - Docker image storage
 # 2. ✅ GitHub Actions Service Account - For CI/CD deployments
 # 3. ✅ Cloud Run Service Account - For the running app
@@ -11,6 +11,11 @@
 # 5. ✅ Cloud Run Service - Your app (named cloud-run)
 # 6. ✅ Public Access - Makes your site publicly accessible
 # 7. ✅ Domain Mapping - Maps antonarbus.com to the service
+# 8. ✅ GCS Bucket - For Terraform remote state storage
+# 9. ✅ State Bucket IAM - Access for GitHub Actions
+#
+# Backend configuration is in backend.tf
+# For first-time setup, see BOOTSTRAP.md
 
 terraform {
   # Require Terraform version 1.0 or higher

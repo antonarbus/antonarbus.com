@@ -36,3 +36,23 @@ yarn-error.log*
 build.tar
 build.tar.gz
 archive.tar.gz
+
+# Terraform
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform/*.tfstate
+terraform/*.tfstate.*
+terraform/*.tfvars
+terraform/*.tfvars.json
+terraform/crash.log
+terraform/crash.*.log
+terraform/*tfplan*
+terraform/.terraformrc
+terraform/terraform.rc
+
+# GCP Service Account Keys (never commit!)
+*.json
+!package.json
+!package-lock.json
+!tsconfig.json
+!jsconfig.json

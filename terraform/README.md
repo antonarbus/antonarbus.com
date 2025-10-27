@@ -2,6 +2,15 @@
 
 This directory contains Terraform configuration to manage all Google Cloud infrastructure for antonarbus.com.
 
+## 📚 Documentation
+
+Choose the guide for your situation:
+
+- **[BOOTSTRAP.md](./BOOTSTRAP.md)** - First-time setup from scratch
+- **[MIGRATION.md](./MIGRATION.md)** - Upgrade existing installation to remote state
+- **[REUSABLE-TEMPLATE.md](./REUSABLE-TEMPLATE.md)** - Copy this setup to a new project
+- **[README.md](./README.md)** (this file) - Daily usage reference
+
 ## Quick Reference
 
 ```bash

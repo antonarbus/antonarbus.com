@@ -127,8 +127,20 @@ Everything in the `/terraform` directory:
 
 ## 📚 Documentation
 
-- **Terraform Guide** (with beginner basics): [terraform/README.md](terraform/README.md)
-- **Infrastructure Configuration**: [terraform/main.tf](terraform/main.tf) (with detailed comments)
+### Terraform Infrastructure Guides
+
+Choose the guide for your situation:
+
+- **[terraform/BOOTSTRAP.md](terraform/BOOTSTRAP.md)** - First-time setup from scratch
+- **[terraform/MIGRATION.md](terraform/MIGRATION.md)** - Upgrade existing installation
+- **[terraform/REUSABLE-TEMPLATE.md](terraform/REUSABLE-TEMPLATE.md)** - Copy setup to new project
+- **[terraform/README.md](terraform/README.md)** - Daily usage and quick reference
+
+### Infrastructure Configuration
+
+- **[terraform/main.tf](terraform/main.tf)** - All resources with detailed comments
+- **[terraform/variables.tf](terraform/variables.tf)** - Configuration options
+- **[terraform/backend.tf](terraform/backend.tf)** - Remote state configuration
 
 ---
 

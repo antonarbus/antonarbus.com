@@ -270,7 +270,7 @@ const postObj = {
       <Code block json>{`
         {
           "dependencies": {
-            "lambda-sdk": "github:heeros/LambdaSDK#a18b4e3"
+            "lambda-sdk": "github:heeros/LambdaSDK#a18b4e33d96ceda06e8e3462847ec01349b9587b"
           },
         }
       `}</Code>

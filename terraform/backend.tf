@@ -64,10 +64,8 @@ resource "google_storage_bucket" "terraform_state" {
     }
   }
 
-  # Encryption at rest (Google-managed keys)
-  encryption {
-    default_kms_key_name = null  # Uses Google-managed encryption
-  }
+  # Encryption at rest uses Google-managed keys by default
+  # No explicit configuration needed
 
   # Labels for organization
   labels = {

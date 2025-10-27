@@ -6,6 +6,13 @@ This guide is for **existing installations** that need to migrate from local sta
 
 ---
 
+## Migration Overview
+
+**Estimated time**: 15-20 minutes
+**Downtime**: Zero (resources are not changed)
+**Difficulty**: Easy to Medium
+**Prerequisites**: Local Terraform state file, authenticated to GCP
+
 ## What Changed?
 
 Your Terraform setup has been upgraded with:
@@ -15,6 +22,15 @@ Your Terraform setup has been upgraded with:
 ✅ **Better Security** - State files removed from git
 ✅ **Team Collaboration** - Multiple people can work on infrastructure
 ✅ **Comprehensive Documentation** - Clear prerequisites and setup instructions
+
+**What gets created:**
+- GCS bucket for state storage (with versioning enabled)
+- IAM binding for GitHub Actions to access the bucket
+
+**What doesn't change:**
+- Your running infrastructure (Cloud Run, Artifact Registry, etc.)
+- Your website (stays operational throughout)
+- Resource configuration (only state location changes)
 
 ---
 
@@ -27,14 +43,16 @@ First, verify your current infrastructure is working:
 ```bash
 cd terraform
 
-# Check what resources exist
-terraform state list
-
 # Make sure you have a valid state file
 ls -lah terraform.tfstate*
+
+# Check what resources exist (this will fail if backend.tf is uncommented - that's OK)
+terraform state list 2>/dev/null || echo "Will check state after init"
 ```
 
-**⚠️ IMPORTANT**: If you don't have a local `terraform.tfstate` file, you'll need to import existing resources. See "Troubleshooting" section below.
+**⚠️ IMPORTANT**:
+- If you don't have a local `terraform.tfstate` file, you'll need to import existing resources. See "Troubleshooting" section below.
+- If you get an error about backend initialization, that's expected - we'll fix it in the next steps.
 
 ### Step 2: Create State Bucket
 
@@ -59,7 +77,8 @@ gcloud storage buckets describe gs://antonarbus-terraform-state 2>&1
 cd terraform
 
 # Comment out the backend block in backend.tf first
-# Open backend.tf and comment lines 15-21:
+# Open backend.tf and comment the entire terraform { backend "gcs" { ... } } block
+# It should look like this:
 # terraform {
 #   backend "gcs" {
 #     bucket = "antonarbus-terraform-state"
@@ -69,7 +88,12 @@ cd terraform
 
 # Initialize Terraform
 terraform init
+
+# Verify state is readable
+terraform state list
 ```
+
+**Expected output**: You should see a list of your existing resources (service accounts, Cloud Run, etc.).
 
 ### Step 4: Apply Changes (Creates State Bucket)
 
@@ -80,7 +104,7 @@ terraform plan
 # You should see:
 # - google_storage_bucket.terraform_state will be created
 # - google_storage_bucket_iam_member.terraform_state_admin will be created
-# - All other resources should show "No changes"
+# - All other resources should show "No changes" (or minor updates like label changes)
 
 # Apply changes
 terraform apply
@@ -88,7 +112,12 @@ terraform apply
 # Type "yes" when prompted
 ```
 
-**Note**: Terraform might detect small differences in existing resources (like IAM bindings format). This is normal and safe to apply.
+**Note**: Terraform might detect small differences in existing resources, such as:
+- IAM bindings format changes
+- Label updates (removing temporary deployment labels)
+- Computed field values being set explicitly
+
+These are normal and safe to apply. Review the plan carefully, but don't worry about minor formatting changes.
 
 ### Step 5: Migrate State to GCS
 
@@ -96,7 +125,7 @@ Now let's move the state file to the cloud:
 
 ```bash
 # Uncomment the backend block in backend.tf
-# Remove the # comments from lines 15-21
+# Remove the # comments to restore the terraform { backend "gcs" { ... } } block
 
 # Reinitialize Terraform (this triggers state migration)
 terraform init -migrate-state
@@ -105,10 +134,16 @@ terraform init -migrate-state
 # Type: yes
 ```
 
-Terraform will:
-1. Upload your local state file to GCS
-2. Configure itself to use remote state
-3. Keep a local backup as `terraform.tfstate.backup`
+**What happens:**
+1. Terraform uploads your local state file to GCS
+2. Configures itself to use remote state going forward
+3. Keeps a local backup as `terraform.tfstate.backup` (you can delete this later)
+
+**Expected output**: You should see:
+```
+Successfully configured the backend "gcs"! Terraform will automatically
+use this backend unless the backend configuration changes.
+```
 
 ### Step 6: Verify Migration
 
@@ -131,12 +166,33 @@ terraform state list
 # Remove local state files (they're now in GCS)
 rm -f terraform.tfstate terraform.tfstate.backup
 
+# Also check for state files in parent directory and .terraform
+find .. -maxdepth 2 -name "*.tfstate*" -type f 2>/dev/null
+# If any found, remove them: rm -f ../terraform.tfstate* .terraform/terraform.tfstate
+
 # Verify no local state files remain
 ls -lah terraform.tfstate*
 # Should show: "No such file or directory"
 ```
 
-### Step 8: Test Everything Works
+**Important**: Make sure to remove ALL local state files, including any in:
+- `terraform/` directory
+- Parent directory `./`
+- `.terraform/` subdirectory
+
+### Step 8: Format Terraform Files
+
+```bash
+# Format all Terraform files (prevents CI/CD failures)
+terraform fmt -recursive
+
+# Check if any files were changed
+git status
+```
+
+**Why**: The CI/CD workflow validates formatting. Running `terraform fmt` now prevents formatting errors later.
+
+### Step 9: Test Everything Works
 
 ```bash
 # Run a plan - should show "No changes"
@@ -145,18 +201,46 @@ terraform plan
 # If Terraform asks for input, check that variables are set correctly
 ```
 
+**Expected output**: `No changes. Your infrastructure matches the configuration.`
+
 ---
 
 ## Verification Checklist
 
-After migration, verify:
+After migration, verify everything is working:
 
-- [ ] State bucket exists: `gcloud storage ls gs://antonarbus-terraform-state`
-- [ ] State file in bucket: `gcloud storage ls gs://antonarbus-terraform-state/terraform/state/`
-- [ ] Local state files deleted: `ls terraform.tfstate*` (should error)
-- [ ] Terraform plan works: `terraform plan` (should show "No changes" or minimal diffs)
-- [ ] Backend config uncommented in `backend.tf`
-- [ ] All resources still exist in Cloud Console
+```bash
+# 1. State bucket exists
+gcloud storage buckets describe gs://antonarbus-terraform-state --format="value(name)"
+
+# 2. State file in bucket
+gcloud storage ls gs://antonarbus-terraform-state/terraform/state/
+
+# 3. No local state files
+find . -name "*.tfstate*" -type f 2>/dev/null | wc -l
+# Should output: 0
+
+# 4. Terraform can read remote state
+terraform state list | wc -l
+# Should output: number of resources (e.g., 11)
+
+# 5. Backend config is active
+grep -A 3 'backend "gcs"' backend.tf | grep -v '^#'
+# Should show uncommented backend configuration
+
+# 6. No unexpected changes
+terraform plan -detailed-exitcode
+# Exit code 0 = no changes (success!)
+
+# 7. Files are formatted
+terraform fmt -check -recursive
+# No output = all files properly formatted
+```
+
+**Manual checks:**
+- [ ] All resources visible in [Cloud Console](https://console.cloud.google.com)
+- [ ] Website is still working at your domain
+- [ ] Backend configuration uncommented in `backend.tf`
 
 ---
 
@@ -216,6 +300,33 @@ git push origin test-terraform-ci
 ---
 
 ## Troubleshooting
+
+### "Error: Backend initialization required" at Step 1
+
+If you get this error when trying `terraform state list`:
+
+```bash
+Error: Backend initialization required, please run "terraform init"
+```
+
+**This is expected!** The backend.tf file is already uncommented. Just proceed to Step 3 and comment it out, then continue normally.
+
+### GitHub Actions Fails with "Terraform files are not properly formatted"
+
+After pushing changes, if the terraform-check workflow fails with formatting errors:
+
+```bash
+# Fix it locally
+cd terraform
+terraform fmt -recursive
+
+# Commit and push
+git add .
+git commit -m "style: format Terraform files"
+git push origin master
+```
+
+The workflow validates formatting with `terraform fmt -check`. Always run `terraform fmt` before committing.
 
 ### "No terraform.tfstate file found"
 

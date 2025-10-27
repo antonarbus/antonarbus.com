@@ -260,6 +260,20 @@ const postObj = {
         </li>
         <li>It will be much faster</li>
       </ul>
+
+      <H>Install package directly from github</H>
+
+      <ul>
+        <li>May even point to commit hash</li>
+      </ul>
+
+      <Code block json>{`
+        {
+          "dependencies": {
+            "lambda-sdk": "github:heeros/LambdaSDK#a18b4e3"
+          },
+        }
+      `}</Code>
     </>
   )
 }

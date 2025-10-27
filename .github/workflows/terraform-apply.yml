@@ -45,9 +45,19 @@ jobs:
         with:
           credentials_json: '${{ secrets.GCP_SA_KEY }}'
 
-      - name: 'Set GCP Project'
+      - name: 'Set GCP Project and Enable APIs'
         run: |
           gcloud config set project ${{ env.PROJECT_ID }}
+
+          # Enable IAM API (required for Terraform to manage service accounts)
+          echo "Enabling IAM API..."
+          gcloud services enable iam.googleapis.com --project=${{ env.PROJECT_ID }}
+
+          # Wait a moment for API to fully activate
+          echo "Waiting for API activation..."
+          sleep 10
+
+          echo "Project configuration:"
           gcloud config list
 
       - name: 'Terraform Format Check'

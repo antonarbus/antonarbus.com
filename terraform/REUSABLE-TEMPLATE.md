@@ -53,7 +53,7 @@ resource "google_storage_bucket" "terraform_state" {
 }
 ```
 
-**`.github/workflows/google-cloudrun-docker.yml`**:
+**`.github/workflows/deploy.yml`**:
 ```yaml
 env:
   PROJECT_ID: 'your-project-id'              # Change!
@@ -61,12 +61,6 @@ env:
   ARTIFACTS_REGISTRY_NAME: 'your-registry'   # Match terraform
   DOCKER_IMAGE_NAME: 'your-image'
   SERVICE_NAME: 'your-app'                   # Match terraform
-```
-
-**`.github/workflows/terraform.yml`**:
-```yaml
-env:
-  PROJECT_ID: 'your-project-id'  # Change!
 ```
 
 ### 3. Setup GCP Project
@@ -209,8 +203,7 @@ resource "google_cloud_run_v2_service" "backend" {
 ```
 project/
 ├── .github/workflows/
-│   ├── terraform.yml              # Terraform apply on merge
-│   └── google-cloudrun-docker.yml # Docker build & deploy
+│   └── deploy.yml                 # Unified deployment workflow
 ├── terraform/
 │   ├── main.tf                    # Infrastructure resources
 │   ├── variables.tf               # Configuration (edit this!)
@@ -234,27 +227,21 @@ With default settings:
 
 ---
 
-## Workflows
+## Unified Deploy Workflow
 
-### Terraform Workflow
+**Trigger:** Every push to master
 
-**Trigger:** Push to master with terraform changes
+**How it works:**
+1. **Detects changes** - Determines which files changed
+2. **Conditional Terraform** - Runs only if `terraform/` or `deploy.yml` changed
+3. **Conditional Docker** - Runs only if app code or terraform changed
+4. **Sequential execution** - Terraform always completes before Docker
 
-**Actions:**
-- Validates syntax and formatting
-- Runs `terraform plan`
-- Applies changes automatically
-
-### Docker Deploy Workflow
-
-**Trigger:**
-- After Terraform completes (when infrastructure changes)
-- Direct push to master (when app code changes)
-
-**Actions:**
-- Builds Docker image
-- Pushes to Artifact Registry
-- Deploys to Cloud Run
+**Smart behavior:**
+- App code only → Skip Terraform, deploy Docker (~3 min)
+- Terraform only → Run Terraform, then Docker (~5 min)
+- Both changed → Run both sequentially (~5 min)
+- Workflow changed → Run both to verify (~5 min)
 
 ---
 

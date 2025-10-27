@@ -45,7 +45,7 @@ terraform fmt -recursive
 **Or use CI/CD (recommended):**
 1. Edit Terraform files
 2. Commit and push to master
-3. GitHub Actions automatically applies changes
+3. GitHub Actions automatically detects changes and applies
 
 ## File Structure
 

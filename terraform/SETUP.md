@@ -182,14 +182,14 @@ gcloud iam service-accounts keys create ~/github-key.json \
 rm ~/github-key.json
 ```
 
-### 4. Test Workflows
+### 4. Test Workflow
 
 ```bash
-git commit --allow-empty -m "test: trigger workflows"
+git commit --allow-empty -m "test: trigger workflow"
 git push origin master
 ```
 
-Check the **Actions** tab to verify both workflows succeed.
+Check the **Actions** tab to verify the Deploy workflow succeeds.
 
 ---
 
@@ -219,7 +219,7 @@ terraform fmt -check -recursive
 - [ ] Cloud Run service exists: https://console.cloud.google.com/run
 - [ ] Artifact Registry exists: https://console.cloud.google.com/artifacts
 - [ ] GitHub secret `GCP_SA_KEY` configured
-- [ ] GitHub Actions workflows pass
+- [ ] GitHub Actions Deploy workflow passes
 
 ---
 
@@ -292,8 +292,22 @@ Small differences are normal during migration (IAM format changes, labels, compu
 After setup is complete:
 
 1. **Daily usage**: See [README.md](./README.md) for commands
-2. **CI/CD**: GitHub Actions automatically validates and deploys
+2. **CI/CD**: GitHub Actions unified Deploy workflow automatically handles everything
 3. **Team collaboration**: Others run `terraform init` to download remote state
+
+## How CI/CD Works
+
+The unified Deploy workflow runs on every push to master:
+
+1. **Detects changes** - Checks which files changed
+2. **Runs Terraform** - Only if `terraform/` or `deploy.yml` changed
+3. **Deploys Docker** - Only if app code or terraform changed
+4. **Sequential execution** - Terraform always completes before Docker
+
+**Examples:**
+- Change app code → Skip Terraform, deploy Docker (~3 min)
+- Change terraform → Run Terraform, then Docker (~5 min)
+- Change both → Run both sequentially (~5 min)
 
 ## Custom Domain Setup
 

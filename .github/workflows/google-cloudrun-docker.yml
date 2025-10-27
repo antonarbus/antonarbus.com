@@ -1,7 +1,7 @@
 name: 'Build and Deploy to Cloud Run'
 
 # This workflow runs in two scenarios:
-# 1. After Terraform Apply completes (via workflow_run) - ensures infrastructure is ready
+# 1. After Terraform workflow completes (via workflow_run) - ensures infrastructure is ready
 # 2. On direct push to master when terraform/ directory is NOT modified
 on:
   # Trigger after Terraform workflow completes
@@ -30,7 +30,7 @@ env:
 jobs:
   deploy:
     runs-on: 'ubuntu-latest'
-    # When triggered by workflow_run, only proceed if terraform-apply succeeded
+    # When triggered by workflow_run, only proceed if terraform succeeded
     if: |
       github.event_name == 'push' ||
       (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')

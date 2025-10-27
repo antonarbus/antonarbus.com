@@ -7,12 +7,11 @@
 # 1. ✅ Artifact Registry - Docker image storage
 # 2. ✅ GitHub Actions Service Account - For CI/CD deployments
 # 3. ✅ Cloud Run Service Account - For the running app
-# 4. ✅ 3 IAM Permissions - Permissions for GitHub Actions SA
+# 4. ✅ 5 IAM Permissions - Permissions for GitHub Actions SA
 # 5. ✅ Cloud Run Service - Your app (named cloud-run)
 # 6. ✅ Public Access - Makes your site publicly accessible
 # 7. ✅ Domain Mapping - Maps antonarbus.com to the service
-# 8. ✅ GCS Bucket - For Terraform remote state storage
-# 9. ✅ State Bucket IAM - Access for GitHub Actions
+# 8. ✅ GCS Bucket - For Terraform remote state storage (in backend.tf)
 #
 # Backend configuration is in backend.tf
 # For first-time setup, see BOOTSTRAP.md
@@ -94,6 +93,22 @@ resource "google_project_iam_member" "github_actions_artifact_registry_admin" {
 resource "google_project_iam_member" "github_actions_service_account_user" {
   project = var.project_id
   role    = "roles/iam.serviceAccountUser"
+  member  = "serviceAccount:${google_service_account.github_actions.email}"
+}
+
+# Give GitHub Actions permission to manage storage buckets
+# "roles/storage.admin" allows: read bucket metadata, manage objects, needed for Terraform state
+resource "google_project_iam_member" "github_actions_storage_admin" {
+  project = var.project_id
+  role    = "roles/storage.admin"
+  member  = "serviceAccount:${google_service_account.github_actions.email}"
+}
+
+# Give GitHub Actions permission to view IAM policies
+# "roles/iam.securityReviewer" allows: reading IAM policies, needed for Terraform state operations
+resource "google_project_iam_member" "github_actions_iam_viewer" {
+  project = var.project_id
+  role    = "roles/iam.securityReviewer"
   member  = "serviceAccount:${google_service_account.github_actions.email}"
 }
 

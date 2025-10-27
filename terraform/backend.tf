@@ -75,9 +75,5 @@ resource "google_storage_bucket" "terraform_state" {
   }
 }
 
-# Grant the GitHub Actions service account access to the state bucket
-resource "google_storage_bucket_iam_member" "terraform_state_admin" {
-  bucket = google_storage_bucket.terraform_state.name
-  role   = "roles/storage.objectAdmin"
-  member = "serviceAccount:${google_service_account.github_actions.email}"
-}
+# Note: GitHub Actions service account permissions are granted in main.tf
+# It has roles/storage.admin at project level, which includes bucket access

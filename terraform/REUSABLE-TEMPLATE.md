@@ -449,19 +449,50 @@ terraform plan
 terraform apply
 ```
 
-### Update Resources
+### Update Resources (Automated via CI/CD)
+
+**Recommended approach** (fully automated):
+
+```bash
+# 1. Create branch
+git checkout -b increase-memory
+
+# 2. Edit terraform files
+# Example: Edit variables.tf
+memory_limit = "1Gi"
+
+# 3. Commit and push
+git add terraform/
+git commit -m "feat: increase Cloud Run memory to 1Gi"
+git push origin increase-memory
+
+# 4. Create PR on GitHub
+# - terraform-check.yml runs (shows plan)
+# - Review the plan
+
+# 5. Merge PR
+# - terraform-apply.yml runs automatically
+# - Infrastructure updated!
+# - No manual terraform apply needed
+```
+
+**Local approach** (if you prefer):
 
 ```bash
 # Edit variables.tf or terraform.tfvars
-# Example: increase memory
 memory_limit = "1Gi"
 
-# Review changes
+# Review and apply locally
 terraform plan
-
-# Apply
 terraform apply
+
+# Push changes
+git add . && git commit -m "feat: update config"
+git push
 ```
+
+**Note**: With automated CI/CD, terraform apply runs on merge to master.
+This is safer and more consistent than local applies.
 
 ### Destroy Infrastructure
 

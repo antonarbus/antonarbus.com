@@ -276,26 +276,45 @@ terraform init  # Downloads remote state
 terraform plan  # Verify it works
 ```
 
-### 3. Test CI/CD
+### 3. Test Automated Terraform CI/CD
 
-Create a test PR to verify Terraform validation works:
+Terraform is now fully automated! Test it with a PR:
 
 ```bash
 # Create a branch
-git checkout -b test-terraform-ci
+git checkout -b test-terraform-automation
 
-# Make a small change
-echo "# test" >> terraform/README.md
+# Make a small infrastructure change
+# Edit terraform/variables.tf or add a comment to terraform/main.tf
 
 # Commit and push
-git add terraform/README.md
-git commit -m "test: verify Terraform CI works"
-git push origin test-terraform-ci
+git add terraform/
+git commit -m "test: verify automated Terraform workflow"
+git push origin test-terraform-automation
 
-# Create PR on GitHub and check that:
-# - Terraform validation runs
-# - Workflow comments on PR with validation results
+# Create PR on GitHub and verify:
+# 1. terraform-check.yml runs on PR
+#    - Shows terraform plan in comments
+#    - Validates syntax and formatting
+#
+# 2. Merge the PR
+#
+# 3. terraform-apply.yml runs automatically on merge
+#    - Applies infrastructure changes
+#    - No manual terraform apply needed!
 ```
+
+**Automated workflows:**
+- **terraform-check.yml**: Validates on PR (shows plan)
+- **terraform-apply.yml**: Applies on merge to master (NEW!)
+- **google-cloudrun-docker.yml**: Deploys container image
+
+**Benefits:**
+- ✅ No manual `terraform apply` needed
+- ✅ Terraform is idempotent (skips if no changes)
+- ✅ All changes tracked in git + CI/CD logs
+- ✅ Team can propose infrastructure changes via PRs
+- ✅ Consistent environment (runs in CI, not locally)
 
 ---
 

@@ -202,15 +202,32 @@ gcloud iam service-accounts keys create ~/github-actions-key.json \
 rm ~/github-actions-key.json
 ```
 
-### 4. Test GitHub Actions
+### 4. Test Automated Workflows
 
-Push a commit to trigger the workflow:
+Push a commit to trigger all workflows:
 ```bash
-git commit --allow-empty -m "test: trigger GitHub Actions"
-git push
+git commit --allow-empty -m "test: trigger GitHub Actions workflows"
+git push origin master
 ```
 
-Check the Actions tab in GitHub to see the deployment.
+**What happens automatically:**
+1. **terraform-apply.yml** runs first
+   - Runs `terraform plan`
+   - Sees "No changes" (infrastructure already applied)
+   - Completes in ~30 seconds ✅
+
+2. **google-cloudrun-docker.yml** runs
+   - Builds Docker image
+   - Pushes to Artifact Registry
+   - Deploys to Cloud Run ✅
+
+3. Check the [Actions tab](https://github.com/YOUR-USERNAME/YOUR-REPO/actions) to see both workflows succeed
+
+**Future infrastructure changes:**
+- Edit `terraform/*.tf` files
+- Create PR (terraform-check.yml validates)
+- Merge PR (terraform-apply.yml automatically applies!)
+- No manual `terraform apply` needed ✅
 
 ---
 

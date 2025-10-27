@@ -38,14 +38,14 @@ jobs:
         id: changes
         run: |
           # Check what files changed in this push
-          if git diff --name-only HEAD~1 HEAD | grep -qE '^terraform/|^\.github/workflows/terraform\.yml'; then
+          if git diff --name-only HEAD~1 HEAD | grep -qE '^terraform/|^\.github/workflows/deploy\.yml'; then
             echo "terraform=true" >> $GITHUB_OUTPUT
           else
             echo "terraform=false" >> $GITHUB_OUTPUT
           fi
 
           # Check if non-terraform files changed
-          if git diff --name-only HEAD~1 HEAD | grep -qvE '^terraform/|^\.github/workflows/terraform\.yml'; then
+          if git diff --name-only HEAD~1 HEAD | grep -qvE '^terraform/|^\.github/workflows/deploy\.yml'; then
             echo "app=true" >> $GITHUB_OUTPUT
           else
             echo "app=false" >> $GITHUB_OUTPUT

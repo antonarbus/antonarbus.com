@@ -10,8 +10,8 @@
 
 terraform {
   backend "gcs" {
-    bucket = "antonarbus-terraform-state"  # GCS bucket name
-    prefix = "terraform/state"              # Path within bucket
+    bucket = "antonarbus-terraform-state" # GCS bucket name
+    prefix = "terraform/state"            # Path within bucket
 
     # State locking is automatic with GCS backend
     # No additional configuration needed

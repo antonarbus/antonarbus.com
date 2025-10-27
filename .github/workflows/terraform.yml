@@ -1,25 +1,25 @@
-name: 'Terraform Apply'
+name: 'Terraform'
 
-# Run on push to master (after PR is merged)
+# Run only on merge to master (push event)
 on:
   push:
     branches:
       - master
     paths:
       - 'terraform/**'
-      - '.github/workflows/terraform-apply.yml'
+      - '.github/workflows/terraform.yml'
 
-# Allow manual trigger
+  # Allow manual trigger
   workflow_dispatch:
 
 env:
   TERRAFORM_VERSION: '1.5.0'
   WORKING_DIR: './terraform'
-  PROJECT_ID: 'antonarbus'  # Explicit project ID
+  PROJECT_ID: 'antonarbus'
 
 jobs:
-  terraform-apply:
-    name: 'Apply Terraform Changes'
+  terraform:
+    name: 'Terraform'
     runs-on: ubuntu-latest
 
     # Required for google-github-actions/auth
@@ -82,7 +82,6 @@ jobs:
       - name: 'Terraform Plan'
         id: plan
         run: terraform plan -no-color -out=tfplan
-        continue-on-error: false
 
       - name: 'Terraform Apply'
         id: apply
@@ -97,7 +96,7 @@ jobs:
           terraform output
 
       - name: 'Post-Apply Summary'
-        if: always()
+        if: always() && steps.apply.outcome != 'skipped'
         run: |
           echo "## Terraform Apply Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY

@@ -4,9 +4,9 @@ name: 'Build and Deploy to Cloud Run'
 # 1. After Terraform Apply completes (via workflow_run) - ensures infrastructure is ready
 # 2. On direct push to master when terraform/ directory is NOT modified
 on:
-  # Trigger after Terraform Apply workflow completes
+  # Trigger after Terraform workflow completes
   workflow_run:
-    workflows: ["Terraform Apply"]
+    workflows: ["Terraform"]
     types:
       - completed
     branches:
@@ -18,7 +18,7 @@ on:
       - master
     paths-ignore:
       - 'terraform/**'
-      - '.github/workflows/terraform-*.yml'
+      - '.github/workflows/terraform.yml'
 
 env:
   PROJECT_ID: 'antonarbus'

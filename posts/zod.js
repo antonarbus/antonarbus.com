@@ -16,7 +16,7 @@ import {
 
 const postObj = {
   title: 'zod',
-  date: '2025.09.26',
+  date: '2025.10.27',
   tags: ['JavaScript', 'tools'],
   imgUrl: 'https://antonarbus.com/imgs/xxx.png',
   desc: 'Zod',

@@ -12,12 +12,13 @@ const postObj = {
       <h2>🔍 GitHub Search Cheat Sheet (PRs & Commits)</h2>
 
       <h3>📦 General Syntax</h3>
-      <pre>
-        org:ORGNAME | repo:OWNER/REPO | user:USERNAME author:USERNAME | assignee:USERNAME |
-        commenter:USERNAME is:pr | is:issue | is:merged | is:open | is:closed
-        created:YYYY-MM-DD..YYYY-MM-DD | updated:>=YYYY-MM-DD label:"some label" sort:updated-desc |
-        sort:created-asc
-      </pre>
+
+      <pre>{'org:ORGNAME | repo:OWNER/REPO | user:USERNAME'}</pre>
+      <pre>{'author:USERNAME | assignee:USERNAME | commenter:USERNAME'}</pre>
+      <pre>{'is:pr | is:issue | is:merged | is:open | is:closed'}</pre>
+      <pre>{'created:YYYY-MM-DD..YYYY-MM-DD | updated:>=YYYY-MM-DD'}</pre>
+      <pre>{'label:"some label"'}</pre>
+      <pre>{'sort:updated-desc | sort:created-asc'}</pre>
 
       <h3>🧭 Useful Search Prompts for Pull Requests</h3>
       <table border="1" cellpadding="6" cellspacing="0">
@@ -248,7 +249,7 @@ const postObj = {
       </table>
 
       <h3>🧩 Combine Filters</h3>
-      <pre>org:heeros author:antonarbus is:pr is:merged created:>=2025-01-01 "zod"</pre>
+      <pre>{'org:heeros author:antonarbus is:pr is:merged created:>=2025-01-01 "zod"'}</pre>
 
       <h3>💡 Pro Tips</h3>
       <ul>

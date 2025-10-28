@@ -9,18 +9,17 @@ const postObj = {
     <>
       <H>Search queries in web interface</H>
 
-      <h2>🔍 GitHub Search Cheat Sheet (PRs & Commits)</h2>
+      <p>General Syntax</p>
 
-      <h3>📦 General Syntax</h3>
+      <ul>
+        <li>{'org:ORGANIZATION | repo:OWNER/REPO | user:USERNAME'}</li>
+        <li>{'author: USERNAME | assignee:USERNAME | commenter:USERNAME'}</li>
+        <li>{'is:pr | is:issue | is:merged | is:open | is:closed'}</li>
+        <li>{'created:YYYY-MM-DD..YYYY-MM-DD | updated:>=YYYY-MM-DD'}</li>
+        <li>{'label:"some label"'}</li>
+        <li>{'sort:updated-desc | sort:created-asc'}</li>
+      </ul>
 
-      <pre>{'org:ORGNAME | repo:OWNER/REPO | user:USERNAME'}</pre>
-      <pre>{'author:USERNAME | assignee:USERNAME | commenter:USERNAME'}</pre>
-      <pre>{'is:pr | is:issue | is:merged | is:open | is:closed'}</pre>
-      <pre>{'created:YYYY-MM-DD..YYYY-MM-DD | updated:>=YYYY-MM-DD'}</pre>
-      <pre>{'label:"some label"'}</pre>
-      <pre>{'sort:updated-desc | sort:created-asc'}</pre>
-
-      <h3>🧭 Useful Search Prompts for Pull Requests</h3>
       <table border="1" cellpadding="6" cellspacing="0">
         <thead>
           <tr>
@@ -33,109 +32,106 @@ const postObj = {
           <tr>
             <td>All PRs by a user in org</td>
             <td>
-              <code>org:heeros author:antonarbus is:pr</code>
+              <code>org:COMPANY author:NAME is:pr</code>
             </td>
-            <td>Shows all PRs created by Anton</td>
+            <td>Shows all PRs created by AME</td>
           </tr>
           <tr>
             <td>Only merged PRs</td>
             <td>
-              <code>org:heeros author:antonarbus is:pr is:merged</code>
+              <code>org:COMPANY author:NAME is:pr is:merged</code>
             </td>
             <td>Only those actually merged</td>
           </tr>
           <tr>
             <td>Only open PRs</td>
             <td>
-              <code>repo:heeros/quotation-app author:antonarbus is:open is:pr</code>
+              <code>repo:COMPANY/REPO author:NAME is:open is:pr</code>
             </td>
             <td>Still active</td>
           </tr>
           <tr>
             <td>Closed but not merged PRs</td>
             <td>
-              <code>is:pr is:closed -is:merged author:antonarbus</code>
+              <code>is:pr is:closed -is:merged author:NAME</code>
             </td>
             <td>Useful for declined PRs</td>
           </tr>
           <tr>
             <td>PRs created this year</td>
             <td>
-              <code>org:heeros author:antonarbus is:pr created:&gt;=2025-01-01</code>
+              <code>org:COMPANY author:NAME is:pr created:&gt;=2025-01-01</code>
             </td>
             <td>Uses date range</td>
           </tr>
           <tr>
             <td>PRs in a specific date range</td>
             <td>
-              <code>
-                repo:heeros/backend is:pr author:antonarbus created:2024-06-01..2024-12-31
-              </code>
+              <code>repo:COMPANY/backend is:pr author:NAME created:2024-06-01..2024-12-31</code>
             </td>
             <td>Two-dot range syntax</td>
           </tr>
           <tr>
             <td>Recently updated PRs</td>
             <td>
-              <code>
-                org:heeros author:antonarbus is:pr updated:&gt;=2025-10-01 sort:updated-desc
-              </code>
+              <code>org:COMPANY author:NAME is:pr updated:&gt;=2025-10-01 sort:updated-desc</code>
             </td>
             <td>Sort newest first</td>
           </tr>
           <tr>
             <td>PRs mentioning a keyword</td>
             <td>
-              <code>org:heeros is:pr author:antonarbus "lambda migration"</code>
+              <code>org:COMPANY is:pr author:NAME "lambda migration"</code>
             </td>
             <td>Full-text match in title/body</td>
           </tr>
           <tr>
             <td>PRs assigned to someone</td>
             <td>
-              <code>repo:heeros/quotation-app is:pr assignee:johndoe</code>
+              <code>repo:COMPANY/REPO is:pr assignee:NAME</code>
             </td>
             <td>Useful for reviews</td>
           </tr>
           <tr>
             <td>PRs reviewed by user</td>
             <td>
-              <code>org:heeros reviewed-by:antonarbus is:pr</code>
+              <code>org:COMPANY reviewed-by:NAME is:pr</code>
             </td>
             <td>When you were a reviewer</td>
           </tr>
           <tr>
             <td>PRs requesting your review</td>
             <td>
-              <code>org:heeros review-requested:antonarbus is:pr</code>
+              <code>org:COMPANY review-requested:NAME is:pr</code>
             </td>
             <td>Pending review requests</td>
           </tr>
           <tr>
             <td>PRs merged by someone</td>
             <td>
-              <code>org:heeros merged-by:johndoe is:pr is:merged</code>
+              <code>org:COMPANY merged-by:NAME is:pr is:merged</code>
             </td>
             <td>Who merged them</td>
           </tr>
           <tr>
             <td>PRs targeting a branch</td>
             <td>
-              <code>repo:heeros/backend is:pr base:main</code>
+              <code>repo:COMPANY/backend is:pr base:main</code>
             </td>
             <td>Target branch</td>
           </tr>
           <tr>
             <td>PRs touching specific path</td>
             <td>
-              <code>repo:heeros/backend is:pr path:src/lambda/</code>
+              <code>repo:COMPANY/backend is:pr path:src/lambda/</code>
             </td>
             <td>Code in that path changed</td>
           </tr>
         </tbody>
       </table>
 
-      <h3>🕐 Useful Search Prompts for Commits</h3>
+      <p>Useful Search Prompts for Commits</p>
+
       <table border="1" cellpadding="6" cellspacing="0">
         <thead>
           <tr>
@@ -148,51 +144,49 @@ const postObj = {
           <tr>
             <td>Commits by author</td>
             <td>
-              <code>repo:heeros/backend author:antonarbus</code>
+              <code>repo:COMPANY/backend author:NAME</code>
             </td>
             <td>Simple one</td>
           </tr>
           <tr>
             <td>Commits across org</td>
             <td>
-              <code>org:heeros author:antonarbus</code>
+              <code>org:COMPANY author:NAME</code>
             </td>
             <td>Works across repos</td>
           </tr>
           <tr>
             <td>Commits after certain date</td>
             <td>
-              <code>repo:heeros/backend author:antonarbus committer-date:&gt;=2025-01-01</code>
+              <code>repo:COMPANY/backend author:NAME committer-date:&gt;=2025-01-01</code>
             </td>
             <td>Filter by commit date</td>
           </tr>
           <tr>
             <td>Commits between dates</td>
             <td>
-              <code>
-                repo:heeros/backend author:antonarbus committer-date:2024-05-01..2024-12-31
-              </code>
+              <code>repo:COMPANY/backend author:NAME committer-date:2024-05-01..2024-12-31</code>
             </td>
             <td>Specific range</td>
           </tr>
           <tr>
             <td>Commits mentioning keyword</td>
             <td>
-              <code>org:heeros author:antonarbus "zod migration"</code>
+              <code>org:COMPANY author:NAME "zod migration"</code>
             </td>
             <td>Matches message text</td>
           </tr>
           <tr>
             <td>Commits in specific path</td>
             <td>
-              <code>repo:heeros/backend path:src/api/ author:antonarbus</code>
+              <code>repo:COMPANY/backend path:src/api/ author:NAME</code>
             </td>
             <td>Filter by directory</td>
           </tr>
           <tr>
             <td>Commits by email</td>
             <td>
-              <code>repo:heeros/backend committer-email:anton@heeros.com</code>
+              <code>repo:COMPANY/backend committer-email:NAME@COMPANY.com</code>
             </td>
             <td>Fallback when username differs</td>
           </tr>
@@ -206,7 +200,8 @@ const postObj = {
         </tbody>
       </table>
 
-      <h3>📅 Date Range Syntax</h3>
+      <p>Date Range Syntax</p>
+
       <table border="1" cellpadding="6" cellspacing="0">
         <thead>
           <tr>
@@ -248,10 +243,14 @@ const postObj = {
         </tbody>
       </table>
 
-      <h3>🧩 Combine Filters</h3>
-      <pre>{'org:heeros author:antonarbus is:pr is:merged created:>=2025-01-01 "zod"'}</pre>
+      <h3>Combine Filters</h3>
 
-      <h3>💡 Pro Tips</h3>
+      <ul>
+        <li>{'org:COMPANY author:NAME is:pr is:merged created:>=2025-01-01 "zod"'}</li>
+      </ul>
+
+      <p>Tips</p>
+
       <ul>
         <li>
           Use <code>is:merged</code> instead of <code>is:closed</code> when you only care about

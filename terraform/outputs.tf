@@ -4,6 +4,7 @@
 # Outputs display important information after Terraform creates resources
 # Use: terraform output (to see all outputs)
 # Use: terraform output cloud_run_url (to see specific output)
+# https://developer.hashicorp.com/terraform/language/values/outputs
 
 output "cloud_run_url" {
   description = "The public URL where your Cloud Run service is accessible"

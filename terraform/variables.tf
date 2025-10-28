@@ -6,6 +6,7 @@
 # 1. Creating a terraform.tfvars file (not in git - for secrets/personal values)
 # 2. Using -var flag: terraform apply -var="min_instances=1"
 # 3. Setting environment variables: TF_VAR_min_instances=1
+# https://developer.hashicorp.com/terraform/language/values/variables
 
 # ==============================================================================
 # PROJECT & REGION

@@ -16,11 +16,14 @@
 # Backend configuration is in backend.tf
 # For first-time setup, see BOOTSTRAP.md
 
+# Terraform configuration block
+# https://developer.hashicorp.com/terraform/language/terraform
 terraform {
   # Require Terraform version 1.0 or higher
   required_version = ">= 1.0"
 
   # Specify which providers (cloud platforms) we're using
+  # https://developer.hashicorp.com/terraform/language/providers/requirements
   required_providers {
     google = {
       source  = "hashicorp/google" # Official Google Cloud provider
@@ -30,6 +33,7 @@ terraform {
 }
 
 # Configure the Google Cloud provider with our project and region
+# https://registry.terraform.io/providers/hashicorp/google/latest/docs
 provider "google" {
   project = var.project_id # Which GCP project to use (from variables.tf)
   region  = var.region     # Default region for resources (from variables.tf)
@@ -41,6 +45,8 @@ provider "google" {
 # This is where Docker images are stored before being deployed to Cloud Run
 # Think of it as a private Docker Hub for your project
 
+# Artifact Registry repository for Docker images
+# https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/artifact_registry_repository
 resource "google_artifact_registry_repository" "docker_repo" {
   location      = var.region                 # Where to store images (us-central1)
   repository_id = var.artifact_registry_name # Name: "artifact-registry"
@@ -66,6 +72,8 @@ resource "google_artifact_registry_repository" "docker_repo" {
 # 2. Deploy to Cloud Run
 # Think of it as a "robot user" that GitHub uses to interact with Google Cloud
 
+# Service account resource
+# https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_service_account
 resource "google_service_account" "github_actions" {
   account_id   = var.github_actions_sa_name # Name: "github-actions-sa"
   display_name = "GitHub Actions Service Account"
@@ -74,6 +82,7 @@ resource "google_service_account" "github_actions" {
 
 # Give GitHub Actions permission to manage Cloud Run services
 # "roles/run.admin" allows: create, update, delete Cloud Run services
+# https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_project_iam
 resource "google_project_iam_member" "github_actions_cloud_run_admin" {
   project = var.project_id
   role    = "roles/run.admin"
@@ -127,6 +136,8 @@ resource "google_project_iam_member" "github_actions_service_usage_admin" {
 # It determines what Google Cloud APIs the running app can access
 # Best practice: use a custom SA instead of the default compute SA
 
+# Service account resource
+# https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_service_account
 resource "google_service_account" "cloud_run_service" {
   account_id   = var.cloud_run_sa_name # Name: "cloud-run-sa"
   display_name = "Cloud Run Service Account"
@@ -139,6 +150,8 @@ resource "google_service_account" "cloud_run_service" {
 # This is the main application - a containerized web app that runs your site
 # Cloud Run automatically scales up/down based on traffic (even to zero!)
 
+# Cloud Run service (v2 API)
+# https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloud_run_v2_service
 resource "google_cloud_run_v2_service" "main" {
   name     = var.cloud_run_service_name # Name: "cloud-run"
   location = var.region                 # Where to run: us-central1
@@ -226,6 +239,8 @@ resource "google_cloud_run_v2_service" "main" {
 # By default, Cloud Run requires authentication
 # This grants public access so anyone can visit your website
 
+# Cloud Run IAM member binding for public access
+# https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloud_run_v2_service_iam
 resource "google_cloud_run_v2_service_iam_member" "public_access" {
   name     = google_cloud_run_v2_service.main.name
   location = google_cloud_run_v2_service.main.location
@@ -239,6 +254,8 @@ resource "google_cloud_run_v2_service_iam_member" "public_access" {
 # Maps your custom domain (antonarbus.com) to the Cloud Run service
 # This will import and update the existing domain mapping to point to cloud-run
 
+# Cloud Run domain mapping (v1 API)
+# https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloud_run_domain_mapping
 resource "google_cloud_run_domain_mapping" "main" {
   name     = var.custom_domain # Domain: "antonarbus.com"
   location = var.region        # Same region as Cloud Run service

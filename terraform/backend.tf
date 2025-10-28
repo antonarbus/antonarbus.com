@@ -9,6 +9,8 @@
 # 4. Backup - GCS versioning enabled for disaster recovery
 
 terraform {
+  # GCS backend for storing Terraform state remotely
+  # https://developer.hashicorp.com/terraform/language/backend/gcs
   backend "gcs" {
     bucket = "antonarbus-terraform-state" # GCS bucket name
     prefix = "terraform/state"            # Path within bucket
@@ -36,6 +38,8 @@ terraform {
 #
 # After bootstrap, this resource is managed like any other
 
+# Google Cloud Storage bucket resource
+# https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket
 resource "google_storage_bucket" "terraform_state" {
   name     = "antonarbus-terraform-state"
   location = var.region

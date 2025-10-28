@@ -75,6 +75,8 @@ jobs:
         with:
           terraform_version: ${{ env.TERRAFORM_VERSION }}
 
+      # Authenticate to Google Cloud using service account credentials
+      # https://github.com/google-github-actions/auth
       - name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v2'
         with:
@@ -83,9 +85,13 @@ jobs:
       - name: 'Set GCP Project and Enable APIs'
         if: env.TERRAFORM_CHANGED == 'true'
         run: |
+          # Set the default project for gcloud commands
+          # https://cloud.google.com/sdk/gcloud/reference/config/set
           gcloud config set project ${{ env.PROJECT_ID }}
 
           echo "Enabling required Google Cloud APIs..."
+          # Enable Google Cloud service APIs
+          # https://cloud.google.com/sdk/gcloud/reference/services/enable
           gcloud services enable \
             iam.googleapis.com \
             cloudresourcemanager.googleapis.com \
@@ -153,6 +159,8 @@ jobs:
       - name: 'Docker Auth'
         if: env.APP_CHANGED == 'true' || env.TERRAFORM_CHANGED == 'true'
         run: |
+          # Configure Docker to authenticate to Artifact Registry
+          # https://cloud.google.com/sdk/gcloud/reference/auth/configure-docker
           gcloud auth configure-docker '${{ env.REGION }}-docker.pkg.dev'
 
       - name: 'Set Environment Variables'
@@ -160,6 +168,8 @@ jobs:
         run: |
           echo "IMAGE_VERSION=${{ github.ref_name }}" >> $GITHUB_ENV
 
+      # Build Docker image and push to Artifact Registry
+      # https://github.com/docker/build-push-action
       - name: 'Build and Push Docker Image'
         if: env.APP_CHANGED == 'true' || env.TERRAFORM_CHANGED == 'true'
         uses: docker/build-push-action@v6
@@ -172,6 +182,8 @@ jobs:
       - name: 'Deploy to Cloud Run'
         if: env.APP_CHANGED == 'true' || env.TERRAFORM_CHANGED == 'true'
         run: |
+          # Update Cloud Run service with new container image
+          # https://cloud.google.com/sdk/gcloud/reference/run/services/update
           gcloud run services update ${{ env.SERVICE_NAME }} \
             --image ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACTS_REGISTRY_NAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ env.IMAGE_VERSION }} \
             --region ${{ env.REGION }} \
@@ -182,6 +194,8 @@ jobs:
         if: env.APP_CHANGED == 'true' || env.TERRAFORM_CHANGED == 'true'
         run: |
           echo "✅ Deployment successful!"
+          # Get Cloud Run service details and extract the URL
+          # https://cloud.google.com/sdk/gcloud/reference/run/services/describe
           gcloud run services describe ${{ env.SERVICE_NAME }} \
             --region ${{ env.REGION }} \
             --project ${{ env.PROJECT_ID }} \

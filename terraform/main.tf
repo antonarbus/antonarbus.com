@@ -14,7 +14,7 @@
 # 8. ✅ GCS Bucket - For Terraform remote state storage (in backend.tf)
 #
 # Backend configuration is in backend.tf
-# For first-time setup, see BOOTSTRAP.md
+# For first-time setup, see README.md
 
 # Terraform configuration block
 # https://developer.hashicorp.com/terraform/language/terraform

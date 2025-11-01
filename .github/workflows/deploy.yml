@@ -90,19 +90,20 @@ jobs:
       - name: 'Set GCP Project and Enable APIs'
         if: env.TERRAFORM_CHANGED == 'true'
         run: |
-          # Set the default project for gcloud commands
-          # https://cloud.google.com/sdk/gcloud/reference/config/set
+          echo "Set the default project for gcloud commands"
+          # ℹ️ https://cloud.google.com/sdk/gcloud/reference/config/set
+
           gcloud config set project ${{ env.PROJECT_ID }}
 
           echo "Enabling required Google Cloud APIs..."
-          # Enable Google Cloud service APIs
-          # https://cloud.google.com/sdk/gcloud/reference/services/enable
+          # ℹ️ https://cloud.google.com/sdk/gcloud/reference/services/enable
+
           gcloud services enable \
             iam.googleapis.com \
             cloudresourcemanager.googleapis.com \
             --project=${{ env.PROJECT_ID }}
 
-          echo "Waiting for API activation to propagate..."
+          echo "Waiting 15s for API activation to propagate..."
           sleep 15
 
       - name: 'Terraform Format Check'
@@ -110,7 +111,6 @@ jobs:
         id: fmt
         run: terraform fmt -check -recursive
         working-directory: ${{ env.TERRAFORM_DIR }}
-        continue-on-error: true
 
       - name: 'Terraform Init'
         if: env.TERRAFORM_CHANGED == 'true'
@@ -173,9 +173,7 @@ jobs:
         run: |
           echo "IMAGE_VERSION=${{ github.ref_name }}" >> $GITHUB_ENV
 
-      # Build Docker image and push to Artifact Registry
-      # https://github.com/docker/build-push-action
-      - name: 'Build and Push Docker Image'
+      - name: 'Build and Push Docker Image to Artifact Registry'
         if: env.APP_CHANGED == 'true' || env.TERRAFORM_CHANGED == 'true'
         uses: docker/build-push-action@v6
         with:

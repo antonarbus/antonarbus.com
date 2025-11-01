@@ -195,13 +195,27 @@ jobs:
             --project ${{ env.PROJECT_ID }} \
             --labels managed-by=github-actions,commit-sha=${{ github.sha }}
 
-      - name: 'Show Deployment URL'
+      - name: 'Verify Deployment'
         if: env.APP_CHANGED == 'true' || env.TERRAFORM_CHANGED == 'true'
         run: |
-          echo "✅ Deployment successful!"
-          # Get Cloud Run service details and extract the URL
-          # https://cloud.google.com/sdk/gcloud/reference/run/services/describe
-          gcloud run services describe ${{ env.SERVICE_NAME }} \
+          echo "Waiting for deployment to be ready..."
+          sleep 10
+
+          # Get the service URL
+          URL=$(gcloud run services describe ${{ env.SERVICE_NAME }} \
             --region ${{ env.REGION }} \
             --project ${{ env.PROJECT_ID }} \
-            --format="value(status.url)"
+            --format="value(status.url)")
+
+          echo "Testing URL: $URL"
+
+          # Test if site responds with 200 OK
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" $URL)
+
+          if [ "$HTTP_CODE" -eq 200 ]; then
+            echo "✅ Site is live and responding (HTTP $HTTP_CODE)"
+            echo "🌐 Deployment URL: $URL"
+          else
+            echo "❌ Site returned HTTP $HTTP_CODE"
+            exit 1
+          fi

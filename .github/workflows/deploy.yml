@@ -1,7 +1,7 @@
 name: 'Deploy'
 
 # Single workflow that handles both Terraform and Docker deployment
-# Steps are conditional based on what files changed
+# Steps are conditional based on what files have been changed
 on:
   push:
     branches:

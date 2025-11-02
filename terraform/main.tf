@@ -4,25 +4,21 @@
 # This file defines all the Google Cloud infrastructure for antonarbus.com
 # It creates these resources:
 #
-# 1. ✅ Artifact Registry - Docker image storage
-# 2. ✅ GitHub Actions Service Account - For CI/CD deployments
-# 3. ✅ Cloud Run Service Account - For the running app
-# 4. ✅ 6 IAM Permissions - Permissions for GitHub Actions SA
-# 5. ✅ Cloud Run Service - Your app (named cloud-run)
-# 6. ✅ Public Access - Makes your site publicly accessible
-# 7. ✅ Domain Mapping - Maps antonarbus.com to the service
-# 8. ✅ GCS Bucket - For Terraform remote state storage (in backend.tf)
+# 1. GCS BUCKET - For Terraform remote state storage (MUST BE FIRST)
+# 2. ARTIFACT REGISTRY - Docker image storage
+# 3. SERVICE ACCOUNT FOR GITHUB ACTIONS - For CI/CD deployments
+# 4. SERVICE ACCOUNT FOR CLOUD RUN - For the running app
+# 5. IAM PERMISSIONS - 6 permissions for GitHub Actions SA
+# 6. CLOUD RUN SERVICE - Your app (named cloud-run)
+# 7. PUBLIC ACCESS CONFIGURATION - Makes your site publicly accessible
+# 8. CUSTOM DOMAIN MAPPING - Maps antonarbus.com to the service
 #
-# Backend configuration is in backend.tf
 # For first-time setup, see README.md
 
-# Terraform configuration block
 # https://developer.hashicorp.com/terraform/language/terraform
 terraform {
-  # Require Terraform version 1.0 or higher
   required_version = ">= 1.0"
 
-  # Specify which providers (cloud platforms) we're using
   # https://developer.hashicorp.com/terraform/language/providers/requirements
   required_providers {
     google = {
@@ -30,7 +26,21 @@ terraform {
       version = "~> 5.0"           # Use version 5.x (any minor/patch version)
     }
   }
+
+  # GCS backend for storing Terraform state remotely
+  # https://developer.hashicorp.com/terraform/language/backend/gcs
+  backend "gcs" {
+    bucket = "antonarbus-terraform-state" # GCS bucket name
+    prefix = "terraform/state"            # Path within bucket
+
+    # State locking is automatic with GCS backend
+    # No additional configuration needed
+  }
 }
+
+# ==============================================================================
+# CHOOSE GOOGLE PROVIDER
+# ==============================================================================
 
 # Configure the Google Cloud provider with our project and region
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs
@@ -40,7 +50,69 @@ provider "google" {
 }
 
 # ==============================================================================
-# ARTIFACT REGISTRY
+# 1. GCS BUCKET
+# ==============================================================================
+# This creates the GCS bucket for storing Terraform state
+#
+# IMPORTANT: This is a chicken-and-egg situation:
+# - You need the bucket to store state
+# - But you need Terraform to create the bucket
+#
+# SOLUTION: Bootstrap process (one-time only):
+# 1. Comment out the "backend" block above (lines 32-38)
+# 2. Run terraform init && terraform apply (creates bucket with local state)
+# 3. Uncomment the "backend" block
+# 4. Run terraform init -migrate-state (moves state to GCS)
+# 5. Delete local terraform.tfstate files
+#
+# After bootstrap, this resource is managed like any other
+
+# Google Cloud Storage bucket resource
+# https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket
+resource "google_storage_bucket" "terraform_state" {
+  name     = "antonarbus-terraform-state"
+  location = var.region
+  project  = var.project_id
+
+  # Force destroy allows bucket deletion even if it contains files
+  # Set to false in production to prevent accidental state deletion
+  force_destroy = false
+
+  # Uniform bucket-level access (recommended)
+  uniform_bucket_level_access = true
+
+  # Enable versioning for state file backup/recovery
+  versioning {
+    enabled = true
+  }
+
+  # Lifecycle rules to manage old versions
+  lifecycle_rule {
+    # Keep last 10 versions of state file
+    action {
+      type = "Delete"
+    }
+    condition {
+      num_newer_versions = 10
+    }
+  }
+
+  # Encryption at rest uses Google-managed keys by default
+  # No explicit configuration needed
+
+  # Labels for organization
+  labels = {
+    purpose     = "terraform-state"
+    managed_by  = "terraform"
+    environment = "production"
+  }
+}
+
+# Note: GitHub Actions service account permissions are granted below
+# It has roles/storage.admin at project level, which includes bucket access
+
+# ==============================================================================
+# 2. ARTIFACT REGISTRY
 # ==============================================================================
 # This is where Docker images are stored before being deployed to Cloud Run
 # Think of it as a private Docker Hub for your project
@@ -65,7 +137,7 @@ resource "google_artifact_registry_repository" "docker_repo" {
 }
 
 # ==============================================================================
-# SERVICE ACCOUNT FOR GITHUB ACTIONS
+# 3. SERVICE ACCOUNT FOR GITHUB ACTIONS
 # ==============================================================================
 # This service account is used by GitHub Actions to:
 # 1. Push Docker images to Artifact Registry
@@ -79,6 +151,10 @@ resource "google_service_account" "github_actions" {
   display_name = "GitHub Actions Service Account"
   description  = "Service account for GitHub Actions to deploy to Cloud Run"
 }
+
+# ==============================================================================
+# 5. IAM PERMISSIONS (6 total for GitHub Actions Service Account)
+# ==============================================================================
 
 # Give GitHub Actions permission to manage Cloud Run services
 # "roles/run.admin" allows: create, update, delete Cloud Run services
@@ -130,7 +206,7 @@ resource "google_project_iam_member" "github_actions_service_usage_admin" {
 }
 
 # ==============================================================================
-# SERVICE ACCOUNT FOR CLOUD RUN
+# 4. SERVICE ACCOUNT FOR CLOUD RUN
 # ==============================================================================
 # This service account is used BY the Cloud Run container when it's running
 # It determines what Google Cloud APIs the running app can access
@@ -145,7 +221,7 @@ resource "google_service_account" "cloud_run_service" {
 }
 
 # ==============================================================================
-# CLOUD RUN SERVICE
+# 6. CLOUD RUN SERVICE
 # ==============================================================================
 # This is the main application - a containerized web app that runs your site
 # Cloud Run automatically scales up/down based on traffic (even to zero!)
@@ -234,7 +310,7 @@ resource "google_cloud_run_v2_service" "main" {
 }
 
 # ==============================================================================
-# PUBLIC ACCESS CONFIGURATION
+# 7. PUBLIC ACCESS CONFIGURATION
 # ==============================================================================
 # By default, Cloud Run requires authentication
 # This grants public access so anyone can visit your website
@@ -249,7 +325,7 @@ resource "google_cloud_run_v2_service_iam_member" "public_access" {
 }
 
 # ==============================================================================
-# CUSTOM DOMAIN MAPPING
+# 8. CUSTOM DOMAIN MAPPING
 # ==============================================================================
 # Maps your custom domain (antonarbus.com) to the Cloud Run service
 # This will import and update the existing domain mapping to point to cloud-run

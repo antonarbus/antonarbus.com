@@ -12,7 +12,8 @@
     "update-packages": "npx npm-check-updates -i",
     "build-docker": "docker compose -f docker-compose.prod.yml build",
     "build-docker-no-cache": "docker compose -f docker-compose.prod.yml build --no-cache",
-    "start-docker": "docker compose -f docker-compose.prod.yml up"
+    "start-docker": "docker compose -f docker-compose.prod.yml up",
+    "terraform-format": "cd terraform && terraform fmt -recursive"
   },
   "dependencies": {
     "@emotion/css": "^11.10.5",

@@ -31,7 +31,7 @@ terraform {
   # https://developer.hashicorp.com/terraform/language/backend/gcs
   backend "gcs" {
     bucket = "antonarbus-terraform-state-test" # GCS bucket name
-    prefix = "terraform/state"            # Path within bucket
+    prefix = "terraform/state"                 # Path within bucket
 
     # State locking is automatic with GCS backend
     # No additional configuration needed

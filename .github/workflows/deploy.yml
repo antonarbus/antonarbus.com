@@ -113,30 +113,25 @@ jobs:
         run: terraform fmt -check -recursive
         working-directory: ${{ env.TERRAFORM_DIR }}
 
-      - name: 'Terraform Init'
-        if: env.TERRAFORM_CHANGED == 'true'
-        run: terraform init
-        working-directory: ${{ env.TERRAFORM_DIR }}
-
-      - name: 'Terraform Validate'
-        if: env.TERRAFORM_CHANGED == 'true'
-        run: terraform validate -no-color
-        working-directory: ${{ env.TERRAFORM_DIR }}
-
-      - name: 'Terraform Plan'
-        if: env.TERRAFORM_CHANGED == 'true'
-        run: terraform plan -no-color -out=tfplan
-        working-directory: ${{ env.TERRAFORM_DIR }}
-
-      - name: 'Terraform Apply'
+      - name: 'Terraform Apply with Smart Bootstrap'
         if: env.TERRAFORM_CHANGED == 'true'
         id: apply
         run: |
-          echo "Applying Terraform changes..."
-          terraform apply -auto-approve tfplan
+          echo "Running smart Terraform wrapper..."
+          echo "This automatically handles GCS bucket bootstrap if needed (first-time setup)"
+          echo ""
 
+          # terraform.sh detects if state bucket exists:
+          # - If not: creates bucket with local state, then migrates to remote
+          # - If yes: runs terraform normally with remote backend
+          # This solves the chicken-and-egg problem automatically!
+
+          chmod +x terraform.sh
+          ./terraform.sh
+
+          echo ""
           echo "✅ Terraform apply completed successfully"
-
+          echo ""
           echo "Outputs:"
           terraform output
         working-directory: ${{ env.TERRAFORM_DIR }}

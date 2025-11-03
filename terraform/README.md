@@ -13,170 +13,114 @@ Infrastructure as Code for antonarbus.com on Google Cloud Run.
 
 ## Quick Commands
 
+### Deployment: Smart Wrapper Script
 ```bash
-terraform init          # Initialize
+./terraform.sh          # Runs 'terraform apply' with auto-bootstrap
+```
+
+**Used by:** GitHub Actions CI/CD (automatically on push to master)
+**Handles:** Bucket bootstrap + terraform apply, no manual steps needed
+
+### For Development: Direct Terraform
+```bash
 terraform plan          # Preview changes
-terraform apply         # Apply changes
+terraform apply         # Apply changes (if bucket exists)
+terraform destroy       # Destroy infrastructure
 terraform output        # View outputs
 terraform fmt -recursive # Format files
 ```
 
-## First-Time Setup
+**Note:** Use wrapper script for deployment. Use direct terraform for planning/debugging.
 
-Terraform needs a GCS bucket for state, but we use Terraform to create that bucket. Solution: bootstrap in two phases.
+## Setup
 
-### Phase 1: Create State Bucket
+### Automated (Recommended)
 
-1. Comment out `backend` block in `backend.tf`:
-   ```hcl
-   # terraform {
-   #   backend "gcs" {
-   #     bucket = "antonarbus-terraform-state"
-   #     prefix = "terraform/state"
-   #   }
-   # }
-   ```
+Just push to master - GitHub Actions runs `./terraform.sh` automatically!
 
-2. Initialize and apply:
-   ```bash
-   cd terraform
-   terraform init
-   terraform apply
-   ```
+**For local deployment:**
+```bash
+cd terraform
+./terraform.sh    # Runs terraform apply with auto-bootstrap
+```
 
-### Phase 2: Migrate to Remote State
+The script automatically handles everything:
+- Detects if GCS bucket exists
+- If not: creates bucket, migrates state to remote
+- If yes: runs terraform apply normally
 
-1. Uncomment `backend` block in `backend.tf`
+### Manual Bootstrap (Fallback Only)
 
-2. Migrate state:
-   ```bash
-   terraform init -migrate-state
-   ```
+If `terraform.sh` fails for some reason, you can bootstrap manually:
 
-3. Clean up:
-   ```bash
-   rm -f terraform.tfstate*
-   find .. -maxdepth 2 -name "*.tfstate*" -type f -delete
-   terraform fmt -recursive
-   terraform plan  # Should show "No changes"
-   ```
+```bash
+terraform init -backend=false
+terraform apply -target=google_storage_bucket.terraform_state
+terraform init -force-copy
+rm -f terraform.tfstate*
+terraform apply
+```
 
-## GitHub Actions Setup
+## GitHub Actions
 
-1. Create service account key:
-   ```bash
-   gcloud iam service-accounts keys create ~/github-key.json \
-     --iam-account=github-actions-sa@antonarbus.iam.gserviceaccount.com
-   ```
-
-2. Add to GitHub:
-   - Settings → Secrets and variables → Actions
-   - New repository secret
-   - Name: `GCP_SA_KEY`
-   - Value: (contents of `github-key.json`)
-
-3. Delete local key:
-   ```bash
-   rm ~/github-key.json
-   ```
-
-## CI/CD Workflow
-
-Every push to master triggers:
-
-1. **Detect changes** - Check which files changed
-2. **Run Terraform** - If `terraform/` or `deploy.yml` changed
-3. **Deploy Docker** - If app code or Terraform changed
-4. **Sequential** - Terraform completes before Docker
-
-Examples:
-- App code only → Deploy Docker (~3 min)
-- Terraform only → Terraform + Docker (~5 min)
-- Both → Terraform + Docker (~5 min)
-
-## Custom Domain
-
-After Terraform applies:
-
-1. Cloud Run Console → service → "Manage Custom Domains"
-2. Copy DNS records
-3. Add to domain registrar
-4. Wait 24-48 hours for DNS propagation
+The workflow uses `./terraform.sh` (hardcoded to run `terraform apply`):
+- Push to master → Detect changes → Run `./terraform.sh` → Deploy Docker
+- First time: Creates bucket, migrates state, applies infrastructure
+- Ongoing: Applies infrastructure with remote backend
 
 ## Troubleshooting
 
-**Terraform files not formatted:**
 ```bash
+# Format files
 terraform fmt -recursive
-```
 
-**Backend initialization error:**
-Comment out backend block in `backend.tf` and continue setup.
-
-**Bucket already exists:**
-```bash
-terraform import google_storage_bucket.terraform_state antonarbus-terraform-state
-```
-
-**Permission denied:**
-```bash
+# Auth
 gcloud auth application-default login
-```
 
-**Resource already exists:**
-```bash
-# Cloud Run
+# Reset backend
+terraform init -reconfigure
+
+# Import bucket
+terraform import google_storage_bucket.terraform_state antonarbus-terraform-state
+
+# Import Cloud Run
 terraform import google_cloud_run_v2_service.main \
   projects/antonarbus/locations/us-central1/services/cloud-run
-
-# Artifact Registry
-terraform import google_artifact_registry_repository.docker_repo \
-  projects/antonarbus/locations/us-central1/repositories/artifact-registry
-
-# Service Accounts
-terraform import google_service_account.github_actions \
-  projects/antonarbus/serviceAccounts/github-actions-sa@antonarbus.iam.gserviceaccount.com
-terraform import google_service_account.cloud_run_service \
-  projects/antonarbus/serviceAccounts/cloud-run-sa@antonarbus.iam.gserviceaccount.com
 ```
 
 ## File Structure
 
 ```
 terraform/
-├── main.tf         # Resources
-├── variables.tf    # Configuration
+├── main.tf         # All resources and backend configuration
+├── variables.tf    # Configuration variables
 ├── outputs.tf      # Output values
-├── backend.tf      # State backend
+├── terraform.sh    # Smart wrapper script (handles bootstrap automatically)
 └── README.md       # This file
 ```
 
 ## Variables
 
 Key variables in `variables.tf`:
+- Project: `antonarbus`, Region: `us-central1`
+- Service: `cloud-run`, Domain: `antonarbus.com`
+- Resources: CPU `1`, Memory `512Mi`, Instances `0-100`
 
-- `project_id` = "antonarbus"
-- `region` = "us-central1"
-- `cloud_run_service_name` = "cloud-run"
-- `artifact_registry_name` = "artifact-registry"
-- `docker_image_name` = "docker-image"
-- `custom_domain` = "antonarbus.com"
-- `min_instances` = 0 (scales to zero)
-- `max_instances` = 100
-- `cpu_limit` = "1"
-- `memory_limit` = "512Mi"
-- `container_port` = 8080
+Variables align with `deploy.yml` workflow environment variables.
 
-Edit `variables.tf` to change values.
+## Resource Creation Order
 
-## Alignment with deploy.yml
+The GCS bucket is resource #1 and created first during bootstrap:
 
-Workflow environment variables match Terraform:
-- `PROJECT_ID` → `project_id`
-- `REGION` → `region`
-- `ARTIFACTS_REGISTRY_NAME` → `artifact_registry_name`
-- `DOCKER_IMAGE_NAME` → `docker_image_name`
-- `SERVICE_NAME` → `cloud_run_service_name`
+```
+1. GCS BUCKET          ← Created FIRST (bootstrap)
+2. ARTIFACT REGISTRY   ← Then infrastructure
+3. SERVICE ACCOUNTS
+4. IAM PERMISSIONS
+5. CLOUD RUN SERVICE
+6. PUBLIC ACCESS
+7. DOMAIN MAPPING
+```
 
 ## Learn More
 

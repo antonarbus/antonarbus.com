@@ -10,7 +10,7 @@
 
 # HOW IT WORKS:
 
-# 1. Checks if the GCS bucket exists (using gsutil)
+# 1. Checks if the GCS bucket exists
 # 2. If bucket doesn't exist (first time):
 #    - Runs 'terraform init -backend=false' (uses local state temporarily)
 #    - Creates only the bucket: 'terraform apply -target=google_storage_bucket.terraform_state'
@@ -43,19 +43,11 @@ echo_error() { echo -e "${RED}✗ ${1}${NO_COLOR}"; }
 echo_info "Checking if Terraform state bucket exists..."
 set +e # Temporarily disable 'exit on error' for bucket check
 
-# Try using gcloud storage command first (more reliable in CI/CD)
-if command -v gcloud &> /dev/null; then
-  echo_info "Using 'gcloud storage' to check bucket..."
-  gcloud storage buckets describe "gs://${BUCKET_NAME}" &> /tmp/bucket_check.txt
-  EXIT_CODE=$?
-else
-  echo_info "Using 'gsutil' to check bucket..."
-  # Fallback to gsutil
-  gsutil ls -b "gs://${BUCKET_NAME}" &> /tmp/bucket_check.txt
-  EXIT_CODE=$?
-fi
+gcloud storage buckets describe "gs://${BUCKET_NAME}" &> /tmp/bucket_check.txt
+EXIT_CODE=$?
 
 echo_info "Bucket check exit code: $EXIT_CODE"
+
 if [ -s /tmp/bucket_check.txt ]; then
   echo_info "Bucket check output:"
   cat /tmp/bucket_check.txt
@@ -67,22 +59,8 @@ if [ $EXIT_CODE -eq 0 ]; then
   BUCKET_EXISTS=true
   echo_success "Bucket exists."
 else
-  # Check the error message to distinguish between "doesn't exist" and "no access"
-  if grep -qE "AccessDeniedException|403|NOT_FOUND|NotFoundException|does not exist" /tmp/bucket_check.txt 2>/dev/null; then
-    # Check specifically for NOT_FOUND or "does not exist" messages
-    if grep -qE "NOT_FOUND|NotFoundException|does not exist|BucketNotFoundException" /tmp/bucket_check.txt 2>/dev/null; then
-      BUCKET_EXISTS=false
-      echo_warning "Bucket does not exist. Starting bootstrap..."
-    else
-      # It's a permission error - bucket might exist but we can't check
-      echo_warning "Cannot verify bucket existence (permission issue). Will attempt to use remote backend..."
-      echo_warning "If this fails, the bootstrap process will run."
-      BUCKET_EXISTS=true  # Assume it exists and let terraform init handle it
-    fi
-  else
-    BUCKET_EXISTS=false
-    echo_warning "Bucket does not exist. Starting bootstrap..."
-  fi
+  BUCKET_EXISTS=false
+  echo_warning "Bucket does not exist. Starting bootstrap..."
 fi
 
 if [ "$BUCKET_EXISTS" = true ]; then

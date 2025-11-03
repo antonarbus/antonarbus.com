@@ -26,16 +26,6 @@ terraform {
       version = "~> 5.0"           # Use version 5.x (any minor/patch version)
     }
   }
-
-  # GCS backend for storing Terraform state remotely
-  # https://developer.hashicorp.com/terraform/language/backend/gcs
-  backend "gcs" {
-    bucket = "antonarbus-terraform-state-test" # GCS bucket name
-    prefix = "terraform/state"                 # Path within bucket
-
-    # State locking is automatic with GCS backend
-    # No additional configuration needed
-  }
 }
 
 # ==============================================================================
@@ -50,69 +40,14 @@ provider "google" {
 }
 
 # ==============================================================================
-# 1. GCS BUCKET
+# NOTE: GCS BUCKET FOR TERRAFORM STATE
 # ==============================================================================
-# This creates the GCS bucket for storing Terraform state
-#
-# IMPORTANT: This is a chicken-and-egg situation:
-# - You need the bucket to store state
-# - But you need Terraform to create the bucket
-#
-# SOLUTION: Bootstrap process (one-time only):
-# 1. Comment out the "backend" block above (lines 32-38)
-# 2. Run terraform init && terraform apply (creates bucket with local state)
-# 3. Uncomment the "backend" block
-# 4. Run terraform init -migrate-state (moves state to GCS)
-# 5. Delete local terraform.tfstate files
-#
-# After bootstrap, this resource is managed like any other
-
-# Google Cloud Storage bucket resource
-# https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket
-resource "google_storage_bucket" "terraform_state" {
-  name     = "antonarbus-terraform-state-test"
-  location = var.region
-  project  = var.project_id
-
-  # Force destroy allows bucket deletion even if it contains files
-  # Set to false in production to prevent accidental state deletion
-  force_destroy = false
-
-  # Uniform bucket-level access (recommended)
-  uniform_bucket_level_access = true
-
-  # Enable versioning for state file backup/recovery
-  versioning {
-    enabled = true
-  }
-
-  # Lifecycle rules to manage old versions
-  lifecycle_rule {
-    # Keep last 10 versions of state file
-    action {
-      type = "Delete"
-    }
-    condition {
-      num_newer_versions = 10
-    }
-  }
-
-  # Encryption at rest uses Google-managed keys by default
-  # No explicit configuration needed
-
-  # Labels for organization
-  labels = {
-    purpose     = "terraform-state"
-    managed_by  = "terraform"
-    environment = "production"
-  }
-}
-
-# Note: GitHub Actions service account permissions are granted below
-# It has roles/storage.admin at project level, which includes bucket access
+# The Terraform state bucket is created separately in the bootstrap/ directory
+# This infrastructure assumes the bucket already exists
+# See bootstrap/README.md for initial setup instructions
 
 # ==============================================================================
-# 2. ARTIFACT REGISTRY
+# 1. ARTIFACT REGISTRY
 # ==============================================================================
 # This is where Docker images are stored before being deployed to Cloud Run
 # Think of it as a private Docker Hub for your project

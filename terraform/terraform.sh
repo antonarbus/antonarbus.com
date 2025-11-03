@@ -1,32 +1,25 @@
 #!/bin/bash
 
 # ==============================================================================
-# SMART TERRAFORM WRAPPER
+# TERRAFORM DEPLOYMENT SCRIPT WITH SMART BOOTSTRAP
 # ==============================================================================
-
-# This script solves the 🐓-🥚 problem of Terraform state storage:
-# - Terraform needs a GCS bucket to store state
-# - The bucket is part of infrastructure and we want it to be documented & create in Terraform
-
-# HOW IT WORKS:
-
-# 1. Checks if the GCS bucket exists
-# 2. If bucket doesn't exist (first time):
-#    - Runs 'terraform init -backend=false' (uses local state temporarily)
-#    - Creates only the bucket: 'terraform apply -target=google_storage_bucket.terraform_state'
-#    - Migrates state to bucket: 'terraform init -force-copy'
-#    - Cleans up local state files
-# 3. If bucket exists (ongoing):
-#    - Runs terraform normally with remote backend
+#
+# This script manages Terraform infrastructure with automatic bootstrap:
+# - Checks if the state bucket exists
+# - If not: runs bootstrap to create it
+# - Then applies main infrastructure with remote backend
+#
+# DIRECTORY STRUCTURE:
+#   bootstrap/      - Creates the GCS bucket for state (local state)
+#   infrastructure/ - Main infrastructure (uses remote backend)
 #
 # USAGE:
-#   ./terraform.sh          # Runs 'terraform apply' with auto-bootstrap in GitHub Actions ci/cd at deploy.yml
+#   ./terraform.sh  # Runs from GitHub Actions or locally
 # ==============================================================================
 
 set -e # exit immediately if any command fails
 
-BUCKET_NAME="antonarbus-terraform-state-test"
-BACKEND_CONFIG_FILE="backend-config.tfvars"
+BUCKET_NAME="antonarbus-terraform-state"
 
 # Colors for output
 RED='\033[0;31m'
@@ -46,13 +39,6 @@ set +e # Temporarily disable 'exit on error' for bucket check
 gcloud storage buckets describe "gs://${BUCKET_NAME}" &> /tmp/bucket_check.txt
 EXIT_CODE=$?
 
-echo_info "Bucket check exit code: $EXIT_CODE"
-
-if [ -s /tmp/bucket_check.txt ]; then
-  echo_info "Bucket check output:"
-  cat /tmp/bucket_check.txt
-fi
-
 set -e  # Re-enable 'exit on error'
 
 if [ $EXIT_CODE -eq 0 ]; then
@@ -63,30 +49,27 @@ else
   echo_warning "Bucket does not exist. Starting bootstrap..."
 fi
 
-if [ "$BUCKET_EXISTS" = true ]; then
-  # Initialize with remote backend when:
-  # first time running terraform or backend configuration changed or providers changed or after cloning the repo
-  echo_info "Initializing Terraform with remote backend..."
+if [ "$BUCKET_EXISTS" = false ]; then
+  # Bootstrap: create the state bucket
+  echo_info "Running bootstrap to create state bucket..."
+
+  cd bootstrap/
   terraform init
-else
-  # Bootstrap: create bucket with local state, then migrate
-  # https://developer.hashicorp.com/terraform/cli/commands/init
-  echo_info "Creating bucket with local state (no backend needed yet)..."
-  terraform init -backend=false -reconfigure
+  terraform apply -auto-approve
+  cd ..
 
-  echo_info "Creating only the bucket for Terraform state..."
-  terraform apply -target=google_storage_bucket.terraform_state -auto-approve
-  echo_success "Bucket created!"
-
-  echo_info "Migrating state to remote backend..."
-  terraform init -reconfigure -force-copy
-
-  echo_info "Cleaning up local state files..."
-  rm -f terraform.tfstate terraform.tfstate.backup .terraform/terraform.tfstate
-  echo_success "Bootstrap complete! State is now in GCS bucket."
+  echo_success "Bootstrap complete! Bucket created."
 fi
 
-# Run terraform apply (happens in both cases)
-echo_info "Running terraform apply..."
+# Deploy main infrastructure
+echo_info "Deploying main infrastructure..."
+
+cd infrastructure/
+terraform init \
+  -backend-config="bucket=${BUCKET_NAME}" \
+  -backend-config="prefix=terraform/state"
+
 terraform apply -auto-approve
-echo_success "'terraform apply' done!"
+cd ..
+
+echo_success "Deployment complete!"

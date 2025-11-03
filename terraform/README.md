@@ -11,22 +11,53 @@ Infrastructure as Code for antonarbus.com on Google Cloud Run.
 - Custom Domain (`antonarbus.com`)
 - GCS Backend (state storage)
 
+## Directory Structure
+
+```
+terraform/
+├── bootstrap/          # Creates state bucket (local state)
+│   ├── main.tf
+│   ├── variables.tf
+│   └── outputs.tf
+├── infrastructure/     # Main infrastructure (remote backend)
+│   ├── backend.tf
+│   ├── main.tf
+│   ├── variables.tf
+│   └── outputs.tf
+├── terraform.sh        # Smart deployment script
+└── README.md           # This file
+```
+
+### Bootstrap Directory
+
+The bootstrap directory solves the chicken-and-egg problem:
+- Terraform needs a GCS bucket to store state
+- But Terraform needs to run to create the bucket
+
+**Solution:** Bootstrap uses **local state** to create just the bucket, then the main infrastructure uses that bucket as a **remote backend**.
+
+You only need to run this **once** when setting up for the first time, or if you've deleted the state bucket. The `terraform.sh` script automatically handles this.
+
 ## Quick Commands
 
 ### Deployment: Smart Wrapper Script
 
 ```bash
-./terraform.sh          # Runs 'terraform apply' with auto-bootstrap
+./terraform.sh          # Runs deployment with auto-bootstrap
 ```
 
 **Used by:** GitHub Actions CI/CD (automatically on push to master)
-**Handles:** Bucket bootstrap + terraform apply, no manual steps needed
+**Handles:**
+1. Checks if state bucket exists
+2. If not: runs bootstrap to create it
+3. Deploys main infrastructure with remote backend
 
 ### For Development: Direct Terraform
 
 ```bash
+# In infrastructure/ directory
 terraform plan          # Preview changes
-terraform apply         # Apply changes (if bucket exists)
+terraform apply         # Apply changes
 terraform destroy       # Destroy infrastructure
 terraform output        # View outputs
 terraform fmt -recursive # Format files
@@ -44,34 +75,36 @@ Just push to master - GitHub Actions runs `./terraform.sh` automatically!
 
 ```bash
 cd terraform
-./terraform.sh    # Runs terraform apply with auto-bootstrap
+./terraform.sh    # Handles everything automatically
 ```
 
-The script automatically handles everything:
-
+The script automatically:
 - Detects if GCS bucket exists
-- If not: creates bucket, migrates state to remote
-- If yes: runs terraform apply normally
+- If not: runs bootstrap to create bucket
+- If yes: skips bootstrap
+- Deploys main infrastructure with remote backend
 
 ### Manual Bootstrap (Fallback Only)
 
-If `terraform.sh` fails for some reason, you can bootstrap manually:
+If you need to run bootstrap manually:
 
 ```bash
-terraform init -backend=false
-terraform apply -target=google_storage_bucket.terraform_state
-terraform init -force-copy
-rm -f terraform.tfstate*
+cd bootstrap/
+terraform init
+terraform apply
+cd ../infrastructure/
+terraform init -backend-config="bucket=antonarbus-terraform-state" \
+  -backend-config="prefix=terraform/state"
 terraform apply
 ```
 
 ## GitHub Actions
 
-The workflow uses `./terraform.sh` (hardcoded to run `terraform apply`):
+The workflow uses `./terraform.sh`:
 
 - Push to master → Detect changes → Run `./terraform.sh` → Deploy Docker
-- First time: Creates bucket, migrates state, applies infrastructure
-- Ongoing: Applies infrastructure with remote backend
+- First time: Creates bucket, deploys infrastructure
+- Ongoing: Deploys infrastructure with remote backend
 
 ## Troubleshooting
 
@@ -82,31 +115,18 @@ terraform fmt -recursive
 # Auth
 gcloud auth application-default login
 
-# Reset backend
-terraform init -reconfigure
-
-# Import bucket
-terraform import google_storage_bucket.terraform_state antonarbus-terraform-state-test
+# Reset backend (in infrastructure/)
+terraform init -reconfigure -backend-config="bucket=antonarbus-terraform-state" \
+  -backend-config="prefix=terraform/state"
 
 # Import Cloud Run
 terraform import google_cloud_run_v2_service.main \
   projects/antonarbus/locations/us-central1/services/cloud-run
 ```
 
-## File Structure
-
-```
-terraform/
-├── main.tf         # All resources and backend configuration
-├── variables.tf    # Configuration variables
-├── outputs.tf      # Output values
-├── terraform.sh    # Smart wrapper script (handles bootstrap automatically)
-└── README.md       # This file
-```
-
 ## Variables
 
-Key variables in `variables.tf`:
+Key variables in `infrastructure/variables.tf`:
 
 - Project: `antonarbus`, Region: `us-central1`
 - Service: `cloud-run`, Domain: `antonarbus.com`
@@ -116,11 +136,12 @@ Variables align with `deploy.yml` workflow environment variables.
 
 ## Resource Creation Order
 
-The GCS bucket is resource #1 and created first during bootstrap:
-
 ```
-1. GCS BUCKET          ← Created FIRST (bootstrap)
-2. ARTIFACT REGISTRY   ← Then infrastructure
+BOOTSTRAP (one-time):
+1. GCS BUCKET          ← Created in bootstrap/ with local state
+
+INFRASTRUCTURE (ongoing):
+2. ARTIFACT REGISTRY   ← Uses remote backend
 3. SERVICE ACCOUNTS
 4. IAM PERMISSIONS
 5. CLOUD RUN SERVICE

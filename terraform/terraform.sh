@@ -42,18 +42,43 @@ echo_error() { echo -e "${RED}✗ ${1}${NO_COLOR}"; }
 
 echo_info "Checking if Terraform state bucket exists..."
 set +e # Temporarily disable 'exit on error' for bucket check
-gsutil ls -b "gs://${BUCKET_NAME}" &> /tmp/gsutil_output.txt
-EXIT_CODE=$?
+
+# Try using gcloud storage command first (more reliable in CI/CD)
+if command -v gcloud &> /dev/null; then
+  echo_info "Using 'gcloud storage' to check bucket..."
+  gcloud storage buckets describe "gs://${BUCKET_NAME}" &> /tmp/bucket_check.txt
+  EXIT_CODE=$?
+else
+  echo_info "Using 'gsutil' to check bucket..."
+  # Fallback to gsutil
+  gsutil ls -b "gs://${BUCKET_NAME}" &> /tmp/bucket_check.txt
+  EXIT_CODE=$?
+fi
+
+echo_info "Bucket check exit code: $EXIT_CODE"
+if [ -s /tmp/bucket_check.txt ]; then
+  echo_info "Bucket check output:"
+  cat /tmp/bucket_check.txt
+fi
+
 set -e  # Re-enable 'exit on error'
 
 if [ $EXIT_CODE -eq 0 ]; then
   BUCKET_EXISTS=true
   echo_success "Bucket exists."
 else
-  # Check if it's a permission error or bucket doesn't exist
-  if grep -q "AccessDeniedException\|403" /tmp/gsutil_output.txt 2>/dev/null; then
-    echo_warning "Permission denied checking bucket. Assuming first-time setup..."
-    BUCKET_EXISTS=false
+  # Check the error message to distinguish between "doesn't exist" and "no access"
+  if grep -qE "AccessDeniedException|403|NOT_FOUND|NotFoundException|does not exist" /tmp/bucket_check.txt 2>/dev/null; then
+    # Check specifically for NOT_FOUND or "does not exist" messages
+    if grep -qE "NOT_FOUND|NotFoundException|does not exist|BucketNotFoundException" /tmp/bucket_check.txt 2>/dev/null; then
+      BUCKET_EXISTS=false
+      echo_warning "Bucket does not exist. Starting bootstrap..."
+    else
+      # It's a permission error - bucket might exist but we can't check
+      echo_warning "Cannot verify bucket existence (permission issue). Will attempt to use remote backend..."
+      echo_warning "If this fails, the bootstrap process will run."
+      BUCKET_EXISTS=true  # Assume it exists and let terraform init handle it
+    fi
   else
     BUCKET_EXISTS=false
     echo_warning "Bucket does not exist. Starting bootstrap..."
@@ -69,10 +94,10 @@ else
   # Bootstrap: create bucket with local state, then migrate
   # https://developer.hashicorp.com/terraform/cli/commands/init
   echo_info "Creating bucket with local state (no backend needed yet)..."
-  terraform init -backend=false -reconfigure
+  terraform init -backend=false
 
   echo_info "Creating only the bucket for Terraform state..."
-  terraform apply -backend=false -target=google_storage_bucket.terraform_state -auto-approve
+  terraform apply -target=google_storage_bucket.terraform_state -auto-approve
   echo_success "Bucket created!"
 
   echo_info "Migrating state to remote backend..."

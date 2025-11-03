@@ -72,7 +72,7 @@ else
   terraform init -backend=false -reconfigure
 
   echo_info "Creating only the bucket for Terraform state..."
-  terraform apply -target=google_storage_bucket.terraform_state -auto-approve
+  terraform apply -backend=false -target=google_storage_bucket.terraform_state -auto-approve
   echo_success "Bucket created!"
 
   echo_info "Migrating state to remote backend..."

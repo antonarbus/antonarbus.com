@@ -108,6 +108,9 @@ jobs:
           echo "Waiting 15s for API activation to propagate..."
           sleep 15
 
+          echo "Configuring gsutil to use gcloud credentials..."
+          gcloud config set pass_credentials_to_gsutil true
+
       - name: 'Terraform Format Check'
         if: env.TERRAFORM_CHANGED == 'true'
         id: fmt

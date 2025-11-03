@@ -25,7 +25,7 @@
 
 set -e # exit immediately if any command fails
 
-BUCKET_NAME="antonarbus-terraform-state"
+BUCKET_NAME="antonarbus-terraform-state-test"
 BACKEND_CONFIG_FILE="backend-config.tfvars"
 
 # Colors for output

@@ -30,7 +30,7 @@ terraform {
   # GCS backend for storing Terraform state remotely
   # https://developer.hashicorp.com/terraform/language/backend/gcs
   backend "gcs" {
-    bucket = "antonarbus-terraform-state" # GCS bucket name
+    bucket = "antonarbus-terraform-state-test" # GCS bucket name
     prefix = "terraform/state"            # Path within bucket
 
     # State locking is automatic with GCS backend
@@ -70,7 +70,7 @@ provider "google" {
 # Google Cloud Storage bucket resource
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket
 resource "google_storage_bucket" "terraform_state" {
-  name     = "antonarbus-terraform-state"
+  name     = "antonarbus-terraform-state-test"
   location = var.region
   project  = var.project_id
 

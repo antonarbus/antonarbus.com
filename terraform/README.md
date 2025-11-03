@@ -14,6 +14,7 @@ Infrastructure as Code for antonarbus.com on Google Cloud Run.
 ## Quick Commands
 
 ### Deployment: Smart Wrapper Script
+
 ```bash
 ./terraform.sh          # Runs 'terraform apply' with auto-bootstrap
 ```
@@ -22,6 +23,7 @@ Infrastructure as Code for antonarbus.com on Google Cloud Run.
 **Handles:** Bucket bootstrap + terraform apply, no manual steps needed
 
 ### For Development: Direct Terraform
+
 ```bash
 terraform plan          # Preview changes
 terraform apply         # Apply changes (if bucket exists)
@@ -39,12 +41,14 @@ terraform fmt -recursive # Format files
 Just push to master - GitHub Actions runs `./terraform.sh` automatically!
 
 **For local deployment:**
+
 ```bash
 cd terraform
 ./terraform.sh    # Runs terraform apply with auto-bootstrap
 ```
 
 The script automatically handles everything:
+
 - Detects if GCS bucket exists
 - If not: creates bucket, migrates state to remote
 - If yes: runs terraform apply normally
@@ -64,6 +68,7 @@ terraform apply
 ## GitHub Actions
 
 The workflow uses `./terraform.sh` (hardcoded to run `terraform apply`):
+
 - Push to master → Detect changes → Run `./terraform.sh` → Deploy Docker
 - First time: Creates bucket, migrates state, applies infrastructure
 - Ongoing: Applies infrastructure with remote backend
@@ -81,7 +86,7 @@ gcloud auth application-default login
 terraform init -reconfigure
 
 # Import bucket
-terraform import google_storage_bucket.terraform_state antonarbus-terraform-state
+terraform import google_storage_bucket.terraform_state antonarbus-terraform-state-test
 
 # Import Cloud Run
 terraform import google_cloud_run_v2_service.main \
@@ -102,6 +107,7 @@ terraform/
 ## Variables
 
 Key variables in `variables.tf`:
+
 - Project: `antonarbus`, Region: `us-central1`
 - Service: `cloud-run`, Domain: `antonarbus.com`
 - Resources: CPU `1`, Memory `512Mi`, Instances `0-100`

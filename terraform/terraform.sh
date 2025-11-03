@@ -42,7 +42,7 @@ echo_error() { echo -e "${RED}✗ ${1}${NO_COLOR}"; }
 
 echo_info "Checking if Terraform state bucket exists..."
 set +e # Temporarily disable 'exit on error' for bucket check
-gsutil ls -b "gs://${BUCKET_NAME}" &> /dev/null
+gsutil ls -b "gs://${BUCKET_NAME}" &> /tmp/gsutil_output.txt
 EXIT_CODE=$?
 set -e  # Re-enable 'exit on error'
 
@@ -50,8 +50,14 @@ if [ $EXIT_CODE -eq 0 ]; then
   BUCKET_EXISTS=true
   echo_success "Bucket exists."
 else
-  BUCKET_EXISTS=false
-  echo_warning "Bucket does not exist. Starting bootstrap..."
+  # Check if it's a permission error or bucket doesn't exist
+  if grep -q "AccessDeniedException\|403" /tmp/gsutil_output.txt 2>/dev/null; then
+    echo_warning "Permission denied checking bucket. Assuming first-time setup..."
+    BUCKET_EXISTS=false
+  else
+    BUCKET_EXISTS=false
+    echo_warning "Bucket does not exist. Starting bootstrap..."
+  fi
 fi
 
 if [ "$BUCKET_EXISTS" = true ]; then
@@ -63,14 +69,14 @@ else
   # Bootstrap: create bucket with local state, then migrate
   # https://developer.hashicorp.com/terraform/cli/commands/init
   echo_info "Creating bucket with local state (no backend needed yet)..."
-  terraform init -backend=false
+  terraform init -backend=false -reconfigure
 
   echo_info "Creating only the bucket for Terraform state..."
   terraform apply -target=google_storage_bucket.terraform_state -auto-approve
   echo_success "Bucket created!"
 
   echo_info "Migrating state to remote backend..."
-  terraform init -force-copy
+  terraform init -reconfigure -force-copy
 
   echo_info "Cleaning up local state files..."
   rm -f terraform.tfstate terraform.tfstate.backup .terraform/terraform.tfstate

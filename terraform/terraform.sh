@@ -72,7 +72,7 @@ else
   # Bootstrap: create bucket with local state, then migrate
   # https://developer.hashicorp.com/terraform/cli/commands/init
   echo_info "Creating bucket with local state (no backend needed yet)..."
-  terraform init -backend=false
+  terraform init -backend=false -reconfigure
 
   echo_info "Creating only the bucket for Terraform state..."
   terraform apply -target=google_storage_bucket.terraform_state -auto-approve

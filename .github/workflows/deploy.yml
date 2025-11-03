@@ -102,6 +102,7 @@ jobs:
           gcloud services enable \
             iam.googleapis.com \
             cloudresourcemanager.googleapis.com \
+            storage.googleapis.com \
             --project=${{ env.PROJECT_ID }}
 
           echo "Waiting 15s for API activation to propagate..."

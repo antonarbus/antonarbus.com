@@ -62,11 +62,11 @@ if [ "$BUCKET_EXISTS" = true ]; then
 else
   # Bootstrap: create bucket with local state, then migrate
   # https://developer.hashicorp.com/terraform/cli/commands/init
-  echo_info "Creating bucket with local state (no bucket needed yet)..."
+  echo_info "Creating bucket with local state (no backend needed yet)..."
   terraform init -backend=false
 
-  echo_info "Creating only bucket for Terraform state..."
-  terraform apply -target=google_storage_bucket.terraform_state -auto-approve
+  echo_info "Creating only the bucket for Terraform state..."
+  terraform apply -backend=false -target=google_storage_bucket.terraform_state -auto-approve
   echo_success "Bucket created!"
 
   echo_info "Migrating state to remote backend..."

@@ -16,6 +16,8 @@ env:
   TERRAFORM_DIR: './terraform'
 
   # GCP configuration
+  # ⚠️ IMPORTANT: These values MUST stay in sync with terraform/infrastructure/variables.tf
+  # If you change these, also update the corresponding Terraform variables
   PROJECT_ID: 'antonarbus'
   REGION: 'us-central1'
   SERVICE_NAME: 'cloud-run'

@@ -8,6 +8,9 @@
 # 3. Setting environment variables: TF_VAR_min_instances=1
 # https://developer.hashicorp.com/terraform/language/values/variables
 
+# ⚠️ IMPORTANT: The default values below MUST stay in sync with .github/workflows/deploy.yml
+# If you change these defaults, also update the GitHub Actions workflow environment variables
+
 # ==============================================================================
 # PROJECT & REGION
 # ==============================================================================

@@ -243,6 +243,15 @@ resource "google_cloud_run_v2_service" "main" {
     percent = 100                                     # Send all traffic to it
   }
 
+  # Ignore fields set by gcloud CLI during deployments
+  # This prevents Terraform from trying to remove metadata added by GitHub Actions
+  lifecycle {
+    ignore_changes = [
+      client,         # Set by gcloud CLI
+      client_version, # Set by gcloud CLI
+    ]
+  }
+
   # Don't try to create Cloud Run until Artifact Registry exists
   # This ensures resources are created in the correct order
   depends_on = [

@@ -193,8 +193,7 @@ jobs:
           gcloud run services update ${{ env.SERVICE_NAME }} \
             --image ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACTS_REGISTRY_NAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ env.IMAGE_VERSION }} \
             --region ${{ env.REGION }} \
-            --project ${{ env.PROJECT_ID }} \
-            --labels managed-by=github-actions,commit-sha=${{ github.sha }}
+            --project ${{ env.PROJECT_ID }}
 
       - name: 'Verify Deployment'
         if: env.APP_CHANGED == 'true' || env.TERRAFORM_CHANGED == 'true'

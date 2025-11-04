@@ -32,13 +32,13 @@ All infrastructure is managed via Terraform and **automatically applied via CI/C
    ```
 
 2. **Create Pull Request**:
-   - `terraform-check.yml` runs automatically
-   - Shows `terraform plan` output in PR comments
-   - Team reviews infrastructure changes
+   - Review infrastructure changes locally with `terraform plan`
+   - Team reviews Terraform file changes in PR
+   - Validate changes before merging
 
 3. **Merge to master**:
-   - `terraform-apply.yml` runs automatically
-   - Applies infrastructure changes
+   - `deploy.yml` workflow runs automatically
+   - Detects Terraform changes and applies them
    - No manual `terraform apply` needed!
 
 **What Terraform manages:**

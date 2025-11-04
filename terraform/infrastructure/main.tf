@@ -170,6 +170,12 @@ resource "google_cloud_run_v2_service" "main" {
 
   # Configuration for how the container runs
   template {
+    # Labels for the template (managed by Terraform)
+    labels = {
+      managed-by  = "terraform"
+      environment = "production"
+    }
+
     # Scaling settings: how many instances (copies) of your app can run
     scaling {
       min_instance_count = var.min_instances # Minimum: 0 (scales to zero when idle = no cost!)

@@ -5,7 +5,7 @@
 This project uses **Terraform** to manage all Google Cloud infrastructure as code.
 
 - **Infrastructure configuration**: `/terraform` directory
-- **CI/CD pipeline**: `.github/workflows/google-cloudrun-docker.yml`
+- **CI/CD pipeline**: `.github/workflows/deploy.yml`
 - **Documentation**: See `/terraform/README.md` for detailed setup instructions
 
 ## Quick Start
@@ -57,27 +57,36 @@ terraform plan   # Preview changes locally
 
 ## CI/CD with GitHub Actions
 
-**Three automated workflows:**
+**Unified deployment workflow** (`.github/workflows/deploy.yml`):
 
-1. **Terraform Check** (`.github/workflows/terraform-check.yml`) - PR validation
-   - Runs on every PR that changes Terraform files
-   - Validates Terraform syntax and formatting
-   - Runs `terraform plan` and comments on PR with changes
-   - Prevents merging invalid Terraform code
+This single intelligent workflow handles both infrastructure and application deployment:
 
-2. **Terraform Apply** (`.github/workflows/terraform-apply.yml`) - Infrastructure deployment
-   - Runs on push to master (after PR merge)
-   - Automatically applies Terraform changes
-   - Updates infrastructure configuration
-   - **Fully automated - no manual terraform apply needed!**
+**Triggers:**
+- Push to `master` branch
+- Manual trigger via `workflow_dispatch`
 
-3. **Build and Deploy** (`.github/workflows/google-cloudrun-docker.yml`) - Application deployment
-   - Runs on push to master branch
-   - Builds Docker image and pushes to Artifact Registry
-   - Deploys container to Cloud Run
-   - Updates only the container image (infrastructure managed by Terraform)
+**Smart change detection:**
+The workflow automatically detects what changed and runs only necessary steps:
+- **Terraform changes** (files in `terraform/` or `deploy.yml` itself):
+  - Validates and formats Terraform code
+  - Runs `./terraform.sh` to apply infrastructure changes
+  - Automatically handles GCS bucket bootstrap if needed (first-time setup)
+  - Deploys updated Docker image after infrastructure changes
 
-**Environment variables** (configured in workflows):
+- **Application changes** (any other files):
+  - Builds Docker image and pushes to Artifact Registry
+  - Deploys new container to Cloud Run
+  - Verifies deployment with HTTP health check
+
+**Key features:**
+- ✅ Conditional execution - only runs steps for changed files
+- ✅ Terraform format validation
+- ✅ Smart bootstrap detection (creates state bucket if needed)
+- ✅ Deployment verification with health checks
+- ✅ Fully automated - no manual intervention required
+
+**Workflow configuration:**
+Environment variables in `deploy.yml` must stay synchronized with `terraform/infrastructure/variables.tf`:
 - `PROJECT_ID`: `antonarbus`
 - `REGION`: `us-central1`
 - `ARTIFACTS_REGISTRY_NAME`: `artifact-registry`
@@ -115,16 +124,18 @@ The only manual configuration needed is setting up the GitHub Actions service ac
 
 ### ✅ Terraform-Managed (Infrastructure as Code)
 
-Everything in the `/terraform` directory:
-- Cloud Run service configuration
+Everything in the `/terraform/infrastructure` directory:
+- Cloud Run service configuration (CPU, memory, scaling)
 - Artifact Registry
 - Service accounts (`github-actions-sa`, `cloud-run-sa`)
 - IAM roles and permissions
 - Domain mapping
 - Health probes
-- Scaling settings
+- Auto-scaling settings
 
-**To change these**: Edit Terraform files and run `terraform apply`
+**To change these**: Edit Terraform files, push to master, and the CI/CD workflow automatically applies changes
+
+**State storage**: Managed by GCS bucket (created via `/terraform/bootstrap` on first run)
 
 ### ⚠️ Manually Managed (One-time Setup)
 

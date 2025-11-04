@@ -10,11 +10,17 @@
     "test": "jest --watch",
     "mocha": "mocha",
     "update-packages": "npx npm-check-updates -i",
-    "build-docker": "docker compose -f docker-compose.prod.yml build",
-    "build-docker-no-cache": "docker compose -f docker-compose.prod.yml build --no-cache",
-    "start-docker": "docker compose -f docker-compose.prod.yml up",
+    "docker-build": "docker compose -f docker-compose.prod.yml build",
+    "docker-build-no-cache": "docker compose -f docker-compose.prod.yml build --no-cache",
+    "docker-start": "docker compose -f docker-compose.prod.yml up",
+    "terraform-init": "cd ./terraform/infrastructure && terraform init -backend-config=bucket=antonarbus-terraform-state -backend-config=prefix=terraform/state",
+    "terraform-validate": "cd terraform && terraform fmt -check -recursive && cd infrastructure && terraform validate",
     "terraform-format": "cd terraform && terraform fmt -recursive",
-    "terraform-plan": "cd ./terraform/infrastructure && terraform plan"
+    "terraform-plan": "cd ./terraform/infrastructure && terraform plan",
+    "terraform-apply": "cd terraform && ./terraform.sh",
+    "terraform-state": "cd ./terraform/infrastructure && terraform state list",
+    "terraform-output": "cd ./terraform/infrastructure && terraform output",
+    "terraform-refresh": "cd ./terraform/infrastructure && terraform refresh"
   },
   "dependencies": {
     "@emotion/css": "^11.10.5",

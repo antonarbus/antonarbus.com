@@ -46,6 +46,11 @@ jobs:
         with:
           fetch-depth: 2
 
+      - name: 'Setup Node.js'
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
       - name: 'Detect where changes have been made'
         run: |
           echo "Files changed in this push (between current and previous commit):"

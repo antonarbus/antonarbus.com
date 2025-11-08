@@ -247,8 +247,8 @@ resource "google_cloud_run_v2_service" "main" {
   # This prevents Terraform from trying to remove metadata added by GitHub Actions
   lifecycle {
     ignore_changes = [
-      client,                     # Set by gcloud CLI
-      client_version,             # Set by gcloud CLI
+      client,                          # Set by gcloud CLI
+      client_version,                  # Set by gcloud CLI
       template[0].containers[0].image, # Image is managed by GitHub Actions workflow
     ]
   }

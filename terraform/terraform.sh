@@ -36,7 +36,7 @@ echo_error() { echo -e "${RED}✗ ${1}${NO_COLOR}"; }
 echo_info "Checking if Terraform state bucket exists..."
 set +e # Temporarily disable 'exit on error' for bucket check
 
-gcloud storage buckets describe "gs://${BUCKET_NAME}" &> /tmp/bucket_check.txt
+gcloud storage buckets describe "gs://${BUCKET_NAME}" &> /dev/null
 EXIT_CODE=$?
 
 set -e  # Re-enable 'exit on error'

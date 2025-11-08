@@ -23,6 +23,7 @@ All infrastructure is managed via Terraform and **automatically applied via CI/C
 **To modify infrastructure** (CPU, memory, scaling, etc.):
 
 1. **Create a branch and edit Terraform files**:
+
    ```bash
    git checkout -b update-infrastructure
    # Edit terraform/*.tf files
@@ -32,6 +33,7 @@ All infrastructure is managed via Terraform and **automatically applied via CI/C
    ```
 
 2. **Create Pull Request**:
+
    - Review infrastructure changes locally with `terraform plan`
    - Team reviews Terraform file changes in PR
    - Validate changes before merging
@@ -42,6 +44,7 @@ All infrastructure is managed via Terraform and **automatically applied via CI/C
    - No manual `terraform apply` needed!
 
 **What Terraform manages:**
+
 - ✅ Cloud Run service (`cloud-run`)
 - ✅ Artifact Registry (`artifact-registry`)
 - ✅ Service accounts and IAM permissions
@@ -49,6 +52,7 @@ All infrastructure is managed via Terraform and **automatically applied via CI/C
 - ✅ Health probes and scaling configuration
 
 **Local development** (optional):
+
 ```bash
 cd terraform
 terraform plan   # Preview changes locally
@@ -62,12 +66,15 @@ terraform plan   # Preview changes locally
 This single intelligent workflow handles both infrastructure and application deployment:
 
 **Triggers:**
+
 - Push to `master` branch
 - Manual trigger via `workflow_dispatch`
 
 **Smart change detection:**
 The workflow automatically detects what changed and runs only necessary steps:
+
 - **Terraform changes** (files in `terraform/` or `deploy.yml` itself):
+
   - Validates and formats Terraform code
   - Runs `./terraform.sh` to apply infrastructure changes
   - Automatically handles GCS bucket bootstrap if needed (first-time setup)
@@ -79,6 +86,7 @@ The workflow automatically detects what changed and runs only necessary steps:
   - Verifies deployment with HTTP health check
 
 **Key features:**
+
 - ✅ Conditional execution - only runs steps for changed files
 - ✅ Terraform format validation
 - ✅ Smart bootstrap detection (creates state bucket if needed)
@@ -87,9 +95,10 @@ The workflow automatically detects what changed and runs only necessary steps:
 
 **Workflow configuration:**
 Environment variables in `deploy.yml` must stay synchronized with `terraform/infrastructure/variables.tf`:
+
 - `PROJECT_ID`: `antonarbus`
 - `REGION`: `us-central1`
-- `ARTIFACTS_REGISTRY_NAME`: `artifact-registry`
+- `ARTIFACT_REGISTRY_NAME`: `artifact-registry`
 - `DOCKER_IMAGE_NAME`: `docker-image`
 - `SERVICE_NAME`: `cloud-run`
 
@@ -100,6 +109,7 @@ Environment variables in `deploy.yml` must stay synchronized with `terraform/inf
 The only manual configuration needed is setting up the GitHub Actions service account key:
 
 1. **Get the service account key** (if you don't have it):
+
    ```bash
    # The service account is created by Terraform
    # You only need to create a key for it
@@ -108,6 +118,7 @@ The only manual configuration needed is setting up the GitHub Actions service ac
    ```
 
 2. **Add to GitHub**:
+
    - Go to: GitHub > Repository Settings > Secrets and variables > Actions
    - Click "New repository secret"
    - Name: `GCP_SA_KEY`
@@ -125,6 +136,7 @@ The only manual configuration needed is setting up the GitHub Actions service ac
 ### ✅ Terraform-Managed (Infrastructure as Code)
 
 Everything in the `/terraform/infrastructure` directory:
+
 - Cloud Run service configuration (CPU, memory, scaling)
 - Artifact Registry
 - Service accounts (`github-actions-sa`, `cloud-run-sa`)
@@ -194,7 +206,7 @@ https://console.cloud.google.com/run/detail/us-central1/cloud-run/metrics?inv=1&
 
 - create repository for docker + 'us-central1' region + with delete artifacts option
 - give it a name "artifact-registry"
-- env.ARTIFACTS_REGISTRY_NAME goes to workflows/google-cloudrun-docker.yml
+- env.ARTIFACT_REGISTRY_NAME goes to workflows/google-cloudrun-docker.yml
 
 https://console.cloud.google.com/artifacts/docker/antonarbus/us-central1/artifact-registry?inv=1&invt=AblLNw&project=antonarbus
 

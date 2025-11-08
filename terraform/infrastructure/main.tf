@@ -55,8 +55,8 @@ provider "google" {
 # Artifact Registry repository for Docker images
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/artifact_registry_repository
 resource "google_artifact_registry_repository" "docker_repo" {
-  location      = var.region                 # Where to store images (us-central1)
-  repository_id = var.artifact_registry_name # Name: "artifact-registry"
+  location      = var.region                 # Where to store images "us-central1"
+  repository_id = var.artifact_registry_name # Name: "docker-images"
   description   = "Docker repository for antonarbus.com"
   format        = "DOCKER" # This repo stores Docker images
 
@@ -186,9 +186,9 @@ resource "google_cloud_run_v2_service" "main" {
     containers {
       # The Docker image to run
       # Format: REGION-docker.pkg.dev/PROJECT/REPOSITORY/IMAGE:TAG
-      # GitHub Actions tags images with the branch name (master)
-      # This matches the workflow in .github/workflows/google-cloudrun-docker.yml
-      image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.artifact_registry_name}/${var.docker_image_name}:master"
+      # GitHub Actions tags images with the branch name
+      # This matches the workflow in .github/workflows/deploy.yml
+      image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.artifact_registry_name}/${var.docker_image_name}:${var.docker_image_tag}"
 
       # Resource limits: how much CPU and memory the container can use
       resources {
@@ -247,8 +247,9 @@ resource "google_cloud_run_v2_service" "main" {
   # This prevents Terraform from trying to remove metadata added by GitHub Actions
   lifecycle {
     ignore_changes = [
-      client,         # Set by gcloud CLI
-      client_version, # Set by gcloud CLI
+      client,                     # Set by gcloud CLI
+      client_version,             # Set by gcloud CLI
+      template[0].containers[0].image, # Image is managed by GitHub Actions workflow
     ]
   }
 

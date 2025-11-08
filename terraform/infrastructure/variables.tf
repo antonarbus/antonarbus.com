@@ -40,7 +40,7 @@ variable "region" {
 variable "artifact_registry_name" {
   description = "Name of the Artifact Registry repository for Docker images"
   type        = string
-  default     = "artifact-registry"
+  default     = "docker-images"
   # This is where your Docker images are stored
   # Must be lowercase, hyphens allowed, no underscores
 }
@@ -60,9 +60,18 @@ variable "cloud_run_service_name" {
 variable "docker_image_name" {
   description = "Name of the Docker image in Artifact Registry"
   type        = string
-  default     = "docker-image"
+  default     = "web-app"
   # The name for your Docker image
   # Full path will be: REGION-docker.pkg.dev/PROJECT/REGISTRY/IMAGE:TAG
+}
+
+variable "docker_image_tag" {
+  description = "Docker image tag (typically the git branch name)"
+  type        = string
+  default     = "master"
+  # This should match your deployment branch name
+  # Common values: master, main, dev, staging
+  # The GitHub workflow sets this dynamically based on github.ref_name
 }
 
 # ==============================================================================

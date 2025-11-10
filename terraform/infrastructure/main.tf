@@ -84,52 +84,60 @@ resource "google_service_account" "github_actions" {
 }
 
 # ==============================================================================
-# IAM PERMISSIONS (6 total for GitHub Actions Service Account)
+# IAM PERMISSIONS (Principle of Least Privilege)
 # ==============================================================================
+# Following security best practices, we grant only the minimum permissions needed
+# for GitHub Actions to deploy the application
 
-# Give GitHub Actions permission to manage Cloud Run services
-# "roles/run.admin" allows: create, update, delete Cloud Run services
-# https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_project_iam
-resource "google_project_iam_member" "github_actions_cloud_run_admin" {
+# Cloud Run: Deploy and update services (not create/delete)
+# "roles/run.developer" allows: deploy revisions, update traffic, view services
+# Does NOT allow: deleting services, changing IAM policies
+resource "google_project_iam_member" "github_actions_cloud_run_developer" {
   project = var.project_id
-  role    = "roles/run.admin"
+  role    = "roles/run.developer"
   member  = "serviceAccount:${google_service_account.github_actions.email}"
 }
 
-# Give GitHub Actions permission to push/pull Docker images
-# "roles/artifactregistry.admin" allows: push, pull, delete Docker images
-resource "google_project_iam_member" "github_actions_artifact_registry_admin" {
+# Artifact Registry: Push and read Docker images only
+# "roles/artifactregistry.writer" allows: push and pull images
+# Does NOT allow: deleting repositories, changing settings
+resource "google_project_iam_member" "github_actions_artifact_registry_writer" {
   project = var.project_id
-  role    = "roles/artifactregistry.admin"
+  role    = "roles/artifactregistry.writer"
   member  = "serviceAccount:${google_service_account.github_actions.email}"
 }
 
-# Give GitHub Actions permission to act as other service accounts
-# "roles/iam.serviceAccountUser" is needed to deploy Cloud Run with a specific service account
+# Service Account: Act as Cloud Run service account
+# "roles/iam.serviceAccountUser" allows: deploy Cloud Run with specific service account
+# Required for setting the service account that the deployed container runs as
 resource "google_project_iam_member" "github_actions_service_account_user" {
   project = var.project_id
   role    = "roles/iam.serviceAccountUser"
   member  = "serviceAccount:${google_service_account.github_actions.email}"
 }
 
-# Give GitHub Actions permission to manage storage buckets
-# "roles/storage.admin" allows: read bucket metadata, manage objects, needed for Terraform state
-resource "google_project_iam_member" "github_actions_storage_admin" {
+# Storage: Read/write Terraform state files
+# "roles/storage.objectUser" allows: read, write, delete objects in buckets
+# Does NOT allow: deleting buckets, changing bucket settings
+resource "google_project_iam_member" "github_actions_storage_object_user" {
   project = var.project_id
-  role    = "roles/storage.admin"
+  role    = "roles/storage.objectUser"
   member  = "serviceAccount:${google_service_account.github_actions.email}"
 }
 
-# Give GitHub Actions permission to view IAM policies
-# "roles/iam.securityReviewer" allows: reading IAM policies, needed for Terraform state operations
-resource "google_project_iam_member" "github_actions_iam_viewer" {
+# IAM: Read IAM policies (for Terraform state)
+# "roles/iam.securityReviewer" allows: reading IAM policies
+# Read-only, needed for Terraform to detect changes
+resource "google_project_iam_member" "github_actions_iam_security_reviewer" {
   project = var.project_id
   role    = "roles/iam.securityReviewer"
   member  = "serviceAccount:${google_service_account.github_actions.email}"
 }
 
-# Give GitHub Actions permission to enable/disable APIs
-# "roles/serviceusage.serviceUsageAdmin" allows: enable/disable Google Cloud APIs
+# APIs: Enable required Google Cloud APIs
+# "roles/serviceusage.serviceUsageAdmin" allows: enable/disable APIs
+# Needed for Terraform to enable required APIs (run.googleapis.com, etc.)
+# Note: This is a powerful permission but required for Terraform automation
 resource "google_project_iam_member" "github_actions_service_usage_admin" {
   project = var.project_id
   role    = "roles/serviceusage.serviceUsageAdmin"

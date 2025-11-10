@@ -102,6 +102,10 @@ jobs:
           push: true
           tags: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY_NAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ env.DOCKER_IMAGE_TAG }}
 
+      - name: 'Scan Image for Vulnerabilities'
+        if: env.CHANGES_DETECTED_AT != 'none'
+        run: sh .github/scripts/scan-vulnerabilities.sh
+
       - name: 'Deploy Docker Image to Cloud Run'
         if: env.CHANGES_DETECTED_AT != 'none'
         run: sh .github/scripts/deploy-to-cloudrun.sh

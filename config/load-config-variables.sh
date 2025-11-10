@@ -33,16 +33,35 @@ echo "📄 Loading variables from: $CONFIG_FILE" >&2
 
 # Parse tfvars file and output as KEY=VALUE for eval
 # Converts: project_id = "antonarbus" → export PROJECT_ID="antonarbus"
-while IFS='=' read -r key value; do
+while IFS= read -r line; do
   # Skip comments and empty lines
-  [[ "$key" =~ ^#.*$ ]] && continue
+  [[ "$line" =~ ^[[:space:]]*# ]] && continue
+  [[ -z "${line// }" ]] && continue
+
+  # Check if line contains an assignment
+  [[ ! "$line" =~ = ]] && continue
+
+  # Extract key and value
+  key=$(echo "$line" | cut -d'=' -f1 | tr -d '[:space:]')
+  value=$(echo "$line" | cut -d'=' -f2-)
+
+  # Skip if key is empty
   [[ -z "$key" ]] && continue
 
-  # Remove leading/trailing whitespace and quotes from value
-  value=$(echo "$value" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//;s/^"//;s/".*$//' | cut -d'#' -f1 | sed 's/[[:space:]]*$//')
+  # Remove leading/trailing whitespace from value
+  value=$(echo "$value" | sed 's/^[[:space:]]*//')
+
+  # Remove inline comments (but preserve # inside quotes)
+  # If value starts with quote, extract quoted content
+  if [[ "$value" =~ ^\"(.*)\".*$ ]]; then
+    value="${BASH_REMATCH[1]}"
+  else
+    # Remove comment and trailing whitespace
+    value=$(echo "$value" | cut -d'#' -f1 | sed 's/[[:space:]]*$//')
+  fi
 
   # Convert snake_case to UPPER_CASE
-  key=$(echo "$key" | tr '[:lower:]' '[:upper:]' | tr -d '[:space:]')
+  key=$(echo "$key" | tr '[:lower:]' '[:upper:]')
 
   # Output as export statement
   echo "export ${key}=\"${value}\""

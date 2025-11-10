@@ -15,22 +15,29 @@
 
 set -e
 
-echo "Files changed (between current and previous commit):"
-git diff --name-only HEAD~1 HEAD
-echo ""
-
-# Check what changed
-TERRAFORM_CHANGED=false
-APP_CHANGED=false
-
-if git diff --name-only HEAD~1 HEAD | grep -qE '^terraform/|^\.github/workflows/deploy\.yml'; then
+# Check if this is the first commit (no HEAD~1)
+if ! git rev-parse HEAD~1 &>/dev/null; then
+  echo "⚠️  First commit detected - treating as both terraform and app changes"
   TERRAFORM_CHANGED=true
-  echo "✅ Terraform changes detected"
-fi
-
-if git diff --name-only HEAD~1 HEAD | grep -qvE '^terraform/|^\.github/workflows/deploy\.yml'; then
   APP_CHANGED=true
-  echo "✅ App code changes detected"
+else
+  echo "Files changed (between current and previous commit):"
+  git diff --name-only HEAD~1 HEAD
+  echo ""
+
+  # Check what changed
+  TERRAFORM_CHANGED=false
+  APP_CHANGED=false
+
+  if git diff --name-only HEAD~1 HEAD | grep -qE '^terraform/|^config/.*\.tfvars$|^\.github/workflows/deploy\.yml'; then
+    TERRAFORM_CHANGED=true
+    echo "✅ Terraform changes detected"
+  fi
+
+  if git diff --name-only HEAD~1 HEAD | grep -qvE '^terraform/|^config/.*\.tfvars$|^\.github/workflows/deploy\.yml'; then
+    APP_CHANGED=true
+    echo "✅ App code changes detected"
+  fi
 fi
 
 # Determine change location

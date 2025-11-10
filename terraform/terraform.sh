@@ -20,6 +20,10 @@
 
 set -e # exit immediately if any command fails
 
+# Get script directory and ensure we're in terraform/
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
+
 # Detect environment from git branch or ENV variable
 if [ -z "$ENV" ]; then
   BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "master")
@@ -38,15 +42,27 @@ if [ -z "$ENV" ]; then
       ENV="dev"
       ;;
     *)
-      ENV="prod"
+      echo "❌ Error: Unknown branch '$BRANCH'"
+      echo "Allowed branches: master, main, test, pilot, dev"
+      echo "Or set ENV variable explicitly: ENV=prod ./terraform.sh"
+      exit 1
       ;;
   esac
 fi
 
 echo "📋 Environment: $ENV"
 
+# Validate config file before proceeding
+echo ""
+echo "Validating config file..."
+if ! ../config/validate.sh "$ENV"; then
+  echo "❌ Config validation failed"
+  exit 1
+fi
+echo ""
+
 # Load all variables using shared utility
-source ../config/load-config-variables.sh "$ENV"
+eval "$(../config/load-config-variables.sh "$ENV")"
 
 # Resolve config path for Terraform var-file
 CONFIG_VARIABLES_FILE_PATH=$(realpath "../config/${ENV}.tfvars")

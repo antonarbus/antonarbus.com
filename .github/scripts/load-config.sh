@@ -11,7 +11,6 @@
 #
 # Outputs to GITHUB_ENV:
 #   - All variables from the config file (uppercase)
-#   - SERVICE_NAME (alias for CLOUD_RUN_SERVICE_NAME)
 # ==============================================================================
 
 set -e
@@ -40,12 +39,6 @@ while IFS= read -r line; do
   echo "$var_assignment" >> "$GITHUB_ENV"
   echo "  $var_assignment"
 done < <(config/load-config-variables.sh "$ENVIRONMENT" 2>/dev/null)
-
-# Create alias for backward compatibility (SERVICE_NAME = CLOUD_RUN_SERVICE_NAME)
-if [ -n "$CLOUD_RUN_SERVICE_NAME" ]; then
-  echo "SERVICE_NAME=${CLOUD_RUN_SERVICE_NAME}" >> "$GITHUB_ENV"
-  echo "  SERVICE_NAME=${CLOUD_RUN_SERVICE_NAME}"
-fi
 
 echo ""
 echo "✅ Config loaded successfully"

@@ -32,8 +32,9 @@ case "$BRANCH" in
     ENVIRONMENT="dev"
     ;;
   *)
-    ENVIRONMENT="prod"
-    echo "⚠️  Unknown branch '$BRANCH', defaulting to prod"
+    echo "❌ Error: Unknown branch '$BRANCH'"
+    echo "Allowed branches: master, main, test, pilot, dev"
+    exit 1
     ;;
 esac
 

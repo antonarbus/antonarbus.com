@@ -77,12 +77,16 @@ validate_file() {
       # Extract value part (after =)
       value=$(echo "$line" | cut -d'=' -f2- | sed 's/^[[:space:]]*//')
 
+      # Remove inline comments (everything after # including leading spaces)
+      value=$(echo "$value" | sed 's/[[:space:]]*#.*$//')
+
+      # Trim trailing whitespace
+      value=$(echo "$value" | sed 's/[[:space:]]*$//')
+
       # Check if value looks like a string (not a number) without quotes
       if [[ ! "$value" =~ ^[0-9]+$ ]] && [[ ! "$value" =~ ^\".*\"$ ]]; then
         # Could be unquoted string or missing quotes
-        if [[ ! "$value" =~ ^# ]]; then
-          echo_warning "  Possible missing quotes: $line"
-        fi
+        echo_warning "  Possible missing quotes: $line"
       fi
     fi
   done < "$file"

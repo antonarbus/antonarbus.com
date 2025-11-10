@@ -40,13 +40,13 @@ jobs:
         run: bash config/validate.sh
 
       - name: 'Detect Environment'
-        run: sh .github/scripts/detect-and-load-env-from-github-branch.sh
+        run: bash .github/scripts/detect-and-load-env-from-github-branch.sh
 
       - name: 'Load Config'
-        run: sh .github/scripts/load-config.sh ${{ env.ENVIRONMENT }}
+        run: bash .github/scripts/load-config.sh ${{ env.ENVIRONMENT }}
 
       - name: 'Detect Changes'
-        run: sh .github/scripts/detect-changes.sh
+        run: bash .github/scripts/detect-changes.sh
 
       - name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v3'
@@ -68,7 +68,7 @@ jobs:
 
       - name: 'Set GCP Project and Enable APIs'
         if: env.CHANGES_DETECTED_AT == 'terraform' || env.CHANGES_DETECTED_AT == 'both'
-        run: sh .github/scripts/setup-gcp.sh
+        run: bash .github/scripts/setup-gcp.sh
 
       - name: 'Terraform Format Check'
         if: env.CHANGES_DETECTED_AT == 'terraform' || env.CHANGES_DETECTED_AT == 'both'
@@ -78,7 +78,7 @@ jobs:
 
       - name: 'Terraform Apply with Smart Bootstrap'
         if: env.CHANGES_DETECTED_AT == 'terraform' || env.CHANGES_DETECTED_AT == 'both'
-        run: sh terraform.sh
+        run: bash terraform.sh
         working-directory: ./terraform
 
       # ============================================================================
@@ -104,12 +104,12 @@ jobs:
 
       - name: 'Scan Image for Vulnerabilities'
         if: env.CHANGES_DETECTED_AT != 'none'
-        run: sh .github/scripts/scan-vulnerabilities.sh
+        run: bash .github/scripts/scan-vulnerabilities.sh
 
       - name: 'Deploy Docker Image to Cloud Run'
         if: env.CHANGES_DETECTED_AT != 'none'
-        run: sh .github/scripts/deploy-to-cloudrun.sh
+        run: bash .github/scripts/deploy-to-cloudrun.sh
 
       - name: 'Verify Deployment'
         if: env.CHANGES_DETECTED_AT != 'none'
-        run: sh .github/scripts/verify-deployment.sh
+        run: bash .github/scripts/verify-deployment.sh

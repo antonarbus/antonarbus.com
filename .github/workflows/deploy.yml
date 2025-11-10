@@ -6,28 +6,15 @@ on:
   push:
     branches:
       - master
+      - pilot
+      - test
+      - dev
 
   # Allow manual trigger in GitHub, useful to test workflow without pushing code
   workflow_dispatch:
 
 env:
-  # Terraform configuration
-  TERRAFORM_VERSION: '1.5.0'
-  TERRAFORM_DIR: './terraform'
-
-  # GCP configuration
-  # ⚠️ IMPORTANT: These values MUST stay in sync with terraform/infrastructure/variables.tf
-  # If you change these, also update the corresponding Terraform variables
-  PROJECT_ID: 'antonarbus'
-  REGION: 'us-central1'
-  SERVICE_NAME: 'cloud-run'
-  ARTIFACT_REGISTRY_NAME: 'docker-images'
-  DOCKER_IMAGE_NAME: 'web-app'
-  DOCKER_IMAGE_TAG: 'placeholder for "master" or "dev"' # overwritten at runtime by the branch name
-
-  # Change detection flags to enable steps conditionally (set by Detect Changes step)
-  TERRAFORM_CHANGED: 'false'
-  APP_CHANGED: 'false'
+  CHANGES_DETECTED_AT: 'none' # 'terraform' | 'app' | 'both' | 'none' (set by 'Detect Changes' step)
 
 jobs:
   deploy:
@@ -49,141 +36,65 @@ jobs:
       - name: 'Setup Node.js'
         uses: actions/setup-node@v4
 
-      - name: 'Detect where changes have been made'
-        run: |
-          echo "Files changed (between current and previous commit):"
-          git diff --name-only HEAD~1 HEAD
-          echo ""
+      - name: 'Validate Config Files'
+        run: sh config/validate.sh
 
-          # Check if terraform files changed
+      - name: 'Detect Environment'
+        run: sh .github/scripts/detect-and-load-env-from-github-branch.sh
 
-          if git diff --name-only HEAD~1 HEAD | grep -qE '^terraform/|^\.github/workflows/deploy\.yml'; then
-            # Appends variable to the temp file which GitHub Actions reads and sets environment variables
-            # $GITHUB_ENV holds the file path
+      - name: 'Load Config'
+        run: sh .github/scripts/load-config.sh ${{ env.ENVIRONMENT }}
 
-            echo "✅ Terraform changes detected"
-            echo "TERRAFORM_CHANGED=true" >> $GITHUB_ENV 
-          else
-            echo "⏭️ No Terraform changes"
-            echo "TERRAFORM_CHANGED=false" >> $GITHUB_ENV
-          fi
-
-          # Check if non-terraform files changed
-
-          if git diff --name-only HEAD~1 HEAD | grep -qvE '^terraform/|^\.github/workflows/deploy\.yml'; then
-            echo "✅ App code changes detected"
-            echo "APP_CHANGED=true" >> $GITHUB_ENV
-          else
-            echo "⏭️  No app code changes"
-            echo "APP_CHANGED=false" >> $GITHUB_ENV
-          fi
+      - name: 'Detect Changes'
+        run: sh .github/scripts/detect-changes.sh
 
       - name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v3'
         with:
           credentials_json: '${{ secrets.GCP_SA_KEY }}'
 
-      - name: 'Configure gsutil'
-        run: |
-          echo "Configuring gsutil to use gcloud credentials..."
-          gcloud config set pass_credentials_to_gsutil true
+      - name: 'Configuring gsutil to use gcloud credentials'
+        run: gcloud config set pass_credentials_to_gsutil true
 
       # ============================================================================
       # TERRAFORM STEPS (only if terraform files changed)
       # ============================================================================
 
       - name: 'Setup Terraform'
-        if: env.TERRAFORM_CHANGED == 'true'
-        # 'uses' fetches the script from GitHub which installs Terraform, adds it to PATH, makes 'terraform' command available
+        if: env.CHANGES_DETECTED_AT == 'terraform' || env.CHANGES_DETECTED_AT == 'both'
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: ${{ env.TERRAFORM_VERSION }}
+          terraform_version: '1.5.0'
 
       - name: 'Set GCP Project and Enable APIs'
-        if: env.TERRAFORM_CHANGED == 'true'
-        run: |
-          echo "Set the default project for gcloud commands"
-          # https://cloud.google.com/sdk/gcloud/reference/config/set
-
-          gcloud config set project ${{ env.PROJECT_ID }}
-
-          echo "Enabling required Google Cloud APIs..."
-          # https://cloud.google.com/sdk/gcloud/reference/services/enable
-
-          gcloud services enable \
-            iam.googleapis.com \
-            cloudresourcemanager.googleapis.com \
-            storage.googleapis.com \
-            --project=${{ env.PROJECT_ID }}
-
-          echo "Waiting 15s for API activation to propagate..."
-          sleep 15
+        if: env.CHANGES_DETECTED_AT == 'terraform' || env.CHANGES_DETECTED_AT == 'both'
+        run: sh .github/scripts/setup-gcp.sh
 
       - name: 'Terraform Format Check'
-        if: env.TERRAFORM_CHANGED == 'true'
+        if: env.CHANGES_DETECTED_AT == 'terraform' || env.CHANGES_DETECTED_AT == 'both'
         id: fmt
         run: terraform fmt -check -recursive
-        working-directory: ${{ env.TERRAFORM_DIR }}
+        working-directory: ./terraform
 
       - name: 'Terraform Apply with Smart Bootstrap'
-        if: env.TERRAFORM_CHANGED == 'true'
-        id: apply
-        run: |
-          echo "Running smart Terraform wrapper..."
-          echo "This automatically handles GCS bucket bootstrap if needed (first-time setup)"
-          echo ""
-
-          # terraform.sh detects if state bucket exists:
-          # - If not: creates bucket with local state, then migrates to remote
-          # - If yes: runs terraform normally with remote backend
-          # This solves the chicken-and-egg problem automatically!
-
-          chmod +x terraform.sh
-          ./terraform.sh
-
-          echo ""
-          echo "✅ Terraform apply completed successfully"
-          echo ""
-          echo "Outputs:"
-          terraform output
-        working-directory: ${{ env.TERRAFORM_DIR }}
-
-      - name: 'Post-Terraform Summary'
-        if: env.TERRAFORM_CHANGED == 'true' && always() && steps.apply.outcome != 'skipped'
-        run: |
-          echo "## Terraform Apply Summary" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Status**: ${{ steps.apply.outcome }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Actor**: @${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-
-          if [ "${{ steps.apply.outcome }}" == "success" ]; then
-            echo "✅ Infrastructure updated successfully" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "❌ Infrastructure update failed" >> $GITHUB_STEP_SUMMARY
-            echo "Check logs above for details" >> $GITHUB_STEP_SUMMARY
-          fi
+        if: env.CHANGES_DETECTED_AT == 'terraform' || env.CHANGES_DETECTED_AT == 'both'
+        run: sh terraform.sh
+        working-directory: ./terraform
 
       # ============================================================================
       # DOCKER STEPS (only if app files changed OR terraform was applied)
       # ============================================================================
 
       - name: 'Docker Auth'
-        if: env.APP_CHANGED == 'true' || env.TERRAFORM_CHANGED == 'true'
-        run: |
-          # https://cloud.google.com/sdk/gcloud/reference/auth/configure-docker
+        if: env.CHANGES_DETECTED_AT != 'none'
+        run: gcloud auth configure-docker '${{ env.REGION }}-docker.pkg.dev'
 
-          gcloud auth configure-docker '${{ env.REGION }}-docker.pkg.dev'
-
-      - name: 'Set Environment Variables'
-        if: env.APP_CHANGED == 'true' || env.TERRAFORM_CHANGED == 'true'
-        # Set docker image version to the branch name, which is returned from 'github.ref_name'
-        run: |
-          echo "DOCKER_IMAGE_TAG=${{ github.ref_name }}" >> $GITHUB_ENV
+      - name: 'Set variable for docker tag '
+        if: env.CHANGES_DETECTED_AT != 'none'
+        run: echo "DOCKER_IMAGE_TAG=${{ github.ref_name }}" >> $GITHUB_ENV
 
       - name: 'Build and Push Docker Image to Artifact Registry'
-        if: env.APP_CHANGED == 'true' || env.TERRAFORM_CHANGED == 'true'
+        if: env.CHANGES_DETECTED_AT != 'none'
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -192,36 +103,9 @@ jobs:
           tags: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY_NAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ env.DOCKER_IMAGE_TAG }}
 
       - name: 'Deploy Docker Image to Cloud Run'
-        if: env.APP_CHANGED == 'true' || env.TERRAFORM_CHANGED == 'true'
-        run: |
-          # https://cloud.google.com/sdk/gcloud/reference/run/services/update
-
-          gcloud run services update ${{ env.SERVICE_NAME }} \
-            --image ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY_NAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ env.DOCKER_IMAGE_TAG }} \
-            --region ${{ env.REGION }} \
-            --project ${{ env.PROJECT_ID }}
+        if: env.CHANGES_DETECTED_AT != 'none'
+        run: sh .github/scripts/deploy-to-cloudrun.sh
 
       - name: 'Verify Deployment'
-        if: env.APP_CHANGED == 'true' || env.TERRAFORM_CHANGED == 'true'
-        run: |
-          echo "Waiting for deployment to be ready..."
-          sleep 10
-
-          # Get the service URL
-          URL=$(gcloud run services describe ${{ env.SERVICE_NAME }} \
-            --region ${{ env.REGION }} \
-            --project ${{ env.PROJECT_ID }} \
-            --format="value(status.url)")
-
-          echo "Testing URL: $URL"
-
-          # Test if site responds with 200 OK
-          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" $URL)
-
-          if [ "$HTTP_CODE" -eq 200 ]; then
-            echo "✅ Site is live and responding (HTTP $HTTP_CODE)"
-            echo "🌐 Deployment URL: $URL"
-          else
-            echo "❌ Site returned HTTP $HTTP_CODE"
-            exit 1
-          fi
+        if: env.CHANGES_DETECTED_AT != 'none'
+        run: sh .github/scripts/verify-deployment.sh

@@ -15,14 +15,15 @@
 # - You need Terraform to create the bucket
 # - Solution: Bootstrap creates bucket with local state, then infrastructure uses remote
 #
+# AUTOMATIC USAGE (via terraform.sh at deploy.yml):
+#   ./terraform.sh   # Handles bootstrap automatically!
+#
 # MANUAL USAGE:
 #   terraform init \
 #     -backend-config=bucket=antonarbus-terraform-state \
 #     -backend-config=prefix=terraform/state
 #
-# AUTOMATIC USAGE (recommended):
-#   ./terraform.sh   # Handles bootstrap automatically!
-#
+
 terraform {
   backend "gcs" {}
 }

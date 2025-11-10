@@ -2,12 +2,15 @@
 # BOOTSTRAP: GCS BUCKET FOR TERRAFORM STATE
 # ==============================================================================
 # This is a one-time setup to create the bucket that stores Terraform state
-# After this bucket exists, all other infrastructure uses it as a backend
 #
-# USAGE:
+# AUTOMATIC USAGE (via terraform.sh at deploy.yml):
+#   cd terraform/
+#   ./terraform.sh
+#
+# MANUAL USAGE:
 #   cd bootstrap/
 #   terraform init
-#   terraform apply
+#   terraform apply -var-file="../../config/prod.tfvars"
 #
 # After the bucket is created, you never need to run this again unless
 # you want to modify the bucket configuration
@@ -36,7 +39,7 @@ provider "google" {
 # ==============================================================================
 
 resource "google_storage_bucket" "terraform_state" {
-  name          = var.bucket_name
+  name          = var.bucket_for_terraform_state_name
   location      = var.region
   project       = var.project_id
   force_destroy = false

@@ -1,17 +1,16 @@
 # ==============================================================================
 # TERRAFORM CONFIGURATION
 # ==============================================================================
-# This file defines all the Google Cloud infrastructure for antonarbus.com
-# It creates these resources:
+# This file defines infrastructure for antonarbus.com and creates these resources:
 #
-# 1. GCS BUCKET - For Terraform remote state storage (MUST BE FIRST)
-# 2. ARTIFACT REGISTRY - Docker image storage
-# 3. SERVICE ACCOUNT FOR GITHUB ACTIONS - For CI/CD deployments
-# 4. SERVICE ACCOUNT FOR CLOUD RUN - For the running app
-# 5. IAM PERMISSIONS - 6 permissions for GitHub Actions SA
-# 6. CLOUD RUN SERVICE - Your app (named cloud-run)
-# 7. PUBLIC ACCESS CONFIGURATION - Makes your site publicly accessible
-# 8. CUSTOM DOMAIN MAPPING - Maps antonarbus.com to the service
+# GCS BUCKET - For Terraform remote state storage (MUST BE FIRST)
+# ARTIFACT REGISTRY - Docker images storage
+# SERVICE ACCOUNT FOR GITHUB ACTIONS - For CI/CD deployments
+# SERVICE ACCOUNT FOR CLOUD RUN - For the running app
+# IAM PERMISSIONS - 6 permissions for GitHub Actions SA
+# CLOUD RUN SERVICE - Your app
+# PUBLIC ACCESS CONFIGURATION - Makes your site publicly accessible
+# CUSTOM DOMAIN MAPPING - Maps antonarbus.com domain to the cloud run internal url
 #
 # For first-time setup, see README.md
 
@@ -44,15 +43,12 @@ provider "google" {
 # ==============================================================================
 # The Terraform state bucket is created separately in the bootstrap/ directory
 # This infrastructure assumes the bucket already exists
-# See bootstrap/README.md for initial setup instructions
 
 # ==============================================================================
-# 1. ARTIFACT REGISTRY
+# ARTIFACT REGISTRY
 # ==============================================================================
 # This is where Docker images are stored before being deployed to Cloud Run
-# Think of it as a private Docker Hub for your project
 
-# Artifact Registry repository for Docker images
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/artifact_registry_repository
 resource "google_artifact_registry_repository" "docker_repo" {
   location      = var.region                 # Where to store images "us-central1"
@@ -72,9 +68,9 @@ resource "google_artifact_registry_repository" "docker_repo" {
 }
 
 # ==============================================================================
-# 3. SERVICE ACCOUNT FOR GITHUB ACTIONS
+# SERVICE ACCOUNT FOR GITHUB ACTIONS
 # ==============================================================================
-# This service account is used by GitHub Actions to:
+# Used by GitHub Actions to:
 # 1. Push Docker images to Artifact Registry
 # 2. Deploy to Cloud Run
 # Think of it as a "robot user" that GitHub uses to interact with Google Cloud
@@ -82,13 +78,13 @@ resource "google_artifact_registry_repository" "docker_repo" {
 # Service account resource
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_service_account
 resource "google_service_account" "github_actions" {
-  account_id   = var.github_actions_sa_name # Name: "github-actions-sa"
+  account_id   = var.github_actions_sa_name
   display_name = "GitHub Actions Service Account"
   description  = "Service account for GitHub Actions to deploy to Cloud Run"
 }
 
 # ==============================================================================
-# 5. IAM PERMISSIONS (6 total for GitHub Actions Service Account)
+# IAM PERMISSIONS (6 total for GitHub Actions Service Account)
 # ==============================================================================
 
 # Give GitHub Actions permission to manage Cloud Run services
@@ -141,22 +137,21 @@ resource "google_project_iam_member" "github_actions_service_usage_admin" {
 }
 
 # ==============================================================================
-# 4. SERVICE ACCOUNT FOR CLOUD RUN
+# SERVICE ACCOUNT FOR CLOUD RUN
 # ==============================================================================
 # This service account is used BY the Cloud Run container when it's running
 # It determines what Google Cloud APIs the running app can access
 # Best practice: use a custom SA instead of the default compute SA
 
-# Service account resource
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_service_account
 resource "google_service_account" "cloud_run_service" {
-  account_id   = var.cloud_run_sa_name # Name: "cloud-run-sa"
+  account_id   = var.cloud_run_sa_name
   display_name = "Cloud Run Service Account"
   description  = "Service account used by the Cloud Run service"
 }
 
 # ==============================================================================
-# 6. CLOUD RUN SERVICE
+# CLOUD RUN SERVICE
 # ==============================================================================
 # This is the main application - a containerized web app that runs your site
 # Cloud Run automatically scales up/down based on traffic (even to zero!)
@@ -164,8 +159,8 @@ resource "google_service_account" "cloud_run_service" {
 # Cloud Run service (v2 API)
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloud_run_v2_service
 resource "google_cloud_run_v2_service" "main" {
-  name     = var.cloud_run_service_name # Name: "cloud-run"
-  location = var.region                 # Where to run: us-central1
+  name     = var.cloud_run_service_name
+  location = var.region
   ingress  = "INGRESS_TRAFFIC_ALL"      # Accept traffic from internet
 
   # Configuration for how the container runs
@@ -261,7 +256,7 @@ resource "google_cloud_run_v2_service" "main" {
 }
 
 # ==============================================================================
-# 7. PUBLIC ACCESS CONFIGURATION
+# PUBLIC ACCESS CONFIGURATION
 # ==============================================================================
 # By default, Cloud Run requires authentication
 # This grants public access so anyone can visit your website
@@ -276,7 +271,7 @@ resource "google_cloud_run_v2_service_iam_member" "public_access" {
 }
 
 # ==============================================================================
-# 8. CUSTOM DOMAIN MAPPING
+# CUSTOM DOMAIN MAPPING
 # ==============================================================================
 # Maps your custom domain (antonarbus.com) to the Cloud Run service
 # This will import and update the existing domain mapping to point to cloud-run

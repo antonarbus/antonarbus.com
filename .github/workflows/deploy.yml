@@ -37,7 +37,7 @@ jobs:
         uses: actions/setup-node@v4
 
       - name: 'Validate Config Files'
-        run: sh config/validate.sh
+        run: bash config/validate.sh
 
       - name: 'Detect Environment'
         run: sh .github/scripts/detect-and-load-env-from-github-branch.sh

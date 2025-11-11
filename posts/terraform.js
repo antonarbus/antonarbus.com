@@ -15,12 +15,18 @@ import {
 } from '/components/post/reExport'
 
 const postObj = {
-  title: 'xxx',
+  title: 'terraform',
   date: '2025.11.xx',
-  tags: ['xxx', 'xxx'],
+  tags: ['IaC'],
   imgUrl: 'https://antonarbus.com/imgs/xxx.png',
   desc: 'xxx',
-  body: <>xyz</>
+  body: (
+    <>
+      <H>Terraform</H>
+
+      <p>To be updated...</p>
+    </>
+  )
 }
 
 export default postObj

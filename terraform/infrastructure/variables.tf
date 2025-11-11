@@ -27,6 +27,14 @@ variable "region" {
   # Value provided by config/*.tfvars file
 }
 
+variable "bucket_for_terraform_state_name" {
+  description = "Name of the GCS bucket for Terraform state (created by bootstrap)"
+  type        = string
+  # This variable is not used by infrastructure module, only by bootstrap
+  # It's declared here to avoid warnings when using shared tfvars files
+  # Value provided by config/*.tfvars file
+}
+
 # ==============================================================================
 # ARTIFACT REGISTRY
 # ==============================================================================

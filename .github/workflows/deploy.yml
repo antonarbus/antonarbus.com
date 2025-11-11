@@ -56,6 +56,9 @@ jobs:
       - name: 'Configuring gsutil to use gcloud credentials'
         run: gcloud config set pass_credentials_to_gsutil true
 
+      - name: 'Check IAM Permissions'
+        run: bash terraform/check-github-actions-permissions.sh ${{ env.ENVIRONMENT }}
+
       # ============================================================================
       # TERRAFORM STEPS (only if terraform files changed)
       # ============================================================================

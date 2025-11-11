@@ -36,9 +36,9 @@ if [ ! -f "$CONFIG_FILE" ]; then
   exit 1
 fi
 
-# Parse tfvars file to get variable values
-PROJECT_ID=$(grep "^project_id" "$CONFIG_FILE" | cut -d'=' -f2 | tr -d ' "')
-GITHUB_ACTIONS_SA_NAME=$(grep "^github_actions_sa_name" "$CONFIG_FILE" | cut -d'=' -f2 | tr -d ' "')
+# Parse tfvars file to get variable values (strip inline comments)
+PROJECT_ID=$(grep "^project_id" "$CONFIG_FILE" | cut -d'=' -f2 | sed 's/#.*//' | tr -d ' "')
+GITHUB_ACTIONS_SA_NAME=$(grep "^github_actions_sa_name" "$CONFIG_FILE" | cut -d'=' -f2 | sed 's/#.*//' | tr -d ' "')
 
 if [ -z "$PROJECT_ID" ] || [ -z "$GITHUB_ACTIONS_SA_NAME" ]; then
   echo "❌ Error: Could not parse project_id or github_actions_sa_name from config file"

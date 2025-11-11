@@ -74,12 +74,12 @@ fi
 echo "📦 Importing existing GCP resources for environment: $ENVIRONMENT"
 echo ""
 
-# Parse tfvars file to get variable values
-PROJECT_ID=$(grep "^project_id" "$CONFIG_FILE" | cut -d'=' -f2 | tr -d ' "')
-REGION=$(grep "^region" "$CONFIG_FILE" | cut -d'=' -f2 | tr -d ' "')
-ARTIFACT_REGISTRY_NAME=$(grep "^artifact_registry_name" "$CONFIG_FILE" | cut -d'=' -f2 | tr -d ' "')
-GITHUB_ACTIONS_SA_NAME=$(grep "^github_actions_sa_name" "$CONFIG_FILE" | cut -d'=' -f2 | tr -d ' "')
-CLOUD_RUN_SA_NAME=$(grep "^cloud_run_sa_name" "$CONFIG_FILE" | cut -d'=' -f2 | tr -d ' "')
+# Parse tfvars file to get variable values (strip inline comments)
+PROJECT_ID=$(grep "^project_id" "$CONFIG_FILE" | cut -d'=' -f2 | sed 's/#.*//' | tr -d ' "')
+REGION=$(grep "^region" "$CONFIG_FILE" | cut -d'=' -f2 | sed 's/#.*//' | tr -d ' "')
+ARTIFACT_REGISTRY_NAME=$(grep "^artifact_registry_name" "$CONFIG_FILE" | cut -d'=' -f2 | sed 's/#.*//' | tr -d ' "')
+GITHUB_ACTIONS_SA_NAME=$(grep "^github_actions_sa_name" "$CONFIG_FILE" | cut -d'=' -f2 | sed 's/#.*//' | tr -d ' "')
+CLOUD_RUN_SA_NAME=$(grep "^cloud_run_sa_name" "$CONFIG_FILE" | cut -d'=' -f2 | sed 's/#.*//' | tr -d ' "')
 
 echo "Project ID: $PROJECT_ID"
 echo "Region: $REGION"

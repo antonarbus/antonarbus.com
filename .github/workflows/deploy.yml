@@ -43,7 +43,7 @@ jobs:
         run: bash .github/scripts/detect-and-load-env-from-github-branch.sh
 
       - name: 'Load Config'
-        run: bash .github/scripts/load-config.sh ${{ env.ENVIRONMENT }}
+        run: bash .github/scripts/get-config-variables.sh ${{ env.ENVIRONMENT }} >> $GITHUB_ENV
 
       - name: 'Detect Changes'
         run: bash .github/scripts/detect-changes.sh

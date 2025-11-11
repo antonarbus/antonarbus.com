@@ -61,10 +61,22 @@ REQUIRED_ROLES=(
 
 # Get current IAM policy
 echo "Fetching IAM policy..."
-POLICY=$(gcloud projects get-iam-policy "$PROJECT_ID" --format=json 2>/dev/null)
+if ! POLICY=$(gcloud projects get-iam-policy "$PROJECT_ID" --format=json 2>&1); then
+  echo "❌ Error: Could not fetch IAM policy for project: $PROJECT_ID"
+  echo ""
+  echo "Error details:"
+  echo "$POLICY"
+  echo ""
+  echo "Common causes:"
+  echo "  1. Not authenticated - run: gcloud auth login"
+  echo "  2. Wrong project - run: gcloud config set project $PROJECT_ID"
+  echo "  3. Missing permissions - you need resourcemanager.projects.getIamPolicy"
+  echo ""
+  exit 1
+fi
 
 if [ -z "$POLICY" ]; then
-  echo "❌ Error: Could not fetch IAM policy for project: $PROJECT_ID"
+  echo "❌ Error: Empty IAM policy returned for project: $PROJECT_ID"
   exit 1
 fi
 

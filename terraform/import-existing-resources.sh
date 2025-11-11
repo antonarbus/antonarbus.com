@@ -47,13 +47,19 @@
 # ==============================================================================
 # WHAT THIS SCRIPT IMPORTS
 # ==============================================================================
-# Attempts to import these resources if they exist:
+# Automatically imports ALL resources that Terraform manages (12 total):
 #   - Artifact Registry repository
 #   - GitHub Actions Service Account
 #   - Cloud Run Service Account
+#   - 6 IAM role bindings for GitHub Actions SA
 #   - Cloud Run Service
+#   - Cloud Run Public Access IAM binding
+#   - Cloud Run Domain Mapping
 #
-# If a resource doesn't exist or is already imported, the import is skipped.
+# This is FULLY AUTOMATIC - no manual intervention needed!
+# If a resource exists in GCP, it's imported.
+# If it doesn't exist, Terraform will create it.
+# If it's already in state, it's skipped.
 #
 # ==============================================================================
 
@@ -86,42 +92,101 @@ ARTIFACT_REGISTRY_NAME=$(grep "^artifact_registry_name" "$CONFIG_FILE" | cut -d'
 GITHUB_ACTIONS_SA_NAME=$(grep "^github_actions_sa_name" "$CONFIG_FILE" | cut -d'=' -f2 | sed 's/#.*//' | tr -d ' "')
 CLOUD_RUN_SA_NAME=$(grep "^cloud_run_sa_name" "$CONFIG_FILE" | cut -d'=' -f2 | sed 's/#.*//' | tr -d ' "')
 CLOUD_RUN_SERVICE_NAME=$(grep "^cloud_run_service_name" "$CONFIG_FILE" | cut -d'=' -f2 | sed 's/#.*//' | tr -d ' "')
+CUSTOM_DOMAIN=$(grep "^custom_domain" "$CONFIG_FILE" | cut -d'=' -f2 | sed 's/#.*//' | tr -d ' "')
 
 echo "Project ID: $PROJECT_ID"
 echo "Region: $REGION"
 echo ""
 
-# Import Artifact Registry (if exists)
-echo "Importing Artifact Registry..."
-terraform import \
-  -var-file="$CONFIG_FILE" \
-  google_artifact_registry_repository.docker_repo \
-  "projects/${PROJECT_ID}/locations/${REGION}/repositories/${ARTIFACT_REGISTRY_NAME}" \
-  2>/dev/null || echo "  ⚠️  Already imported or doesn't exist"
+# Helper function to check if resource is already in state
+resource_in_state() {
+  terraform state list 2>/dev/null | grep -q "^${1}$"
+}
 
-# Import GitHub Actions Service Account (if exists)
-echo "Importing GitHub Actions Service Account..."
-terraform import \
-  -var-file="$CONFIG_FILE" \
-  google_service_account.github_actions \
-  "projects/${PROJECT_ID}/serviceAccounts/${GITHUB_ACTIONS_SA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
-  2>/dev/null || echo "  ⚠️  Already imported or doesn't exist"
+# Helper function to safely import a resource
+# Usage: safe_import "resource_name" "resource_id"
+safe_import() {
+  local resource_name=$1
+  local resource_id=$2
 
-# Import Cloud Run Service Account (if exists)
-echo "Importing Cloud Run Service Account..."
-terraform import \
-  -var-file="$CONFIG_FILE" \
-  google_service_account.cloud_run_service \
-  "projects/${PROJECT_ID}/serviceAccounts/${CLOUD_RUN_SA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
-  2>/dev/null || echo "  ⚠️  Already imported or doesn't exist"
+  echo "Importing $resource_name..."
+  if resource_in_state "$resource_name"; then
+    echo "  ✓ Already in state"
+  else
+    if terraform import -var-file="$CONFIG_FILE" "$resource_name" "$resource_id" >/dev/null 2>&1; then
+      echo "  ✓ Imported successfully"
+    else
+      echo "  ⚠️  Doesn't exist in GCP (will be created)"
+    fi
+  fi
+}
 
-# Import Cloud Run Service (if exists)
-echo "Importing Cloud Run Service..."
-terraform import \
-  -var-file="$CONFIG_FILE" \
-  google_cloud_run_v2_service.main \
-  "projects/${PROJECT_ID}/locations/${REGION}/services/${CLOUD_RUN_SERVICE_NAME}" \
-  2>/dev/null || echo "  ⚠️  Already imported or doesn't exist"
+# ==============================================================================
+# IMPORT ALL RESOURCES THAT TERRAFORM MANAGES
+# ==============================================================================
+# This automatically tries to import all resources defined in main.tf
+# If they exist in GCP but not in state, they'll be imported
+# If they don't exist, Terraform will create them
+# ==============================================================================
+
+echo "Attempting to import all existing resources..."
+echo ""
+
+# 1. Artifact Registry
+safe_import \
+  "google_artifact_registry_repository.docker_repo" \
+  "projects/${PROJECT_ID}/locations/${REGION}/repositories/${ARTIFACT_REGISTRY_NAME}"
+
+# 2. GitHub Actions Service Account
+safe_import \
+  "google_service_account.github_actions" \
+  "projects/${PROJECT_ID}/serviceAccounts/${GITHUB_ACTIONS_SA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
+
+# 3. Cloud Run Service Account
+safe_import \
+  "google_service_account.cloud_run_service" \
+  "projects/${PROJECT_ID}/serviceAccounts/${CLOUD_RUN_SA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
+
+# 4. IAM Bindings for GitHub Actions SA
+# Note: IAM member bindings use a special ID format
+safe_import \
+  "google_project_iam_member.github_actions_cloud_run_developer" \
+  "${PROJECT_ID} roles/run.developer serviceAccount:${GITHUB_ACTIONS_SA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
+
+safe_import \
+  "google_project_iam_member.github_actions_artifact_registry_writer" \
+  "${PROJECT_ID} roles/artifactregistry.writer serviceAccount:${GITHUB_ACTIONS_SA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
+
+safe_import \
+  "google_project_iam_member.github_actions_service_account_user" \
+  "${PROJECT_ID} roles/iam.serviceAccountUser serviceAccount:${GITHUB_ACTIONS_SA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
+
+safe_import \
+  "google_project_iam_member.github_actions_storage_object_user" \
+  "${PROJECT_ID} roles/storage.objectUser serviceAccount:${GITHUB_ACTIONS_SA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
+
+safe_import \
+  "google_project_iam_member.github_actions_iam_security_reviewer" \
+  "${PROJECT_ID} roles/iam.securityReviewer serviceAccount:${GITHUB_ACTIONS_SA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
+
+safe_import \
+  "google_project_iam_member.github_actions_service_usage_admin" \
+  "${PROJECT_ID} roles/serviceusage.serviceUsageAdmin serviceAccount:${GITHUB_ACTIONS_SA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
+
+# 5. Cloud Run Service
+safe_import \
+  "google_cloud_run_v2_service.main" \
+  "projects/${PROJECT_ID}/locations/${REGION}/services/${CLOUD_RUN_SERVICE_NAME}"
+
+# 6. Cloud Run Public Access IAM
+safe_import \
+  "google_cloud_run_v2_service_iam_member.public_access" \
+  "projects/${PROJECT_ID}/locations/${REGION}/services/${CLOUD_RUN_SERVICE_NAME} roles/run.invoker allUsers"
+
+# 7. Cloud Run Domain Mapping
+safe_import \
+  "google_cloud_run_domain_mapping.main" \
+  "locations/${REGION}/namespaces/${PROJECT_ID}/domainmappings/${CUSTOM_DOMAIN}"
 
 echo ""
 echo "✅ Import complete!"

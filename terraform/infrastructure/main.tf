@@ -169,7 +169,7 @@ resource "google_service_account" "cloud_run_service" {
 resource "google_cloud_run_v2_service" "main" {
   name     = var.cloud_run_service_name
   location = var.region
-  ingress  = "INGRESS_TRAFFIC_ALL"      # Accept traffic from internet
+  ingress  = "INGRESS_TRAFFIC_ALL" # Accept traffic from internet
 
   # Configuration for how the container runs
   template {

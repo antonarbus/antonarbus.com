@@ -124,29 +124,9 @@ echo ""
 echo_info "Checking for existing resources that need to be imported..."
 echo ""
 
-# Import existing resources if they exist (ignore errors if already imported or don't exist)
+# Use the shared import script to handle imports
 # This prevents 409 errors when resources were created outside Terraform
-
-echo_info "Attempting to import Artifact Registry..."
-terraform import \
-  -var-file="$CONFIG_VARIABLES_FILE_PATH" \
-  google_artifact_registry_repository.docker_repo \
-  "projects/${PROJECT_ID}/locations/${REGION}/repositories/${ARTIFACT_REGISTRY_NAME}" \
-  2>/dev/null && echo_success "Artifact Registry imported" || echo_warning "Skipped (already in state or doesn't exist)"
-
-echo_info "Attempting to import GitHub Actions Service Account..."
-terraform import \
-  -var-file="$CONFIG_VARIABLES_FILE_PATH" \
-  google_service_account.github_actions \
-  "projects/${PROJECT_ID}/serviceAccounts/${GITHUB_ACTIONS_SA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
-  2>/dev/null && echo_success "GitHub Actions SA imported" || echo_warning "Skipped (already in state or doesn't exist)"
-
-echo_info "Attempting to import Cloud Run Service Account..."
-terraform import \
-  -var-file="$CONFIG_VARIABLES_FILE_PATH" \
-  google_service_account.cloud_run_service \
-  "projects/${PROJECT_ID}/serviceAccounts/${CLOUD_RUN_SA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
-  2>/dev/null && echo_success "Cloud Run SA imported" || echo_warning "Skipped (already in state or doesn't exist)"
+bash ../import-existing-resources.sh "$ENV"
 
 echo ""
 echo_info "Applying Terraform configuration..."

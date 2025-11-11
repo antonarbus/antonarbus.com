@@ -3,52 +3,57 @@
 # ==============================================================================
 # IMPORT EXISTING GCP RESOURCES INTO TERRAFORM STATE
 # ==============================================================================
-# Run this script if you get "Error 409: already exists" errors
-# This imports existing GCP resources into Terraform's state
+# This script imports existing GCP resources into Terraform state to prevent
+# "Error 409: already exists" errors.
 #
-# Usage:
+# AUTOMATIC USAGE (via terraform.sh):
+#   This script is called automatically by terraform.sh during deployment
+#   You don't need to run it manually in most cases!
+#
+# MANUAL USAGE (for troubleshooting):
 #   cd terraform/infrastructure
 #   bash ../import-existing-resources.sh prod
 #
 # ==============================================================================
-# WHEN DO YOU NEED THIS?
+# HOW THIS SCRIPT IS USED
 # ==============================================================================
-# You need this script if you get errors like:
-#   Error 409: the repository already exists
-#   Error 409: Service account already exists
 #
-# This happens when:
-#   1. Resources were created manually in Google Cloud Console
-#   2. Resources were created by a different Terraform run
-#   3. Terraform state file was deleted but resources still exist in GCP
-#   4. You're migrating existing infrastructure to Terraform
+# AUTOMATICALLY (CI/CD and terraform.sh):
+#   - terraform.sh calls this script before running terraform apply
+#   - Runs in non-interactive mode (no prompts)
+#   - Prevents 409 errors by importing existing resources
+#   - Output is integrated into terraform.sh workflow
 #
-# What this script does:
-#   - Tells Terraform: "These resources already exist in GCP"
-#   - Adds them to Terraform state so Terraform can manage them
-#   - After importing, Terraform won't try to recreate them
+# MANUALLY (Local troubleshooting):
+#   - Run directly when debugging state issues
+#   - Interactive mode - asks if you want to run terraform plan
+#   - Shows detailed import output
+#   - Useful for testing before pushing to CI/CD
 #
 # ==============================================================================
-# WHEN DON'T YOU NEED THIS?
+# WHEN TO RUN THIS MANUALLY
 # ==============================================================================
-# Skip this script if:
-#   ✅ This is a fresh project with no existing resources
-#   ✅ Terraform created all resources from the start
-#   ✅ You're not getting 409 errors
+# Only run manually when:
+#   1. Testing imports locally before committing changes
+#   2. Troubleshooting state issues (resources exist but not in state)
+#   3. Initial migration of existing infrastructure to Terraform
+#   4. Debugging why automatic imports aren't working
+#
+# You DON'T need to run manually if:
+#   ✅ terraform.sh is working fine (it calls this automatically)
+#   ✅ CI/CD is running successfully
+#   ✅ Fresh project with no existing resources
 #
 # ==============================================================================
-# SETUP ORDER (if you're getting both 403 and 409 errors)
+# WHAT THIS SCRIPT IMPORTS
 # ==============================================================================
-# 1. Grant permissions first:
-#    bash terraform/grant-github-actions-permissions.sh prod
+# Attempts to import these resources if they exist:
+#   - Artifact Registry repository
+#   - GitHub Actions Service Account
+#   - Cloud Run Service Account
+#   - Cloud Run Service
 #
-# 2. Import existing resources (this script):
-#    cd terraform/infrastructure
-#    bash ../import-existing-resources.sh prod
-#
-# 3. Run Terraform:
-#    terraform plan -var-file="../../config/prod.tfvars"
-#    terraform apply -var-file="../../config/prod.tfvars"
+# If a resource doesn't exist or is already imported, the import is skipped.
 #
 # ==============================================================================
 
@@ -80,6 +85,7 @@ REGION=$(grep "^region" "$CONFIG_FILE" | cut -d'=' -f2 | sed 's/#.*//' | tr -d '
 ARTIFACT_REGISTRY_NAME=$(grep "^artifact_registry_name" "$CONFIG_FILE" | cut -d'=' -f2 | sed 's/#.*//' | tr -d ' "')
 GITHUB_ACTIONS_SA_NAME=$(grep "^github_actions_sa_name" "$CONFIG_FILE" | cut -d'=' -f2 | sed 's/#.*//' | tr -d ' "')
 CLOUD_RUN_SA_NAME=$(grep "^cloud_run_sa_name" "$CONFIG_FILE" | cut -d'=' -f2 | sed 's/#.*//' | tr -d ' "')
+CLOUD_RUN_SERVICE_NAME=$(grep "^cloud_run_service_name" "$CONFIG_FILE" | cut -d'=' -f2 | sed 's/#.*//' | tr -d ' "')
 
 echo "Project ID: $PROJECT_ID"
 echo "Region: $REGION"
@@ -109,32 +115,46 @@ terraform import \
   "projects/${PROJECT_ID}/serviceAccounts/${CLOUD_RUN_SA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
   2>/dev/null || echo "  ⚠️  Already imported or doesn't exist"
 
+# Import Cloud Run Service (if exists)
+echo "Importing Cloud Run Service..."
+terraform import \
+  -var-file="$CONFIG_FILE" \
+  google_cloud_run_v2_service.main \
+  "projects/${PROJECT_ID}/locations/${REGION}/services/${CLOUD_RUN_SERVICE_NAME}" \
+  2>/dev/null || echo "  ⚠️  Already imported or doesn't exist"
+
 echo ""
 echo "✅ Import complete!"
 echo ""
 
-# Ask if user wants to run terraform plan automatically
-read -p "Run 'terraform plan' now to verify? (y/n) " -n 1 -r
-echo ""
-
-if [[ $REPLY =~ ^[Yy]$ ]]; then
-  echo ""
-  echo "Running: terraform plan -var-file=\"$CONFIG_FILE\""
-  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+# Only prompt for terraform plan if not in non-interactive mode (CI/CD)
+if [ -t 0 ]; then
+  # Interactive mode (terminal attached) - ask user
+  read -p "Run 'terraform plan' now to verify? (y/n) " -n 1 -r
   echo ""
 
-  terraform plan -var-file="$CONFIG_FILE"
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    echo ""
+    echo "Running: terraform plan -var-file=\"$CONFIG_FILE\""
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo ""
 
-  echo ""
-  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-  echo ""
-  echo "If the plan looks good, apply the changes with:"
-  echo "  terraform apply -var-file=\"$CONFIG_FILE\""
+    terraform plan -var-file="$CONFIG_FILE"
+
+    echo ""
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo ""
+    echo "If the plan looks good, apply the changes with:"
+    echo "  terraform apply -var-file=\"$CONFIG_FILE\""
+  else
+    echo ""
+    echo "Skipped. You can verify the import manually:"
+    echo "  terraform plan -var-file=\"$CONFIG_FILE\""
+    echo ""
+    echo "Then apply any pending changes:"
+    echo "  terraform apply -var-file=\"$CONFIG_FILE\""
+  fi
 else
-  echo ""
-  echo "Skipped. You can verify the import manually:"
-  echo "  terraform plan -var-file=\"$CONFIG_FILE\""
-  echo ""
-  echo "Then apply any pending changes:"
-  echo "  terraform apply -var-file=\"$CONFIG_FILE\""
+  # Non-interactive mode (CI/CD) - skip prompt
+  echo "Running in non-interactive mode (CI/CD) - skipping terraform plan prompt"
 fi

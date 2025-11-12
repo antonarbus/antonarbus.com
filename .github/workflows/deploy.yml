@@ -63,10 +63,7 @@ jobs:
 
       - name: 'Grant Missing IAM Permissions'
         if: steps.check-permissions.outcome == 'failure'
-        run: |
-          echo "⚠️ Missing IAM permissions detected. Granting required permissions..."
-          bash terraform/grant-github-actions-permissions.sh ${{ env.ENVIRONMENT }}
-          echo "✅ Permissions granted successfully"
+        run: bash terraform/grant-github-actions-permissions.sh ${{ env.ENVIRONMENT }}
 
       # ============================================================================
       # TERRAFORM STEPS (only if terraform files changed)

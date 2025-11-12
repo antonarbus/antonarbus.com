@@ -150,8 +150,8 @@ safe_import \
 # 4. IAM Bindings for GitHub Actions SA
 # Note: IAM member bindings use a special ID format
 safe_import \
-  "google_project_iam_member.github_actions_cloud_run_developer" \
-  "${PROJECT_ID} roles/run.developer serviceAccount:${GITHUB_ACTIONS_SA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
+  "google_project_iam_member.github_actions_cloud_run_admin" \
+  "${PROJECT_ID} roles/run.admin serviceAccount:${GITHUB_ACTIONS_SA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
 
 safe_import \
   "google_project_iam_member.github_actions_artifact_registry_writer" \

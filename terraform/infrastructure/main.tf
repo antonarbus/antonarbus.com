@@ -89,12 +89,13 @@ resource "google_service_account" "github_actions" {
 # Following security best practices, we grant only the minimum permissions needed
 # for GitHub Actions to deploy the application
 
-# Cloud Run: Deploy and update services (not create/delete)
-# "roles/run.developer" allows: deploy revisions, update traffic, view services
-# Does NOT allow: deleting services, changing IAM policies
-resource "google_project_iam_member" "github_actions_cloud_run_developer" {
+# Cloud Run: Full management including domain mappings
+# "roles/run.admin" allows: deploy services, manage domain mappings, update traffic
+# Required for automated domain mapping creation via Terraform
+# Note: This role includes domain mapping permissions which run.developer lacks
+resource "google_project_iam_member" "github_actions_cloud_run_admin" {
   project = var.project_id
-  role    = "roles/run.developer"
+  role    = "roles/run.admin"
   member  = "serviceAccount:${google_service_account.github_actions.email}"
 }
 

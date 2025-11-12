@@ -37,6 +37,10 @@ const postObj = {
           packages
         </li>
         <li>
+          <Code bash>npm ci --legacy-peer-deps</Code> same, but ignoring peer dependency version
+          conflicts
+        </li>
+        <li>
           <Code bash>npm i -E</Code> install exact versions
         </li>
         <li>

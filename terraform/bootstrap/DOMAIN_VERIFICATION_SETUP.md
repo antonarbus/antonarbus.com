@@ -57,4 +57,5 @@ Once the service account is added as a verified owner:
 ## Related Files
 
 - `terraform/infrastructure/main.tf` - Contains domain mapping resource and setup instructions (lines 148-168)
+- `terraform/bootstrap/` - Bootstrap directory containing one-time setup documentation
 - `.github/workflows/deploy.yml` - Workflow that creates domain mappings

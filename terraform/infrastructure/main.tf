@@ -155,7 +155,7 @@ resource "google_project_iam_member" "github_actions_service_usage_admin" {
 #
 # This is a ONE-TIME setup that enables all environments (dev, test, pilot, prod).
 #
-# Setup instructions: See terraform/DOMAIN_VERIFICATION_SETUP.md
+# Setup instructions: See terraform/bootstrap/DOMAIN_VERIFICATION_SETUP.md
 #
 # Quick steps:
 #   1. Go to https://search.google.com/search-console

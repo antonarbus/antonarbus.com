@@ -162,7 +162,7 @@ resource "null_resource" "add_service_account_domain_verification" {
     domain          = var.custom_domain
   }
 
-  # Add service account as verified owner using gcloud
+  # Add service account as verified owner using Site Verification API REST call
   provisioner "local-exec" {
     command = <<-EOT
       # Extract base domain from custom_domain (e.g., test.antonarbus.com -> antonarbus.com)
@@ -170,11 +170,31 @@ resource "null_resource" "add_service_account_domain_verification" {
 
       echo "Adding ${google_service_account.github_actions.email} as verified owner of $BASE_DOMAIN..."
 
-      # Add the service account as a verified owner
-      # This command is idempotent - won't fail if already added
-      gcloud domains verify "$BASE_DOMAIN" \
-        --owners="${google_service_account.github_actions.email}" \
-        --verbosity=info || echo "Note: Domain verification may require manual setup if not already verified"
+      # Site ID format for DNS verification
+      SITE_ID="dns://$BASE_DOMAIN"
+      ENCODED_SITE_ID=$(echo -n "$SITE_ID" | jq -sRr @uri)
+
+      # Try to add the service account to the verified owners list
+      # Using the Site Verification API v1
+      ACCESS_TOKEN=$(gcloud auth print-access-token)
+
+      curl -s -X PATCH \
+        "https://www.googleapis.com/siteVerification/v1/webResource/$ENCODED_SITE_ID" \
+        -H "Authorization: Bearer $ACCESS_TOKEN" \
+        -H "Content-Type: application/json" \
+        -d '{
+          "owners": ["${google_service_account.github_actions.email}"]
+        }' || {
+          echo ""
+          echo "Note: Could not automatically add service account as domain owner."
+          echo "Manual step required: Add ${google_service_account.github_actions.email}"
+          echo "as an owner at https://www.google.com/webmasters/verification/"
+          echo ""
+          echo "This is a one-time setup - after adding, all environments will work."
+        }
+
+      # Always exit 0 to not fail terraform
+      exit 0
     EOT
   }
 

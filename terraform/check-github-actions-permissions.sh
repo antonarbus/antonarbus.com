@@ -101,11 +101,19 @@ if [ ${#MISSING_ROLES[@]} -eq 0 ]; then
 else
   echo "❌ Missing ${#MISSING_ROLES[@]} required IAM role(s)"
   echo ""
-  echo "To fix this, run:"
-  echo "  bash terraform/grant-github-actions-permissions.sh $ENVIRONMENT"
-  echo ""
-  echo "Or grant permissions manually in Google Cloud Console:"
-  echo "  https://console.cloud.google.com/iam-admin/iam?project=$PROJECT_ID"
+
+  # Check if running in GitHub Actions
+  if [ -n "$GITHUB_ACTIONS" ]; then
+    echo "Running in GitHub Actions - the workflow will automatically grant missing permissions."
+  else
+    # Running locally - provide manual fix instructions
+    echo "To fix this, run:"
+    echo "  bash terraform/grant-github-actions-permissions.sh $ENVIRONMENT"
+    echo ""
+    echo "Or grant permissions manually in Google Cloud Console:"
+    echo "  https://console.cloud.google.com/iam-admin/iam?project=$PROJECT_ID"
+  fi
+
   echo ""
   exit 1
 fi

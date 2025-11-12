@@ -15,6 +15,29 @@
 
 set -e
 
+# Check if Terraform state exists for this environment
+check_terraform_state_exists() {
+  local env=$1
+  local bucket="${BUCKET_FOR_TERRAFORM_STATE_NAME}"
+  local state_path="gs://${bucket}/terraform/state/${env}/default.tfstate"
+
+  if gsutil -q stat "${state_path}" 2>/dev/null; then
+    return 0  # State exists
+  else
+    return 1  # State does not exist
+  fi
+}
+
+# Check if this is the first infrastructure deployment for this environment
+FIRST_DEPLOYMENT=false
+if [ -n "$ENVIRONMENT" ] && [ -n "$BUCKET_FOR_TERRAFORM_STATE_NAME" ]; then
+  if ! check_terraform_state_exists "$ENVIRONMENT"; then
+    echo "🆕 First deployment detected for environment: $ENVIRONMENT"
+    echo "   No Terraform state found - infrastructure needs to be created"
+    FIRST_DEPLOYMENT=true
+  fi
+fi
+
 # Check if this is the first commit (no HEAD~1)
 if ! git rev-parse HEAD~1 &>/dev/null; then
   echo "⚠️  First commit detected - treating as both terraform and app changes"
@@ -38,6 +61,12 @@ else
     APP_CHANGED=true
     echo "✅ App code changes detected"
   fi
+fi
+
+# Force Terraform to run on first deployment
+if [ "$FIRST_DEPLOYMENT" = true ]; then
+  echo "🔧 Forcing Terraform run for first-time infrastructure setup"
+  TERRAFORM_CHANGED=true
 fi
 
 # Determine change location

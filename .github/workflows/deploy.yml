@@ -45,9 +45,6 @@ jobs:
       - name: 'Load Config'
         run: bash .github/scripts/get-config-variables.sh ${{ env.ENVIRONMENT }} >> $GITHUB_ENV
 
-      - name: 'Detect Changes'
-        run: bash .github/scripts/detect-changes.sh
-
       - name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v3'
         with:
@@ -55,6 +52,9 @@ jobs:
 
       - name: 'Configuring gsutil to use gcloud credentials'
         run: gcloud config set pass_credentials_to_gsutil true
+
+      - name: 'Detect Changes'
+        run: bash .github/scripts/detect-changes.sh
 
       - name: 'Check IAM Permissions'
         run: bash terraform/check-github-actions-permissions.sh ${{ env.ENVIRONMENT }}

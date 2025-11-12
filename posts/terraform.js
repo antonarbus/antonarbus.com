@@ -24,7 +24,7 @@ const postObj = {
     <>
       <H>Terraform</H>
 
-      <p>To be updated...</p>
+      <p>To be updated in future...</p>
     </>
   )
 }

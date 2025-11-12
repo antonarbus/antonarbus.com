@@ -145,6 +145,15 @@ resource "google_project_iam_member" "github_actions_service_usage_admin" {
   member  = "serviceAccount:${google_service_account.github_actions.email}"
 }
 
+# Domain Verification: Allow service account to manage verified domains
+# This grants the service account permission to use domain verification
+# Required for creating domain mappings without manual verification per subdomain
+resource "google_project_iam_member" "github_actions_site_verification" {
+  project = var.project_id
+  role    = "roles/siteverification.verifiedOwner"
+  member  = "serviceAccount:${google_service_account.github_actions.email}"
+}
+
 # ==============================================================================
 # SERVICE ACCOUNT FOR CLOUD RUN
 # ==============================================================================

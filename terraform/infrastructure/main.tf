@@ -148,60 +148,24 @@ resource "google_project_iam_member" "github_actions_service_usage_admin" {
 # ==============================================================================
 # DOMAIN VERIFICATION FOR SERVICE ACCOUNT
 # ==============================================================================
-# Add the GitHub Actions service account as a verified owner of the domain
-# This allows the service account to create domain mappings programmatically
-# Uses gcloud command since there's no native Terraform resource for this
+# IMPORTANT: One-time manual setup required!
 #
-# The verification is idempotent - if already added, it will not fail
-# This runs during terraform apply and ensures the SA can manage domain mappings
-
-resource "null_resource" "add_service_account_domain_verification" {
-  # Trigger re-run if service account changes
-  triggers = {
-    service_account = google_service_account.github_actions.email
-    domain          = var.custom_domain
-  }
-
-  # Add service account as verified owner using Site Verification API REST call
-  provisioner "local-exec" {
-    command = <<-EOT
-      # Extract base domain from custom_domain (e.g., test.antonarbus.com -> antonarbus.com)
-      BASE_DOMAIN=$(echo "${var.custom_domain}" | awk -F. '{print $(NF-1)"."$NF}')
-
-      echo "Adding ${google_service_account.github_actions.email} as verified owner of $BASE_DOMAIN..."
-
-      # Site ID format for DNS verification
-      SITE_ID="dns://$BASE_DOMAIN"
-      ENCODED_SITE_ID=$(echo -n "$SITE_ID" | jq -sRr @uri)
-
-      # Try to add the service account to the verified owners list
-      # Using the Site Verification API v1
-      ACCESS_TOKEN=$(gcloud auth print-access-token)
-
-      curl -s -X PATCH \
-        "https://www.googleapis.com/siteVerification/v1/webResource/$ENCODED_SITE_ID" \
-        -H "Authorization: Bearer $ACCESS_TOKEN" \
-        -H "Content-Type: application/json" \
-        -d '{
-          "owners": ["${google_service_account.github_actions.email}"]
-        }' || {
-          echo ""
-          echo "Note: Could not automatically add service account as domain owner."
-          echo "Manual step required: Add ${google_service_account.github_actions.email}"
-          echo "as an owner at https://www.google.com/webmasters/verification/"
-          echo ""
-          echo "This is a one-time setup - after adding, all environments will work."
-        }
-
-      # Always exit 0 to not fail terraform
-      exit 0
-    EOT
-  }
-
-  depends_on = [
-    google_service_account.github_actions
-  ]
-}
+# Before domain mappings can be created automatically, the GitHub Actions
+# service account must be added as a verified owner of antonarbus.com.
+#
+# This is a ONE-TIME setup that enables all environments (dev, test, pilot, prod).
+#
+# Setup instructions: See terraform/DOMAIN_VERIFICATION_SETUP.md
+#
+# Quick steps:
+#   1. Go to https://search.google.com/search-console
+#   2. Select antonarbus.com property
+#   3. Settings → Users and permissions → Add user
+#   4. Add: github-actions-sa@antonarbus.iam.gserviceaccount.com
+#   5. Grant Owner permission
+#
+# After this setup, all automated domain mappings will work.
+# ==============================================================================
 
 # ==============================================================================
 # SERVICE ACCOUNT FOR CLOUD RUN

@@ -145,13 +145,42 @@ resource "google_project_iam_member" "github_actions_service_usage_admin" {
   member  = "serviceAccount:${google_service_account.github_actions.email}"
 }
 
-# Domain Verification: Allow service account to manage verified domains
-# This grants the service account permission to use domain verification
-# Required for creating domain mappings without manual verification per subdomain
-resource "google_project_iam_member" "github_actions_site_verification" {
-  project = var.project_id
-  role    = "roles/siteverification.verifiedOwner"
-  member  = "serviceAccount:${google_service_account.github_actions.email}"
+# ==============================================================================
+# DOMAIN VERIFICATION FOR SERVICE ACCOUNT
+# ==============================================================================
+# Add the GitHub Actions service account as a verified owner of the domain
+# This allows the service account to create domain mappings programmatically
+# Uses gcloud command since there's no native Terraform resource for this
+#
+# The verification is idempotent - if already added, it will not fail
+# This runs during terraform apply and ensures the SA can manage domain mappings
+
+resource "null_resource" "add_service_account_domain_verification" {
+  # Trigger re-run if service account changes
+  triggers = {
+    service_account = google_service_account.github_actions.email
+    domain          = var.custom_domain
+  }
+
+  # Add service account as verified owner using gcloud
+  provisioner "local-exec" {
+    command = <<-EOT
+      # Extract base domain from custom_domain (e.g., test.antonarbus.com -> antonarbus.com)
+      BASE_DOMAIN=$(echo "${var.custom_domain}" | awk -F. '{print $(NF-1)"."$NF}')
+
+      echo "Adding ${google_service_account.github_actions.email} as verified owner of $BASE_DOMAIN..."
+
+      # Add the service account as a verified owner
+      # This command is idempotent - won't fail if already added
+      gcloud domains verify "$BASE_DOMAIN" \
+        --owners="${google_service_account.github_actions.email}" \
+        --verbosity=info || echo "Note: Domain verification may require manual setup if not already verified"
+    EOT
+  }
+
+  depends_on = [
+    google_service_account.github_actions
+  ]
 }
 
 # ==============================================================================

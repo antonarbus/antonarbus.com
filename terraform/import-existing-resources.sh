@@ -173,9 +173,8 @@ safe_import \
   "google_project_iam_member.github_actions_service_usage_admin" \
   "${PROJECT_ID} roles/serviceusage.serviceUsageAdmin serviceAccount:${GITHUB_ACTIONS_SA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
 
-safe_import \
-  "google_project_iam_member.github_actions_site_verification" \
-  "${PROJECT_ID} roles/siteverification.verifiedOwner serviceAccount:${GITHUB_ACTIONS_SA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
+# Note: Domain verification (null_resource.add_service_account_domain_verification)
+# is handled by local-exec provisioner, not imported
 
 # 5. Cloud Run Service
 safe_import \

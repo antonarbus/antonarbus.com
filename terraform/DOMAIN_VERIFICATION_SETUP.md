@@ -13,7 +13,7 @@ This happens because domain verification is tied to individual users/service acc
 
 To enable automated domain mapping creation across all environments (dev, test, pilot, prod), you need to add the GitHub Actions service account as a verified owner of `antonarbus.com`.
 
-### Option 1: Add via Google Search Console (Recommended - Simplest)
+### Setup Steps
 
 1. Go to [Google Search Console](https://search.google.com/search-console)
 2. Select the `antonarbus.com` property (or add it if not already there)
@@ -27,15 +27,6 @@ That's it! Once added:
 - ✅ All subdomains (dev.antonarbus.com, test.antonarbus.com, etc.) will work automatically
 - ✅ The GitHub Actions workflow can create domain mappings for any environment
 - ✅ This is a one-time setup - never needs to be done again
-
-### Option 2: Add via Site Verification API
-
-Run the provided script:
-```bash
-bash terraform/add-service-account-to-domain-verification.sh
-```
-
-This automates the process using the Site Verification API.
 
 ## Verification
 
@@ -65,6 +56,5 @@ Once the service account is added as a verified owner:
 
 ## Related Files
 
-- `terraform/infrastructure/main.tf` - Contains domain mapping resource
-- `terraform/add-service-account-to-domain-verification.sh` - Automated setup script
+- `terraform/infrastructure/main.tf` - Contains domain mapping resource and setup instructions (lines 148-168)
 - `.github/workflows/deploy.yml` - Workflow that creates domain mappings

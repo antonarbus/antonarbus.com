@@ -56,18 +56,11 @@ jobs:
       - name: 'Detect Changes'
         run: bash .github/scripts/detect-changes.sh
 
-      - name: 'Check IAM Permissions'
-        id: check-permissions
-        continue-on-error: true
-        run: bash terraform/check-github-actions-permissions.sh ${{ env.ENVIRONMENT }}
-
-      - name: 'Grant Missing IAM Permissions'
-        if: steps.check-permissions.outcome == 'failure'
-        run: bash terraform/grant-github-actions-permissions.sh ${{ env.ENVIRONMENT }}
-
       # ============================================================================
       # TERRAFORM STEPS (only if terraform files changed)
       # ============================================================================
+      # Note: Terraform manages IAM permissions declaratively in main.tf
+      # No need for separate permission checks - Terraform handles it
 
       - name: 'Setup Terraform'
         if: env.CHANGES_DETECTED_AT == 'terraform' || env.CHANGES_DETECTED_AT == 'both'

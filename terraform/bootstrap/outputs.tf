@@ -21,3 +21,14 @@ output "bucket_for_terraform_state_url_output" {
   description = "URL of the Terraform state bucket"
   value       = google_storage_bucket.terraform_state.url
 }
+
+# ==============================================================================
+# WORKLOAD IDENTITY FEDERATION (PROJECT-WIDE)
+# ==============================================================================
+
+output "workload_identity_provider" {
+  description = "Workload Identity Provider for GitHub Actions (ALL environments)"
+  value       = google_iam_workload_identity_pool_provider.github_provider.name
+  # This is used by ALL environments in deploy.yml
+  # Only needs to be created once for the whole project
+}

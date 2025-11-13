@@ -61,3 +61,4 @@ output "custom_domain_output" {
   # Example: antonarbus.com
   # The DNS records should already be configured from the previous setup
 }
+

@@ -3,22 +3,21 @@
 # ==============================================================================
 # This file defines infrastructure for antonarbus.com:
 #
-# ARCHITECTURE: Fully Isolated Environments
-# Each environment (dev/test/pilot/prod) has completely separate resources:
+# ARCHITECTURE: Hybrid - Shared + Isolated Resources
 #
-# PER ENVIRONMENT:
-#   - Artifact Registry (docker-images-{env})
-#   - GitHub Actions Service Account (github-actions-sa-{env})
-#   - Cloud Run Service Account (cloud-run-sa-{env})
-#   - 6 IAM permissions for GitHub Actions SA
-#   - Cloud Run Service (web-app-{env})
-#   - Public Access IAM binding
-#   - Custom Domain Mapping
-#
-# SHARED ACROSS ENVIRONMENTS:
+# SHARED ACROSS ALL ENVIRONMENTS:
 #   - GCP Project (antonarbus)
 #   - GCS Bucket for Terraform state
 #   - Region (us-central1)
+#   - GitHub Actions Service Account (github-actions-sa) - shared CI/CD
+#   - Cloud Run Service Account (cloud-run-sa) - shared runtime identity
+#   - 6 IAM permissions for GitHub Actions SA
+#
+# PER ENVIRONMENT (dev/test/pilot/prod):
+#   - Artifact Registry (docker-images-{env}) - isolated image storage
+#   - Cloud Run Service (web-app-{env}) - isolated app instances
+#   - Public Access IAM binding
+#   - Custom Domain Mapping
 #
 # For first-time setup, see README.md
 
@@ -79,16 +78,16 @@ resource "google_artifact_registry_repository" "docker_repo" {
 # ==============================================================================
 # SERVICE ACCOUNT FOR GITHUB ACTIONS
 # ==============================================================================
-# Each environment has its own isolated service account for CI/CD
-# Examples: github-actions-sa-dev, github-actions-sa-prod
-# This ensures dev CI/CD can't accidentally deploy to prod
+# Shared across all environments (dev, test, pilot, prod)
+# One service account can deploy to any environment
+# Simplifies credential management - one GitHub Secret for all
 
 # Service account resource
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_service_account
 resource "google_service_account" "github_actions" {
   account_id   = var.github_actions_sa_name
-  display_name = "GitHub Actions Service Account (${var.github_actions_sa_name})"
-  description  = "Service account for GitHub Actions to deploy to this environment"
+  display_name = "GitHub Actions Service Account (All Environments)"
+  description  = "Service account for GitHub Actions to deploy to all environments"
 }
 
 # ==============================================================================
@@ -178,15 +177,15 @@ resource "google_project_iam_member" "github_actions_service_usage_admin" {
 # ==============================================================================
 # SERVICE ACCOUNT FOR CLOUD RUN
 # ==============================================================================
-# Each environment has its own service account for running the app
-# Examples: cloud-run-sa-dev, cloud-run-sa-prod
-# This provides isolation - dev app runs as different identity than prod
+# Shared across all environments (dev, test, pilot, prod)
+# All Cloud Run services run as this service account
+# If you need different permissions per environment, create environment-specific SAs
 
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_service_account
 resource "google_service_account" "cloud_run_service" {
   account_id   = var.cloud_run_sa_name
-  display_name = "Cloud Run Service Account (${var.cloud_run_sa_name})"
-  description  = "Service account used by Cloud Run service in this environment"
+  display_name = "Cloud Run Service Account (All Environments)"
+  description  = "Service account used by Cloud Run services in all environments"
 }
 
 # ==============================================================================

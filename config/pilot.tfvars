@@ -15,7 +15,7 @@ bucket_for_terraform_state_name = "antonarbus-terraform-state"    # Shared Terra
 
 # ARTIFACT REGISTRY
 
-artifact_registry_name = "docker-images-pilot"
+artifact_registry_name = "docker-images-pilot"  # Environment-specific (has images)
 
 # CLOUD RUN
 
@@ -23,10 +23,10 @@ cloud_run_service_name = "web-app-pilot"
 docker_image_name      = "web-app"
 docker_image_tag       = "pilot"
 
-# SERVICE ACCOUNTS
+# SERVICE ACCOUNTS (SHARED across all environments)
 
-github_actions_sa_name = "github-actions-sa-pilot"
-cloud_run_sa_name      = "cloud-run-sa-pilot"
+github_actions_sa_name = "github-actions-sa"  # Shared
+cloud_run_sa_name      = "cloud-run-sa"       # Shared
 
 # SCALING & PERFORMANCE
 

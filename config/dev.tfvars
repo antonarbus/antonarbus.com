@@ -15,7 +15,7 @@ bucket_for_terraform_state_name = "antonarbus-terraform-state"    # Shared: Terr
 
 # ARTIFACT REGISTRY
 
-artifact_registry_name = "docker-images-dev"
+artifact_registry_name = "docker-images-dev"  # Environment-specific (has images)
 
 # CLOUD RUN
 
@@ -23,10 +23,10 @@ cloud_run_service_name = "web-app-dev"
 docker_image_name      = "web-app"
 docker_image_tag       = "dev"
 
-# SERVICE ACCOUNTS
+# SERVICE ACCOUNTS (SHARED across all environments)
 
-github_actions_sa_name = "github-actions-sa-dev"
-cloud_run_sa_name      = "cloud-run-sa-dev"
+github_actions_sa_name = "github-actions-sa"  # Shared
+cloud_run_sa_name      = "cloud-run-sa"       # Shared
 
 # SCALING & PERFORMANCE
 

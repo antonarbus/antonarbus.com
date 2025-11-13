@@ -11,24 +11,22 @@ If you get "409: already exists" errors, just import that resource (see below).
 
 ---
 
-## Architecture: Fully Isolated Environments
+## Architecture: Hybrid - Shared + Isolated
 
-Each environment (dev, test, pilot, prod) has its own completely isolated resources:
+**Shared Across All Environments:**
+- ✅ Service Accounts (github-actions-sa, cloud-run-sa) - one set of credentials
+- ✅ IAM Permissions - apply project-wide
+- ✅ GCP Project & Region
 
 **Per Environment:**
-- ✅ Artifact Registry (docker-images-dev, docker-images-prod, etc.)
-- ✅ GitHub Actions Service Account (github-actions-sa-dev, github-actions-sa-prod, etc.)
-- ✅ Cloud Run Service Account (cloud-run-sa-dev, cloud-run-sa-prod, etc.)
-- ✅ Cloud Run Service (web-app-dev, web-app-prod, etc.)
+- ✅ Artifact Registry (docker-images-dev, docker-images-prod, etc.) - isolated images
+- ✅ Cloud Run Service (web-app-dev, web-app-prod, etc.) - isolated apps
 - ✅ Domain Mapping (dev.antonarbus.com, antonarbus.com, etc.)
-- ✅ All IAM permissions (scoped to each environment)
 
 **Benefits:**
-- 🔒 Complete security isolation
-- 🔑 Separate credentials per environment
-- 👥 Different teams can own different environments
-- 🛡️ Compromised dev doesn't affect prod
-- 📋 Compliance-friendly
+- 🔑 Simple credentials management (one GitHub Secret works for all)
+- 🗂️ Isolated app deployments (dev can't break prod)
+- 💰 Cost-effective (shared infrastructure)
 
 ## Simple Usage
 

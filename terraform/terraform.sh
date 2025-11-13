@@ -1,18 +1,15 @@
 #!/bin/bash
 
 # ==============================================================================
-# TERRAFORM DEPLOYMENT SCRIPT WITH SMART BOOTSTRAP
+# TERRAFORM DEPLOYMENT SCRIPT (INFRASTRUCTURE ONLY)
 # ==============================================================================
 #
-# This script manages Terraform infrastructure with automatic bootstrap:
-# - Checks if the bucket for terraform state exists
-# - If not: runs bootstrap to create it
-# - Then applies main infrastructure
-# - If yes: just applies main infrastructure
+# This script deploys main infrastructure using Terraform.
+# Bootstrap resources (state bucket + Workload Identity) are created separately.
 #
 # DIRECTORY STRUCTURE:
-#   bootstrap/      - Creates the GCS bucket for state (local state)
-#   infrastructure/ - Main infrastructure (uses remote backend)
+#   bootstrap/      - One-time setup (run locally, see bootstrap/README.md)
+#   infrastructure/ - Main infrastructure (uses remote backend, runs in CI/CD)
 #
 # USAGE:
 #   ./terraform.sh  # Runs from GitHub Actions or can be run manually
@@ -80,36 +77,8 @@ echo_success() { echo -e "${GREEN}✓ ${1}${NO_COLOR}"; }
 echo_warning() { echo -e "${YELLOW}⚠ ${1}${NO_COLOR}"; }
 echo_error() { echo -e "${RED}✗ ${1}${NO_COLOR}"; }
 
-echo_info "Checking if Terraform state bucket exists..."
-set +e # Temporarily disable 'exit on error' for bucket check
-
-gcloud storage buckets describe "gs://${BUCKET_FOR_TERRAFORM_STATE_NAME}" &> /dev/null
-EXIT_CODE=$?
-
-set -e  # Re-enable 'exit on error'
-
-if [ $EXIT_CODE -eq 0 ]; then
-  BUCKET_EXISTS=true
-  echo_success "Bucket exists."
-else
-  BUCKET_EXISTS=false
-  echo_warning "Bucket does not exist. Starting bootstrap..."
-fi
-
-if [ "$BUCKET_EXISTS" = false ]; then
-  echo_info "Running bootstrap to create state bucket..."
-
-  cd bootstrap/
-  terraform init
-  terraform apply -auto-approve -var-file="$CONFIG_VARIABLES_FILE_PATH"
-  cd ..
-
-  echo_success "Bootstrap complete! Bucket created."
-fi
-
 echo ""
 echo_info "Deploying main infrastructure for environment: $ENV"
-echo_info "This automatically handles GCS bucket bootstrap if needed (first-time setup)"
 echo ""
 
 cd infrastructure/

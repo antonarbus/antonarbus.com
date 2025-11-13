@@ -10,6 +10,7 @@
 # PROJECT & REGION
 
 project_id                      = "antonarbus"                    # All environments are under one project
+project_number                  = "850593405209"                  # Shared: GCP project number (find with: gcloud projects describe antonarbus)
 region                          = "us-central1"
 bucket_for_terraform_state_name = "antonarbus-terraform-state"    # Shared Terraform state bucket
 

@@ -48,8 +48,8 @@ jobs:
       - name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v3'
         with:
-          workload_identity_provider: 'projects/850593405209/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
-          service_account: 'github-actions-sa@antonarbus.iam.gserviceaccount.com'
+          workload_identity_provider: 'projects/${{ env.PROJECT_NUMBER }}/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
+          service_account: 'github-actions-sa@${{ env.PROJECT_ID }}.iam.gserviceaccount.com'
 
       - name: 'Configuring gsutil to use gcloud credentials'
         run: gcloud config set pass_credentials_to_gsutil true

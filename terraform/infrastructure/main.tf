@@ -74,6 +74,11 @@ resource "google_artifact_registry_repository" "docker_repo" {
       older_than = "2592000s" # Delete if older than 30 days (in seconds)
     }
   }
+
+  # Prevent accidental deletion of registry (contains Docker images)
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 # ==============================================================================

@@ -74,11 +74,6 @@ resource "google_artifact_registry_repository" "docker_repo" {
       older_than = "2592000s" # Delete if older than 30 days (in seconds)
     }
   }
-
-  # Prevent accidental deletion of registry (contains Docker images)
-  lifecycle {
-    prevent_destroy = true
-  }
 }
 
 # ==============================================================================
@@ -224,10 +219,10 @@ resource "google_cloud_run_v2_service" "main" {
     # Container configuration: what Docker image to run and how
     containers {
       # The Docker image to run
-      # Format: REGION-docker.pkg.dev/PROJECT/REPOSITORY/IMAGE:TAG
-      # GitHub Actions tags images with the branch name
-      # This matches the workflow in .github/workflows/deploy.yml
-      image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.artifact_registry_name}/${var.docker_image_name}:${var.docker_image_tag}"
+      # Note: We use a public hello-world image for initial creation
+      # The real app image is deployed by GitHub Actions after Terraform creates the service
+      # lifecycle.ignore_changes prevents Terraform from reverting to this placeholder
+      image = "us-docker.pkg.dev/cloudrun/container/hello"
 
       # Resource limits: how much CPU and memory the container can use
       resources {

@@ -121,14 +121,6 @@ terraform init \
   -backend-config="prefix=terraform/state/${ENV}"
 
 echo ""
-echo_info "Checking for existing resources that need to be imported..."
-echo ""
-
-# Use the shared import script to handle imports
-# This prevents 409 errors when resources were created outside Terraform
-bash ../import-existing-resources.sh "$ENV"
-
-echo ""
 echo_info "Applying Terraform configuration..."
 echo_info "Config file: $CONFIG_VARIABLES_FILE_PATH"
 echo ""

@@ -9,31 +9,31 @@
 
 # PROJECT & REGION
 
-project_id  = "antonarbus"                    # All environments are under one project
-region      = "us-central1"
-bucket_for_terraform_state_name = "antonarbus-terraform-state"    # Shared Terraform state bucket
+project_id  = "antonarbus"                    # Shared: All environments in one GCP project
+region      = "us-central1"                   # Shared: Same region for all environments
+bucket_for_terraform_state_name = "antonarbus-terraform-state"    # Shared: Terraform state bucket
 
 # ARTIFACT REGISTRY
 
-artifact_registry_name = "docker-images"
+artifact_registry_name = "docker-images-dev"
 
 # CLOUD RUN
 
 cloud_run_service_name = "web-app-dev"
-docker_image_name      = "web-app"          # No need to be env specific, tag is responsible for it
-docker_image_tag       = "dev"              # Overridden by CI/CD with actual branch name
+docker_image_name      = "web-app"
+docker_image_tag       = "dev"
 
 # SERVICE ACCOUNTS
 
-github_actions_sa_name = "github-actions-sa"
-cloud_run_sa_name      = "cloud-run-sa"
+github_actions_sa_name = "github-actions-sa-dev"
+cloud_run_sa_name      = "cloud-run-sa-dev"
 
 # SCALING & PERFORMANCE
 
 min_instances  = 0          # Dev can scale to zero to save costs
 max_instances  = 5          # Lower limit for dev
 cpu_limit      = "1"
-memory_limit   = "256Mi"    # Less memory for dev to save costs
+memory_limit   = "512Mi"    # Minimum required for Cloud Run with always-allocated CPU
 container_port = 8080
 
 # CUSTOM DOMAIN

@@ -1,16 +1,24 @@
 # ==============================================================================
 # TERRAFORM CONFIGURATION
 # ==============================================================================
-# This file defines infrastructure for antonarbus.com and creates these resources:
+# This file defines infrastructure for antonarbus.com:
 #
-# GCS BUCKET - For Terraform remote state storage (MUST BE FIRST)
-# ARTIFACT REGISTRY - Docker images storage
-# SERVICE ACCOUNT FOR GITHUB ACTIONS - For CI/CD deployments
-# SERVICE ACCOUNT FOR CLOUD RUN - For the running app
-# IAM PERMISSIONS - 6 permissions for GitHub Actions SA
-# CLOUD RUN SERVICE - Your app
-# PUBLIC ACCESS CONFIGURATION - Makes your site publicly accessible
-# CUSTOM DOMAIN MAPPING - Maps antonarbus.com domain to the cloud run internal url
+# ARCHITECTURE: Fully Isolated Environments
+# Each environment (dev/test/pilot/prod) has completely separate resources:
+#
+# PER ENVIRONMENT:
+#   - Artifact Registry (docker-images-{env})
+#   - GitHub Actions Service Account (github-actions-sa-{env})
+#   - Cloud Run Service Account (cloud-run-sa-{env})
+#   - 6 IAM permissions for GitHub Actions SA
+#   - Cloud Run Service (web-app-{env})
+#   - Public Access IAM binding
+#   - Custom Domain Mapping
+#
+# SHARED ACROSS ENVIRONMENTS:
+#   - GCP Project (antonarbus)
+#   - GCS Bucket for Terraform state
+#   - Region (us-central1)
 #
 # For first-time setup, see README.md
 
@@ -47,13 +55,14 @@ provider "google" {
 # ==============================================================================
 # ARTIFACT REGISTRY
 # ==============================================================================
-# This is where Docker images are stored before being deployed to Cloud Run
+# Each environment has its own isolated Docker registry
+# Examples: docker-images-dev, docker-images-test, docker-images-pilot, docker-images-prod
 
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/artifact_registry_repository
 resource "google_artifact_registry_repository" "docker_repo" {
   location      = var.region                 # Where to store images "us-central1"
-  repository_id = var.artifact_registry_name # Name: "docker-images"
-  description   = "Docker repository for antonarbus.com"
+  repository_id = var.artifact_registry_name # Name: "docker-images-{env}"
+  description   = "Docker repository for antonarbus.com (${var.artifact_registry_name})"
   format        = "DOCKER" # This repo stores Docker images
 
   # Cleanup policy: automatically delete old, unused images to save storage costs
@@ -70,17 +79,16 @@ resource "google_artifact_registry_repository" "docker_repo" {
 # ==============================================================================
 # SERVICE ACCOUNT FOR GITHUB ACTIONS
 # ==============================================================================
-# Used by GitHub Actions to:
-# 1. Push Docker images to Artifact Registry
-# 2. Deploy to Cloud Run
-# Think of it as a "robot user" that GitHub uses to interact with Google Cloud
+# Each environment has its own isolated service account for CI/CD
+# Examples: github-actions-sa-dev, github-actions-sa-prod
+# This ensures dev CI/CD can't accidentally deploy to prod
 
 # Service account resource
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_service_account
 resource "google_service_account" "github_actions" {
   account_id   = var.github_actions_sa_name
-  display_name = "GitHub Actions Service Account"
-  description  = "Service account for GitHub Actions to deploy to Cloud Run"
+  display_name = "GitHub Actions Service Account (${var.github_actions_sa_name})"
+  description  = "Service account for GitHub Actions to deploy to this environment"
 }
 
 # ==============================================================================
@@ -170,15 +178,15 @@ resource "google_project_iam_member" "github_actions_service_usage_admin" {
 # ==============================================================================
 # SERVICE ACCOUNT FOR CLOUD RUN
 # ==============================================================================
-# This service account is used BY the Cloud Run container when it's running
-# It determines what Google Cloud APIs the running app can access
-# Best practice: use a custom SA instead of the default compute SA
+# Each environment has its own service account for running the app
+# Examples: cloud-run-sa-dev, cloud-run-sa-prod
+# This provides isolation - dev app runs as different identity than prod
 
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_service_account
 resource "google_service_account" "cloud_run_service" {
   account_id   = var.cloud_run_sa_name
-  display_name = "Cloud Run Service Account"
-  description  = "Service account used by the Cloud Run service"
+  display_name = "Cloud Run Service Account (${var.cloud_run_sa_name})"
+  description  = "Service account used by Cloud Run service in this environment"
 }
 
 # ==============================================================================

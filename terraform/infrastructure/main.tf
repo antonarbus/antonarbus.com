@@ -106,12 +106,12 @@ resource "google_project_iam_member" "github_actions_cloud_run_admin" {
   member  = "serviceAccount:${google_service_account.github_actions.email}"
 }
 
-# Artifact Registry: Push and read Docker images only
-# "roles/artifactregistry.writer" allows: push and pull images
-# Does NOT allow: deleting repositories, changing settings
-resource "google_project_iam_member" "github_actions_artifact_registry_writer" {
+# Artifact Registry: Create repositories and push/pull images
+# "roles/artifactregistry.admin" allows: create repositories, push/pull images, manage settings
+# Required because Terraform needs to create artifact registries for new environments
+resource "google_project_iam_member" "github_actions_artifact_registry_admin" {
   project = var.project_id
-  role    = "roles/artifactregistry.writer"
+  role    = "roles/artifactregistry.admin"
   member  = "serviceAccount:${google_service_account.github_actions.email}"
 }
 

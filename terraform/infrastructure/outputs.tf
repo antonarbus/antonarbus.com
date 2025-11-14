@@ -28,21 +28,19 @@ output "artifact_registry_repository_output" {
 }
 
 output "github_actions_service_account_email_output" {
-  description = "Email address of the GitHub Actions service account"
-  value       = google_service_account.github_actions.email
+  description = "Email address of the GitHub Actions service account (shared, created in bootstrap)"
+  value       = data.google_service_account.github_actions.email
   # Example: github-actions-sa@antonarbus.iam.gserviceaccount.com
-  # Use this email when:
-  # 1. Creating service account keys for GitHub Actions
-  # 2. Granting additional permissions
-  # 3. Troubleshooting deployment issues
+  # This service account is shared across all environments
+  # Created in bootstrap/, referenced here via data source
 }
 
 output "cloud_run_service_account_email_output" {
-  description = "Email address of the Cloud Run service account"
-  value       = google_service_account.cloud_run_service.email
+  description = "Email address of the Cloud Run service account (shared, created in bootstrap)"
+  value       = data.google_service_account.cloud_run_service.email
   # Example: cloud-run-sa@antonarbus.iam.gserviceaccount.com
-  # This is the identity your running application uses
-  # Grant this SA permissions to access Google Cloud APIs your app needs
+  # This service account is shared across all environments
+  # Created in bootstrap/, referenced here via data source
 }
 
 output "docker_image_path_output" {

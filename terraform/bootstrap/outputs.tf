@@ -32,3 +32,17 @@ output "workload_identity_provider" {
   # This is used by ALL environments in deploy.yml
   # Only needs to be created once for the whole project
 }
+
+# ==============================================================================
+# SHARED SERVICE ACCOUNTS
+# ==============================================================================
+
+output "github_actions_service_account_email" {
+  description = "Email of the GitHub Actions service account (shared across all environments)"
+  value       = google_service_account.github_actions.email
+}
+
+output "cloud_run_service_account_email" {
+  description = "Email of the Cloud Run service account (shared across all environments)"
+  value       = google_service_account.cloud_run_service.email
+}

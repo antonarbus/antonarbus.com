@@ -76,80 +76,26 @@ resource "google_artifact_registry_repository" "docker_repo" {
 }
 
 # ==============================================================================
-# SERVICE ACCOUNT FOR GITHUB ACTIONS
+# REFERENCE SHARED SERVICE ACCOUNTS
 # ==============================================================================
-# Shared across all environments (dev, test, pilot, prod)
-# One service account can deploy to any environment
-# Simplifies credential management - one GitHub Secret for all
-
-# Service account resource
-# https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_service_account
-resource "google_service_account" "github_actions" {
-  account_id   = var.github_actions_sa_name
-  display_name = "GitHub Actions Service Account (All Environments)"
-  description  = "Service account for GitHub Actions to deploy to all environments"
-}
-
+# Service accounts are created in bootstrap/ and shared across all environments
+# We reference them here using data sources instead of creating them
+#
+# WHY DATA SOURCES?
+# - Service accounts are singleton resources (one per project)
+# - Created once in bootstrap/, referenced by all environment workspaces
+# - Prevents conflicts when multiple workspaces try to create the same SA
 # ==============================================================================
-# IAM PERMISSIONS (Principle of Least Privilege)
-# ==============================================================================
-# Following security best practices, we grant only the minimum permissions needed
-# for GitHub Actions to deploy the application
 
-# Cloud Run: Full management including domain mappings
-# "roles/run.admin" allows: deploy services, manage domain mappings, update traffic
-# Required for automated domain mapping creation via Terraform
-# Note: This role includes domain mapping permissions which run.developer lacks
-resource "google_project_iam_member" "github_actions_cloud_run_admin" {
-  project = var.project_id
-  role    = "roles/run.admin"
-  member  = "serviceAccount:${google_service_account.github_actions.email}"
+# Reference the GitHub Actions service account created in bootstrap
+# https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/service_account
+data "google_service_account" "github_actions" {
+  account_id = var.github_actions_sa_name
 }
 
-# Artifact Registry: Create repositories and push/pull images
-# "roles/artifactregistry.admin" allows: create repositories, push/pull images, manage settings
-# Required because Terraform needs to create artifact registries for new environments
-resource "google_project_iam_member" "github_actions_artifact_registry_admin" {
-  project = var.project_id
-  role    = "roles/artifactregistry.admin"
-  member  = "serviceAccount:${google_service_account.github_actions.email}"
-}
-
-# Service Account: Act as Cloud Run service account
-# "roles/iam.serviceAccountUser" allows: deploy Cloud Run with specific service account
-# Required for setting the service account that the deployed container runs as
-resource "google_project_iam_member" "github_actions_service_account_user" {
-  project = var.project_id
-  role    = "roles/iam.serviceAccountUser"
-  member  = "serviceAccount:${google_service_account.github_actions.email}"
-}
-
-# Storage: Read/write Terraform state files
-# "roles/storage.objectUser" allows: read, write, delete objects in buckets
-# Does NOT allow: deleting buckets, changing bucket settings
-resource "google_project_iam_member" "github_actions_storage_object_user" {
-  project = var.project_id
-  role    = "roles/storage.objectUser"
-  member  = "serviceAccount:${google_service_account.github_actions.email}"
-}
-
-# IAM: Read IAM policies (for Terraform state)
-# "roles/iam.securityReviewer" allows: reading IAM policies
-# Read-only, needed for Terraform to detect changes
-resource "google_project_iam_member" "github_actions_iam_security_reviewer" {
-  project = var.project_id
-  role    = "roles/iam.securityReviewer"
-  member  = "serviceAccount:${google_service_account.github_actions.email}"
-}
-
-# APIs: Enable required Google Cloud APIs
-# "roles/serviceusage.serviceUsageAdmin" allows: enable/disable APIs
-# Needed for Terraform to enable required APIs (run.googleapis.com, etc.)
-# Note: This is a powerful permission but required for Terraform automation
-resource "google_project_iam_member" "github_actions_service_usage_admin" {
-  project = var.project_id
-  role    = "roles/serviceusage.serviceUsageAdmin"
-  member  = "serviceAccount:${google_service_account.github_actions.email}"
+# Reference the Cloud Run service account created in bootstrap
+data "google_service_account" "cloud_run_service" {
+  account_id = var.cloud_run_sa_name
 }
 
 # ==============================================================================
@@ -173,20 +119,6 @@ resource "google_project_iam_member" "github_actions_service_usage_admin" {
 #
 # After this setup, all automated domain mappings will work.
 # ==============================================================================
-
-# ==============================================================================
-# SERVICE ACCOUNT FOR CLOUD RUN
-# ==============================================================================
-# Shared across all environments (dev, test, pilot, prod)
-# All Cloud Run services run as this service account
-# If you need different permissions per environment, create environment-specific SAs
-
-# https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_service_account
-resource "google_service_account" "cloud_run_service" {
-  account_id   = var.cloud_run_sa_name
-  display_name = "Cloud Run Service Account (All Environments)"
-  description  = "Service account used by Cloud Run services in all environments"
-}
 
 # ==============================================================================
 # CLOUD RUN SERVICE
@@ -267,7 +199,7 @@ resource "google_cloud_run_v2_service" "main" {
 
     # Which service account the running container uses
     # This determines what Google Cloud APIs your app can access
-    service_account = google_service_account.cloud_run_service.email
+    service_account = data.google_service_account.cloud_run_service.email
   }
 
   # Traffic routing: send 100% of traffic to the latest deployed version

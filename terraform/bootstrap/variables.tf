@@ -30,3 +30,19 @@ variable "bucket_for_terraform_state_name" {
   type        = string
   # Value provided by config/*.tfvars file
 }
+
+# ==============================================================================
+# SERVICE ACCOUNTS
+# ==============================================================================
+
+variable "github_actions_sa_name" {
+  description = "Name of the service account used by GitHub Actions for deployments"
+  type        = string
+  # Value provided by config/*.tfvars file
+}
+
+variable "cloud_run_sa_name" {
+  description = "Name of the service account used by the Cloud Run service"
+  type        = string
+  # Value provided by config/*.tfvars file
+}

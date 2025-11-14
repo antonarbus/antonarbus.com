@@ -87,7 +87,13 @@ echo_info "Initializing Terraform with remote backend..."
 
 terraform init \
   -backend-config="bucket=${BUCKET_FOR_TERRAFORM_STATE_NAME}" \
-  -backend-config="prefix=terraform/state/${ENV}"
+  -backend-config="prefix=terraform/state"
+
+echo ""
+echo_info "Selecting workspace: $ENV"
+
+# Create workspace if it doesn't exist, otherwise select it
+terraform workspace select "$ENV" 2>/dev/null || terraform workspace new "$ENV"
 
 echo ""
 echo_info "Applying Terraform configuration..."

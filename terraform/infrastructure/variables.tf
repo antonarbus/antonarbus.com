@@ -35,6 +35,14 @@ variable "bucket_for_terraform_state_name" {
   # Value provided by config/*.tfvars file
 }
 
+variable "project_number" {
+  description = "The GCP project number (numeric ID)"
+  type        = string
+  # This variable is not used by infrastructure module, only by GitHub Actions
+  # It's declared here to avoid warnings when using shared tfvars files
+  # Value provided by config/*.tfvars file
+}
+
 # ==============================================================================
 # ARTIFACT REGISTRY
 # ==============================================================================

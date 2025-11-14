@@ -13,7 +13,17 @@ This directory contains Terraform configuration for project-wide resources that 
   - Lifecycle policy (keeps last 10 versions)
   - Uniform bucket-level access (security)
 
-### 2. Workload Identity Federation (Keyless GitHub Actions Authentication)
+### 2. Shared Service Accounts
+- **GitHub Actions SA**: `github-actions-sa@antonarbus.iam.gserviceaccount.com`
+  - Used by CI/CD pipeline to deploy infrastructure and applications
+  - Shared across ALL environments (dev/test/pilot/prod)
+  - Permissions: Cloud Run admin, Artifact Registry admin, Storage, IAM
+- **Cloud Run SA**: `cloud-run-sa@antonarbus.iam.gserviceaccount.com`
+  - Used by running Cloud Run services
+  - Shared across ALL environments
+  - Can be granted additional permissions as needed by your application
+
+### 3. Workload Identity Federation (Keyless GitHub Actions Authentication)
 - **Pool**: `github-pool` - Groups identity providers
 - **Provider**: `github-provider` - Configures GitHub as trusted OIDC provider
 - **IAM Binding**: Allows GitHub Actions to impersonate `github-actions-sa`
@@ -59,11 +69,35 @@ gcloud auth application-default login
 
 ## After Bootstrap
 
-Once bootstrap is complete:
+Once bootstrap is complete, you need to perform **ONE ADDITIONAL MANUAL STEP**:
+
+### ⚠️ REQUIRED: Domain Verification for Custom Domains
+
+To allow the `github-actions-sa` service account to create domain mappings (like `antonarbus.com`, `dev.antonarbus.com`), you must verify it as a domain owner in Google Search Console.
+
+**Steps:**
+
+1. Go to [Google Search Console](https://search.google.com/search-console)
+2. Select your property: `antonarbus.com`
+3. Navigate to **Settings** → **Users and permissions**
+4. Click **Add user**
+5. Enter: `github-actions-sa@antonarbus.iam.gserviceaccount.com`
+6. Select permission level: **Owner**
+7. Click **Add**
+
+**Why is this needed?**
+- Cloud Run domain mappings require domain ownership verification
+- This is a one-time setup that enables ALL environments (dev, prod, test, pilot)
+- Without this, domain mapping creation will fail with authorization errors
+
+**Detailed instructions:** See `DOMAIN_VERIFICATION_SETUP.md` in this directory
+
+After domain verification is complete:
 
 1. The Terraform state bucket will store all environment states
 2. GitHub Actions will authenticate using Workload Identity (no secrets needed)
 3. All infrastructure deployments run automatically via CI/CD
+4. Domain mappings will be created automatically for each environment
 
 ## Important Notes
 
@@ -79,7 +113,9 @@ Once bootstrap is complete:
 ## Files in This Directory
 
 - `main.tf` - Terraform state bucket configuration
+- `service-accounts.tf` - Shared service accounts and IAM permissions
 - `workload-identity.tf` - Workload Identity Federation setup
 - `variables.tf` - Variable declarations
-- `outputs.tf` - Outputs (workload identity provider URL)
+- `outputs.tf` - Outputs (workload identity provider URL, service account emails)
 - `terraform.tfstate` - Local state file (not in git)
+- `DOMAIN_VERIFICATION_SETUP.md` - Detailed domain verification instructions

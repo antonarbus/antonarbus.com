@@ -17,7 +17,7 @@
 
 set -e # exit immediately if any command fails
 
-# Get script directory and ensure we're in terraform/
+# Get script directory (we're in terraform/infrastructure/)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
@@ -52,17 +52,17 @@ echo "📋 Environment: $ENV"
 # Validate config file before proceeding
 echo ""
 echo "Validating config file..."
-if ! ../config/validate.sh "$ENV"; then
+if ! ../../config/validate.sh "$ENV"; then
   echo "❌ Config validation failed"
   exit 1
 fi
 echo ""
 
 # Load all variables using shared utility
-eval "$(../config/load-config-variables.sh "$ENV")"
+eval "$(../../config/load-config-variables.sh "$ENV")"
 
 # Resolve config path for Terraform var-file
-CONFIG_VARIABLES_FILE_PATH=$(realpath "../config/${ENV}.tfvars")
+CONFIG_VARIABLES_FILE_PATH=$(realpath "../../config/${ENV}.tfvars")
 echo "📄 Config: $CONFIG_VARIABLES_FILE_PATH"
 
 # Colors for output
@@ -80,8 +80,6 @@ echo_error() { echo -e "${RED}✗ ${1}${NO_COLOR}"; }
 echo ""
 echo_info "Deploying main infrastructure for environment: $ENV"
 echo ""
-
-cd infrastructure/
 
 echo_info "Initializing Terraform with remote backend..."
 
@@ -108,8 +106,6 @@ echo ""
 
 echo_info "Terraform Outputs:"
 terraform output
-
-cd ..
 
 echo ""
 echo_success "Infrastructure deployment complete!"

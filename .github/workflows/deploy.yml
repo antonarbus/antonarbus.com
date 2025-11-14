@@ -81,8 +81,8 @@ jobs:
 
       - name: 'Terraform Apply with Smart Bootstrap'
         if: env.CHANGES_DETECTED_AT == 'terraform' || env.CHANGES_DETECTED_AT == 'both'
-        run: bash terraform.sh
-        working-directory: ./terraform
+        run: bash smart-apply.sh
+        working-directory: ./terraform/infrastructure
 
       # ============================================================================
       # DOCKER STEPS (only if app files changed OR terraform was applied)

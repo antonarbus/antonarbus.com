@@ -65,6 +65,41 @@ terraform apply -var-file="../../config/dev.tfvars"
 
 ---
 
+### If You Get "Error acquiring the state lock"
+
+**This means Terraform is already running somewhere else (or crashed and left a stale lock).**
+
+**Check who has the lock:**
+The error message shows who holds the lock:
+```
+Who:       runner@runnervmw9dnm      # CI/CD has the lock
+Who:       sherb@MAC-KX909470LX      # Your local machine has the lock
+```
+
+**Option 1: Wait for the other operation to finish**
+- If CI/CD is running, wait for the GitHub Actions workflow to complete
+- If your local machine has it, finish or cancel that Terraform operation
+
+**Option 2: Force remove the stale lock (if operation already failed/crashed)**
+
+```bash
+# Find all lock files
+gsutil ls -r gs://antonarbus-terraform-state/terraform/state/ | grep -i lock
+
+# Remove the specific lock for dev environment
+gsutil rm gs://antonarbus-terraform-state/terraform/state/dev.tflock
+
+# Remove the specific lock for prod environment
+gsutil rm gs://antonarbus-terraform-state/terraform/state/prod.tflock
+
+# Or remove all locks (use with caution!)
+gsutil rm gs://antonarbus-terraform-state/terraform/state/**/*.tflock
+```
+
+⚠️ **WARNING**: Only force remove locks if you're SURE no Terraform operation is actually running. Removing an active lock can corrupt your state!
+
+---
+
 ## How to Find Resource IDs for Import
 
 Terraform errors tell you the resource name. Here's how to find the ID:

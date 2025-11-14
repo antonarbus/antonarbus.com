@@ -32,6 +32,8 @@ This replaces service account JSON keys with secure, short-lived OIDC tokens.
 
 ## How to Run
 
+Bootstrap is **project-wide** (not environment-specific), but we use prod.tfvars since `project_id` and `region` are the same across all environments.
+
 ```bash
 cd terraform/bootstrap
 
@@ -39,10 +41,10 @@ cd terraform/bootstrap
 terraform init
 
 # Review what will be created
-terraform plan -var-file="../../config/dev.tfvars"
+terraform plan -var-file="../../config/prod.tfvars"
 
 # Create the resources
-terraform apply -var-file="../../config/dev.tfvars"
+terraform apply -var-file="../../config/prod.tfvars"
 ```
 
 ## Authentication Required

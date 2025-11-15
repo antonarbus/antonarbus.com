@@ -36,11 +36,11 @@ jobs:
       - name: 'Setup Node.js'
         uses: actions/setup-node@v4
 
-      - name: 'Validate Config Files'
-        run: bash config/validate.sh
-
       - name: 'Detect Environment'
         run: bash .github/scripts/detect-and-load-env-from-github-branch.sh
+
+      - name: 'Validate Config Files'
+        run: bash config/validate.sh
 
       - name: 'Load Config'
         run: bash .github/scripts/get-config-variables.sh ${{ env.ENVIRONMENT }} >> $GITHUB_ENV

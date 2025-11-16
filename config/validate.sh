@@ -21,7 +21,7 @@ REQUIRED_VARS=(
   "artifact_registry_name"
   "cloud_run_service_name"
   "docker_image_name"
-  "docker_image_tag"
+  # docker_image_tag is now passed at deployment time, not in tfvars
   "github_actions_sa_name"
   "cloud_run_sa_name"
   "min_instances"

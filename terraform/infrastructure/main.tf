@@ -52,27 +52,16 @@ provider "google" {
 # This infrastructure assumes the bucket already exists
 
 # ==============================================================================
-# ARTIFACT REGISTRY
+# ARTIFACT REGISTRY (SHARED - CREATED IN BOOTSTRAP)
 # ==============================================================================
-# Each environment has its own isolated Docker registry
-# Examples: docker-images-dev, docker-images-test, docker-images-pilot, docker-images-prod
+# Single Docker registry shared by all environments (created in bootstrap/)
+# Images are tagged per environment: web-app:dev, web-app:test, web-app:pilot, web-app:prod
+# We reference it here using a data source
 
-# https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/artifact_registry_repository
-resource "google_artifact_registry_repository" "docker_repo" {
-  location      = var.region                 # Where to store images "us-central1"
-  repository_id = var.artifact_registry_name # Name: "docker-images-{env}"
-  description   = "Docker repository for antonarbus.com (${var.artifact_registry_name})"
-  format        = "DOCKER" # This repo stores Docker images
-
-  # Cleanup policy: automatically delete old, unused images to save storage costs
-  cleanup_policies {
-    id     = "delete-old-images"
-    action = "DELETE"
-    condition {
-      tag_state  = "UNTAGGED" # Only delete images without tags
-      older_than = "2592000s" # Delete if older than 30 days (in seconds)
-    }
-  }
+# https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/artifact_registry_repository
+data "google_artifact_registry_repository" "docker_repo" {
+  location      = var.region
+  repository_id = var.artifact_registry_name
 }
 
 # ==============================================================================
@@ -218,11 +207,6 @@ resource "google_cloud_run_v2_service" "main" {
     ]
   }
 
-  # Don't try to create Cloud Run until Artifact Registry exists
-  # This ensures resources are created in the correct order
-  depends_on = [
-    google_artifact_registry_repository.docker_repo
-  ]
 }
 
 # ==============================================================================

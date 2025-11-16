@@ -65,3 +65,36 @@ resource "google_storage_bucket" "terraform_state" {
     environment = "production"
   }
 }
+
+# ==============================================================================
+# ARTIFACT REGISTRY (SHARED)
+# ==============================================================================
+# Single Docker registry shared by all environments
+# Images are tagged per environment: web-app:dev, web-app:test, web-app:pilot, web-app:prod
+# This enables image promotion without cross-registry copying
+
+resource "google_artifact_registry_repository" "docker_repo" {
+  location      = var.region
+  repository_id = var.artifact_registry_name
+  description   = "Shared Docker repository for antonarbus.com (all environments)"
+  format        = "DOCKER"
+
+  # Cleanup policy: automatically delete old, unused images to save storage costs
+  cleanup_policies {
+    id     = "delete-old-untagged-images"
+    action = "DELETE"
+    condition {
+      tag_state  = "UNTAGGED"
+      older_than = "2592000s" # 30 days
+    }
+  }
+
+  # Keep tagged images longer (they're promoted releases)
+  cleanup_policies {
+    id     = "keep-tagged-images"
+    action = "KEEP"
+    condition {
+      tag_state = "TAGGED"
+    }
+  }
+}

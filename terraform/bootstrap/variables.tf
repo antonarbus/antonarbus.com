@@ -46,3 +46,15 @@ variable "cloud_run_sa_name" {
   type        = string
   # Value provided by config/*.tfvars file
 }
+
+# ==============================================================================
+# ARTIFACT REGISTRY (SHARED)
+# ==============================================================================
+
+variable "artifact_registry_name" {
+  description = "Name of the shared Artifact Registry repository for Docker images"
+  type        = string
+  # Single registry for all environments (dev, test, pilot, prod)
+  # Images differentiated by tags: web-app:dev, web-app:test, etc.
+  # Value provided by config/*.tfvars file
+}

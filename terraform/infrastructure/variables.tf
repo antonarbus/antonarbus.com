@@ -75,15 +75,6 @@ variable "docker_image_name" {
   # Value provided by config/*.tfvars file
 }
 
-variable "docker_image_tag" {
-  description = "Docker image tag (typically the git branch name)"
-  type        = string
-  # This should match your deployment branch name
-  # Common values: master, main, dev, staging
-  # The GitHub workflow sets this dynamically based on github.ref_name
-  # Value provided by config/*.tfvars file
-}
-
 # ==============================================================================
 # SERVICE ACCOUNTS
 # ==============================================================================

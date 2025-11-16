@@ -14,15 +14,14 @@ project_number = "850593405209"               # Shared: GCP project number (find
 region      = "us-central1"
 bucket_for_terraform_state_name = "antonarbus-terraform-state"    # Shared Terraform state bucket
 
-# ARTIFACT REGISTRY
+# ARTIFACT REGISTRY (SHARED across all environments)
 
-artifact_registry_name = "docker-images-pilot"  # Environment-specific (has images)
+artifact_registry_name = "docker-images"      # Shared: Single registry for all environments
+docker_image_name      = "web-app"            # Shared: Same image name, different tags
 
-# CLOUD RUN
+# CLOUD RUN (environment-specific)
 
 cloud_run_service_name = "web-app-pilot"
-docker_image_name      = "web-app"
-docker_image_tag       = "pilot"
 
 # SERVICE ACCOUNTS (SHARED across all environments)
 

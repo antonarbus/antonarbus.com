@@ -144,14 +144,22 @@ After first deployment to each environment:
 
 ### Automatic (via GitHub Actions)
 
-1. Push to branch (`dev`, `test`, `pilot`, or `master`)
-2. GitHub Actions detects environment
-3. Builds Docker image (tagged with environment + git SHA)
-4. Runs Terraform if infrastructure changed
-5. Deploys to Cloud Run
-6. Verifies deployment (auto-rollback on failure)
+Push to any branch triggers deployment:
 
-### Manual
+**Dev branch** (builds new image):
+1. Push to `dev` branch
+2. Builds Docker image (tagged with `dev` + git SHA)
+3. Deploys to dev Cloud Run service
+4. Verifies deployment (auto-rollback on failure)
+
+**Test/Pilot/Prod branches** (optional, for infrastructure changes only):
+- Push to `test`, `pilot`, or `master` branches
+- Only runs Terraform if infrastructure changed
+- **Does NOT rebuild Docker image** - use promotion workflow instead
+
+### Manual Terraform (Infrastructure Only)
+
+For infrastructure changes without code deployment:
 
 ```bash
 cd terraform/infrastructure
@@ -162,6 +170,8 @@ bash smart-apply.sh
 # Or specify environment explicitly
 ENV=prod bash smart-apply.sh
 ```
+
+**Note**: This only applies Terraform (scaling, domains, etc.). It does NOT deploy application code. For code deployments, use the promotion workflow.
 
 ---
 

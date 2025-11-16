@@ -22,9 +22,10 @@ output "cloud_run_url_output" {
 
 output "artifact_registry_repository_output" {
   description = "Full resource name of the Artifact Registry repository"
-  value       = google_artifact_registry_repository.docker_repo.name
+  value       = data.google_artifact_registry_repository.docker_repo.name
   # Example: projects/antonarbus/locations/us-central1/repositories/artifact-registry
   # This is the unique identifier for your Docker image storage
+  # Resource created in bootstrap/, referenced here via data source
 }
 
 output "github_actions_service_account_email_output" {

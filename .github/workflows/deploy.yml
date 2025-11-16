@@ -79,7 +79,7 @@ jobs:
         run: terraform fmt -check -recursive
         working-directory: ./terraform
 
-      - name: 'Terraform Apply with Smart Bootstrap'
+      - name: 'Terraform Apply'
         if: env.CHANGES_DETECTED_AT == 'terraform' || env.CHANGES_DETECTED_AT == 'both'
         run: bash smart-apply.sh
         working-directory: ./terraform/infrastructure

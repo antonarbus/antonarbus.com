@@ -19,12 +19,12 @@ Next.js web application deployed to Google Cloud Run with Terraform infrastructu
 
 **Project**: All environments run in GCP project `antonarbus`
 
-| Environment | Branch   | Cloud Run Service | Domain                 | Memory | Max Instances |
-| ----------- | -------- | ----------------- | ---------------------- | ------ | ------------- |
-| **Prod**    | `master` | `web-app-prod`    | antonarbus.com         | 512Mi  | 100           |
-| **Pilot**   | `pilot`  | `web-app-pilot`   | pilot.antonarbus.com   | 512Mi  | 50            |
-| **Test**    | `test`   | `web-app-test`    | test.antonarbus.com    | 512Mi  | 10            |
-| **Dev**     | `dev`    | `web-app-dev`     | dev.antonarbus.com     | 512Mi  | 5             |
+| Environment | Branch   | Cloud Run Service | Domain               | Memory | Max Instances |
+| ----------- | -------- | ----------------- | -------------------- | ------ | ------------- |
+| **Prod**    | `master` | `web-app-prod`    | antonarbus.com       | 512Mi  | 100           |
+| **Pilot**   | `pilot`  | `web-app-pilot`   | pilot.antonarbus.com | 512Mi  | 50            |
+| **Test**    | `test`   | `web-app-test`    | test.antonarbus.com  | 512Mi  | 10            |
+| **Dev**     | `dev`    | `web-app-dev`     | dev.antonarbus.com   | 512Mi  | 5             |
 
 ### Shared Resources (created in bootstrap)
 
@@ -40,13 +40,6 @@ Next.js web application deployed to Google Cloud Run with Terraform infrastructu
 - Custom domain mappings
 - Auto-scaling configuration
 - **Terraform state files** (isolated via workspaces): `terraform/state/<env>/default.tfstate`
-
-### Benefits
-
-- Single credentials management (one GitHub Actions SA for all environments)
-- Isolated app deployments (dev can't break prod)
-- Cost-effective (shared infrastructure)
-- Immutable deployments (same image promoted through environments)
 
 ---
 
@@ -91,6 +84,7 @@ terraform apply -var-file="../../config/prod.tfvars"
 ```
 
 **What gets created:**
+
 - GCS bucket for Terraform state (with versioning)
 - Shared Artifact Registry (`docker-images`)
 - Service accounts (`github-actions-sa`, `cloud-run-sa`)
@@ -108,13 +102,6 @@ To allow automated domain mapping creation, add the service account as a verifie
 5. Grant **Owner** permission
 6. Click **Add**
 
-**Verify it worked:**
-- Go back to Search Console → Settings → Users and permissions
-- Confirm `github-actions-sa@antonarbus.iam.gserviceaccount.com` is listed as Owner
-- Or test by deploying: if domain mapping creates successfully, verification worked
-
-This enables ALL environments (dev, test, pilot, prod) to create domain mappings automatically.
-
 ### 4. Configure GitHub Environments
 
 Set up approval gates for release promotion:
@@ -126,6 +113,7 @@ Set up approval gates for release promotion:
 5. Add GitHub usernames who must approve deployments
 
 Suggested configuration:
+
 - **dev**: No protection rules (leave unchecked)
 - **test**: Enable "Required reviewers", add 1 reviewer
 - **pilot**: Enable "Required reviewers", add 2 reviewers
@@ -134,6 +122,7 @@ Suggested configuration:
 ### 5. DNS Setup (Per Environment)
 
 After first deployment to each environment:
+
 1. Go to Cloud Run → Manage Custom Domains
 2. Copy DNS records shown
 3. Add them to your domain registrar (e.g., GoDaddy, Namecheap)
@@ -147,12 +136,14 @@ After first deployment to each environment:
 Push to any branch triggers deployment:
 
 **Dev branch** (builds new image):
+
 1. Push to `dev` branch
 2. Builds Docker image (tagged with `dev` + git SHA)
 3. Deploys to dev Cloud Run service
 4. Verifies deployment (auto-rollback on failure)
 
 **Test/Pilot/Prod branches** (optional, for infrastructure changes only):
+
 - Push to `test`, `pilot`, or `master` branches
 - Only runs Terraform if infrastructure changed
 - **Does NOT rebuild Docker image** - use promotion workflow instead
@@ -191,6 +182,7 @@ dev → test → pilot → prod
 4. Click **Run workflow**
 
 The workflow:
+
 - Validates promotion path (dev→test, test→pilot, pilot→prod only)
 - Requires approval from configured reviewers
 - Re-tags the Docker image (instant, no rebuild)
@@ -213,21 +205,22 @@ The workflow:
 ### Single Source of Truth
 
 All configuration lives in `/config/<env>.tfvars`:
+
 - `dev.tfvars`, `test.tfvars`, `pilot.tfvars`, `prod.tfvars`
 
 Both Terraform and GitHub Actions read from these files. No duplication.
 
 ### Key Variables
 
-| Variable | Environment-Specific | Shared |
-|----------|---------------------|--------|
-| `project_id` | | X |
-| `region` | | X |
-| `artifact_registry_name` | | X |
-| `cloud_run_service_name` | X | |
-| `custom_domain` | X | |
-| `max_instances` | X | |
-| `memory_limit` | X | |
+| Variable                 | Environment-Specific | Shared |
+| ------------------------ | -------------------- | ------ |
+| `project_id`             |                      | X      |
+| `region`                 |                      | X      |
+| `artifact_registry_name` |                      | X      |
+| `cloud_run_service_name` | X                    |        |
+| `custom_domain`          | X                    |        |
+| `max_instances`          | X                    |        |
+| `memory_limit`           | X                    |        |
 
 ### Changing Configuration
 
@@ -249,6 +242,7 @@ terraform workspace select <env>
 ```
 
 **Artifact Registry:**
+
 ```bash
 terraform import -var-file="../../config/dev.tfvars" \
   google_artifact_registry_repository.docker_repo \
@@ -256,6 +250,7 @@ terraform import -var-file="../../config/dev.tfvars" \
 ```
 
 **Cloud Run Service:**
+
 ```bash
 terraform import -var-file="../../config/dev.tfvars" \
   google_cloud_run_v2_service.main \
@@ -263,6 +258,7 @@ terraform import -var-file="../../config/dev.tfvars" \
 ```
 
 **Domain Mapping:**
+
 ```bash
 terraform import -var-file="../../config/dev.tfvars" \
   google_cloud_run_domain_mapping.main \
@@ -270,6 +266,7 @@ terraform import -var-file="../../config/dev.tfvars" \
 ```
 
 **Public Access IAM:**
+
 ```bash
 terraform import -var-file="../../config/dev.tfvars" \
   google_cloud_run_v2_service_iam_member.public_access \
@@ -281,6 +278,7 @@ terraform import -var-file="../../config/dev.tfvars" \
 Terraform is already running or crashed with stale lock.
 
 **Check who has the lock** (shown in error message):
+
 ```
 Who: runner@runnervmw9dnm    # CI/CD has it
 Who: sherb@MAC-KX909470LX    # Your machine has it
@@ -289,6 +287,7 @@ Who: sherb@MAC-KX909470LX    # Your machine has it
 **Option 1: Wait** for the other operation to finish
 
 **Option 2: Force remove** (only if operation crashed):
+
 ```bash
 # Find locks
 gsutil ls -r gs://antonarbus-terraform-state/terraform/state/ | grep -i lock

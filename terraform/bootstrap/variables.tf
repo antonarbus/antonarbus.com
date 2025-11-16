@@ -58,3 +58,63 @@ variable "artifact_registry_name" {
   # Images differentiated by tags: web-app:dev, web-app:test, etc.
   # Value provided by config/*.tfvars file
 }
+
+# ==============================================================================
+# UNUSED VARIABLES (from shared tfvars)
+# ==============================================================================
+# These variables exist in the shared config/*.tfvars files but are not used
+# in the bootstrap module. Declaring them here prevents Terraform warnings.
+
+variable "cloud_run_service_name" {
+  description = "Not used in bootstrap module"
+  type        = string
+  default     = null
+}
+
+variable "docker_image_name" {
+  description = "Not used in bootstrap module"
+  type        = string
+  default     = null
+}
+
+variable "min_instances" {
+  description = "Not used in bootstrap module"
+  type        = number
+  default     = null
+}
+
+variable "max_instances" {
+  description = "Not used in bootstrap module"
+  type        = number
+  default     = null
+}
+
+variable "cpu_limit" {
+  description = "Not used in bootstrap module"
+  type        = string
+  default     = null
+}
+
+variable "memory_limit" {
+  description = "Not used in bootstrap module"
+  type        = string
+  default     = null
+}
+
+variable "container_port" {
+  description = "Not used in bootstrap module"
+  type        = number
+  default     = null
+}
+
+variable "custom_domain" {
+  description = "Not used in bootstrap module"
+  type        = string
+  default     = null
+}
+
+variable "project_number" {
+  description = "Not used in bootstrap module"
+  type        = string
+  default     = null
+}

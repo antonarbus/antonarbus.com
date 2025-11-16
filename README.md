@@ -190,14 +190,6 @@ The workflow:
 - Verifies with smoke tests
 - Auto-rollback on failure
 
-### Why Image Promotion?
-
-- **Consistency**: Same binary tested in dev runs in prod
-- **Traceability**: Images tagged with git SHA and environment
-- **Safety**: Required approvals before promoting
-- **Speed**: Instant re-tagging (no rebuild)
-- **Audit trail**: Clear record of who promoted what and when
-
 ---
 
 ## Configuration

@@ -2,7 +2,6 @@ import { Code, H, Hs, LazyImg, Lnk, React, jsxToStr } from '/components/post/reE
 import { ExportedTypes } from '/types/types'
 import { UserContext, UserContextProvider } from '/types/UserContext'
 
-// #region main types
 function myFunc(
   arg1: string,
   arg2: number,
@@ -39,9 +38,7 @@ myFunc(
   someFunc,
   'optional string'
 )
-// #endregion
 
-// #region interface
 interface propsTypes1 {
   name: string
   lastName?: string
@@ -55,9 +52,7 @@ function Msg1(props: propsTypes1): JSX.Element {
     </div>
   )
 }
-// #endregion
 
-// #region type
 type propTypes2 = {
   name: string
   company?: string
@@ -83,41 +78,29 @@ function Msg2(props: propTypes2): JSX.Element {
     </>
   )
 }
-// #endregion
 
-// #region prop.children as string
 function ComponentWithChildren(props: { children: string }) {
   return <h2> {props.children} </h2>
 }
-// #endregion
 
-// #region prop.children as React component
 function ComponentWithReactComponentAsChild(props: { children: React.ReactNode }) {
   return <h2> {props.children} </h2>
 }
-// #endregion
 
-// #region onClick event handler without return or event object
 function Button1(props: { handleClick: () => void }) {
   return <button onClick={props.handleClick}> Click </button>
 }
-// #endregion
 
-// #region onClick event handler with event object
 function Button2(props: { handleClick: (e: React.MouseEvent<HTMLButtonElement>) => void }) {
   return <button onClick={props.handleClick}> Click </button>
 }
-// #endregion
 
-// #region onClick event handler with event object & additional param
 function Button3(props: {
   handleClick: (e: React.MouseEvent<HTMLButtonElement>, id: number) => void
 }) {
   return <button onClick={(e) => props.handleClick(e, 1)}>Click</button>
 }
-// #endregion
 
-// #region onChange event handler passed in prop
 type InputProps = {
   value: string
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void
@@ -125,9 +108,7 @@ type InputProps = {
 function Input(props: InputProps) {
   return <input type="text" value={props.value} onChange={props.handleChange} />
 }
-// #endregion
 
-// #region onChange event handler defined in a component
 type InputProps1 = {
   value: string
 }
@@ -135,33 +116,25 @@ function Input1(props: InputProps1) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => console.log(e)
   return <input type="text" value={props.value} onChange={handleChange} />
 }
-// #endregion
 
-// #region styles as props
 type ContainerProps = {
   styles: React.CSSProperties
 }
 function SomeCmpt(props: ContainerProps) {
   return <div style={props.styles}> Some text </div>
 }
-// #endregion
 
-// #region props destructuring
 type SomeProps = {
   styles: React.CSSProperties
 }
 function Cmpt({ styles }: SomeProps) {
   return <div style={styles}> Some text </div>
 }
-// #endregion
 
-// #region exporting types
 function Cmpt2({ styles }: ExportedTypes) {
   return <div style={styles}> Some text </div>
 }
-// #endregion
 
-// #region re-use types
 type Name = {
   first: string
   last: string
@@ -176,9 +149,7 @@ function Person(props: PersonProp) {
     </h2>
   )
 }
-// #endregion
 
-// #region array of other type
 type Nameee = {
   first: string
   last: string
@@ -204,9 +175,7 @@ const namesArr = [
   { first: 'Jane', last: 'Blake' },
   { first: 'Kate', last: 'Stew' }
 ]
-// #endregion
 
-// #region uesState
 type AuthType = {
   name: string
   mail: string
@@ -224,9 +193,7 @@ function User() {
     </div>
   )
 }
-// #endregion
 
-// #region uesState with type assertion
 type AuthType2 = {
   name: string
   mail: string
@@ -242,9 +209,7 @@ function User2() {
     </div>
   )
 }
-// #endregion
 
-// #region useReducer
 type CounterStateType = {
   count: number
 }
@@ -276,9 +241,7 @@ const Counter = () => {
     </>
   )
 }
-// #endregion
 
-// #region useReducer better approach
 type CounterState2 = {
   count: number
 }
@@ -316,9 +279,7 @@ const Counter2 = () => {
     </>
   )
 }
-// #endregion
 
-// #region useContext
 export const Userrr = () => {
   const userContext = React.useContext(UserContext)
   const handleLogin = () => userContext.setUser({ name: 'Mike', email: 'mike@mail.com' })
@@ -332,17 +293,13 @@ export const Userrr = () => {
     </div>
   )
 }
-// #endregion
 
-// #region useRef as DOM element
 const DomRef = () => {
   const inputRef = React.useRef<HTMLInputElement>(null!)
   React.useEffect(() => inputRef.current.focus(), [])
   return <input type="text" ref={inputRef} />
 }
-// #endregion
 
-// #region useRef as mutable object
 const Timer = () => {
   const [timer, setTimer] = React.useState(0)
   const interValRef = React.useRef<number | null>(null)
@@ -363,9 +320,7 @@ const Timer = () => {
     </div>
   )
 }
-// #endregion
 
-// #region component in props
 type ProfileProps = { name: string }
 type PrivateProps = {
   isLoggedIn: boolean
@@ -376,9 +331,7 @@ const Private = ({ isLoggedIn, Component }: PrivateProps) => {
   if (isLoggedIn) return <Component name="John" />
   return <div>Login to continue</div>
 }
-// #endregion
 
-// #region generic type
 type ListProps<T> = {
   items: T[]
   onClick: (value: T) => void
@@ -398,9 +351,7 @@ const List = <T extends number>({ items, onClick }: ListProps<T>) => {
     </div>
   )
 }
-// #endregion
 
-// #region never type
 type RandomNumberType = {
   value: number
 }
@@ -428,9 +379,7 @@ const RandomNumber = ({ value, isPositive, isNegative, isZero }: RandomNumberPro
     </div>
   )
 }
-// #endregion
 
-// #region types in template literals
 /*
  * Position prop can be one of
  * "left-center" | "left-top" | "left-bottom" | "center" | "center-top" |
@@ -444,9 +393,7 @@ type ToastProps = {
 }
 
 const Toast = ({ position }: ToastProps) => <div>Position - {position}</div>
-// #endregion
 
-// #region html element
 type ButtonProps = {
   variant: 'primary' | 'secondary'
 } & React.ComponentProps<'button'>
@@ -463,18 +410,12 @@ const CustomButton = ({ variant, children, ...rest }: ButtonProps) => {
 
 type InputPropsType = React.ComponentProps<'input'>
 const Inpt = (props: InputPropsType) => <input {...props} />
-// #endregion
 
-// #region omit
 type InpPropsType = Omit<React.ComponentProps<'input'>, 'onChange'>
 const Inpt2 = (props: InpPropsType) => <input {...props} />
-// #endregion
 
-// #region Take types of other components
 const Inpt3 = (props: React.ComponentProps<typeof Inpt2>) => <input {...props} />
-// #endregion
 
-// #region Polymorphic Components
 type TextOwnProps<E extends React.ElementType> = {
   size?: 'sm' | 'md' | 'lg'
   color?: 'primary' | 'secondary'
@@ -488,7 +429,6 @@ const Text = <E extends React.ElementType = 'div'>({ size, color, children, as }
   const Component = as || 'div'
   return <Component className={`class-with-${size}-${color}`}>{children}</Component>
 }
-// #endregion
 
 const postObj = {
   title: 'typescript',

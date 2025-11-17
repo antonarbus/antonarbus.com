@@ -19,12 +19,14 @@ Next.js web application deployed to Google Cloud Run with Terraform infrastructu
 
 **Project**: All environments run in GCP project `antonarbus`
 
-| Environment | Branch   | Cloud Run Service | Domain               | Memory | Max Instances |
-| ----------- | -------- | ----------------- | -------------------- | ------ | ------------- |
-| **Prod**    | `master` | `web-app-prod`    | antonarbus.com       | 512Mi  | 100           |
-| **Pilot**   | `pilot`  | `web-app-pilot`   | pilot.antonarbus.com | 512Mi  | 50            |
-| **Test**    | `test`   | `web-app-test`    | test.antonarbus.com  | 512Mi  | 10            |
-| **Dev**     | `dev`    | `web-app-dev`     | dev.antonarbus.com   | 512Mi  | 5             |
+| Environment | Cloud Run Service | Domain               | Memory | Max Instances |
+| ----------- | ----------------- | -------------------- | ------ | ------------- |
+| **Prod**    | `web-app-prod`    | antonarbus.com       | 512Mi  | 100           |
+| **Pilot**   | `web-app-pilot`   | pilot.antonarbus.com | 512Mi  | 50            |
+| **Test**    | `web-app-test`    | test.antonarbus.com  | 512Mi  | 10            |
+| **Dev**     | `web-app-dev`     | dev.antonarbus.com   | 512Mi  | 5             |
+
+**Git workflow**: Single `master` branch. Environments are deployment targets, not branches.
 
 ### Shared Resources (created in bootstrap)
 
@@ -133,20 +135,16 @@ After first deployment to each environment:
 
 ### Automatic (via GitHub Actions)
 
-Push to any branch triggers deployment:
+Push to `master` branch triggers deployment to **dev** environment:
 
-**Dev branch** (builds new image):
+1. Push/merge to `master` branch
+2. Detects changes (Terraform and/or application code)
+3. If Terraform changed: applies infrastructure updates
+4. If code changed: builds Docker image (tagged with `dev` + git SHA)
+5. Deploys to dev Cloud Run service
+6. Verifies deployment (auto-rollback on failure)
 
-1. Push to `dev` branch
-2. Builds Docker image (tagged with `dev` + git SHA)
-3. Deploys to dev Cloud Run service
-4. Verifies deployment (auto-rollback on failure)
-
-**Test/Pilot/Prod branches** (optional, for infrastructure changes only):
-
-- Push to `test`, `pilot`, or `master` branches
-- Only runs Terraform if infrastructure changed
-- **Does NOT rebuild Docker image** - use promotion workflow instead
+**Other environments** (test, pilot, prod) use the [Release Promotion](#release-promotion) workflow.
 
 ### Manual Terraform (Infrastructure Only)
 
@@ -155,14 +153,12 @@ For infrastructure changes without code deployment:
 ```bash
 cd terraform/infrastructure
 
-# Uses current git branch to detect environment
-bash smart-apply.sh
-
-# Or specify environment explicitly
+# Specify environment explicitly
+ENV=dev bash smart-apply.sh
 ENV=prod bash smart-apply.sh
 ```
 
-**Note**: This only applies Terraform (scaling, domains, etc.). It does NOT deploy application code. For code deployments, use the promotion workflow.
+**Note**: This only applies Terraform (scaling, domains, etc.). It does NOT deploy application code. For code deployments, push to master or use the promotion workflow.
 
 ---
 
@@ -217,8 +213,8 @@ Both Terraform and GitHub Actions read from these files. No duplication.
 ### Changing Configuration
 
 1. Edit `/config/<env>.tfvars`
-2. Push to the corresponding branch
-3. GitHub Actions applies changes automatically
+2. Push to `master` branch (dev environment applies automatically)
+3. For other environments, run manual Terraform or use promotion workflow
 
 ---
 

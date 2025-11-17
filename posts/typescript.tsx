@@ -840,7 +840,7 @@ const postObj = {
       <H>useState</H>
       <p>
         TypeScript automatically defines a type for <Code>useState(initVal)</Code> variable based on
-        initial value provided
+        initial value provided.
       </p>
       <p>
         But if the type is unknown beforehand, more complex, or may change in future then we may

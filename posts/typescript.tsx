@@ -872,7 +872,7 @@ const postObj = {
       <H>useState type assertion</H>
       <p>
         If we are sure that state value will be set to not a <code>null</code> we may define initial
-        state as an empty object with a certain type
+        state as an empty object with a certain type.
       </p>
       <p>
         For example we set a value as soon as a component mounts with <code>useEffect</code> hook

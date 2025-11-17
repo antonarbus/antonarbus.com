@@ -19,7 +19,7 @@ set -e
 check_terraform_state_exists() {
   local env=$1
   local bucket="${BUCKET_FOR_TERRAFORM_STATE_NAME}"
-  local state_path="gs://${bucket}/terraform/state/env:${env}/default.tfstate"
+  local state_path="gs://${bucket}/terraform/state/${env}.tfstate"
 
   if gsutil -q stat "${state_path}" 2>/dev/null; then
     return 0  # State exists

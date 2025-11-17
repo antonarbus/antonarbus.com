@@ -19,7 +19,7 @@ set -e
 check_terraform_state_exists() {
   local env=$1
   local bucket="${BUCKET_FOR_TERRAFORM_STATE_NAME}"
-  local state_path="gs://${bucket}/terraform/state/${env}/default.tfstate"
+  local state_path="gs://${bucket}/terraform/state/env:${env}/default.tfstate"
 
   if gsutil -q stat "${state_path}" 2>/dev/null; then
     return 0  # State exists
@@ -30,10 +30,12 @@ check_terraform_state_exists() {
 
 # Check if this is the first infrastructure deployment for this environment
 FIRST_DEPLOYMENT=false
+
 if [ -n "$ENVIRONMENT" ] && [ -n "$BUCKET_FOR_TERRAFORM_STATE_NAME" ]; then
   if ! check_terraform_state_exists "$ENVIRONMENT"; then
     echo "🆕 First deployment detected for environment: $ENVIRONMENT"
     echo "   No Terraform state found - infrastructure needs to be created"
+    
     FIRST_DEPLOYMENT=true
   fi
 fi

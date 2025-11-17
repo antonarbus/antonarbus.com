@@ -49,9 +49,6 @@ jobs:
           workload_identity_provider: 'projects/${{ env.PROJECT_NUMBER }}/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
           service_account: 'github-actions-sa@${{ env.PROJECT_ID }}.iam.gserviceaccount.com'
 
-      - name: 'Configuring gsutil to use gcloud credentials'
-        run: gcloud config set pass_credentials_to_gsutil true
-
       - name: 'Detect Changes'
         run: bash .github/scripts/detect-changes.sh
 

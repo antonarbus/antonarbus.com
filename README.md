@@ -278,13 +278,13 @@ Who: sherb@MAC-KX909470LX    # Your machine has it
 
 ```bash
 # Find locks
-gsutil ls -r gs://antonarbus-terraform-state/terraform/state/ | grep -i lock
+gcloud storage ls --recursive gs://antonarbus-terraform-state/terraform/state/ | grep -i lock
 
 # Remove specific lock
-gsutil rm gs://antonarbus-terraform-state/terraform/state/dev.tflock
+gcloud storage rm gs://antonarbus-terraform-state/terraform/state/dev.tflock
 
 # Or remove all locks (use with caution!)
-gsutil rm gs://antonarbus-terraform-state/terraform/state/**/*.tflock
+gcloud storage rm gs://antonarbus-terraform-state/terraform/state/**/*.tflock
 ```
 
 ### "Caller is not authorized to administer the domain"

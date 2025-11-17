@@ -1,14 +1,12 @@
 name: 'Deploy'
 
 # Single workflow that handles both Terraform and Docker deployment
-# Steps are conditional based on what files have been changed
+# Pushes to master automatically deploy to dev environment
+# Other environments (test, pilot, prod) use image promotion workflow at GitHub
 on:
   push:
     branches:
       - master
-      - pilot
-      - test
-      - dev
 
   # Allow manual trigger in GitHub, useful to test workflow without pushing code
   workflow_dispatch:
@@ -85,19 +83,19 @@ jobs:
         working-directory: ./terraform/infrastructure
 
       # ============================================================================
-      # DOCKER STEPS (only for dev branch - other envs use image promotion)
+      # DOCKER STEPS (always deploys to dev - other envs use image promotion)
       # ============================================================================
 
       - name: 'Docker Auth'
-        if: env.CHANGES_DETECTED_AT != 'none' && env.ENVIRONMENT == 'dev'
+        if: env.CHANGES_DETECTED_AT != 'none'
         run: gcloud auth configure-docker '${{ env.REGION }}-docker.pkg.dev'
 
       - name: 'Set variable for docker tag '
-        if: env.CHANGES_DETECTED_AT != 'none' && env.ENVIRONMENT == 'dev'
+        if: env.CHANGES_DETECTED_AT != 'none'
         run: echo "DOCKER_IMAGE_TAG=${{ env.ENVIRONMENT }}" >> $GITHUB_ENV
 
       - name: 'Build and Push Docker Image to Artifact Registry'
-        if: env.CHANGES_DETECTED_AT != 'none' && env.ENVIRONMENT == 'dev'
+        if: env.CHANGES_DETECTED_AT != 'none'
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -108,13 +106,13 @@ jobs:
             ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY_NAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }}
 
       - name: 'Scan Image for Vulnerabilities'
-        if: env.CHANGES_DETECTED_AT != 'none' && env.ENVIRONMENT == 'dev'
+        if: env.CHANGES_DETECTED_AT != 'none'
         run: bash .github/scripts/scan-vulnerabilities.sh
 
       - name: 'Deploy Docker Image to Cloud Run'
-        if: env.CHANGES_DETECTED_AT != 'none' && env.ENVIRONMENT == 'dev'
+        if: env.CHANGES_DETECTED_AT != 'none'
         run: bash .github/scripts/deploy-to-cloudrun.sh
 
       - name: 'Verify Deployment'
-        if: env.CHANGES_DETECTED_AT != 'none' && env.ENVIRONMENT == 'dev'
+        if: env.CHANGES_DETECTED_AT != 'none'
         run: bash .github/scripts/verify-deployment.sh

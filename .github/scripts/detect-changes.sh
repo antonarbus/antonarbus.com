@@ -32,11 +32,17 @@ check_terraform_state_exists() {
 FIRST_DEPLOYMENT=false
 
 if [ -n "$ENVIRONMENT" ] && [ -n "$BUCKET_FOR_TERRAFORM_STATE_NAME" ]; then
+  echo "🔍 Checking Terraform state for environment: $ENVIRONMENT"
+  echo "   Bucket: $BUCKET_FOR_TERRAFORM_STATE_NAME"
+  echo "   State path: gs://${BUCKET_FOR_TERRAFORM_STATE_NAME}/terraform/state/${ENVIRONMENT}.tfstate"
+
   if ! check_terraform_state_exists "$ENVIRONMENT"; then
     echo "🆕 First deployment detected for environment: $ENVIRONMENT"
     echo "   No Terraform state found - infrastructure needs to be created"
-    
+
     FIRST_DEPLOYMENT=true
+  else
+    echo "✅ Terraform state found for environment: $ENVIRONMENT"
   fi
 fi
 

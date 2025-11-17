@@ -21,31 +21,15 @@ set -e # exit immediately if any command fails
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
-# Detect environment from git branch or ENV variable
-if [ -z "$ENV" ]; then
-  BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "master")
-
-  case "$BRANCH" in
-    master|main)
-      ENV="prod"
-      ;;
-    test)
-      ENV="test"
-      ;;
-    pilot)
-      ENV="pilot"
-      ;;
-    dev)
-      ENV="dev"
-      ;;
-    *)
-      echo "❌ Error: Unknown branch '$BRANCH'"
-      echo "Allowed branches: master, main, test, pilot, dev"
-      echo "Or set ENV variable explicitly: ENV=prod ./terraform.sh"
-      exit 1
-      ;;
-  esac
+# Require environment as argument
+if [ -z "$1" ]; then
+  echo "❌ Error: Environment argument required"
+  echo "Usage: ./smart-apply.sh <environment>"
+  echo "Example: ./smart-apply.sh dev"
+  echo "Valid environments: dev, test, pilot, prod"
+  exit 1
 fi
+ENV="$1"
 
 echo "📋 Environment: $ENV"
 

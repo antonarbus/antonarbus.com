@@ -154,8 +154,8 @@ For infrastructure changes without code deployment:
 cd terraform/infrastructure
 
 # Specify environment explicitly
-ENV=dev bash smart-apply.sh
-ENV=prod bash smart-apply.sh
+bash smart-apply.sh dev
+bash smart-apply.sh prod
 ```
 
 **Note**: This only applies Terraform (scaling, domains, etc.). It does NOT deploy application code. For code deployments, push to master or use the promotion workflow.

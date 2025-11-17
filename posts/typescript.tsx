@@ -611,6 +611,18 @@ const postObj = {
           'key 3': 3
         }
       `}</Code>
+      <H>PropertyKey</H>
+      <ul>
+        <li>
+          <code>PropertyKey</code> is a built-in type which is <code>string | number | symbol</code>
+        </li>
+      </ul>
+      <Code block jsx>{`
+        const obj: Record<PropertyKey, number> = {
+          'key 1': 1,
+          123: 2
+        }
+      `}</Code>
       <H>Rest of props</H>
       <Code block jsx>{`
         type Props = {

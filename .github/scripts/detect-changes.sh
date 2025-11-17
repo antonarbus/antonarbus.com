@@ -21,12 +21,12 @@ check_terraform_state_exists() {
   local bucket="${BUCKET_FOR_TERRAFORM_STATE_NAME}"
   local state_path="gs://${bucket}/terraform/state/${env}.tfstate"
 
-  # Check if state file exists (show errors for debugging)
-  if gsutil stat "${state_path}" >/dev/null 2>&1; then
+  # Check if state file exists using gcloud storage (uses authenticated credentials)
+  if gcloud storage objects describe "${state_path}" --format="value(name)" >/dev/null 2>&1; then
     return 0  # State exists
   else
     # Try to get more info about why it failed
-    gsutil stat "${state_path}" 2>&1 | head -5 || true
+    gcloud storage objects describe "${state_path}" 2>&1 | head -5 || true
     return 1  # State does not exist
   fi
 }

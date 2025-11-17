@@ -875,7 +875,7 @@ const postObj = {
         state as an empty object with a certain type.
       </p>
       <p>
-        For example we set a value as soon as a component mounts with <code>useEffect</code> hook
+        For example we set a value as soon as a component mounts with <code>useEffect</code> hook.
       </p>
       <Code block jsx>{`
       type AuthType2 = {

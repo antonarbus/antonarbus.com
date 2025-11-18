@@ -73,11 +73,14 @@ export class ConfigLoader {
 
   /**
    * Load and validate config for a specific environment
+   * @param silent - If true, suppress logging (used by load-config command)
    */
-  loadConfig(env: Environment): Config {
+  loadConfig(env: Environment, silent = false): Config {
     const configPath = resolve(this.configDir, `${env}.tfvars`)
 
-    logger.info(`Loading config from: ${configPath}`)
+    if (!silent) {
+      logger.info(`Loading config from: ${configPath}`)
+    }
 
     try {
       const content = readFileSync(configPath, 'utf-8')
@@ -105,7 +108,9 @@ export class ConfigLoader {
         customDomain: validated.custom_domain,
       }
 
-      logger.success('Config loaded and validated successfully')
+      if (!silent) {
+        logger.success('Config loaded and validated successfully')
+      }
       return config
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -154,8 +159,18 @@ export class ConfigLoader {
 
   /**
    * Export config as environment variables (for GitHub Actions compatibility)
+   * Removes inline comments from values
    */
   exportAsEnvVars(config: Config): string {
+    const cleanValue = (value: string) => {
+      // Remove inline comments (everything after # including leading spaces)
+      const commentIndex = value.indexOf('#')
+      if (commentIndex !== -1) {
+        return value.substring(0, commentIndex).trim()
+      }
+      return value.trim()
+    }
+
     const envVars = [
       `PROJECT_ID=${config.projectId}`,
       config.projectNumber ? `PROJECT_NUMBER=${config.projectNumber}` : null,
@@ -166,12 +181,12 @@ export class ConfigLoader {
       `DOCKER_IMAGE_NAME=${config.dockerImageName}`,
       `GITHUB_ACTIONS_SA_NAME=${config.githubActionsSaName}`,
       `CLOUD_RUN_SA_NAME=${config.cloudRunSaName}`,
-      `MIN_INSTANCES=${config.minInstances}`,
-      `MAX_INSTANCES=${config.maxInstances}`,
-      `CPU_LIMIT=${config.cpuLimit}`,
-      `MEMORY_LIMIT=${config.memoryLimit}`,
-      `CONTAINER_PORT=${config.containerPort}`,
-      `CUSTOM_DOMAIN=${config.customDomain}`,
+      `MIN_INSTANCES=${cleanValue(config.minInstances)}`,
+      `MAX_INSTANCES=${cleanValue(config.maxInstances)}`,
+      `CPU_LIMIT=${cleanValue(config.cpuLimit)}`,
+      `MEMORY_LIMIT=${cleanValue(config.memoryLimit)}`,
+      `CONTAINER_PORT=${cleanValue(config.containerPort)}`,
+      `CUSTOM_DOMAIN=${cleanValue(config.customDomain)}`,
     ].filter(Boolean)
 
     return envVars.join('\n')

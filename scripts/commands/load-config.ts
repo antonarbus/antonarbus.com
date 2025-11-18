@@ -1,30 +1,31 @@
-import { logger } from '../lib/logger'
 import { configLoader } from '../lib/config'
 import type { Environment } from '../types'
 
 export async function loadConfig(environment: Environment): Promise<void> {
   if (!environment) {
-    logger.error('Environment parameter is required')
-    logger.error('Usage: load-config <environment>')
-    logger.error('Available environments: prod, pilot, test, dev')
+    console.error('❌ Error: Environment parameter is required')
+    console.error('Usage: load-config <environment>')
+    console.error('Available environments: prod, pilot, test, dev')
     process.exit(1)
   }
 
-  logger.info(`Loading config for environment: ${environment}`)
+  // Send info to stderr so it doesn't interfere with stdout (GitHub Actions reads stdout)
+  console.error(`📄 Loading config for environment: ${environment}`)
 
   try {
-    const config = configLoader.loadConfig(environment)
+    // Use silent mode to suppress logger output to stdout
+    const config = configLoader.loadConfig(environment, true)
 
     // Output as KEY=value format for GitHub Actions to append to GITHUB_ENV
     const envVars = configLoader.exportAsEnvVars(config)
 
-    // Output to stdout so GitHub Actions can capture it
+    // Output ONLY the env vars to stdout (no extra messages)
     console.log(envVars)
 
-    logger.plain('')
-    logger.success('Config loaded successfully')
+    console.error('')
+    console.error('✅ Config loaded successfully')
   } catch (error) {
-    logger.error(`Failed to load config: ${error}`)
+    console.error(`❌ Failed to load config: ${error}`)
     process.exit(1)
   }
 }

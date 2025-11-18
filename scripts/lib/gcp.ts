@@ -162,8 +162,8 @@ export const gcp = {
     region: string,
     projectId: string
   ): Promise<string> {
-    const result = await $`gcloud run services describe ${serviceName} --region ${region} --project ${projectId} --format=value(status.url)`.text()
-    return result.trim()
+    const result = await $`gcloud run services describe ${serviceName} --region ${region} --project ${projectId} --format=json`.json()
+    return result.status.url
   },
 
   /**

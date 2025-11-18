@@ -33,9 +33,14 @@ jobs:
       - name: 'Checkout repository'
         uses: actions/checkout@v4
 
+      - name: 'Setup Bun'
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
       - name: 'Check promotion path'
         id: check
-        run: bash .github/scripts/validate-promotion-path.sh "${{ github.event.inputs.source_env }}" "${{ github.event.inputs.target_env }}" >> "$GITHUB_OUTPUT"
+        run: bun scripts/cli.ts validate-promotion "${{ github.event.inputs.source_env }}" "${{ github.event.inputs.target_env }}" >> "$GITHUB_OUTPUT"
 
       - name: 'Fail if invalid'
         if: steps.check.outputs.valid == 'false'
@@ -61,8 +66,13 @@ jobs:
       - name: 'Checkout repository'
         uses: actions/checkout@v4
 
+      - name: 'Setup Bun'
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
       - name: 'Load target environment config'
-        run: bash .github/scripts/get-config-variables.sh "$TARGET_ENV" >> "$GITHUB_ENV"
+        run: bun scripts/cli.ts load-config "$TARGET_ENV" >> "$GITHUB_ENV"
 
       - name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v3'
@@ -75,15 +85,15 @@ jobs:
 
       - name: 'Promote Docker Image'
         id: promote
-        run: bash .github/scripts/promote-image.sh
+        run: bun scripts/cli.ts promote-image
 
       - name: 'Deploy promoted image to Cloud Run'
-        run: bash .github/scripts/deploy-to-cloudrun.sh
+        run: bun scripts/cli.ts deploy-cloudrun
         env:
           DOCKER_IMAGE_TAG: ${{ env.TARGET_ENV }}
 
       - name: 'Verify Deployment'
-        run: bash .github/scripts/verify-deployment.sh
+        run: bun scripts/cli.ts verify-deployment
 
       - name: 'Add promotion summary'
         if: always()

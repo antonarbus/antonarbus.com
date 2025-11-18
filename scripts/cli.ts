@@ -9,6 +9,8 @@ import { scanVulnerabilities } from './commands/scan-vulnerabilities'
 import { deployCloudRun } from './commands/deploy-cloudrun'
 import { verifyDeployment } from './commands/verify-deployment'
 import { terraformApply } from './commands/terraform-apply'
+import { promoteImage } from './commands/promote-image'
+import { validatePromotion } from './commands/validate-promotion'
 import type { Environment } from './types'
 
 const program = new Command()
@@ -79,6 +81,20 @@ program
   .description('Apply Terraform configuration for environment')
   .action(async (environment: Environment) => {
     await terraformApply(environment)
+  })
+
+program
+  .command('promote-image')
+  .description('Promote Docker image from source to target environment')
+  .action(async () => {
+    await promoteImage()
+  })
+
+program
+  .command('validate-promotion <source_env> <target_env>')
+  .description('Validate promotion path between environments')
+  .action(async (sourceEnv: string, targetEnv: string) => {
+    await validatePromotion(sourceEnv, targetEnv)
   })
 
 program.parse()

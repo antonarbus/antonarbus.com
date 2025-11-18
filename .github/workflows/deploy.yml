@@ -11,25 +11,18 @@ on:
   # Allow manual trigger in GitHub, useful to test workflow without pushing code
   workflow_dispatch:
 
-env:
-  CHANGES_DETECTED_AT: 'none' # 'terraform' | 'app' | 'both' | 'none' (set by 'Detect Changes' step)
-
 jobs:
   deploy:
     name: 'Deploy Infrastructure and Application'
-    runs-on: ubuntu-latest # OS the GitHub Actions runner (virtual machine) uses
+    runs-on: ubuntu-latest
 
     permissions:
       contents: read
       id-token: write
 
     steps:
-      # To identify where a change has been made, either in code or in terraform
-      # Checkout with current and previous commit to get the diff at the next step
       - name: 'Checkout repository code'
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 2
 
       - name: 'Setup Bun'
         uses: oven-sh/setup-bun@v2
@@ -54,49 +47,41 @@ jobs:
           workload_identity_provider: 'projects/${{ env.PROJECT_NUMBER }}/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
           service_account: 'github-actions-sa@${{ env.PROJECT_ID }}.iam.gserviceaccount.com'
 
-      - name: 'Detect Changes'
-        run: bun scripts/cli.ts detect-changes
-
       # ============================================================================
-      # TERRAFORM STEPS (only if terraform files changed)
+      # TERRAFORM STEPS
       # ============================================================================
-      # Note: Terraform manages IAM permissions declaratively in main.tf
-      # No need for separate permission checks - Terraform handles it
+      # Terraform is idempotent - if no changes, it completes in ~1 second
+      # No need for conditional logic - always run for simplicity
 
       - name: 'Setup Terraform'
-        if: env.CHANGES_DETECTED_AT == 'terraform' || env.CHANGES_DETECTED_AT == 'both'
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: '1.5.0'
 
       - name: 'Set GCP Project and Enable APIs'
-        if: env.CHANGES_DETECTED_AT == 'terraform' || env.CHANGES_DETECTED_AT == 'both'
         run: bun scripts/cli.ts setup-gcp
 
       - name: 'Terraform Format Check'
-        if: env.CHANGES_DETECTED_AT == 'terraform' || env.CHANGES_DETECTED_AT == 'both'
         id: fmt
         run: terraform fmt -check -recursive
         working-directory: ./terraform
 
       - name: 'Terraform Apply'
-        if: env.CHANGES_DETECTED_AT == 'terraform' || env.CHANGES_DETECTED_AT == 'both'
         run: bun scripts/cli.ts terraform-apply ${{ env.ENVIRONMENT }}
 
       # ============================================================================
-      # DOCKER STEPS (always deploys to dev - other envs use image promotion)
+      # DOCKER STEPS
       # ============================================================================
+      # Docker build uses cache - rebuilding identical code is fast
+      # Always deploy to dev - other envs use image promotion workflow
 
       - name: 'Docker Auth'
-        if: env.CHANGES_DETECTED_AT != 'none'
         run: gcloud auth configure-docker '${{ env.REGION }}-docker.pkg.dev'
 
-      - name: 'Set variable for docker tag '
-        if: env.CHANGES_DETECTED_AT != 'none'
+      - name: 'Set variable for docker tag'
         run: echo "DOCKER_IMAGE_TAG=${{ env.ENVIRONMENT }}" >> $GITHUB_ENV
 
       - name: 'Build and Push Docker Image to Artifact Registry'
-        if: env.CHANGES_DETECTED_AT != 'none'
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -107,13 +92,10 @@ jobs:
             ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY_NAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }}
 
       - name: 'Scan Image for Vulnerabilities'
-        if: env.CHANGES_DETECTED_AT != 'none'
         run: bun scripts/cli.ts scan-vulnerabilities
 
       - name: 'Deploy Docker Image to Cloud Run'
-        if: env.CHANGES_DETECTED_AT != 'none'
         run: bun scripts/cli.ts deploy-cloudrun
 
       - name: 'Verify Deployment'
-        if: env.CHANGES_DETECTED_AT != 'none'
         run: bun scripts/cli.ts verify-deployment

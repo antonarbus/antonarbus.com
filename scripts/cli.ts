@@ -3,7 +3,6 @@ import { Command } from 'commander'
 import { detectEnvironment } from './commands/detect-env'
 import { validate } from './commands/validate'
 import { loadConfig } from './commands/load-config'
-import { detectChanges } from './commands/detect-changes'
 import { setupGcp } from './commands/setup-gcp'
 import { scanVulnerabilities } from './commands/scan-vulnerabilities'
 import { deployCloudRun } from './commands/deploy-cloudrun'
@@ -39,13 +38,6 @@ program
   .description('Load config for specified environment and output as env vars')
   .action(async (environment: Environment) => {
     await loadConfig(environment)
-  })
-
-program
-  .command('detect-changes')
-  .description('Detect what changed between commits')
-  .action(async () => {
-    await detectChanges()
   })
 
 program

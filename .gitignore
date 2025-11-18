@@ -56,3 +56,6 @@ terraform/terraform.rc
 !package-lock.json
 !tsconfig.json
 !jsconfig.json
+
+
+tsconfig.tsbuildinfo

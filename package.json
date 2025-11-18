@@ -8,6 +8,7 @@
     "start": "bun --bun next start",
     "lint": "bun --bun next lint",
     "test": "bun test --watch",
+    "tsc": "tsc --noEmit",
     "mocha": "bun mocha",
     "update-packages": "bunx npm-check-updates -i",
     "docker-build": "docker compose -f docker-compose.prod.yml build",

@@ -19,7 +19,7 @@ const ConfigSchema = z.object({
   cpu_limit: z.string(),
   memory_limit: z.string(),
   container_port: z.string(),
-  custom_domain: z.string(),
+  custom_domain: z.string()
 })
 
 export class ConfigLoader {
@@ -105,7 +105,7 @@ export class ConfigLoader {
         cpuLimit: validated.cpu_limit,
         memoryLimit: validated.memory_limit,
         containerPort: validated.container_port,
-        customDomain: validated.custom_domain,
+        customDomain: validated.custom_domain
       }
 
       if (!silent) {
@@ -115,7 +115,8 @@ export class ConfigLoader {
     } catch (error) {
       if (error instanceof z.ZodError) {
         logger.error('Config validation failed:')
-        error.errors.forEach(err => {
+
+        error.issues.forEach((err) => {
           logger.error(`  ${err.path.join('.')}: ${err.message}`)
         })
       } else {
@@ -186,7 +187,7 @@ export class ConfigLoader {
       `CPU_LIMIT=${cleanValue(config.cpuLimit)}`,
       `MEMORY_LIMIT=${cleanValue(config.memoryLimit)}`,
       `CONTAINER_PORT=${cleanValue(config.containerPort)}`,
-      `CUSTOM_DOMAIN=${cleanValue(config.customDomain)}`,
+      `CUSTOM_DOMAIN=${cleanValue(config.customDomain)}`
     ].filter(Boolean)
 
     return envVars.join('\n')

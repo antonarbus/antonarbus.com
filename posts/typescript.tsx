@@ -322,11 +322,14 @@ const Timer = () => {
 }
 
 type ProfileProps = { name: string }
+
 type PrivateProps = {
   isLoggedIn: boolean
-  Component: React.ComponentType<ProfileProps>
+  Component: (props: ProfileProps) => JSX.Element
 }
+
 const Profile = ({ name }: ProfileProps) => <div>Name is {name}</div>
+
 const Private = ({ isLoggedIn, Component }: PrivateProps) => {
   if (isLoggedIn) return <Component name="John" />
   return <div>Login to continue</div>
@@ -415,20 +418,6 @@ type InpPropsType = Omit<React.ComponentProps<'input'>, 'onChange'>
 const Inpt2 = (props: InpPropsType) => <input {...props} />
 
 const Inpt3 = (props: React.ComponentProps<typeof Inpt2>) => <input {...props} />
-
-type TextOwnProps<E extends React.ElementType> = {
-  size?: 'sm' | 'md' | 'lg'
-  color?: 'primary' | 'secondary'
-  children: React.ReactNode
-  as?: E
-}
-type TextProps<E extends React.ElementType> = TextOwnProps<E> &
-  Omit<React.ComponentProps<E>, keyof TextOwnProps<E>>
-
-const Text = <E extends React.ElementType = 'div'>({ size, color, children, as }: TextProps<E>) => {
-  const Component = as || 'div'
-  return <Component className={`class-with-${size}-${color}`}>{children}</Component>
-}
 
 const postObj = {
   title: 'typescript',
@@ -1282,47 +1271,6 @@ const postObj = {
       <Inpt3 />
       `}</Code>
       <Inpt3 />
-      <H>Polymorphic components</H>
-      <p>Polymorphic component renders different html tags depends on input props.</p>
-      <i>Not clear because generic type is used, take a closer look later.</i>
-      <Code block jsx>{`
-      type TextOwnProps<E extends React.ElementType> = {
-        size?: 'sm' | 'md' | 'lg'
-        color?: 'primary' | 'secondary'
-        children: React.ReactNode
-        as?: E
-      }
-      type TextProps<E extends React.ElementType> = TextOwnProps<E> &
-        Omit<React.ComponentProps<E>, keyof TextOwnProps<E>>
-
-      const Text = <E extends React.ElementType = 'div'>({
-        size,
-        color,
-        children,
-        as
-      }: TextProps<E>) => {
-        const Component = as || 'div'
-        return (
-          <Component className={\`class-with-\${size}-\${color}\`}>{children}</Component>
-        )
-      }
-      <>
-        <Text size='lg' as='h1'>Heading</Text>
-        <Text size='md' as='p'>Paragraph</Text>
-        <Text size='sm' color='secondary' as='label' htmlFor='someId'>Label</Text>
-      </>
-      `}</Code>
-      <>
-        <Text size="lg" as="h1">
-          Heading
-        </Text>
-        <Text size="md" as="p">
-          Paragraph
-        </Text>
-        <Text size="sm" color="secondary" as="label" htmlFor="someId">
-          Label
-        </Text>
-      </>
       <H>Redux</H>
       <Hs>Payload in reducer</Hs>
       <Code block jsx>{`

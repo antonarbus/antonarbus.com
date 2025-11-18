@@ -30,9 +30,7 @@ export class ConfigLoader {
     this.configDir = resolve(__dirname, '../../config')
   }
 
-  /**
-   * Parse a .tfvars file and return key-value pairs
-   */
+  /** Parse a .tfvars file and return key-value pairs */
   private parseTfvars(content: string): Record<string, string> {
     const result: Record<string, string> = {}
 
@@ -52,6 +50,7 @@ export class ConfigLoader {
 
       // Remove inline comments
       const commentIndex = value.indexOf('#')
+
       if (commentIndex !== -1) {
         // Only remove comment if it's outside quotes
         const beforeComment = value.substring(0, commentIndex)
@@ -111,6 +110,7 @@ export class ConfigLoader {
       if (!silent) {
         logger.success('Config loaded and validated successfully')
       }
+
       return config
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -122,13 +122,12 @@ export class ConfigLoader {
       } else {
         logger.error(`Failed to load config: ${error}`)
       }
+
       throw error
     }
   }
 
-  /**
-   * Validate a config file
-   */
+  /** Validate a config file  */
   validateConfig(env: Environment): boolean {
     try {
       this.loadConfig(env)

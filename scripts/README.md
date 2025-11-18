@@ -2,15 +2,6 @@
 
 TypeScript-based CLI for managing deployment workflows for antonarbus.com.
 
-## Overview
-
-This CLI replaces the previous bash scripts with a unified TypeScript interface, providing:
-- Type safety and better error handling
-- Cleaner code organization and reusability
-- Better IDE support and autocomplete
-- Easier testing and maintenance
-- Native TypeScript execution with Bun (no compilation needed)
-
 ## Installation
 
 The CLI requires Bun to be installed. Dependencies are already included in the project:
@@ -28,6 +19,7 @@ bun scripts/cli.ts <command> [options]
 ### Available Commands
 
 #### `detect-env`
+
 Detect deployment environment from the current git branch.
 
 ```bash
@@ -39,6 +31,7 @@ Sets `ENVIRONMENT` in GitHub Actions environment variables.
 ---
 
 #### `validate`
+
 Validate all configuration files (dev, test, pilot, prod).
 
 ```bash
@@ -50,6 +43,7 @@ Checks all `.tfvars` files for required variables and proper formatting.
 ---
 
 #### `load-config <environment>`
+
 Load configuration for a specific environment.
 
 ```bash
@@ -62,6 +56,7 @@ Outputs environment variables in `KEY=value` format for GitHub Actions.
 ---
 
 #### `detect-changes`
+
 Detect what changed between commits.
 
 ```bash
@@ -73,6 +68,7 @@ Sets `CHANGES_DETECTED_AT` to one of: `terraform`, `app`, `both`, or `none`.
 ---
 
 #### `setup-gcp`
+
 Setup GCP project and enable required APIs.
 
 ```bash
@@ -84,6 +80,7 @@ Requires `PROJECT_ID` environment variable.
 ---
 
 #### `scan-vulnerabilities`
+
 Scan Docker image for vulnerabilities using GCP Container Analysis.
 
 ```bash
@@ -95,6 +92,7 @@ Requires: `REGION`, `PROJECT_ID`, `ARTIFACT_REGISTRY_NAME`, `DOCKER_IMAGE_NAME`,
 ---
 
 #### `deploy-cloudrun`
+
 Deploy Docker image to Cloud Run.
 
 ```bash
@@ -106,6 +104,7 @@ Requires: `CLOUD_RUN_SERVICE_NAME`, `REGION`, `PROJECT_ID`, `ARTIFACT_REGISTRY_N
 ---
 
 #### `verify-deployment`
+
 Verify Cloud Run deployment with smoke tests and automatic rollback on failure.
 
 ```bash
@@ -117,6 +116,7 @@ Requires: `CLOUD_RUN_SERVICE_NAME`, `REGION`, `PROJECT_ID`.
 ---
 
 #### `terraform-apply <environment>`
+
 Apply Terraform configuration for a specific environment.
 
 ```bash
@@ -127,6 +127,7 @@ bun scripts/cli.ts terraform-apply prod
 ---
 
 #### `promote-image`
+
 Promote a Docker image from source environment to target environment.
 
 ```bash
@@ -140,6 +141,7 @@ Requires: `SOURCE_ENV`, `TARGET_ENV`, `REGION`, `PROJECT_ID`, `ARTIFACT_REGISTRY
 ---
 
 #### `validate-promotion <source_env> <target_env>`
+
 Validate that a promotion path is allowed.
 
 ```bash
@@ -150,6 +152,7 @@ bun scripts/cli.ts validate-promotion dev prod      # Invalid
 ```
 
 Allowed promotion paths:
+
 - `dev` → `test`
 - `test` → `pilot`
 - `pilot` → `prod`
@@ -232,6 +235,7 @@ program
 The CLI is integrated into both workflows:
 
 **`deploy.yml`** (automatic deployment on push to master):
+
 ```yaml
 - name: 'Detect Environment'
   run: bun scripts/cli.ts detect-env
@@ -244,6 +248,7 @@ The CLI is integrated into both workflows:
 ```
 
 **`promote.yml`** (manual image promotion between environments):
+
 ```yaml
 - name: 'Check promotion path'
   run: bun scripts/cli.ts validate-promotion "$SOURCE_ENV" "$TARGET_ENV"
@@ -254,33 +259,3 @@ The CLI is integrated into both workflows:
 - name: 'Deploy promoted image'
   run: bun scripts/cli.ts deploy-cloudrun
 ```
-
-## Dependencies
-
-- **commander**: CLI framework (v14.0.2)
-- **chalk**: Colored terminal output (v5.6.2)
-- **bun**: TypeScript runtime (native execution, no compilation needed)
-
-## Migration from Bash
-
-**Migration completed!** All bash scripts have been replaced with TypeScript:
-
-| Old Bash Script | New TypeScript Command | Status |
-|----------------|----------------------|--------|
-| `detect-and-load-env-from-github-branch.sh` | `detect-env` | ✅ Deleted |
-| `validate.sh` | `validate` | ✅ Deleted |
-| `get-config-variables.sh` + `load-config-variables.sh` | `load-config` | ✅ Deleted |
-| `detect-changes.sh` | `detect-changes` | ✅ Deleted |
-| `setup-gcp.sh` | `setup-gcp` | ✅ Deleted |
-| `scan-vulnerabilities.sh` | `scan-vulnerabilities` | ✅ Deleted |
-| `deploy-to-cloudrun.sh` | `deploy-cloudrun` | ✅ Deleted |
-| `verify-deployment.sh` | `verify-deployment` | ✅ Deleted |
-| `smart-apply.sh` | `terraform-apply` | ✅ Deleted |
-| `promote-image.sh` | `promote-image` | ✅ Deleted |
-| `validate-promotion-path.sh` | `validate-promotion` | ✅ Deleted |
-
-**Summary:**
-- ✅ 12 bash scripts deleted (1116 lines removed)
-- ✅ 11 TypeScript commands created (unified CLI)
-- ✅ Both workflows (`deploy.yml`, `promote.yml`) fully migrated
-- ✅ Zero bash scripts remaining

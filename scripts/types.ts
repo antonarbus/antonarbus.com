@@ -1,24 +1,7 @@
-export type Environment = 'dev' | 'test' | 'pilot' | 'prod'
+// Import types from the single source of truth
+export type { Config, Environment } from '../config/environments'
 
 export type ChangeDetection = 'terraform' | 'app' | 'both' | 'none'
-
-export interface Config {
-  projectId: string
-  projectNumber?: string
-  region: string
-  bucketForTerraformStateName: string
-  artifactRegistryName: string
-  cloudRunServiceName: string
-  dockerImageName: string
-  githubActionsSaName: string
-  cloudRunSaName: string
-  minInstances: string
-  maxInstances: string
-  cpuLimit: string
-  memoryLimit: string
-  containerPort: string
-  customDomain: string
-}
 
 export interface VulnerabilitySummary {
   critical: number

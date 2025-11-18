@@ -1,133 +1,43 @@
-import { readFileSync } from 'fs'
-import { resolve } from 'path'
-import { z } from 'zod'
 import { logger } from './logger'
 import type { Config, Environment } from '../types'
-
-const ConfigSchema = z.object({
-  project_id: z.string(),
-  project_number: z.string().optional(),
-  region: z.string(),
-  bucket_for_terraform_state_name: z.string(),
-  artifact_registry_name: z.string(),
-  cloud_run_service_name: z.string(),
-  docker_image_name: z.string(),
-  github_actions_sa_name: z.string(),
-  cloud_run_sa_name: z.string(),
-  min_instances: z.string(),
-  max_instances: z.string(),
-  cpu_limit: z.string(),
-  memory_limit: z.string(),
-  container_port: z.string(),
-  custom_domain: z.string()
-})
+import { configs } from '../../config/environments'
 
 export class ConfigLoader {
-  private configDir: string
-
-  constructor() {
-    // Assuming scripts are in /scripts and config is in /config
-    this.configDir = resolve(__dirname, '../../config')
-  }
-
-  /** Parse a .tfvars file and return key-value pairs */
-  private parseTfvars(content: string): Record<string, string> {
-    const result: Record<string, string> = {}
-
-    const lines = content.split('\n')
-    for (const line of lines) {
-      const trimmed = line.trim()
-
-      // Skip comments and empty lines
-      if (!trimmed || trimmed.startsWith('#')) continue
-
-      // Check if line contains assignment
-      if (!trimmed.includes('=')) continue
-
-      const [key, ...valueParts] = trimmed.split('=')
-      const trimmedKey = key.trim()
-      let value = valueParts.join('=').trim()
-
-      // Remove inline comments
-      const commentIndex = value.indexOf('#')
-
-      if (commentIndex !== -1) {
-        // Only remove comment if it's outside quotes
-        const beforeComment = value.substring(0, commentIndex)
-        if (beforeComment.includes('"') && beforeComment.lastIndexOf('"') < commentIndex) {
-          value = beforeComment.trim()
-        }
-      }
-
-      // Remove quotes if present
-      if (value.startsWith('"') && value.endsWith('"')) {
-        value = value.slice(1, -1)
-      }
-
-      result[trimmedKey] = value
-    }
-
-    return result
-  }
 
   /**
    * Load and validate config for a specific environment
+   *
+   * Now loads directly from TypeScript config for full type safety!
+   * The .tfvars files are only used by Terraform.
+   *
    * @param silent - If true, suppress logging (used by load-config command)
    */
   loadConfig(env: Environment, silent = false): Config {
-    const configPath = resolve(this.configDir, `${env}.tfvars`)
-
     if (!silent) {
-      logger.info(`Loading config from: ${configPath}`)
+      logger.info(`Loading config for environment: ${env}`)
     }
 
     try {
-      const content = readFileSync(configPath, 'utf-8')
-      const parsed = this.parseTfvars(content)
+      // Load directly from TypeScript config - single source of truth!
+      const config = configs[env]
 
-      // Validate with Zod
-      const validated = ConfigSchema.parse(parsed)
-
-      // Convert snake_case to camelCase
-      const config: Config = {
-        projectId: validated.project_id,
-        projectNumber: validated.project_number,
-        region: validated.region,
-        bucketForTerraformStateName: validated.bucket_for_terraform_state_name,
-        artifactRegistryName: validated.artifact_registry_name,
-        cloudRunServiceName: validated.cloud_run_service_name,
-        dockerImageName: validated.docker_image_name,
-        githubActionsSaName: validated.github_actions_sa_name,
-        cloudRunSaName: validated.cloud_run_sa_name,
-        minInstances: validated.min_instances,
-        maxInstances: validated.max_instances,
-        cpuLimit: validated.cpu_limit,
-        memoryLimit: validated.memory_limit,
-        containerPort: validated.container_port,
-        customDomain: validated.custom_domain
+      if (!config) {
+        throw new Error(`No configuration found for environment: ${env}`)
       }
 
       if (!silent) {
-        logger.success('Config loaded and validated successfully')
+        logger.success('Config loaded successfully')
       }
 
-      return config
+      // Return the config - TypeScript ensures type safety at compile time!
+      return config as Config
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        logger.error('Config validation failed:')
-
-        error.issues.forEach((err) => {
-          logger.error(`  ${err.path.join('.')}: ${err.message}`)
-        })
-      } else {
-        logger.error(`Failed to load config: ${error}`)
-      }
-
+      logger.error(`Failed to load config: ${error}`)
       throw error
     }
   }
 
-  /** Validate a config file  */
+  /** Validate a config exists for an environment  */
   validateConfig(env: Environment): boolean {
     try {
       this.loadConfig(env)

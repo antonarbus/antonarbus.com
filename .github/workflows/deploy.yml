@@ -36,6 +36,9 @@ jobs:
         with:
           bun-version: latest
 
+      - name: 'Generate Terraform Variables'
+        run: bun run generate-tfvars
+
       - name: 'Detect Environment'
         run: bun scripts/cli.ts detect-env
 

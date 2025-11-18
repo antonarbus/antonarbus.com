@@ -12,7 +12,10 @@
     "update-packages": "bunx npm-check-updates -i",
     "docker-build": "docker compose -f docker-compose.prod.yml build",
     "docker-build-no-cache": "docker compose -f docker-compose.prod.yml build --no-cache",
-    "docker-start": "docker compose -f docker-compose.prod.yml up"
+    "docker-start": "docker compose -f docker-compose.prod.yml up",
+    "deploy": "bun scripts/cli.ts",
+    "deploy:validate": "bun scripts/cli.ts validate",
+    "deploy:help": "bun scripts/cli.ts --help"
   },
   "dependencies": {
     "@emotion/css": "^11.10.5",
@@ -22,6 +25,8 @@
     "@mui/icons-material": "^5.8.0",
     "@mui/material": "^5.8.1",
     "@reduxjs/toolkit": "^1.8.1",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.3.0",
     "@types/jest": "^27.5.0",
     "@types/react-dom": "18.3.1",
     "ag-grid-community": "^28.2.1",
@@ -29,10 +34,13 @@
     "ag-grid-react": "^28.2.1",
     "array-move": "^4.0.0",
     "axios": "^0.26.1",
+    "chalk": "^5.6.2",
     "cheerio": "^1.0.0-rc.11",
+    "commander": "^14.0.2",
     "cookies-next": "^2.0.4",
     "create-next-app": "15.0.1",
     "eslint-config-next": "15.0.1",
+    "execa": "^9.6.0",
     "formidable": "^2.0.1",
     "framer-motion": "^9.0.1",
     "gsap": "^3.10.4",
@@ -58,6 +66,7 @@
     "react-sortable-hoc": "^2.0.0",
     "react-transition-group": "^4.4.2",
     "react-use": "^17.3.2",
+    "redux-devtools-extension": "^2.13.9",
     "redux-form": "^8.3.8",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.4.1",
@@ -68,10 +77,8 @@
     "styled-components": "^5.3.3",
     "styled-jsx": "^5.0.1",
     "uuid": "^8.3.2",
-    "zustand": "^4.0.0-rc.1",
-    "redux-devtools-extension": "^2.13.9",
-    "@testing-library/react": "^13.3.0",
-    "@testing-library/jest-dom": "^5.16.4"
+    "zod": "^4.1.12",
+    "zustand": "^4.0.0-rc.1"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.16.7",

@@ -37,13 +37,13 @@ jobs:
           bun-version: latest
 
       - name: 'Detect Environment'
-        run: bash .github/scripts/detect-and-load-env-from-github-branch.sh
+        run: bun scripts/cli.ts detect-env
 
       - name: 'Validate Config Files'
-        run: bash config/validate.sh
+        run: bun scripts/cli.ts validate
 
       - name: 'Load Config'
-        run: bash .github/scripts/get-config-variables.sh ${{ env.ENVIRONMENT }} >> $GITHUB_ENV
+        run: bun scripts/cli.ts load-config ${{ env.ENVIRONMENT }} >> $GITHUB_ENV
 
       - name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v3'
@@ -52,7 +52,7 @@ jobs:
           service_account: 'github-actions-sa@${{ env.PROJECT_ID }}.iam.gserviceaccount.com'
 
       - name: 'Detect Changes'
-        run: bash .github/scripts/detect-changes.sh
+        run: bun scripts/cli.ts detect-changes
 
       # ============================================================================
       # TERRAFORM STEPS (only if terraform files changed)
@@ -68,7 +68,7 @@ jobs:
 
       - name: 'Set GCP Project and Enable APIs'
         if: env.CHANGES_DETECTED_AT == 'terraform' || env.CHANGES_DETECTED_AT == 'both'
-        run: bash .github/scripts/setup-gcp.sh
+        run: bun scripts/cli.ts setup-gcp
 
       - name: 'Terraform Format Check'
         if: env.CHANGES_DETECTED_AT == 'terraform' || env.CHANGES_DETECTED_AT == 'both'
@@ -78,8 +78,7 @@ jobs:
 
       - name: 'Terraform Apply'
         if: env.CHANGES_DETECTED_AT == 'terraform' || env.CHANGES_DETECTED_AT == 'both'
-        run: bash smart-apply.sh ${{ env.ENVIRONMENT }}
-        working-directory: ./terraform/infrastructure
+        run: bun scripts/cli.ts terraform-apply ${{ env.ENVIRONMENT }}
 
       # ============================================================================
       # DOCKER STEPS (always deploys to dev - other envs use image promotion)
@@ -106,12 +105,12 @@ jobs:
 
       - name: 'Scan Image for Vulnerabilities'
         if: env.CHANGES_DETECTED_AT != 'none'
-        run: bash .github/scripts/scan-vulnerabilities.sh
+        run: bun scripts/cli.ts scan-vulnerabilities
 
       - name: 'Deploy Docker Image to Cloud Run'
         if: env.CHANGES_DETECTED_AT != 'none'
-        run: bash .github/scripts/deploy-to-cloudrun.sh
+        run: bun scripts/cli.ts deploy-cloudrun
 
       - name: 'Verify Deployment'
         if: env.CHANGES_DETECTED_AT != 'none'
-        run: bash .github/scripts/verify-deployment.sh
+        run: bun scripts/cli.ts verify-deployment

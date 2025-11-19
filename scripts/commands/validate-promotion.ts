@@ -1,17 +1,14 @@
 import { logger } from '../lib/logger'
+import { Env } from '/config/configVariables'
 
-export async function validatePromotion(sourceEnv: string, targetEnv: string): Promise<void> {
+export async function validatePromotion(sourceEnv: Env, targetEnv: Env): Promise<void> {
   if (!sourceEnv || !targetEnv) {
     console.error('Usage: validate-promotion <source_env> <target_env>')
     process.exit(1)
   }
 
   // Define valid promotion paths
-  const validPaths = [
-    'dev-test',
-    'test-pilot',
-    'pilot-prod',
-  ]
+  const validPaths = ['dev-test', 'test-pilot', 'pilot-prod']
 
   const promotionPath = `${sourceEnv}-${targetEnv}`
 

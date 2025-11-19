@@ -10,14 +10,11 @@ import { verifyDeployment } from './commands/verify-deployment'
 import { terraformApply } from './commands/terraform-apply'
 import { promoteImage } from './commands/promote-image'
 import { validatePromotion } from './commands/validate-promotion'
-import type { Environment } from './types'
+import { Env } from '/config/configVariables'
 
 const program = new Command()
 
-program
-  .name('deploy-cli')
-  .description('Deployment automation for antonarbus.com')
-  .version('1.0.0')
+program.name('deploy-cli').description('Deployment automation for antonarbus.com').version('1.0.0')
 
 program
   .command('detect-env')
@@ -36,8 +33,8 @@ program
 program
   .command('load-config <environment>')
   .description('Load config for specified environment and output as env vars')
-  .action(async (environment: Environment) => {
-    await loadConfig(environment)
+  .action(async (env: Env) => {
+    await loadConfig(env)
   })
 
 program
@@ -71,8 +68,8 @@ program
 program
   .command('terraform-apply <environment>')
   .description('Apply Terraform configuration for environment')
-  .action(async (environment: Environment) => {
-    await terraformApply(environment)
+  .action(async (env: Env) => {
+    await terraformApply(env)
   })
 
 program
@@ -85,7 +82,7 @@ program
 program
   .command('validate-promotion <source_env> <target_env>')
   .description('Validate promotion path between environments')
-  .action(async (sourceEnv: string, targetEnv: string) => {
+  .action(async (sourceEnv: Env, targetEnv: Env) => {
     await validatePromotion(sourceEnv, targetEnv)
   })
 

@@ -1,15 +1,15 @@
 import { logger } from '../lib/logger'
 import { githubEnv } from '../lib/github-env'
 import { git } from '../lib/git'
-import type { Environment } from '../types'
+import { Env } from '/config/configVariables'
 
-export async function detectEnvironment(): Promise<Environment> {
+export async function detectEnvironment(): Promise<Env> {
   const branch = await git.getCurrentBranch()
 
   // Master branch always deploys to dev
   // Other environments are reached via promotion workflow at GitHub, not direct push
   if (branch === 'master' || branch === 'main') {
-    const environment: Environment = 'dev'
+    const environment: Env = 'dev'
 
     logger.info(`Environment: ${environment} (from branch: ${branch})`)
 

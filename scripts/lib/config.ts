@@ -1,9 +1,7 @@
 import { logger } from './logger'
-import type { Config, Environment } from '../types'
-import { configs } from '../../config/environments'
+import { ConfigVariables, configVariables, Env } from '../../config/configVariables'
 
 export class ConfigLoader {
-
   /**
    * Load and validate config for a specific environment
    *
@@ -12,16 +10,16 @@ export class ConfigLoader {
    *
    * @param silent - If true, suppress logging (used by load-config command)
    */
-  loadConfig(env: Environment, silent = false): Config {
+  loadConfig(env: Env, silent = false): ConfigVariables {
     if (!silent) {
       logger.info(`Loading config for environment: ${env}`)
     }
 
     try {
       // Load directly from TypeScript config - single source of truth!
-      const config = configs[env]
+      const variables = configVariables[env]
 
-      if (!config) {
+      if (!variables) {
         throw new Error(`No configuration found for environment: ${env}`)
       }
 
@@ -30,7 +28,7 @@ export class ConfigLoader {
       }
 
       // Return the config - TypeScript ensures type safety at compile time!
-      return config as Config
+      return variables // as ConfigVariables
     } catch (error) {
       logger.error(`Failed to load config: ${error}`)
       throw error
@@ -38,7 +36,7 @@ export class ConfigLoader {
   }
 
   /** Validate a config exists for an environment  */
-  validateConfig(env: Environment): boolean {
+  validateConfig(env: Env): boolean {
     try {
       this.loadConfig(env)
       return true
@@ -51,7 +49,7 @@ export class ConfigLoader {
    * Validate all config files
    */
   validateAllConfigs(): boolean {
-    const environments: Environment[] = ['dev', 'test', 'pilot', 'prod']
+    const environments: Env[] = ['dev', 'test', 'pilot', 'prod']
     let allValid = true
 
     logger.section('Validating all config files...')
@@ -71,7 +69,7 @@ export class ConfigLoader {
    * Export config as environment variables (for GitHub Actions compatibility)
    * Removes inline comments from values
    */
-  exportAsEnvVars(config: Config): string {
+  exportAsEnvVars(config: ConfigVariables): string {
     const cleanValue = (value: string) => {
       // Remove inline comments (everything after # including leading spaces)
       const commentIndex = value.indexOf('#')

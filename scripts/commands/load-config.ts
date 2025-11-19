@@ -1,7 +1,7 @@
 import { configLoader } from '../lib/config'
-import type { Environment } from '../types'
+import { Env } from '/config/configVariables'
 
-export async function loadConfig(environment: Environment): Promise<void> {
+export async function loadConfig(environment: Env): Promise<void> {
   if (!environment) {
     console.error('❌ Error: Environment parameter is required')
     console.error('Usage: load-config <environment>')

@@ -2,9 +2,9 @@ import { $ } from 'bun'
 import { resolve } from 'path'
 import { logger } from '../lib/logger'
 import { configLoader } from '../lib/config'
-import type { Environment } from '../types'
+import { Env } from '/config/configVariables'
 
-export async function terraformApply(environment: Environment): Promise<void> {
+export async function terraformApply(environment: Env): Promise<void> {
   if (!environment) {
     logger.error('Environment argument required')
     logger.error('Usage: terraform-apply <environment>')

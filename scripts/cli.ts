@@ -10,7 +10,7 @@ import { verifyDeployment } from './commands/verify-deployment'
 import { terraformApply } from './commands/terraform-apply'
 import { promoteImage } from './commands/promote-image'
 import { validatePromotion } from './commands/validate-promotion'
-import { Env } from '/config/configVariables'
+import { envSchema } from '/config/configVariables'
 
 const program = new Command()
 
@@ -33,8 +33,9 @@ program
 program
   .command('load-config <environment>')
   .description('Load config for specified environment and output as env vars')
-  .action(async (env: Env) => {
-    await loadConfig(env)
+  .action(async (env: string) => {
+    const validatedEnv = envSchema.parse(env)
+    await loadConfig(validatedEnv)
   })
 
 program
@@ -68,8 +69,9 @@ program
 program
   .command('terraform-apply <environment>')
   .description('Apply Terraform configuration for environment')
-  .action(async (env: Env) => {
-    await terraformApply(env)
+  .action(async (env: string) => {
+    const validatedEnv = envSchema.parse(env)
+    await terraformApply(validatedEnv)
   })
 
 program
@@ -82,8 +84,10 @@ program
 program
   .command('validate-promotion <source_env> <target_env>')
   .description('Validate promotion path between environments')
-  .action(async (sourceEnv: Env, targetEnv: Env) => {
-    await validatePromotion(sourceEnv, targetEnv)
+  .action(async (sourceEnv: string, targetEnv: string) => {
+    const validatedSourceEnv = envSchema.parse(sourceEnv)
+    const validatedTargetEnv = envSchema.parse(targetEnv)
+    await validatePromotion(validatedSourceEnv, validatedTargetEnv)
   })
 
 program.parse()

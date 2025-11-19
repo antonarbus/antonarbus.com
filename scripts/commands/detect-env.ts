@@ -9,16 +9,16 @@ export async function detectEnvironment(): Promise<Env> {
   // Master branch always deploys to dev
   // Other environments are reached via promotion workflow at GitHub, not direct push
   if (branch === 'master' || branch === 'main') {
-    const environment: Env = 'dev'
+    const env: Env = 'dev'
 
-    logger.info(`Environment: ${environment} (from branch: ${branch})`)
+    logger.info(`Environment: ${env} (from branch: ${branch})`)
 
     // Export ENVIRONMENT to GITHUB_ENV
-    githubEnv.set('ENVIRONMENT', environment)
+    githubEnv.set('ENVIRONMENT', env)
 
     logger.success('Environment detection complete')
 
-    return environment
+    return env
   }
 
   logger.error(`Only master/main branch triggers deployment to dev environment`)

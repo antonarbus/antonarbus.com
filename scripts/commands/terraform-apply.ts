@@ -4,8 +4,8 @@ import { logger } from '../lib/logger'
 import { configLoader } from '../lib/config'
 import { Env } from '/config/configVariables'
 
-export async function terraformApply(environment: Env): Promise<void> {
-  if (!environment) {
+export async function terraformApply(env: Env): Promise<void> {
+  if (!env) {
     logger.error('Environment argument required')
     logger.error('Usage: terraform-apply <environment>')
     logger.error('Example: terraform-apply dev')
@@ -13,28 +13,28 @@ export async function terraformApply(environment: Env): Promise<void> {
     process.exit(1)
   }
 
-  logger.info(`Environment: ${environment}`)
+  logger.info(`Environment: ${env}`)
 
   // Validate config file before proceeding
   logger.plain('')
   logger.info('Validating config file...')
-  if (!configLoader.validateConfig(environment)) {
+  if (!configLoader.validateConfig(env)) {
     logger.error('Config validation failed')
     process.exit(1)
   }
   logger.plain('')
 
   // Load config
-  const config = configLoader.loadConfig(environment)
+  const config = configLoader.loadConfig(env)
 
   // Resolve paths
   const terraformDir = resolve(__dirname, '../../terraform/infrastructure')
-  const configFilePath = resolve(__dirname, `../../config/${environment}.tfvars`)
+  const configFilePath = resolve(__dirname, `../../config/${env}.tfvars`)
 
   logger.info(`Config: ${configFilePath}`)
   logger.plain('')
 
-  logger.section(`Deploying main infrastructure for environment: ${environment}`)
+  logger.section(`Deploying main infrastructure for environment: ${env}`)
   logger.plain('')
 
   logger.info('Initializing Terraform with remote backend...')
@@ -45,13 +45,13 @@ export async function terraformApply(environment: Env): Promise<void> {
   await $`terraform init -backend-config=bucket=${config.bucketForTerraformStateName} -backend-config=prefix=terraform/state`
 
   logger.plain('')
-  logger.info(`Selecting workspace: ${environment}`)
+  logger.info(`Selecting workspace: ${env}`)
 
   // Create workspace if it doesn't exist, otherwise select it
   try {
-    await $`terraform workspace select ${environment}`.quiet()
+    await $`terraform workspace select ${env}`.quiet()
   } catch {
-    await $`terraform workspace new ${environment}`
+    await $`terraform workspace new ${env}`
   }
 
   logger.plain('')
@@ -75,7 +75,7 @@ export async function terraformApply(environment: Env): Promise<void> {
   // Summary for GitHub Actions
   logger.summary.write('## Terraform Apply Summary')
   logger.summary.write('')
-  logger.summary.write(`**Environment**: ${environment}`)
+  logger.summary.write(`**Environment**: ${env}`)
   logger.summary.write(`**Config**: \`${configFilePath}\``)
   logger.summary.write('**Status**: ✅ Success')
   logger.summary.write('')

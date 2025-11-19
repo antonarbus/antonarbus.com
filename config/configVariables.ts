@@ -1,3 +1,5 @@
+import z from 'zod'
+
 /**
  * - This file is the authoritative source for all environment configs.
  * - The .tfvars files are GENERATED from this file by `bun run generate-tfvars.ts`
@@ -40,5 +42,7 @@ export const configVariables = {
   prod: prodConfigVariables
 } as const
 
-export type Env = keyof typeof configVariables
+export const envSchema = z.enum(['dev', 'test', 'pilot', 'prod'])
+export type Env = z.infer<typeof envSchema>
+
 export type ConfigVariables = (typeof configVariables)[keyof typeof configVariables]

@@ -118,12 +118,14 @@ export const gcp = {
     projectId: string
   ): Promise<string | null> {
     try {
+      const format = 'value(spec.template.spec.containers[0].image)'
       const result =
-        await $`gcloud run services describe ${serviceName} --region ${region} --project ${projectId} --format=value(spec.template.spec.containers[0].image)`.text()
+        await $`gcloud run services describe ${serviceName} --region ${region} --project ${projectId} --format=${format}`.text()
 
       return result.trim() || null
     } catch (error) {
-      logger.warning(`Could not retrieve current image: ${error}`)
+      const errorMessage = error instanceof Error ? error.message : String(error)
+      logger.warning(`Could not retrieve current image: ${errorMessage}`)
       return null
     }
   },

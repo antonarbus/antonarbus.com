@@ -15,7 +15,6 @@
     "docker-build-no-cache": "docker compose -f docker-compose.prod.yml build --no-cache",
     "docker-start": "docker compose -f docker-compose.prod.yml up",
     "deploy": "bun scripts/cli.ts",
-    "deploy:validate": "bun scripts/cli.ts validate",
     "deploy:help": "bun scripts/cli.ts --help",
     "generate-tfvars": "bun scripts/commands/generate-tfvars.ts"
   },

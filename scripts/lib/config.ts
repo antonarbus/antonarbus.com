@@ -35,36 +35,6 @@ export class ConfigLoader {
     }
   }
 
-  /** Validate a config exists for an environment  */
-  validateConfig(env: Env): boolean {
-    try {
-      this.loadConfig(env)
-      return true
-    } catch {
-      return false
-    }
-  }
-
-  /**
-   * Validate all config files
-   */
-  validateAllConfigs(): boolean {
-    const environments: Env[] = ['dev', 'test', 'pilot', 'prod']
-    let allValid = true
-
-    logger.section('Validating all config files...')
-
-    for (const env of environments) {
-      logger.plain('')
-      const isValid = this.validateConfig(env)
-      if (!isValid) {
-        allValid = false
-      }
-    }
-
-    return allValid
-  }
-
   /**
    * Export config as environment variables (for GitHub Actions compatibility)
    * Removes inline comments from values

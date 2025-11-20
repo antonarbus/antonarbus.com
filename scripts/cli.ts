@@ -1,7 +1,6 @@
 #!/usr/bin/env bun
 import { Command } from 'commander'
 import { detectEnvironment } from './commands/detect-env'
-import { validate } from './commands/validate'
 import { loadConfig } from './commands/load-config'
 import { setupGcp } from './commands/setup-gcp'
 import { scanVulnerabilities } from './commands/scan-vulnerabilities'
@@ -21,13 +20,6 @@ program
   .description('Detect deployment environment from git branch')
   .action(async () => {
     await detectEnvironment()
-  })
-
-program
-  .command('validate')
-  .description('Validate all config files')
-  .action(async () => {
-    await validate()
   })
 
 program

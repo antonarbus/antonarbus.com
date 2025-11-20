@@ -35,9 +35,6 @@ jobs:
       - name: 'Detect Environment'
         run: bun scripts/cli.ts detect-env
 
-      - name: 'Validate Config Files'
-        run: bun scripts/cli.ts validate
-
       - name: 'Load Config'
         run: bun scripts/cli.ts load-config --env ${{ env.ENVIRONMENT }} >> $GITHUB_ENV
 

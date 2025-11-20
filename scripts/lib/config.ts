@@ -1,4 +1,4 @@
-import { logger } from './logger'
+import { logger } from './output'
 import { ConfigVariables, configVariables, Env } from '../../config/configVariables'
 
 export class ConfigLoader {

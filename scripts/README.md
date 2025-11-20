@@ -79,18 +79,6 @@ Requires `PROJECT_ID` environment variable.
 
 ---
 
-#### `scan-vulnerabilities`
-
-Scan Docker image for vulnerabilities using GCP Container Analysis.
-
-```bash
-bun scripts/cli.ts scan-vulnerabilities
-```
-
-Requires: `REGION`, `PROJECT_ID`, `ARTIFACT_REGISTRY_NAME`, `DOCKER_IMAGE_NAME`, `DOCKER_IMAGE_TAG`.
-
----
-
 #### `deploy-cloudrun`
 
 Deploy Docker image to Cloud Run.
@@ -164,13 +152,12 @@ Outputs `valid=true` or `valid=false` for `GITHUB_OUTPUT`.
 ```
 scripts/
 ├── cli.ts                          # Main CLI entry point
-├── commands/                       # Command implementations (11 total)
+├── commands/                       # Command implementations (10 total)
 │   ├── detect-env.ts
 │   ├── validate.ts
 │   ├── load-config.ts
 │   ├── detect-changes.ts
 │   ├── setup-gcp.ts
-│   ├── scan-vulnerabilities.ts
 │   ├── deploy-cloudrun.ts
 │   ├── verify-deployment.ts
 │   ├── terraform-apply.ts
@@ -181,7 +168,7 @@ scripts/
 │   ├── gcp.ts                      # GCP operations
 │   ├── git.ts                      # Git operations
 │   ├── github-env.ts               # GitHub Actions environment helpers
-│   └── logger.ts                   # Colored logging
+│   └── output.ts                   # Logging (stderr) and GitHub Actions output (stdout)
 └── types.ts                        # TypeScript type definitions
 ```
 

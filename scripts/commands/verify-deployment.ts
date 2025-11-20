@@ -1,4 +1,4 @@
-import { logger } from '../lib/logger'
+import { logger } from '../lib/output'
 import { gcp } from '../lib/gcp'
 import { sharedConfigVariables, configVariables, Env } from '../../config/configVariables'
 
@@ -13,13 +13,13 @@ export async function verifyDeployment(env: Env, previousImage?: string): Promis
   logger.info('Waiting for deployment to be ready...')
   await Bun.sleep(10000)
 
-  logger.plain('')
+  logger.emptyLine()
   logger.info('Getting service URL...')
 
   const url = await gcp.getCloudRunServiceUrl(serviceName, region, projectId)
 
   logger.info(`Testing URL: ${url}`)
-  logger.plain('')
+  logger.emptyLine()
 
   // Test if site responds with 200 OK
   let httpCode: number
@@ -30,7 +30,7 @@ export async function verifyDeployment(env: Env, previousImage?: string): Promis
 
     if (httpCode === 200) {
       logger.success(`Site is live and responding (HTTP ${httpCode})`)
-      logger.plain('')
+      logger.emptyLine()
 
       // Smoke tests: Verify actual content
       logger.info('Running smoke tests...')
@@ -72,32 +72,19 @@ export async function verifyDeployment(env: Env, previousImage?: string): Promis
         logger.warning('     Response time slow (> 10s)')
       }
 
-      logger.plain('')
+      logger.emptyLine()
 
       if (smokeTestFailures === 0) {
         logger.success('All smoke tests passed')
         logger.plain(`🌐 Deployment URL: ${url}`)
-        logger.plain('')
-
-        logger.summary.write('## Deployment Verification')
-        logger.summary.write('')
-        logger.summary.write('✅ **Status**: Live and responding')
-        logger.summary.write(`🌐 **URL**: ${url}`)
-        logger.summary.write(`📊 **HTTP Status**: ${httpCode}`)
-        logger.summary.write(`🧪 **Smoke Tests**: All passed (${responseSize} bytes, ${responseTime.toFixed(2)}ms)`)
+        logger.emptyLine()
 
         process.exit(0)
       } else {
         logger.error(`${smokeTestFailures} smoke test(s) failed`)
         logger.warning('Site is responding but content may be incorrect')
         logger.plain(`🌐 URL: ${url}`)
-        logger.plain('')
-
-        logger.summary.write('## Deployment Verification')
-        logger.summary.write('')
-        logger.summary.write('⚠️ **Status**: Responding but smoke tests failed')
-        logger.summary.write(`📊 **HTTP Status**: ${httpCode}`)
-        logger.summary.write(`🧪 **Smoke Tests**: ${smokeTestFailures} failed`)
+        logger.emptyLine()
 
         // Trigger rollback for smoke test failures
         if (previousImage && previousImage !== 'none') {
@@ -108,13 +95,13 @@ export async function verifyDeployment(env: Env, previousImage?: string): Promis
       }
     } else {
       logger.error(`Site returned HTTP ${httpCode}`)
-      logger.plain('')
+      logger.emptyLine()
 
       // Attempt rollback if previous image is available
       if (previousImage && previousImage !== 'none') {
         await gcp.rollbackCloudRunService(serviceName, previousImage, region, projectId)
 
-        logger.plain('')
+        logger.emptyLine()
         logger.info('Waiting 10s for rollback to stabilize...')
         await Bun.sleep(10000)
 
@@ -125,26 +112,15 @@ export async function verifyDeployment(env: Env, previousImage?: string): Promis
         if (rollbackHttpCode === 200) {
           logger.success(`Service restored and responding (HTTP ${rollbackHttpCode})`)
         } else {
-          logger.warning(`Rollback completed but service still not responding properly (HTTP ${rollbackHttpCode})`)
+          logger.warning(
+            `Rollback completed but service still not responding properly (HTTP ${rollbackHttpCode})`
+          )
         }
       } else {
         logger.warning('No previous image available for rollback')
       }
 
-      logger.plain('')
-
-      logger.summary.write('## Deployment Verification')
-      logger.summary.write('')
-      logger.summary.write('❌ **Status**: Failed')
-      logger.summary.write(`📊 **HTTP Status**: ${httpCode}`)
-      logger.summary.write('')
-      logger.summary.write(`Expected HTTP 200, got ${httpCode}`)
-
-      if (previousImage && previousImage !== 'none') {
-        logger.summary.write('')
-        logger.summary.write('🔄 **Rollback**: Attempted to previous image')
-      }
-
+      logger.emptyLine()
       process.exit(1)
     }
   } catch (error) {

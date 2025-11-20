@@ -1,6 +1,6 @@
 import { $ } from 'bun'
 import { resolve } from 'path'
-import { logger } from '../lib/logger'
+import { logger } from '../lib/output'
 import { configLoader } from '../lib/config'
 import { Env } from '/config/configVariables'
 
@@ -15,10 +15,10 @@ export async function terraformApply(env: Env): Promise<void> {
   const configFilePath = resolve(__dirname, `../../config/${env}.tfvars`)
 
   logger.info(`Config: ${configFilePath}`)
-  logger.plain('')
+  logger.emptyLine()
 
   logger.section(`Deploying main infrastructure for environment: ${env}`)
-  logger.plain('')
+  logger.emptyLine()
 
   logger.info('Initializing Terraform with remote backend...')
 
@@ -27,7 +27,7 @@ export async function terraformApply(env: Env): Promise<void> {
 
   await $`terraform init -backend-config=bucket=${config.bucketForTerraformStateName} -backend-config=prefix=terraform/state`
 
-  logger.plain('')
+  logger.emptyLine()
   logger.info(`Selecting workspace: ${env}`)
 
   // Create workspace if it doesn't exist, otherwise select it
@@ -37,30 +37,21 @@ export async function terraformApply(env: Env): Promise<void> {
     await $`terraform workspace new ${env}`
   }
 
-  logger.plain('')
+  logger.emptyLine()
   logger.info('Applying Terraform configuration...')
   logger.info(`Config file: ${configFilePath}`)
-  logger.plain('')
+  logger.emptyLine()
 
   await $`terraform apply -auto-approve -var-file=${configFilePath}`
 
-  logger.plain('')
+  logger.emptyLine()
   logger.success('Terraform apply completed successfully')
-  logger.plain('')
+  logger.emptyLine()
 
   logger.info('Terraform Outputs:')
   await $`terraform output`
 
-  logger.plain('')
+  logger.emptyLine()
   logger.success('Infrastructure deployment complete!')
-  logger.plain('')
-
-  // Summary for GitHub Actions
-  logger.summary.write('## Terraform Apply Summary')
-  logger.summary.write('')
-  logger.summary.write(`**Environment**: ${env}`)
-  logger.summary.write(`**Config**: \`${configFilePath}\``)
-  logger.summary.write('**Status**: ✅ Success')
-  logger.summary.write('')
-  logger.summary.write('Infrastructure updated successfully')
+  logger.emptyLine()
 }

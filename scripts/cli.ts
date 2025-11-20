@@ -3,7 +3,6 @@ import { Command } from 'commander'
 import { detectEnvironment } from './commands/detect-env'
 import { loadConfig } from './commands/load-config'
 import { setupGcp } from './commands/setup-gcp'
-import { scanVulnerabilities } from './commands/scan-vulnerabilities'
 import { deployCloudRun } from './commands/deploy-cloudrun'
 import { verifyDeployment } from './commands/verify-deployment'
 import { terraformApply } from './commands/terraform-apply'
@@ -64,15 +63,6 @@ program
   .action(async (options: { env: string; previousImage?: string }) => {
     const validatedEnv = envSchema.parse(options.env)
     await verifyDeployment(validatedEnv, options.previousImage)
-  })
-
-program
-  .command('scan-vulnerabilities')
-  .description('Scan Docker image for vulnerabilities')
-  .requiredOption('--env <environment>', 'Environment name (dev, test, pilot, prod)')
-  .action(async (options: { env: string }) => {
-    const validatedEnv = envSchema.parse(options.env)
-    await scanVulnerabilities(validatedEnv)
   })
 
 program

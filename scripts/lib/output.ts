@@ -1,3 +1,5 @@
+import chalk from 'chalk'
+
 /**
  * Output utilities for CLI commands
  *
@@ -8,19 +10,31 @@
 /** Real-time logs to stderr (won't interfere with stdout) */
 export const logger = {
   info: (message: string): void => {
-    console.error(`ℹ️  ${message}`)
+    console.error(chalk.blue(`ℹ ${message}`))
   },
 
   success: (message: string): void => {
-    console.error(`✅ ${message}`)
+    console.error(chalk.green(`✓ ${message}`))
   },
 
   error: (message: string): void => {
-    console.error(`❌ ${message}`)
+    console.error(chalk.red(`✗ ${message}`))
   },
 
   warning: (message: string): void => {
-    console.error(`⚠️  ${message}`)
+    console.error(chalk.yellow(`⚠ ${message}`))
+  },
+
+  section: (message: string): void => {
+    console.error('\n' + chalk.bold(message))
+  },
+
+  plain: (message: string): void => {
+    console.error(message)
+  },
+
+  emptyLine: (): void => {
+    console.error('')
   }
 }
 

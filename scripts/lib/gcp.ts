@@ -1,6 +1,5 @@
 import { $ } from 'bun'
-import { logger } from './logger'
-import type { VulnerabilitySummary } from '../types'
+import { logger } from './output'
 
 export const gcp = {
   /**
@@ -19,7 +18,8 @@ export const gcp = {
 
     // Quick check if APIs are already enabled
     try {
-      const result = await $`gcloud services list --enabled --project=${projectId} --filter=name:iam.googleapis.com --format=value(name)`.text()
+      const result =
+        await $`gcloud services list --enabled --project=${projectId} --filter=name:iam.googleapis.com --format=value(name)`.text()
 
       if (result.includes('iam.googleapis.com')) {
         logger.success('APIs already enabled')
@@ -32,7 +32,7 @@ export const gcp = {
     logger.info('Enabling required Google Cloud APIs...')
     await $`gcloud services enable iam.googleapis.com cloudresourcemanager.googleapis.com storage.googleapis.com containerscanning.googleapis.com --project=${projectId}`
 
-    logger.plain('')
+    logger.emptyLine()
     logger.info('Waiting for API activation to propagate...')
 
     // Retry loop with shorter intervals (max 30 seconds)
@@ -41,7 +41,8 @@ export const gcp = {
       logger.info(`  Checking API status (attempt ${attempt}/${maxAttempts})...`)
 
       try {
-        const result = await $`gcloud services list --enabled --project=${projectId} --filter=name:iam.googleapis.com --format=value(name)`.text()
+        const result =
+          await $`gcloud services list --enabled --project=${projectId} --filter=name:iam.googleapis.com --format=value(name)`.text()
 
         if (result.includes('iam.googleapis.com')) {
           logger.success('  APIs are active')
@@ -59,7 +60,7 @@ export const gcp = {
       await Bun.sleep(5000) // 5 seconds
     }
 
-    logger.plain('')
+    logger.emptyLine()
     logger.success('GCP project setup complete')
   },
 
@@ -87,36 +88,6 @@ export const gcp = {
   },
 
   /**
-   * Get vulnerability scan results for a Docker image
-   */
-  async getVulnerabilityScan(imageUrl: string): Promise<VulnerabilitySummary | null> {
-    logger.info('Fetching vulnerability scan results...')
-
-    try {
-      const result = await $`gcloud artifacts docker images describe ${imageUrl} --show-package-vulnerability --format=value(package_vulnerability_summary.vulnerabilityCounts)`.text()
-
-      if (!result.trim()) {
-        return null
-      }
-
-      // Parse vulnerability counts
-      const critical = this.extractCount(result, 'CRITICAL')
-      const high = this.extractCount(result, 'HIGH')
-      const medium = this.extractCount(result, 'MEDIUM')
-      const low = this.extractCount(result, 'LOW')
-
-      return { critical, high, medium, low }
-    } catch {
-      return null
-    }
-  },
-
-  extractCount(text: string, severity: string): number {
-    const match = text.match(new RegExp(`${severity}=(\\d+)`))
-    return match ? parseInt(match[1], 10) : 0
-  },
-
-  /**
    * Update Cloud Run service with new image
    */
   async updateCloudRunService(
@@ -130,11 +101,11 @@ export const gcp = {
     logger.info(`  Region: ${region}`)
     logger.info(`  Project: ${projectId}`)
     logger.info(`  Image: ${imageUrl}`)
-    logger.plain('')
+    logger.emptyLine()
 
     await $`gcloud run services update ${serviceName} --image ${imageUrl} --region ${region} --project ${projectId}`
 
-    logger.plain('')
+    logger.emptyLine()
     logger.success('Docker image deployed to Cloud Run successfully')
   },
 
@@ -147,7 +118,8 @@ export const gcp = {
     projectId: string
   ): Promise<string | null> {
     try {
-      const result = await $`gcloud run services describe ${serviceName} --region ${region} --project ${projectId} --format=value(spec.template.spec.containers[0].image)`.text()
+      const result =
+        await $`gcloud run services describe ${serviceName} --region ${region} --project ${projectId} --format=value(spec.template.spec.containers[0].image)`.text()
       return result.trim() || null
     } catch {
       return null
@@ -162,7 +134,8 @@ export const gcp = {
     region: string,
     projectId: string
   ): Promise<string> {
-    const result = await $`gcloud run services describe ${serviceName} --region ${region} --project ${projectId} --format=json`.json()
+    const result =
+      await $`gcloud run services describe ${serviceName} --region ${region} --project ${projectId} --format=json`.json()
     return result.status.url
   },
 

@@ -1,6 +1,5 @@
 import { $ } from 'bun'
-import { logger } from '../lib/logger'
-import { githubOutput } from '../lib/output'
+import { logger, githubOutput } from '../lib/output'
 import { sharedConfigVariables, Env } from '../../config/configVariables'
 
 export async function promoteImage(sourceEnv: Env, targetEnv: Env): Promise<void> {
@@ -16,7 +15,7 @@ export async function promoteImage(sourceEnv: Env, targetEnv: Env): Promise<void
   logger.info(`  Registry: ${artifactRegistryName}`)
   logger.info(`  Source tag: ${sourceEnv}`)
   logger.info(`  Target tag: ${targetEnv}`)
-  logger.plain('')
+  logger.emptyLine()
 
   // Verify source image exists
   logger.info('Verifying source image exists...')
@@ -30,12 +29,13 @@ export async function promoteImage(sourceEnv: Env, targetEnv: Env): Promise<void
   }
 
   logger.success('Source image found')
-  logger.plain('')
+  logger.emptyLine()
 
   // Get the digest (hash) of the source image for traceability
   let sourceDigest = 'unknown'
   try {
-    const digestOutput = await $`gcloud artifacts docker images describe ${sourceImage} --project=${projectId} --format=value(image_summary.digest)`.text()
+    const digestOutput =
+      await $`gcloud artifacts docker images describe ${sourceImage} --project=${projectId} --format=value(image_summary.digest)`.text()
     sourceDigest = digestOutput.trim()
   } catch {
     logger.warning('Could not retrieve source image digest')
@@ -48,7 +48,7 @@ export async function promoteImage(sourceEnv: Env, targetEnv: Env): Promise<void
   logger.info('Adding target environment tag...')
   await $`gcloud artifacts docker tags add ${sourceImage} ${targetImage} --quiet`
 
-  logger.plain('')
+  logger.emptyLine()
   logger.success('Image promoted successfully')
   logger.info(`  Source: ${sourceImage}`)
   logger.info(`  Target: ${targetImage}`)
@@ -57,6 +57,6 @@ export async function promoteImage(sourceEnv: Env, targetEnv: Env): Promise<void
   // Export promoted image tag for deployment step
   githubOutput({
     PROMOTED_IMAGE_TAG: targetEnv,
-    SOURCE_IMAGE_DIGEST: sourceDigest,
+    SOURCE_IMAGE_DIGEST: sourceDigest
   })
 }

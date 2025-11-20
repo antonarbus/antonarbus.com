@@ -1,6 +1,5 @@
-import { logger } from '../lib/logger'
+import { logger, githubOutput } from '../lib/output'
 import { gcp } from '../lib/gcp'
-import { githubOutput } from '../lib/output'
 import { sharedConfigVariables, configVariables, Env } from '../../config/configVariables'
 
 export async function deployCloudRun(env: Env): Promise<void> {
@@ -27,8 +26,6 @@ export async function deployCloudRun(env: Env): Promise<void> {
   if (previousImage) {
     githubOutput({ PREVIOUS_IMAGE: previousImage })
   }
-
-  logger.plain('')
 
   // Deploy to Cloud Run
   await gcp.updateCloudRunService(serviceName, imageUrl, region, projectId)

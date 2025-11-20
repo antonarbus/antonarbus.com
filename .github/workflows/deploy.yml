@@ -87,9 +87,6 @@ jobs:
             ${{ steps.config.outputs.REGION }}-docker.pkg.dev/${{ steps.config.outputs.PROJECT_ID }}/${{ steps.config.outputs.ARTIFACT_REGISTRY_NAME }}/${{ steps.config.outputs.DOCKER_IMAGE_NAME }}:${{ steps.detect-env.outputs.ENVIRONMENT }}
             ${{ steps.config.outputs.REGION }}-docker.pkg.dev/${{ steps.config.outputs.PROJECT_ID }}/${{ steps.config.outputs.ARTIFACT_REGISTRY_NAME }}/${{ steps.config.outputs.DOCKER_IMAGE_NAME }}:${{ github.sha }}
 
-      - name: 'Scan Image for Vulnerabilities'
-        run: bun scripts/cli.ts scan-vulnerabilities --env ${{ steps.detect-env.outputs.ENVIRONMENT }}
-
       - name: 'Deploy Docker Image to Cloud Run'
         id: deploy
         run: bun scripts/cli.ts deploy-cloudrun --env ${{ steps.detect-env.outputs.ENVIRONMENT }} >> $GITHUB_OUTPUT

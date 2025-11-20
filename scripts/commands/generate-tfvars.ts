@@ -7,7 +7,7 @@
 
 import { resolve } from 'path'
 import { configVariables } from '../../config/configVariables'
-import { logger } from '../lib/logger'
+import { logger } from '../lib/output'
 
 // Convert camelCase to snake_case
 function toSnakeCase(str: string): string {
@@ -70,7 +70,7 @@ function generateTfvarsContent(env: string, config: Record<string, string>): str
 
 async function main() {
   logger.section('Generating .tfvars files from TypeScript config...')
-  logger.plain('')
+  logger.emptyLine()
 
   const configDir = resolve(__dirname, '../../config')
 
@@ -82,7 +82,7 @@ async function main() {
     logger.success(`Generated ${env}.tfvars`)
   }
 
-  logger.plain('')
+  logger.emptyLine()
   logger.success('All .tfvars files generated successfully!')
   logger.info('Files are ready to commit to git')
 }

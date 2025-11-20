@@ -42,12 +42,7 @@ jobs:
         run: bun run generate-tfvars
 
       - name: 'Check promotion path'
-        id: check
-        run: bun scripts/cli.ts validate-promotion "${{ github.event.inputs.source_env }}" "${{ github.event.inputs.target_env }}" >> "$GITHUB_OUTPUT"
-
-      - name: 'Fail if invalid'
-        if: steps.check.outputs.valid == 'false'
-        run: exit 1
+        run: bun scripts/cli.ts validate-promotion "${{ github.event.inputs.source_env }}" "${{ github.event.inputs.target_env }}"
 
   promote:
     name: 'Promote to ${{ github.event.inputs.target_env }}'

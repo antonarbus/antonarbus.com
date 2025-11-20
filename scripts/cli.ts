@@ -31,10 +31,11 @@ program
   })
 
 program
-  .command('load-config <environment>')
+  .command('load-config')
   .description('Load config for specified environment and output as env vars')
-  .action(async (env: string) => {
-    const validatedEnv = envSchema.parse(env)
+  .requiredOption('--env <environment>', 'Environment name (dev, test, pilot, prod)')
+  .action(async (options: { env: string }) => {
+    const validatedEnv = envSchema.parse(options.env)
     await loadConfig(validatedEnv)
   })
 
@@ -67,10 +68,11 @@ program
   })
 
 program
-  .command('terraform-apply <environment>')
+  .command('terraform-apply')
   .description('Apply Terraform configuration for environment')
-  .action(async (env: string) => {
-    const validatedEnv = envSchema.parse(env)
+  .requiredOption('--env <environment>', 'Environment name (dev, test, pilot, prod)')
+  .action(async (options: { env: string }) => {
+    const validatedEnv = envSchema.parse(options.env)
     await terraformApply(validatedEnv)
   })
 
@@ -82,11 +84,13 @@ program
   })
 
 program
-  .command('validate-promotion <source_env> <target_env>')
+  .command('validate-promotion')
   .description('Validate promotion path between environments')
-  .action((sourceEnv: string, targetEnv: string) => {
-    const validatedSourceEnv = envSchema.parse(sourceEnv)
-    const validatedTargetEnv = envSchema.parse(targetEnv)
+  .requiredOption('--source <environment>', 'Source environment name')
+  .requiredOption('--target <environment>', 'Target environment name')
+  .action((options: { source: string; target: string }) => {
+    const validatedSourceEnv = envSchema.parse(options.source)
+    const validatedTargetEnv = envSchema.parse(options.target)
     validatePromotion({ sourceEnv: validatedSourceEnv, targetEnv: validatedTargetEnv })
   })
 

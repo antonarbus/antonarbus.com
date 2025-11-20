@@ -42,7 +42,7 @@ jobs:
         run: bun run generate-tfvars
 
       - name: 'Check promotion path'
-        run: bun scripts/cli.ts validate-promotion "${{ github.event.inputs.source_env }}" "${{ github.event.inputs.target_env }}"
+        run: bun scripts/cli.ts validate-promotion --source "${{ github.event.inputs.source_env }}" --target "${{ github.event.inputs.target_env }}"
 
   promote:
     name: 'Promote to ${{ github.event.inputs.target_env }}'
@@ -73,7 +73,7 @@ jobs:
         run: bun run generate-tfvars
 
       - name: 'Load target environment config'
-        run: bun scripts/cli.ts load-config "$TARGET_ENV" >> "$GITHUB_ENV"
+        run: bun scripts/cli.ts load-config --env "$TARGET_ENV" >> "$GITHUB_ENV"
 
       - name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v3'

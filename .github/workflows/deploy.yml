@@ -39,7 +39,7 @@ jobs:
         run: bun scripts/cli.ts validate
 
       - name: 'Load Config'
-        run: bun scripts/cli.ts load-config ${{ env.ENVIRONMENT }} >> $GITHUB_ENV
+        run: bun scripts/cli.ts load-config --env ${{ env.ENVIRONMENT }} >> $GITHUB_ENV
 
       - name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v3'
@@ -67,7 +67,7 @@ jobs:
         working-directory: ./terraform
 
       - name: 'Terraform Apply'
-        run: bun scripts/cli.ts terraform-apply ${{ env.ENVIRONMENT }}
+        run: bun scripts/cli.ts terraform-apply --env ${{ env.ENVIRONMENT }}
 
       # ============================================================================
       # DOCKER STEPS

@@ -120,8 +120,10 @@ export const gcp = {
     try {
       const result =
         await $`gcloud run services describe ${serviceName} --region ${region} --project ${projectId} --format=value(spec.template.spec.containers[0].image)`.text()
+
       return result.trim() || null
-    } catch {
+    } catch (error) {
+      logger.warning(`Could not retrieve current image: ${error}`)
       return null
     }
   },

@@ -39,10 +39,12 @@ program
   })
 
 program
-  .command('scan-vulnerabilities')
-  .description('Scan Docker image for vulnerabilities')
-  .action(async () => {
-    await scanVulnerabilities()
+  .command('terraform-apply')
+  .description('Apply Terraform configuration for environment')
+  .requiredOption('--env <environment>', 'Environment name (dev, test, pilot, prod)')
+  .action(async (options: { env: string }) => {
+    const validatedEnv = envSchema.parse(options.env)
+    await terraformApply(validatedEnv)
   })
 
 program
@@ -60,19 +62,10 @@ program
   })
 
 program
-  .command('terraform-apply')
-  .description('Apply Terraform configuration for environment')
-  .requiredOption('--env <environment>', 'Environment name (dev, test, pilot, prod)')
-  .action(async (options: { env: string }) => {
-    const validatedEnv = envSchema.parse(options.env)
-    await terraformApply(validatedEnv)
-  })
-
-program
-  .command('promote-image')
-  .description('Promote Docker image from source to target environment')
+  .command('scan-vulnerabilities')
+  .description('Scan Docker image for vulnerabilities')
   .action(async () => {
-    await promoteImage()
+    await scanVulnerabilities()
   })
 
 program
@@ -84,6 +77,13 @@ program
     const validatedSourceEnv = envSchema.parse(options.source)
     const validatedTargetEnv = envSchema.parse(options.target)
     validatePromotion({ sourceEnv: validatedSourceEnv, targetEnv: validatedTargetEnv })
+  })
+
+program
+  .command('promote-image')
+  .description('Promote Docker image from source to target environment')
+  .action(async () => {
+    await promoteImage()
   })
 
 program.parse()

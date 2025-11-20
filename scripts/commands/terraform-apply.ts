@@ -5,14 +5,6 @@ import { configLoader } from '../lib/config'
 import { Env } from '/config/configVariables'
 
 export async function terraformApply(env: Env): Promise<void> {
-  if (!env) {
-    logger.error('Environment argument required')
-    logger.error('Usage: terraform-apply <environment>')
-    logger.error('Example: terraform-apply dev')
-    logger.error('Valid environments: dev, test, pilot, prod')
-    process.exit(1)
-  }
-
   logger.info(`Environment: ${env}`)
 
   // Validate config file before proceeding

@@ -2,13 +2,6 @@ import { configLoader } from '../lib/config'
 import { Env } from '/config/configVariables'
 
 export async function loadConfig(env: Env): Promise<void> {
-  if (!env) {
-    console.error('❌ Error: Environment parameter is required')
-    console.error('Usage: load-config <environment>')
-    console.error('Available environments: prod, pilot, test, dev')
-    process.exit(1)
-  }
-
   // Send info to stderr so it doesn't interfere with stdout (GitHub Actions reads stdout)
   console.error(`📄 Loading config for environment: ${env}`)
 

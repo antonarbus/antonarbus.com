@@ -24,25 +24,29 @@ const prodConfigVariables = {
 } as const
 
 export const configVariables = {
-  dev: {
+  prod: prodConfigVariables,
+  pilot: {
     ...prodConfigVariables,
-    cloudRunServiceName: 'web-app-dev',
-    customDomain: 'dev.antonarbus.com'
+    cloudRunServiceName: 'web-app-pilot',
+    customDomain: 'pilot.antonarbus.com'
   },
   test: {
     ...prodConfigVariables,
     cloudRunServiceName: 'web-app-test',
     customDomain: 'test.antonarbus.com'
   },
-  pilot: {
+  dev: {
     ...prodConfigVariables,
-    cloudRunServiceName: 'web-app-pilot',
-    customDomain: 'pilot.antonarbus.com'
-  },
-  prod: prodConfigVariables
+    cloudRunServiceName: 'web-app-dev',
+    customDomain: 'dev.antonarbus.com'
+  }
 } as const
 
 export const envSchema = z.enum(['dev', 'test', 'pilot', 'prod'])
 export type Env = z.infer<typeof envSchema>
 
 export type ConfigVariables = (typeof configVariables)[keyof typeof configVariables]
+
+export const allowedPromotionPath = ['dev-test', 'test-pilot', 'pilot-prod'] as const
+
+export const allowedPromotionPathSchema = z.enum(allowedPromotionPath)

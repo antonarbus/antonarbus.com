@@ -84,10 +84,10 @@ program
 program
   .command('validate-promotion <source_env> <target_env>')
   .description('Validate promotion path between environments')
-  .action(async (sourceEnv: string, targetEnv: string) => {
+  .action((sourceEnv: string, targetEnv: string) => {
     const validatedSourceEnv = envSchema.parse(sourceEnv)
     const validatedTargetEnv = envSchema.parse(targetEnv)
-    await validatePromotion(validatedSourceEnv, validatedTargetEnv)
+    validatePromotion({ sourceEnv: validatedSourceEnv, targetEnv: validatedTargetEnv })
   })
 
 program.parse()

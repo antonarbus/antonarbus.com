@@ -7,15 +7,6 @@ import { Env } from '/config/configVariables'
 export async function terraformApply(env: Env): Promise<void> {
   logger.info(`Environment: ${env}`)
 
-  // Validate config file before proceeding
-  logger.plain('')
-  logger.info('Validating config file...')
-  if (!configLoader.validateConfig(env)) {
-    logger.error('Config validation failed')
-    process.exit(1)
-  }
-  logger.plain('')
-
   // Load config
   const config = configLoader.loadConfig(env)
 

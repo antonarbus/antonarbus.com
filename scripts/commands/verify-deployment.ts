@@ -1,17 +1,14 @@
 import { logger } from '../lib/logger'
 import { gcp } from '../lib/gcp'
+import { sharedConfigVariables, configVariables, Env } from '../../config/configVariables'
 
-export async function verifyDeployment(): Promise<void> {
-  const serviceName = process.env.CLOUD_RUN_SERVICE_NAME
-  const region = process.env.REGION
-  const projectId = process.env.PROJECT_ID
-  const previousImage = process.env.PREVIOUS_IMAGE
+export async function verifyDeployment(env: Env, previousImage?: string): Promise<void> {
+  // Get environment-specific config
+  const config = configVariables[env]
+  const serviceName = config.cloudRunServiceName
 
-  if (!serviceName || !region || !projectId) {
-    logger.error('Required environment variables not set')
-    logger.error('CLOUD_RUN_SERVICE_NAME, REGION, PROJECT_ID must be set')
-    process.exit(1)
-  }
+  // Use shared config for common values
+  const { region, projectId } = sharedConfigVariables
 
   logger.info('Waiting for deployment to be ready...')
   await Bun.sleep(10000)

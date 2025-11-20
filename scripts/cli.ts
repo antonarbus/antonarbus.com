@@ -50,40 +50,51 @@ program
 program
   .command('deploy-cloudrun')
   .description('Deploy Docker image to Cloud Run')
-  .action(async () => {
-    await deployCloudRun()
+  .requiredOption('--env <environment>', 'Environment name (dev, test, pilot, prod)')
+  .action(async (options: { env: string }) => {
+    const validatedEnv = envSchema.parse(options.env)
+    await deployCloudRun(validatedEnv)
   })
 
 program
   .command('verify-deployment')
   .description('Verify Cloud Run deployment')
-  .action(async () => {
-    await verifyDeployment()
+  .requiredOption('--env <environment>', 'Environment name (dev, test, pilot, prod)')
+  .option('--previous-image <image>', 'Previous image URL for rollback')
+  .action(async (options: { env: string; previousImage?: string }) => {
+    const validatedEnv = envSchema.parse(options.env)
+    await verifyDeployment(validatedEnv, options.previousImage)
   })
 
 program
   .command('scan-vulnerabilities')
   .description('Scan Docker image for vulnerabilities')
-  .action(async () => {
-    await scanVulnerabilities()
+  .requiredOption('--env <environment>', 'Environment name (dev, test, pilot, prod)')
+  .action(async (options: { env: string }) => {
+    const validatedEnv = envSchema.parse(options.env)
+    await scanVulnerabilities(validatedEnv)
   })
 
 program
   .command('validate-promotion')
   .description('Validate promotion path between environments')
-  .requiredOption('--source <environment>', 'Source environment name')
-  .requiredOption('--target <environment>', 'Target environment name')
-  .action((options: { source: string; target: string }) => {
-    const validatedSourceEnv = envSchema.parse(options.source)
-    const validatedTargetEnv = envSchema.parse(options.target)
+  .requiredOption('--source-env <environment>', 'Source environment name')
+  .requiredOption('--target-env <environment>', 'Target environment name')
+  .action((options: { sourceEnv: string; targetEnv: string }) => {
+    const validatedSourceEnv = envSchema.parse(options.sourceEnv)
+    const validatedTargetEnv = envSchema.parse(options.targetEnv)
     validatePromotion({ sourceEnv: validatedSourceEnv, targetEnv: validatedTargetEnv })
   })
 
 program
   .command('promote-image')
   .description('Promote Docker image from source to target environment')
-  .action(async () => {
-    await promoteImage()
+  .requiredOption('--source-env <environment>', 'Source environment name')
+  .requiredOption('--target-env <environment>', 'Target environment name')
+  .action(async (options: { sourceEnv: string; targetEnv: string }) => {
+    const validatedSourceEnv = envSchema.parse(options.sourceEnv)
+    const validatedTargetEnv = envSchema.parse(options.targetEnv)
+    await promoteImage(validatedSourceEnv, validatedTargetEnv)
   })
 
 program.parse()

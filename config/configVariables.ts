@@ -5,7 +5,7 @@ import z from 'zod'
  * - The .tfvars files are GENERATED from this file by `bun run generate-tfvars.ts`
  */
 
-const prodConfigVariables = {
+export const sharedConfigVariables = {
   projectId: 'antonarbus',
   projectNumber: '850593405209',
   region: 'us-central1',
@@ -18,25 +18,27 @@ const prodConfigVariables = {
   maxInstances: '5',
   cpuLimit: '1',
   memoryLimit: '512Mi',
-  containerPort: '8080',
-  cloudRunServiceName: 'web-app-prod',
-  customDomain: 'antonarbus.com'
+  containerPort: '8080'
 } as const
 
 export const configVariables = {
-  prod: prodConfigVariables,
+  prod: {
+    ...sharedConfigVariables,
+    cloudRunServiceName: 'web-app-prod',
+    customDomain: 'antonarbus.com'
+  },
   pilot: {
-    ...prodConfigVariables,
+    ...sharedConfigVariables,
     cloudRunServiceName: 'web-app-pilot',
     customDomain: 'pilot.antonarbus.com'
   },
   test: {
-    ...prodConfigVariables,
+    ...sharedConfigVariables,
     cloudRunServiceName: 'web-app-test',
     customDomain: 'test.antonarbus.com'
   },
   dev: {
-    ...prodConfigVariables,
+    ...sharedConfigVariables,
     cloudRunServiceName: 'web-app-dev',
     customDomain: 'dev.antonarbus.com'
   }

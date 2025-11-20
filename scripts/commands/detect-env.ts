@@ -1,7 +1,6 @@
-import { logger } from '../lib/logger'
-import { githubEnv } from '../lib/github-env'
 import { git } from '../lib/git'
 import { Env } from '/config/configVariables'
+import { logger, githubOutput } from '../lib/output'
 
 export async function detectEnvironment(): Promise<Env> {
   const branch = await git.getCurrentBranch()
@@ -11,12 +10,12 @@ export async function detectEnvironment(): Promise<Env> {
   if (branch === 'master' || branch === 'main') {
     const env: Env = 'dev'
 
+    // Real-time feedback to stderr
     logger.info(`Environment: ${env} (from branch: ${branch})`)
-
-    // Export ENVIRONMENT to GITHUB_ENV
-    githubEnv.set('ENVIRONMENT', env)
-
     logger.success('Environment detection complete')
+
+    // Output for GitHub Actions to stdout
+    githubOutput({ ENVIRONMENT: env })
 
     return env
   }

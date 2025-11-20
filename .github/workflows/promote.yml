@@ -27,8 +27,6 @@ jobs:
   validate:
     name: 'Validate Promotion Path'
     runs-on: ubuntu-latest
-    outputs:
-      is_valid: ${{ steps.check.outputs.valid }}
     steps:
       - name: 'Checkout repository'
         uses: actions/checkout@v4
@@ -42,7 +40,7 @@ jobs:
         run: bun run generate-tfvars
 
       - name: 'Check promotion path'
-        run: bun scripts/cli.ts validate-promotion --source "${{ github.event.inputs.source_env }}" --target "${{ github.event.inputs.target_env }}"
+        run: bun scripts/cli.ts validate-promotion --source-env "${{ github.event.inputs.source_env }}" --target-env "${{ github.event.inputs.target_env }}"
 
   promote:
     name: 'Promote to ${{ github.event.inputs.target_env }}'
@@ -55,10 +53,6 @@ jobs:
     permissions:
       contents: read
       id-token: write
-
-    env:
-      SOURCE_ENV: ${{ github.event.inputs.source_env }}
-      TARGET_ENV: ${{ github.event.inputs.target_env }}
 
     steps:
       - name: 'Checkout repository'
@@ -73,37 +67,37 @@ jobs:
         run: bun run generate-tfvars
 
       - name: 'Load target environment config'
-        run: bun scripts/cli.ts load-config --env "$TARGET_ENV" >> "$GITHUB_ENV"
+        id: config
+        run: bun scripts/cli.ts load-config --env "${{ github.event.inputs.target_env }}" >> $GITHUB_OUTPUT
 
       - name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v3'
         with:
-          workload_identity_provider: 'projects/${{ env.PROJECT_NUMBER }}/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
-          service_account: 'github-actions-sa@${{ env.PROJECT_ID }}.iam.gserviceaccount.com'
+          workload_identity_provider: 'projects/${{ steps.config.outputs.PROJECT_NUMBER }}/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
+          service_account: 'github-actions-sa@${{ steps.config.outputs.PROJECT_ID }}.iam.gserviceaccount.com'
 
       - name: 'Configure gcloud'
-        run: gcloud config set project '${{ env.PROJECT_ID }}'
+        run: gcloud config set project '${{ steps.config.outputs.PROJECT_ID }}'
 
       - name: 'Promote Docker Image'
         id: promote
-        run: bun scripts/cli.ts promote-image
+        run: bun scripts/cli.ts promote-image --source-env "${{ github.event.inputs.source_env }}" --target-env "${{ github.event.inputs.target_env }}" >> $GITHUB_OUTPUT
 
       - name: 'Deploy promoted image to Cloud Run'
-        run: bun scripts/cli.ts deploy-cloudrun
-        env:
-          DOCKER_IMAGE_TAG: ${{ env.TARGET_ENV }}
+        id: deploy
+        run: bun scripts/cli.ts deploy-cloudrun --env "${{ github.event.inputs.target_env }}" >> $GITHUB_OUTPUT
 
       - name: 'Verify Deployment'
-        run: bun scripts/cli.ts verify-deployment
+        run: bun scripts/cli.ts verify-deployment --env "${{ github.event.inputs.target_env }}" --previous-image "${{ steps.deploy.outputs.PREVIOUS_IMAGE }}"
 
       - name: 'Add promotion summary'
         if: always()
         run: |
           echo "## Release Promotion Summary" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
-          echo "**Source**: $SOURCE_ENV" >> "$GITHUB_STEP_SUMMARY"
-          echo "**Target**: $TARGET_ENV" >> "$GITHUB_STEP_SUMMARY"
-          echo "**Digest**: \`$SOURCE_IMAGE_DIGEST\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "**Source**: ${{ github.event.inputs.source_env }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "**Target**: ${{ github.event.inputs.target_env }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "**Digest**: \`${{ steps.promote.outputs.SOURCE_IMAGE_DIGEST }}\`" >> "$GITHUB_STEP_SUMMARY"
           echo "**Promoted by**: ${{ github.actor }}" >> "$GITHUB_STEP_SUMMARY"
           echo "**Timestamp**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"

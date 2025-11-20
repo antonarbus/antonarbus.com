@@ -1,28 +1,14 @@
 import { logger } from '../lib/logger'
 import { gcp } from '../lib/gcp'
+import { sharedConfigVariables } from '../../config/configVariables'
+import { Env } from '../../config/configVariables'
 
-export async function scanVulnerabilities(): Promise<void> {
-  // Validate required environment variables
-  const requiredVars = [
-    'REGION',
-    'PROJECT_ID',
-    'ARTIFACT_REGISTRY_NAME',
-    'DOCKER_IMAGE_NAME',
-    'DOCKER_IMAGE_TAG',
-  ]
+export async function scanVulnerabilities(env: Env): Promise<void> {
+  // Use shared config for common values
+  const { region, projectId, artifactRegistryName, dockerImageName } = sharedConfigVariables
 
-  for (const varName of requiredVars) {
-    if (!process.env[varName]) {
-      logger.error(`${varName} environment variable not set`)
-      process.exit(1)
-    }
-  }
-
-  const region = process.env.REGION!
-  const projectId = process.env.PROJECT_ID!
-  const artifactRegistryName = process.env.ARTIFACT_REGISTRY_NAME!
-  const dockerImageName = process.env.DOCKER_IMAGE_NAME!
-  const dockerImageTag = process.env.DOCKER_IMAGE_TAG!
+  // Use environment name as the docker image tag
+  const dockerImageTag = env
 
   // Construct image URL
   const imageUrl = `${region}-docker.pkg.dev/${projectId}/${artifactRegistryName}/${dockerImageName}:${dockerImageTag}`

@@ -1,31 +1,11 @@
 import { $ } from 'bun'
 import { logger } from '../lib/logger'
-import { githubEnv } from '../lib/github-env'
+import { githubOutput } from '../lib/output'
+import { sharedConfigVariables, Env } from '../../config/configVariables'
 
-export async function promoteImage(): Promise<void> {
-  // Validate required environment variables
-  const requiredVars = [
-    'SOURCE_ENV',
-    'TARGET_ENV',
-    'REGION',
-    'PROJECT_ID',
-    'ARTIFACT_REGISTRY_NAME',
-    'DOCKER_IMAGE_NAME',
-  ]
-
-  for (const varName of requiredVars) {
-    if (!process.env[varName]) {
-      logger.error(`${varName} environment variable not set`)
-      process.exit(1)
-    }
-  }
-
-  const sourceEnv = process.env.SOURCE_ENV!
-  const targetEnv = process.env.TARGET_ENV!
-  const region = process.env.REGION!
-  const projectId = process.env.PROJECT_ID!
-  const artifactRegistryName = process.env.ARTIFACT_REGISTRY_NAME!
-  const dockerImageName = process.env.DOCKER_IMAGE_NAME!
+export async function promoteImage(sourceEnv: Env, targetEnv: Env): Promise<void> {
+  // Use shared config for common values
+  const { region, projectId, artifactRegistryName, dockerImageName } = sharedConfigVariables
 
   // Construct image URLs (same registry, different tags)
   const baseImage = `${region}-docker.pkg.dev/${projectId}/${artifactRegistryName}/${dockerImageName}`
@@ -75,6 +55,8 @@ export async function promoteImage(): Promise<void> {
   logger.info(`  Digest: ${sourceDigest} (same image, new tag)`)
 
   // Export promoted image tag for deployment step
-  githubEnv.set('PROMOTED_IMAGE_TAG', targetEnv)
-  githubEnv.set('SOURCE_IMAGE_DIGEST', sourceDigest)
+  githubOutput({
+    PROMOTED_IMAGE_TAG: targetEnv,
+    SOURCE_IMAGE_DIGEST: sourceDigest,
+  })
 }

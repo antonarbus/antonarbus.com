@@ -119,6 +119,7 @@ export const gcp = {
   ): Promise<string | null> {
     try {
       const format = 'value(spec.template.spec.containers[0].image)'
+
       const result =
         await $`gcloud run services describe ${serviceName} --region ${region} --project ${projectId} --format=${format}`.text()
 

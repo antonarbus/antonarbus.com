@@ -34,7 +34,7 @@ cloud_run_sa_name               = "cloud-run-sa"
 # SCALING & PERFORMANCE
 
 min_instances                   = "0"
-max_instances                   = "50"
+max_instances                   = "5"
 cpu_limit                       = "1"
 memory_limit                    = "512Mi"
 container_port                  = "8080"

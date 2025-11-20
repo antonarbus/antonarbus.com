@@ -19,7 +19,7 @@ const prodConfigVariables = {
   cpuLimit: '1',
   memoryLimit: '512Mi',
   containerPort: '8080',
-  cloudRunServiceName: 'web-app',
+  cloudRunServiceName: 'web-app-prod',
   customDomain: 'antonarbus.com'
 } as const
 

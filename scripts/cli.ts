@@ -27,7 +27,7 @@ program
   .requiredOption('--env <environment>', 'Environment name (dev, test, pilot, prod)')
   .action(async (options: { env: string }) => {
     const validatedEnv = envSchema.parse(options.env)
-    await loadConfig({ env: validatedEnv })
+    loadConfig({ env: validatedEnv })
   })
 
 program

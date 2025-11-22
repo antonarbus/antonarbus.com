@@ -6,7 +6,7 @@ type Props = {
   env: Env
 }
 
-export const loadConfig = async (props: Props): Promise<void> => {
+export const loadConfig = (props: Props): void => {
   try {
     logger.info(`Loading config for environment: ${props.env}`)
 

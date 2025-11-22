@@ -1,7 +1,7 @@
 import { gcp } from '../lib/gcp'
 import { sharedConfigVariables } from '../../config/configVariables'
 
-export async function setupGcp(): Promise<void> {
+export const setupGcp = async (): Promise<void> => {
   const projectId = sharedConfigVariables.projectId
 
   await gcp.setProject(projectId)

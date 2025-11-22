@@ -15,8 +15,9 @@ export const showDeploymentInfo = async (props: Props): Promise<void> => {
 
   try {
     // Get current image URL
+    const format = 'value(spec.template.spec.containers[0].image)'
     const imageOutput =
-      await $`gcloud run services describe ${cloudRunServiceName} --region ${region} --project ${projectId} --format=value(spec.template.spec.containers[0].image)`.text()
+      await $`gcloud run services describe ${cloudRunServiceName} --region ${region} --project ${projectId} --format=${format}`.text()
 
     const imageUrl = imageOutput.trim()
 

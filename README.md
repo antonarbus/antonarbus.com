@@ -8,8 +8,10 @@ Next.js web application deployed to Google Cloud Run with Terraform infrastructu
 - [Development](#development)
 - [First-Time Setup](#first-time-setup)
 - [Deployment](#deployment)
+- [CLI Commands](#cli-commands)
 - [Release Promotion](#release-promotion)
 - [Configuration](#configuration)
+- [Testing](#testing)
 - [Troubleshooting](#troubleshooting)
 - [Monitoring](#monitoring)
 
@@ -48,10 +50,10 @@ Next.js web application deployed to Google Cloud Run with Terraform infrastructu
 ## Development
 
 ```bash
-npm install
-npm run dev              # Local development at http://localhost:3000
-npm run build            # Build production
-npm run docker-build     # Build Docker image locally
+bun install
+bun run dev              # Local development at http://localhost:3000
+bun run build            # Build production
+bun run docker-build     # Build Docker image locally
 ```
 
 ---
@@ -136,7 +138,17 @@ Suggested configuration:
 - **pilot**: Enable "Required reviewers", add 2 reviewers
 - **prod**: Enable "Required reviewers", add 2 reviewers, optionally add "Wait timer" (15 min)
 
-### 5. DNS Setup (Per Environment)
+### 5. Generate Terraform Variables
+
+Generate `.tfvars` files from the TypeScript configuration:
+
+```bash
+bun run generate-tfvars
+```
+
+This creates/updates all environment `.tfvars` files from `config/configVariables.ts`.
+
+### 6. DNS Setup (Per Environment)
 
 After first deployment to each environment:
 
@@ -177,6 +189,131 @@ bash smart-apply.sh prod
 
 ---
 
+## CLI Commands
+
+All deployment automation is handled by a TypeScript CLI located in `scripts/cli.ts`.
+
+### Available Commands
+
+```bash
+# Show all available commands
+bun scripts/cli.ts --help
+
+# Or use the npm script alias
+bun run deploy:help
+```
+
+#### `generate-tfvars`
+
+Generate `.tfvars` files from TypeScript config.
+
+```bash
+bun scripts/cli.ts generate-tfvars
+# or
+bun run generate-tfvars
+```
+
+Reads `config/configVariables.ts` and generates `.tfvars` files for all environments.
+
+#### `detect-env`
+
+Detect deployment environment from git branch.
+
+```bash
+bun scripts/cli.ts detect-env
+```
+
+Outputs: `env=dev` (for master branch)
+
+#### `load-config`
+
+Load configuration for a specific environment.
+
+```bash
+bun scripts/cli.ts load-config --env dev
+bun scripts/cli.ts load-config --env prod
+```
+
+Outputs environment variables in `key=value` format for GitHub Actions.
+
+#### `terraform-apply`
+
+Apply Terraform configuration for an environment.
+
+```bash
+bun scripts/cli.ts terraform-apply --env dev
+bun scripts/cli.ts terraform-apply --env prod
+```
+
+#### `deploy-cloudrun`
+
+Deploy Docker image to Cloud Run.
+
+```bash
+bun scripts/cli.ts deploy-cloudrun --env dev
+```
+
+Captures current image for rollback, deploys new image, outputs `previousImage` for verification step.
+
+#### `verify-deployment`
+
+Verify Cloud Run deployment with smoke tests.
+
+```bash
+bun scripts/cli.ts verify-deployment --env dev --previous-image <image-url>
+```
+
+Performs health checks, auto-rollback on failure.
+
+#### `validate-promotion`
+
+Validate promotion path between environments.
+
+```bash
+bun scripts/cli.ts validate-promotion --source-env dev --target-env test
+```
+
+Allowed paths: `dev→test`, `test→pilot`, `pilot→prod`
+
+#### `promote-image`
+
+Promote Docker image from source to target environment.
+
+```bash
+bun scripts/cli.ts promote-image --source-env dev --target-env test
+```
+
+Re-tags the exact same Docker image, ensuring binary consistency across environments.
+
+### CLI Architecture
+
+```
+scripts/
+├── cli.ts                     # Main CLI entry point (Commander.js)
+├── commands/                  # Command implementations
+│   ├── generate-tfvars.ts
+│   ├── detect-env.ts
+│   ├── load-config.ts
+│   ├── terraform-apply.ts
+│   ├── deploy-cloudrun.ts
+│   ├── verify-deployment.ts
+│   ├── validate-promotion.ts
+│   └── promote-image.ts
+├── lib/
+│   ├── gcloud/               # Google Cloud operations
+│   │   ├── getCurrentCloudRunImage.ts
+│   │   ├── updateCloudRunService.ts
+│   │   ├── rollbackCloudRunService.ts
+│   │   └── getCloudRunServiceUrl.ts
+│   └── output/               # Logging and GitHub Actions output
+│       ├── logger.ts
+│       └── githubOutput.ts
+└── config/
+    └── configVariables.ts    # Single source of truth for all config
+```
+
+---
+
 ## Release Promotion
 
 **Promote tested images between environments** (instead of rebuilding):
@@ -207,29 +344,98 @@ The workflow:
 
 ### Single Source of Truth
 
-All configuration lives in `/config/<env>.tfvars`:
+All configuration lives in `config/configVariables.ts`:
 
-- `dev.tfvars`, `test.tfvars`, `pilot.tfvars`, `prod.tfvars`
+```typescript
+export const configVariables = {
+  dev: { ... },
+  test: { ... },
+  pilot: { ... },
+  prod: { ... }
+}
+```
 
-Both Terraform and GitHub Actions read from these files. No duplication.
+The `.tfvars` files are **generated** from this TypeScript config using `bun run generate-tfvars`.
 
 ### Key Variables
 
 | Variable                 | Environment-Specific | Shared |
 | ------------------------ | -------------------- | ------ |
-| `project_id`             |                      | X      |
-| `region`                 |                      | X      |
-| `artifact_registry_name` |                      | X      |
-| `cloud_run_service_name` | X                    |        |
-| `custom_domain`          | X                    |        |
-| `max_instances`          | X                    |        |
-| `memory_limit`           | X                    |        |
+| `projectId`              |                      | ✓      |
+| `region`                 |                      | ✓      |
+| `artifactRegistryName`   |                      | ✓      |
+| `cloudRunServiceName`    | ✓                    |        |
+| `customDomain`           | ✓                    |        |
+| `maxInstances`           | ✓                    |        |
+| `memoryLimit`            | ✓                    |        |
 
 ### Changing Configuration
 
-1. Edit `/config/<env>.tfvars`
-2. Push to `master` branch (dev environment applies automatically)
-3. For other environments, run manual Terraform or use promotion workflow
+1. Edit `config/configVariables.ts`
+2. Run `bun run generate-tfvars` to update `.tfvars` files
+3. Commit both files
+4. Push to `master` branch (dev environment applies automatically)
+5. For other environments, run manual Terraform or use promotion workflow
+
+---
+
+## Testing
+
+### Local Testing
+
+Test CLI commands locally before pushing:
+
+```bash
+# Test help
+bun scripts/cli.ts --help
+
+# Test config generation
+bun run generate-tfvars
+
+# Test environment detection
+bun scripts/cli.ts detect-env
+
+# Test config loading
+bun scripts/cli.ts load-config --env dev
+```
+
+### GitHub Actions Testing
+
+The workflow can be triggered manually for testing:
+
+1. Go to **Actions** → **Deploy** → **Run workflow**
+2. Select branch: `master`
+3. Click **Run workflow**
+
+### What to Verify
+
+After deployment:
+
+- ✓ Environment detected correctly
+- ✓ Config loaded successfully
+- ✓ Terraform apply succeeds
+- ✓ Docker build/push succeeds
+- ✓ Cloud Run deployment succeeds
+- ✓ Health checks pass
+- ✓ No errors in logs
+
+### Test Checklist
+
+**Before Merging to Master:**
+
+- [ ] `bun scripts/cli.ts --help` shows all commands
+- [ ] `bun run generate-tfvars` succeeds
+- [ ] `bun scripts/cli.ts load-config --env dev` outputs correct values
+- [ ] TypeScript compiles without errors
+- [ ] No linting errors
+
+**After Merging to Master:**
+
+- [ ] GitHub Actions workflow triggers
+- [ ] All steps complete successfully
+- [ ] Deployment succeeds
+- [ ] Website accessible
+- [ ] No errors in Cloud Run logs
 
 ---
 
@@ -306,6 +512,21 @@ gcloud storage rm gs://antonarbus-terraform-state/terraform/state/**/*.tflock
 
 Domain verification missing. See [Domain Verification](#3-domain-verification-one-time) section.
 
+### CLI Command Errors
+
+**"Command not found"**
+- Ensure Bun is installed: `bun --version`
+- Run `bun install` in project root
+
+**Config validation fails**
+- Check `config/configVariables.ts` for missing required properties
+- Run `bun run generate-tfvars` to regenerate `.tfvars` files
+
+**GCP commands fail**
+- Authenticate: `gcloud auth login`
+- Set project: `gcloud config set project antonarbus`
+- Verify APIs are enabled (see Prerequisites section)
+
 ### Finding Resource IDs for Import
 
 ```bash
@@ -337,19 +558,23 @@ gcloud run domain-mappings list --region=us-central1
 
 ```
 /
-├── config/                    # Environment configurations (single source of truth)
-│   ├── dev.tfvars
-│   ├── test.tfvars
-│   ├── pilot.tfvars
-│   └── prod.tfvars
+├── config/                       # Single source of truth for configuration
+│   ├── configVariables.ts        # TypeScript config (authoritative)
+│   ├── dev.tfvars               # Generated from configVariables.ts
+│   ├── test.tfvars              # Generated from configVariables.ts
+│   ├── pilot.tfvars             # Generated from configVariables.ts
+│   └── prod.tfvars              # Generated from configVariables.ts
+├── scripts/                      # TypeScript CLI for deployment automation
+│   ├── cli.ts                   # Main CLI entry point
+│   ├── commands/                # Command implementations
+│   └── lib/                     # Shared utilities (gcloud, output, etc.)
 ├── terraform/
-│   ├── bootstrap/             # One-time setup (state bucket, shared registry, SAs)
-│   └── infrastructure/        # Per-environment resources (Cloud Run, domains)
+│   ├── bootstrap/               # One-time setup (shared resources)
+│   └── infrastructure/          # Per-environment resources
 ├── .github/
-│   ├── workflows/
-│   │   ├── deploy.yml         # Auto-deploy on push
-│   │   └── promote.yml        # Image promotion workflow
-│   └── scripts/               # Deployment helper scripts
-├── dockerfile.prod            # Production Docker image
-└── README.md                  # This file
+│   └── workflows/
+│       ├── deploy.yml           # Auto-deploy on push to master
+│       └── promote.yml          # Manual image promotion
+├── dockerfile.prod              # Production Docker image
+└── README.md                    # This file
 ```

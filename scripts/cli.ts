@@ -8,11 +8,21 @@ import { terraformApply } from './commands/terraform-apply'
 import { promoteImage } from './commands/promote-image'
 import { validatePromotion } from './commands/validate-promotion'
 import { generateTfvars } from './commands/generate-tfvars'
+import { showDeploymentInfo } from './commands/show-deployment-info'
 import { envSchema } from '/config/configVariables'
 
 const program = new Command()
 
 program.name('deploy-cli').description('Deployment automation for antonarbus.com').version('1.0.0')
+
+program
+  .command('show-deployment-info')
+  .description('Show deployment info for a specific environment')
+  .requiredOption('--env <environment>', 'Environment name (dev, test, pilot, prod)')
+  .action(async (options: { env: string }) => {
+    const validatedEnv = envSchema.parse(options.env)
+    await showDeploymentInfo({ env: validatedEnv })
+  })
 
 program
   .command('generate-tfvars')

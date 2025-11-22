@@ -42,6 +42,26 @@ jobs:
       - name: 'Check promotion path'
         run: bun scripts/cli.ts validate-promotion --source-env "${{ github.event.inputs.source-env }}" --target-env "${{ github.event.inputs.target-env }}"
 
+      - name: 'Load source environment config'
+        id: source-config
+        run: bun scripts/cli.ts load-config --env "${{ github.event.inputs.source-env }}" >> $GITHUB_OUTPUT
+
+      - name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v3'
+        with:
+          workload_identity_provider: 'projects/${{ steps.source-config.outputs.projectNumber }}/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
+          service_account: 'github-actions-sa@${{ steps.source-config.outputs.projectId }}.iam.gserviceaccount.com'
+
+      - name: 'Show current deployments'
+        run: |
+          echo "## Current Deployment Status" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "### Source: ${{ github.event.inputs.source-env }}" >> "$GITHUB_STEP_SUMMARY"
+          bun scripts/cli.ts show-deployment-info --env "${{ github.event.inputs.source-env }}" >> "$GITHUB_STEP_SUMMARY" 2>&1 || echo "No deployment found" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "### Target: ${{ github.event.inputs.target-env }}" >> "$GITHUB_STEP_SUMMARY"
+          bun scripts/cli.ts show-deployment-info --env "${{ github.event.inputs.target-env }}" >> "$GITHUB_STEP_SUMMARY" 2>&1 || echo "No deployment found" >> "$GITHUB_STEP_SUMMARY"
+
   promote:
     name: 'Promote to ${{ github.event.inputs.target-env }}'
     needs: validate

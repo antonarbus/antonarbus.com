@@ -1,27 +1,25 @@
-import { git } from '../lib/git'
+import { getCurrentGitBranchName } from '../lib/git'
 import { Env } from '/config/configVariables'
 import { logger, githubOutput } from '../lib/output'
+import { exit } from 'process'
 
-export async function detectEnvironment(): Promise<Env> {
-  const branch = await git.getCurrentBranch()
+export const detectEnvironment = async (): Promise<Env> => {
+  const branchName = await getCurrentGitBranchName()
 
-  // Master branch always deploys to dev
+  // Master branch always deploys to 'dev' github environment
   // Other environments are reached via promotion workflow at GitHub, not direct push
-  if (branch === 'master' || branch === 'main') {
+  if (['master', 'main'].includes(branchName) === true) {
     const env: Env = 'dev'
 
-    // Real-time feedback to stderr
-    logger.info(`Environment: ${env} (from branch: ${branch})`)
+    logger.info(`Environment: ${env} (from branch: ${branchName})`)
     logger.success('Environment detection complete')
-
-    // Output for GitHub Actions to stdout
     githubOutput({ ENVIRONMENT: env })
 
     return env
   }
 
   logger.error(`Only master/main branch triggers deployment to dev environment`)
-  logger.error(`Current branch: ${branch}`)
+  logger.error(`Current branch: ${branchName}`)
   logger.error('Use the Promote Release workflow at GitHub to deploy to other environments')
-  process.exit(1)
+  exit(1)
 }

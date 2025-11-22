@@ -8,6 +8,7 @@
 import { resolve } from 'path'
 import { configVariables } from '../../config/configVariables'
 import { logger } from '../lib/output'
+import { exit } from 'process'
 
 // Convert camelCase to snake_case
 function toSnakeCase(str: string): string {
@@ -90,5 +91,5 @@ async function main() {
 main().catch((error) => {
   logger.error('Failed to generate .tfvars files')
   console.error(error)
-  process.exit(1)
+  exit(1)
 })

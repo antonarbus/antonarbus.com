@@ -1,4 +1,9 @@
-import { Env, allowedPromotionPath, allowedPromotionPathSchema } from '/config/configVariables'
+import {
+  AllowedPromotionPath,
+  Env,
+  allowedPromotionPath,
+  allowedPromotionPathSchema
+} from '/config/configVariables'
 import { exit } from 'process'
 
 type Props = {
@@ -6,7 +11,7 @@ type Props = {
   targetEnv: Env
 }
 
-export function validatePromotion(props: Props): void {
+export const validatePromotion = (props: Props): void => {
   const validationResult = allowedPromotionPathSchema.safeParse(
     `${props.sourceEnv}-${props.targetEnv}`
   )
@@ -21,5 +26,7 @@ export function validatePromotion(props: Props): void {
     exit(1)
   }
 
-  console.log(`✅ Valid promotion path: ${props.sourceEnv} → ${props.targetEnv}`)
+  const validatedPromotionPath: AllowedPromotionPath = validationResult.data
+
+  console.log(`✅ Valid promotion path: ${validatedPromotionPath.replace('-', '→')}`)
 }

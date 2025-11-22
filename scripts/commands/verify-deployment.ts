@@ -1,10 +1,16 @@
 import { logger } from '../lib/output'
 import { gcp } from '../lib/gcp'
 import { sharedConfigVariables, configVariables, Env } from '../../config/configVariables'
+import { exit } from 'process'
 
-export async function verifyDeployment(env: Env, previousImage?: string): Promise<void> {
+type Props = {
+  env: Env
+  previousImage?: string
+}
+
+export async function verifyDeployment(props: Props): Promise<void> {
   // Get environment-specific config
-  const config = configVariables[env]
+  const config = configVariables[props.env]
   const serviceName = config.cloudRunServiceName
 
   // Use shared config for common values
@@ -87,19 +93,19 @@ export async function verifyDeployment(env: Env, previousImage?: string): Promis
         logger.emptyLine()
 
         // Trigger rollback for smoke test failures
-        if (previousImage && previousImage !== 'none') {
-          await gcp.rollbackCloudRunService(serviceName, previousImage, region, projectId)
+        if (props.previousImage && props.previousImage !== 'none') {
+          await gcp.rollbackCloudRunService(serviceName, props.previousImage, region, projectId)
         }
 
-        process.exit(1)
+        exit(1)
       }
     } else {
       logger.error(`Site returned HTTP ${httpCode}`)
       logger.emptyLine()
 
       // Attempt rollback if previous image is available
-      if (previousImage && previousImage !== 'none') {
-        await gcp.rollbackCloudRunService(serviceName, previousImage, region, projectId)
+      if (props.previousImage && props.previousImage !== 'none') {
+        await gcp.rollbackCloudRunService(serviceName, props.previousImage, region, projectId)
 
         logger.emptyLine()
         logger.info('Waiting 10s for rollback to stabilize...')
@@ -121,10 +127,10 @@ export async function verifyDeployment(env: Env, previousImage?: string): Promis
       }
 
       logger.emptyLine()
-      process.exit(1)
+      exit(1)
     }
   } catch (error) {
     logger.error(`curl command failed: ${error}`)
-    process.exit(1)
+    exit(1)
   }
 }

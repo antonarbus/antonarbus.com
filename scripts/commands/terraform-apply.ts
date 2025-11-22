@@ -1,23 +1,26 @@
 import { $ } from 'bun'
 import { resolve } from 'path'
 import { logger } from '../lib/output'
-import { configLoader } from '../lib/config'
-import { Env } from '/config/configVariables'
+import { configVariables, Env } from '/config/configVariables'
 
-export async function terraformApply(env: Env): Promise<void> {
-  logger.info(`Environment: ${env}`)
+type Props = {
+  env: Env
+}
+
+export async function terraformApply(props: Props): Promise<void> {
+  logger.info(`Environment: ${props.env}`)
 
   // Load config
-  const config = configLoader.loadConfig(env)
+  const config = configVariables[props.env]
 
   // Resolve paths
   const terraformDir = resolve(__dirname, '../../terraform/infrastructure')
-  const configFilePath = resolve(__dirname, `../../config/${env}.tfvars`)
+  const configFilePath = resolve(__dirname, `../../config/${props.env}.tfvars`)
 
   logger.info(`Config: ${configFilePath}`)
   logger.emptyLine()
 
-  logger.section(`Deploying main infrastructure for environment: ${env}`)
+  logger.section(`Deploying main infrastructure for environment: ${props.env}`)
   logger.emptyLine()
 
   logger.info('Initializing Terraform with remote backend...')
@@ -28,13 +31,13 @@ export async function terraformApply(env: Env): Promise<void> {
   await $`terraform init -backend-config=bucket=${config.bucketForTerraformStateName} -backend-config=prefix=terraform/state`
 
   logger.emptyLine()
-  logger.info(`Selecting workspace: ${env}`)
+  logger.info(`Selecting workspace: ${props.env}`)
 
   // Create workspace if it doesn't exist, otherwise select it
   try {
-    await $`terraform workspace select ${env}`.quiet()
+    await $`terraform workspace select ${props.env}`.quiet()
   } catch {
-    await $`terraform workspace new ${env}`
+    await $`terraform workspace new ${props.env}`
   }
 
   logger.emptyLine()

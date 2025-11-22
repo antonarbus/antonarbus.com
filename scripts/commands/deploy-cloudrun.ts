@@ -2,16 +2,20 @@ import { logger, githubOutput } from '../lib/output'
 import { gcp } from '../lib/gcp'
 import { sharedConfigVariables, configVariables, Env } from '../../config/configVariables'
 
-export async function deployCloudRun(env: Env): Promise<void> {
+type Props = {
+  env: Env
+}
+
+export async function deployCloudRun(props: Props): Promise<void> {
   // Get environment-specific config
-  const config = configVariables[env]
+  const config = configVariables[props.env]
   const serviceName = config.cloudRunServiceName
 
   // Use shared config for common values
   const { region, projectId, artifactRegistryName, dockerImageName } = sharedConfigVariables
 
   // Use environment name as the docker image tag
-  const dockerImageTag = env
+  const dockerImageTag = props.env
 
   // Construct the image URL
   const imageUrl = `${region}-docker.pkg.dev/${projectId}/${artifactRegistryName}/${dockerImageName}:${dockerImageTag}`

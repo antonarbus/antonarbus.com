@@ -1,16 +1,34 @@
-import { configLoader } from '../lib/config'
-import { Env } from '/config/configVariables'
+import { configVariables, Env } from '/config/configVariables'
 import { logger } from '../lib/output'
+import { exit } from 'process'
 
-export async function loadConfig(env: Env): Promise<void> {
-  logger.info(`Loading config for environment: ${env}`)
+type Props = {
+  env: Env
+}
 
+export const loadConfig = async (props: Props): Promise<void> => {
   try {
-    // Use silent mode to suppress logger output to stdout
-    const config = configLoader.loadConfig(env, true)
+    logger.info(`Loading config for environment: ${props.env}`)
+    const configVariablesEnvSpecific = configVariables[props.env]
 
     // Output as KEY=value format for GitHub Actions to stdout
-    const envVars = configLoader.exportAsEnvVars(config)
+    const envVars = [
+      `PROJECT_ID=${configVariablesEnvSpecific.projectId}`,
+      `PROJECT_NUMBER=${configVariablesEnvSpecific.projectNumber}`,
+      `REGION=${configVariablesEnvSpecific.region}`,
+      `BUCKET_FOR_TERRAFORM_STATE_NAME=${configVariablesEnvSpecific.bucketForTerraformStateName}`,
+      `ARTIFACT_REGISTRY_NAME=${configVariablesEnvSpecific.artifactRegistryName}`,
+      `CLOUD_RUN_SERVICE_NAME=${configVariablesEnvSpecific.cloudRunServiceName}`,
+      `DOCKER_IMAGE_NAME=${configVariablesEnvSpecific.dockerImageName}`,
+      `GITHUB_ACTIONS_SA_NAME=${configVariablesEnvSpecific.githubActionsSaName}`,
+      `CLOUD_RUN_SA_NAME=${configVariablesEnvSpecific.cloudRunSaName}`,
+      `MIN_INSTANCES=${configVariablesEnvSpecific.minInstances}`,
+      `MAX_INSTANCES=${configVariablesEnvSpecific.maxInstances}`,
+      `CPU_LIMIT=${configVariablesEnvSpecific.cpuLimit}`,
+      `MEMORY_LIMIT=${configVariablesEnvSpecific.memoryLimit}`,
+      `CONTAINER_PORT=${configVariablesEnvSpecific.containerPort}`,
+      `CUSTOM_DOMAIN=${configVariablesEnvSpecific.customDomain}`
+    ].join('\n')
 
     // Output ONLY the env vars to stdout (no extra messages)
     console.log(envVars)
@@ -18,6 +36,6 @@ export async function loadConfig(env: Env): Promise<void> {
     logger.success('Config loaded successfully')
   } catch (error) {
     logger.error(`Failed to load config: ${error}`)
-    process.exit(1)
+    exit(1)
   }
 }

@@ -5,6 +5,17 @@ import z from 'zod'
  * - The .tfvars files are GENERATED from this file by `bun run generate-tfvars.ts`
  */
 
+const envName = {
+  dev: 'dev',
+  test: 'test',
+  pilot: 'pilot',
+  prod: 'prod'
+} as const
+
+export const envSchema = z.enum([envName.dev, envName.test, envName.pilot, envName.prod])
+
+export type Env = z.infer<typeof envSchema>
+
 export const sharedConfigVariables = {
   projectId: 'antonarbus',
   projectNumber: '850593405209',
@@ -22,33 +33,36 @@ export const sharedConfigVariables = {
 } as const
 
 export const configVariables = {
-  prod: {
+  [envName.prod]: {
     ...sharedConfigVariables,
     cloudRunServiceName: 'web-app-prod',
     customDomain: 'antonarbus.com'
   },
-  pilot: {
+  [envName.pilot]: {
     ...sharedConfigVariables,
     cloudRunServiceName: 'web-app-pilot',
     customDomain: 'pilot.antonarbus.com'
   },
-  test: {
+  [envName.test]: {
     ...sharedConfigVariables,
     cloudRunServiceName: 'web-app-test',
     customDomain: 'test.antonarbus.com'
   },
-  dev: {
+  [envName.dev]: {
     ...sharedConfigVariables,
     cloudRunServiceName: 'web-app-dev',
     customDomain: 'dev.antonarbus.com'
   }
 } as const
 
-export const envSchema = z.enum(['dev', 'test', 'pilot', 'prod'])
-export type Env = z.infer<typeof envSchema>
-
 export type ConfigVariables = (typeof configVariables)[keyof typeof configVariables]
 
-export const allowedPromotionPath = ['dev-test', 'test-pilot', 'pilot-prod'] as const
+export const allowedPromotionPath = [
+  `${envName.dev}-${envName.test}`,
+  `${envName.test}-${envName.pilot}`,
+  `${envName.pilot}-${envName.prod}`
+] as const
 
 export const allowedPromotionPathSchema = z.enum(allowedPromotionPath)
+
+export type AllowedPromotionPath = z.infer<typeof allowedPromotionPathSchema>

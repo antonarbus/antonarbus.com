@@ -39,10 +39,11 @@ export const logger = {
 }
 
 /**
-  GitHub Actions output to stdout(key = value pairs)
-  @example githubOutput({ ENVIRONMENT: 'dev' })
-*/
-export function githubOutput(outputs: Record<string, string | number | boolean>): void {
+ * - GitHub Actions output to stdout(key = value pairs)
+ * - Required to pass data between steps in Github Actions workflow
+ * @example githubOutput({ ENVIRONMENT: 'dev' })
+ */
+export const githubOutput = (outputs: Record<string, string | number | boolean>): void => {
   Object.entries(outputs).forEach(([key, value]) => {
     console.log(`${key}=${value}`)
   })

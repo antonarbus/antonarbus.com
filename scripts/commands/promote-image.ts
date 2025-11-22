@@ -1,20 +1,26 @@
 import { $ } from 'bun'
 import { logger, githubOutput } from '../lib/output'
 import { sharedConfigVariables, Env } from '../../config/configVariables'
+import { exit } from 'process'
 
-export async function promoteImage(sourceEnv: Env, targetEnv: Env): Promise<void> {
+type Props = {
+  sourceEnv: Env
+  targetEnv: Env
+}
+
+export async function promoteImage(props: Props): Promise<void> {
   // Use shared config for common values
   const { region, projectId, artifactRegistryName, dockerImageName } = sharedConfigVariables
 
   // Construct image URLs (same registry, different tags)
   const baseImage = `${region}-docker.pkg.dev/${projectId}/${artifactRegistryName}/${dockerImageName}`
-  const sourceImage = `${baseImage}:${sourceEnv}`
-  const targetImage = `${baseImage}:${targetEnv}`
+  const sourceImage = `${baseImage}:${props.sourceEnv}`
+  const targetImage = `${baseImage}:${props.targetEnv}`
 
   logger.info('Promoting Docker image...')
   logger.info(`  Registry: ${artifactRegistryName}`)
-  logger.info(`  Source tag: ${sourceEnv}`)
-  logger.info(`  Target tag: ${targetEnv}`)
+  logger.info(`  Source tag: ${props.sourceEnv}`)
+  logger.info(`  Target tag: ${props.targetEnv}`)
   logger.emptyLine()
 
   // Verify source image exists
@@ -25,7 +31,7 @@ export async function promoteImage(sourceEnv: Env, targetEnv: Env): Promise<void
   } catch {
     logger.error(`Source image not found: ${sourceImage}`)
     logger.error('Make sure the source environment has been deployed first.')
-    process.exit(1)
+    exit(1)
   }
 
   logger.success('Source image found')
@@ -56,7 +62,7 @@ export async function promoteImage(sourceEnv: Env, targetEnv: Env): Promise<void
 
   // Export promoted image tag for deployment step
   githubOutput({
-    PROMOTED_IMAGE_TAG: targetEnv,
+    PROMOTED_IMAGE_TAG: props.targetEnv,
     SOURCE_IMAGE_DIGEST: sourceDigest
   })
 }

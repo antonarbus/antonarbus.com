@@ -27,7 +27,7 @@ program
   .requiredOption('--env <environment>', 'Environment name (dev, test, pilot, prod)')
   .action(async (options: { env: string }) => {
     const validatedEnv = envSchema.parse(options.env)
-    await loadConfig(validatedEnv)
+    await loadConfig({ env: validatedEnv })
   })
 
 program
@@ -43,7 +43,7 @@ program
   .requiredOption('--env <environment>', 'Environment name (dev, test, pilot, prod)')
   .action(async (options: { env: string }) => {
     const validatedEnv = envSchema.parse(options.env)
-    await terraformApply(validatedEnv)
+    await terraformApply({ env: validatedEnv })
   })
 
 program
@@ -52,7 +52,7 @@ program
   .requiredOption('--env <environment>', 'Environment name (dev, test, pilot, prod)')
   .action(async (options: { env: string }) => {
     const validatedEnv = envSchema.parse(options.env)
-    await deployCloudRun(validatedEnv)
+    await deployCloudRun({ env: validatedEnv })
   })
 
 program
@@ -62,7 +62,7 @@ program
   .option('--previous-image <image>', 'Previous image URL for rollback')
   .action(async (options: { env: string; previousImage?: string }) => {
     const validatedEnv = envSchema.parse(options.env)
-    await verifyDeployment(validatedEnv, options.previousImage)
+    await verifyDeployment({ env: validatedEnv, previousImage: options.previousImage })
   })
 
 program
@@ -84,7 +84,7 @@ program
   .action(async (options: { sourceEnv: string; targetEnv: string }) => {
     const validatedSourceEnv = envSchema.parse(options.sourceEnv)
     const validatedTargetEnv = envSchema.parse(options.targetEnv)
-    await promoteImage(validatedSourceEnv, validatedTargetEnv)
+    await promoteImage({ sourceEnv: validatedSourceEnv, targetEnv: validatedTargetEnv })
   })
 
 program.parse()

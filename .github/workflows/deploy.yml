@@ -38,13 +38,13 @@ jobs:
 
       - name: 'Load Config'
         id: config
-        run: bun scripts/cli.ts load-config --env ${{ steps.detect-env.outputs.ENV }} >> $GITHUB_OUTPUT
+        run: bun scripts/cli.ts load-config --env ${{ steps.detect-env.outputs.env }} >> $GITHUB_OUTPUT
 
       - name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v3'
         with:
-          workload_identity_provider: 'projects/${{ steps.config.outputs.PROJECT_NUMBER }}/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
-          service_account: 'github-actions-sa@${{ steps.config.outputs.PROJECT_ID }}.iam.gserviceaccount.com'
+          workload_identity_provider: 'projects/${{ steps.config.outputs.projectNumber }}/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
+          service_account: 'github-actions-sa@${{ steps.config.outputs.projectId }}.iam.gserviceaccount.com'
 
       # ============================================================================
       # TERRAFORM STEPS
@@ -66,7 +66,7 @@ jobs:
         working-directory: ./terraform
 
       - name: 'Terraform Apply'
-        run: bun scripts/cli.ts terraform-apply --env ${{ steps.detect-env.outputs.ENV }}
+        run: bun scripts/cli.ts terraform-apply --env ${{ steps.detect-env.outputs.env }}
 
       # ============================================================================
       # DOCKER STEPS
@@ -75,7 +75,7 @@ jobs:
       # Always deploy to dev - other envs use image promotion workflow
 
       - name: 'Docker Auth'
-        run: gcloud auth configure-docker '${{ steps.config.outputs.REGION }}-docker.pkg.dev'
+        run: gcloud auth configure-docker '${{ steps.config.outputs.region }}-docker.pkg.dev'
 
       - name: 'Build and Push Docker Image to Artifact Registry'
         uses: docker/build-push-action@v6
@@ -84,12 +84,12 @@ jobs:
           file: ./dockerfile.prod
           push: true
           tags: |
-            ${{ steps.config.outputs.REGION }}-docker.pkg.dev/${{ steps.config.outputs.PROJECT_ID }}/${{ steps.config.outputs.ARTIFACT_REGISTRY_NAME }}/${{ steps.config.outputs.DOCKER_IMAGE_NAME }}:${{ steps.detect-env.outputs.ENV }}
-            ${{ steps.config.outputs.REGION }}-docker.pkg.dev/${{ steps.config.outputs.PROJECT_ID }}/${{ steps.config.outputs.ARTIFACT_REGISTRY_NAME }}/${{ steps.config.outputs.DOCKER_IMAGE_NAME }}:${{ github.sha }}
+            ${{ steps.config.outputs.region }}-docker.pkg.dev/${{ steps.config.outputs.projectId }}/${{ steps.config.outputs.artifactRegistryName }}/${{ steps.config.outputs.dockerImageName }}:${{ steps.detect-env.outputs.env }}
+            ${{ steps.config.outputs.region }}-docker.pkg.dev/${{ steps.config.outputs.projectId }}/${{ steps.config.outputs.artifactRegistryName }}/${{ steps.config.outputs.dockerImageName }}:${{ github.sha }}
 
       - name: 'Deploy Docker Image to Cloud Run'
         id: deploy
-        run: bun scripts/cli.ts deploy-cloudrun --env ${{ steps.detect-env.outputs.ENV }} >> $GITHUB_OUTPUT
+        run: bun scripts/cli.ts deploy-cloudrun --env ${{ steps.detect-env.outputs.env }} >> $GITHUB_OUTPUT
 
       - name: 'Verify Deployment'
-        run: bun scripts/cli.ts verify-deployment --env ${{ steps.detect-env.outputs.ENV }} --previous-image "${{ steps.deploy.outputs.PREVIOUS_IMAGE }}"
+        run: bun scripts/cli.ts verify-deployment --env ${{ steps.detect-env.outputs.env }} --previous-image "${{ steps.deploy.outputs.PREVIOUS_IMAGE }}"

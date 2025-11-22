@@ -73,11 +73,11 @@ jobs:
       - name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v3'
         with:
-          workload_identity_provider: 'projects/${{ steps.config.outputs.PROJECT_NUMBER }}/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
-          service_account: 'github-actions-sa@${{ steps.config.outputs.PROJECT_ID }}.iam.gserviceaccount.com'
+          workload_identity_provider: 'projects/${{ steps.config.outputs.projectNumber }}/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
+          service_account: 'github-actions-sa@${{ steps.config.outputs.projectId }}.iam.gserviceaccount.com'
 
       - name: 'Configure gcloud'
-        run: gcloud config set project '${{ steps.config.outputs.PROJECT_ID }}'
+        run: gcloud config set project '${{ steps.config.outputs.projectId }}'
 
       - name: 'Promote Docker Image'
         id: promote

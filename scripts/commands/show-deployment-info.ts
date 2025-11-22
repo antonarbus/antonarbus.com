@@ -24,29 +24,65 @@ export const showDeploymentInfo = async (props: Props): Promise<void> => {
       await $`gcloud run services describe ${cloudRunServiceName} --region ${region} --project ${projectId} --format=${format}`.text()
 
     const imageUrl = imageOutput.trim()
+    const baseImageUrl = imageUrl.split(':')[0]
+    const envTag = imageUrl.split(':')[1]
 
-    // Look for git SHA tag in the repository
+    // Get digest for the environment tag
+    let digest: string | null = null
+
+    try {
+      const tagListOutput =
+        await $`gcloud artifacts docker tags list ${baseImageUrl} --project=${projectId}`.text()
+
+      // Find the digest for the environment tag (e.g., "dev", "test")
+      const lines = tagListOutput.trim().split('\n').slice(1) // Skip header
+
+      for (const line of lines) {
+        const parts = line.trim().split(/\s+/)
+        if (parts.length >= 3) {
+          const tagPath = parts[0]
+          const tagDigest = parts[2] // Column 3: DIGEST (0=TAG, 1=IMAGE, 2=DIGEST)
+          const tag = tagPath.split('/tags/').pop()
+
+          if (tag === envTag) {
+            digest = tagDigest
+            break
+          }
+        }
+      }
+
+      if (!digest) {
+        logger.warning(`Could not find digest for tag: ${envTag}`)
+        return
+      }
+    } catch (error) {
+      logger.warning('Could not get image digest')
+      return
+    }
+
+    // Now find git SHA tag with the same digest
     let gitSha: string | null = null
 
     try {
-      const baseImageUrl = imageUrl.split(':')[0]
+      const tagListOutput =
+        await $`gcloud artifacts docker tags list ${baseImageUrl} --project=${projectId}`.text()
 
-      // List all tags in the repository - use --format to get clean tag names
-      const tagsFormat = 'get(tag)'
+      const lines = tagListOutput.trim().split('\n').slice(1) // Skip header
 
-      const tagsOutput =
-        await $`gcloud artifacts docker tags list ${baseImageUrl} --project=${projectId} --format=${tagsFormat}`.text()
+      for (const line of lines) {
+        const parts = line.trim().split(/\s+/)
+        if (parts.length >= 3) {
+          const tagPath = parts[0]
+          const tagDigest = parts[2] // Column 3: DIGEST (0=TAG, 1=IMAGE, 2=DIGEST)
+          const tag = tagPath.split('/tags/').pop()
 
-      // Parse tags - extract just the tag name from the full path
-      // Format: projects/.../tags/TAGNAME
-      const allTags = tagsOutput
-        .trim()
-        .split('\n')
-        .map((line) => line.split('/tags/').pop()?.trim())
-        .filter(Boolean)
-
-      // Find a tag that looks like a git SHA (7-40 hex chars)
-      gitSha = allTags.find((tag) => tag && tag.match(/^[0-9a-f]{7,40}$/)) || null
+          // If this tag points to same digest and looks like a git SHA (40 hex chars), use it
+          if (tagDigest === digest && tag && tag.match(/^[0-9a-f]{40}$/)) {
+            gitSha = tag
+            break
+          }
+        }
+      }
     } catch (error) {
       logger.warning('Could not list repository tags')
     }

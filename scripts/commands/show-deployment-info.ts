@@ -25,13 +25,6 @@ export const showDeploymentInfo = async (props: Props): Promise<void> => {
 
     const imageUrl = imageOutput.trim()
 
-    // Extract tag from image URL (e.g., "dev" or git SHA)
-    const tag = imageUrl.split(':').pop() || 'unknown'
-
-    logger.info(`Environment: ${props.env}`)
-    logger.info(`Service: ${cloudRunServiceName}`)
-    logger.info(`Image tag: ${tag}`)
-
     // Look for git SHA tag in the repository
     let gitSha: string | null = null
 
@@ -52,18 +45,8 @@ export const showDeploymentInfo = async (props: Props): Promise<void> => {
         .map((line) => line.split('/tags/').pop()?.trim())
         .filter(Boolean)
 
-      logger.info(`Found ${allTags.length} tags in repository`)
-      logger.info(`Sample tags: ${allTags.slice(0, 5).join(', ')}`)
-
       // Find a tag that looks like a git SHA (7-40 hex chars)
       gitSha = allTags.find((tag) => tag && tag.match(/^[0-9a-f]{7,40}$/)) || null
-
-      if (gitSha) {
-        logger.info(`Found git SHA tag: ${gitSha}`)
-      } else {
-        logger.warning('No git SHA tag found in repository')
-        logger.info(`All tags: ${allTags.join(', ')}`)
-      }
     } catch (error) {
       logger.warning('Could not list repository tags')
     }

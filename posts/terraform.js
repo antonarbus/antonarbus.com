@@ -16,15 +16,15 @@ import {
 
 const postObj = {
   title: 'terraform',
-  date: '2025.11.xx',
+  date: '2025.11.22',
   tags: ['IaC'],
   imgUrl: 'https://antonarbus.com/imgs/xxx.png',
-  desc: 'xxx',
+  desc: 'terraform',
   body: (
     <>
       <H>Terraform</H>
 
-      <p>To be updated in future...</p>
+      <p>To be updated in future... when i figure out how it works.</p>
     </>
   )
 }

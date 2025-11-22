@@ -22,10 +22,8 @@ export async function deployCloudRun(props: Props): Promise<void> {
 
   logger.info(`  Previous image: ${previousImage || 'none'}`)
 
-  // Export for use in verify-deployment
-  if (previousImage) {
-    githubOutput({ PREVIOUS_IMAGE: previousImage })
-  }
+  // Export for use in verify-deployment (even if null - verification handles it)
+  githubOutput({ PREVIOUS_IMAGE: previousImage || '' })
 
   // Deploy to Cloud Run
   await gcloud.updateCloudRunService(cloudRunServiceName, imageUrl, region, projectId)

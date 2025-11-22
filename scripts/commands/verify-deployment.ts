@@ -11,23 +11,21 @@ type Props = {
 export async function verifyDeployment(props: Props): Promise<void> {
   const { cloudRunServiceName, region, projectId } = configVariables[props.env]
 
-  logger.info('Waiting for deployment to be ready...')
-  await Bun.sleep(10000)
-
-  logger.emptyLine()
-  logger.info('Getting service URL...')
-
-  const url = await gcloud.getCloudRunServiceUrl(cloudRunServiceName, region, projectId)
-
-  logger.info(`Testing URL: ${url}`)
-  logger.emptyLine()
-
-  // Test if site responds with 200 OK
-  let httpCode: number
-
   try {
+    logger.info('Waiting for deployment to be ready...')
+    await Bun.sleep(10000)
+
+    logger.emptyLine()
+    logger.info('Getting service URL...')
+
+    const url = await gcloud.getCloudRunServiceUrl(cloudRunServiceName, region, projectId)
+
+    logger.info(`Testing URL: ${url}`)
+    logger.emptyLine()
+
+    // Test if site responds with 200 OK
     const response = await fetch(url)
-    httpCode = response.status
+    const httpCode = response.status
 
     if (httpCode === 200) {
       logger.success(`Site is live and responding (HTTP ${httpCode})`)
@@ -41,6 +39,7 @@ export async function verifyDeployment(props: Props): Promise<void> {
 
       // Test 1: Check that response contains HTML
       logger.info('  1. Checking for HTML content...')
+
       if (body.toLowerCase().includes('<html') || body.toLowerCase().includes('<!doctype')) {
         logger.success('     HTML content detected')
       } else {
@@ -51,6 +50,7 @@ export async function verifyDeployment(props: Props): Promise<void> {
       // Test 2: Check response size (should be more than 100 bytes)
       logger.info('  2. Checking response size...')
       const responseSize = body.length
+
       if (responseSize > 100) {
         logger.success(`     Response size: ${responseSize} bytes`)
       } else {
@@ -80,7 +80,7 @@ export async function verifyDeployment(props: Props): Promise<void> {
         logger.plain(`🌐 Deployment URL: ${url}`)
         logger.emptyLine()
 
-        process.exit(0)
+        exit(0)
       } else {
         logger.error(`${smokeTestFailures} smoke test(s) failed`)
         logger.warning('Site is responding but content may be incorrect')
@@ -135,7 +135,7 @@ export async function verifyDeployment(props: Props): Promise<void> {
       exit(1)
     }
   } catch (error) {
-    logger.error(`curl command failed: ${error}`)
+    logger.error(`Deployment verification failed: ${error}`)
     exit(1)
   }
 }

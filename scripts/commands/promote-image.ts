@@ -38,9 +38,11 @@ export async function promoteImage(props: Props): Promise<void> {
 
   // Get the digest (hash) of the source image for traceability
   let sourceDigest = 'unknown'
+
   try {
     const digestOutput =
       await $`gcloud artifacts docker images describe ${sourceImage} --project=${projectId} --format=value(image_summary.digest)`.text()
+
     sourceDigest = digestOutput.trim()
   } catch {
     logger.warning('Could not retrieve source image digest')

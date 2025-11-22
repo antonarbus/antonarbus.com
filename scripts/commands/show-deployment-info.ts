@@ -43,13 +43,17 @@ export const showDeploymentInfo = async (props: Props): Promise<void> => {
       try {
         const baseImageUrl = imageUrl.split(':')[0]
 
-        // List all tags in the repository
+        // List all tags in the repository - use --format to get clean tag names
+        const tagsFormat = 'get(tag)'
         const tagsOutput =
-          await $`gcloud artifacts docker tags list ${baseImageUrl} --project=${projectId}`.text()
+          await $`gcloud artifacts docker tags list ${baseImageUrl} --project=${projectId} --format=${tagsFormat}`.text()
 
-        // Parse tags - format is like: us-central1-docker.pkg.dev/project/repo/image:tag
-        const lines = tagsOutput.trim().split('\n').slice(1) // Skip header
-        const allTags = lines.map((line) => line.split(':').pop()?.trim()).filter(Boolean)
+        // Parse tags - one tag per line
+        const allTags = tagsOutput
+          .trim()
+          .split('\n')
+          .map((t) => t.trim())
+          .filter(Boolean)
 
         logger.info(`Found ${allTags.length} tags in repository`)
         logger.info(`Sample tags: ${allTags.slice(0, 5).join(', ')}`)

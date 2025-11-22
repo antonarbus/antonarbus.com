@@ -49,7 +49,7 @@ jobs:
       # ============================================================================
       # TERRAFORM STEPS
       # ============================================================================
-      # Terraform is idempotent - if no changes, it completes in ~1 second
+      # Terraform is idempotent - if no changes, it completes in ~10 second
       # No need for conditional logic - always run for simplicity
 
       - name: 'Setup Terraform'

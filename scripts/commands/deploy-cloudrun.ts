@@ -1,7 +1,8 @@
-import { logger, githubOutput } from '../lib/output'
 import { configVariables, Env } from '../../config/configVariables'
 import { getCurrentCloudRunImage } from '../lib/gcloud/getCurrentCloudRunImage'
 import { updateCloudRunService } from '../lib/gcloud/updateCloudRunService'
+import { githubOutput } from '../lib/output/githubOutput'
+import { logger } from '../lib/output/logger'
 
 type Props = {
   env: Env

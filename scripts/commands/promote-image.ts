@@ -1,7 +1,8 @@
 import { $ } from 'bun'
-import { logger, githubOutput } from '../lib/output'
 import { sharedConfigVariables, Env } from '../../config/configVariables'
 import { exit } from 'process'
+import { githubOutput } from '../lib/output/githubOutput'
+import { logger } from '../lib/output/logger'
 
 type Props = {
   sourceEnv: Env

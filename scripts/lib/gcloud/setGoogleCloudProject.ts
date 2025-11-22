@@ -1,5 +1,5 @@
 import { $ } from 'bun'
-import { logger } from '../output'
+import { logger } from '../output/logger'
 
 type Props = {
   projectId: string

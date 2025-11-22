@@ -1,14 +1,14 @@
+import { resolve } from 'path'
+import { configVariables } from '../../config/configVariables'
+import { exit } from 'process'
+import { logger } from '../lib/output/logger'
+
 /**
  * Generate .tfvars files from TypeScript config
  *
  * This script ensures that .tfvars files stay in sync with the TypeScript config.
  * Run this after modifying config/configVariables.ts
  */
-
-import { resolve } from 'path'
-import { configVariables } from '../../config/configVariables'
-import { logger } from '../lib/output'
-import { exit } from 'process'
 
 // Convert camelCase to snake_case
 function toSnakeCase(str: string): string {

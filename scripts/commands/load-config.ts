@@ -1,6 +1,7 @@
 import { configVariables, Env } from '/config/configVariables'
-import { logger, githubOutput } from '../lib/output'
 import { exit } from 'process'
+import { githubOutput } from '../lib/output/githubOutput'
+import { logger } from '../lib/output/logger'
 
 type Props = {
   env: Env

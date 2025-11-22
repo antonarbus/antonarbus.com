@@ -1,7 +1,8 @@
-import { getCurrentGitBranchName } from '../lib/git'
+import { getCurrentGitBranchName } from '../lib/git/getCurrentGitBranchName'
 import { Env } from '/config/configVariables'
-import { logger, githubOutput } from '../lib/output'
 import { exit } from 'process'
+import { githubOutput } from '../lib/output/githubOutput'
+import { logger } from '../lib/output/logger'
 
 export const detectEnvironment = async (): Promise<Env> => {
   const branchName = await getCurrentGitBranchName()

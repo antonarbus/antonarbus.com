@@ -1,5 +1,4 @@
 import { $ } from 'bun'
-import { logger } from '../output'
 
 type Props = {
   cloudRunServiceName: string

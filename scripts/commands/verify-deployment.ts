@@ -1,8 +1,8 @@
-import { logger } from '../lib/output'
 import { configVariables, Env } from '../../config/configVariables'
 import { exit } from 'process'
 import { getCloudRunServiceUrl } from '../lib/gcloud/getCloudRunServiceUrl'
 import { rollbackCloudRunService } from '../lib/gcloud/rollbackCloudRunService'
+import { logger } from '../lib/output/logger'
 
 type Props = {
   env: Env

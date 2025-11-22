@@ -1,8 +1,8 @@
 import { $ } from 'bun'
 import { resolve } from 'path'
-import { logger } from '../lib/output'
 import { configVariables, Env } from '/config/configVariables'
 import { chdir } from 'process'
+import { logger } from '../lib/output/logger'
 
 type Props = {
   env: Env

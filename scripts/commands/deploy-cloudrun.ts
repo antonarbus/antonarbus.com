@@ -1,18 +1,14 @@
 import { logger, githubOutput } from '../lib/output'
-import { gcp } from '../lib/gcp'
-import { sharedConfigVariables, configVariables, Env } from '../../config/configVariables'
+import { gcloud } from '../lib/gcloud'
+import { configVariables, Env } from '../../config/configVariables'
 
 type Props = {
   env: Env
 }
 
 export async function deployCloudRun(props: Props): Promise<void> {
-  // Get environment-specific config
-  const config = configVariables[props.env]
-  const serviceName = config.cloudRunServiceName
-
-  // Use shared config for common values
-  const { region, projectId, artifactRegistryName, dockerImageName } = sharedConfigVariables
+  const { region, projectId, artifactRegistryName, dockerImageName, cloudRunServiceName } =
+    configVariables[props.env]
 
   // Use environment name as the docker image tag
   const dockerImageTag = props.env
@@ -22,7 +18,7 @@ export async function deployCloudRun(props: Props): Promise<void> {
 
   // Capture current image for potential rollback
   logger.info('Capturing current image for rollback capability...')
-  const previousImage = await gcp.getCurrentCloudRunImage(serviceName, region, projectId)
+  const previousImage = await gcloud.getCurrentCloudRunImage(cloudRunServiceName, region, projectId)
 
   logger.info(`  Previous image: ${previousImage || 'none'}`)
 
@@ -32,5 +28,5 @@ export async function deployCloudRun(props: Props): Promise<void> {
   }
 
   // Deploy to Cloud Run
-  await gcp.updateCloudRunService(serviceName, imageUrl, region, projectId)
+  await gcloud.updateCloudRunService(cloudRunServiceName, imageUrl, region, projectId)
 }

@@ -1,7 +1,7 @@
 import { $ } from 'bun'
 import { logger } from './output'
 
-export const gcp = {
+export const gcloud = {
   /** Set the default GCP project */
   async setProject(projectId: string): Promise<void> {
     logger.info(`Setting default GCP project: ${projectId}`)

@@ -1,8 +1,6 @@
-import { gcp } from '../lib/gcp'
+import { gcloud } from '../lib/gcloud'
 import { sharedConfigVariables } from '../../config/configVariables'
 
 export const setupGcp = async (): Promise<void> => {
-  const projectId = sharedConfigVariables.projectId
-
-  await gcp.setProject(projectId)
+  await gcloud.setProject(sharedConfigVariables.projectId)
 }

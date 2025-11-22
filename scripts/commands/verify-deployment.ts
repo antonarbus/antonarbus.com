@@ -1,6 +1,6 @@
 import { logger } from '../lib/output'
-import { gcp } from '../lib/gcp'
-import { sharedConfigVariables, configVariables, Env } from '../../config/configVariables'
+import { gcloud } from '../lib/gcloud'
+import { configVariables, Env } from '../../config/configVariables'
 import { exit } from 'process'
 
 type Props = {
@@ -9,12 +9,7 @@ type Props = {
 }
 
 export async function verifyDeployment(props: Props): Promise<void> {
-  // Get environment-specific config
-  const config = configVariables[props.env]
-  const serviceName = config.cloudRunServiceName
-
-  // Use shared config for common values
-  const { region, projectId } = sharedConfigVariables
+  const { cloudRunServiceName, region, projectId } = configVariables[props.env]
 
   logger.info('Waiting for deployment to be ready...')
   await Bun.sleep(10000)
@@ -22,7 +17,7 @@ export async function verifyDeployment(props: Props): Promise<void> {
   logger.emptyLine()
   logger.info('Getting service URL...')
 
-  const url = await gcp.getCloudRunServiceUrl(serviceName, region, projectId)
+  const url = await gcloud.getCloudRunServiceUrl(cloudRunServiceName, region, projectId)
 
   logger.info(`Testing URL: ${url}`)
   logger.emptyLine()
@@ -94,7 +89,12 @@ export async function verifyDeployment(props: Props): Promise<void> {
 
         // Trigger rollback for smoke test failures
         if (props.previousImage && props.previousImage !== 'none') {
-          await gcp.rollbackCloudRunService(serviceName, props.previousImage, region, projectId)
+          await gcloud.rollbackCloudRunService(
+            cloudRunServiceName,
+            props.previousImage,
+            region,
+            projectId
+          )
         }
 
         exit(1)
@@ -105,7 +105,12 @@ export async function verifyDeployment(props: Props): Promise<void> {
 
       // Attempt rollback if previous image is available
       if (props.previousImage && props.previousImage !== 'none') {
-        await gcp.rollbackCloudRunService(serviceName, props.previousImage, region, projectId)
+        await gcloud.rollbackCloudRunService(
+          cloudRunServiceName,
+          props.previousImage,
+          region,
+          projectId
+        )
 
         logger.emptyLine()
         logger.info('Waiting 10s for rollback to stabilize...')

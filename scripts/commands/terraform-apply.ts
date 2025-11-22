@@ -2,6 +2,7 @@ import { $ } from 'bun'
 import { resolve } from 'path'
 import { logger } from '../lib/output'
 import { configVariables, Env } from '/config/configVariables'
+import { chdir } from 'process'
 
 type Props = {
   env: Env
@@ -10,8 +11,7 @@ type Props = {
 export async function terraformApply(props: Props): Promise<void> {
   logger.info(`Environment: ${props.env}`)
 
-  // Load config
-  const config = configVariables[props.env]
+  const { bucketForTerraformStateName } = configVariables[props.env]
 
   // Resolve paths
   const terraformDir = resolve(__dirname, '../../terraform/infrastructure')
@@ -26,9 +26,9 @@ export async function terraformApply(props: Props): Promise<void> {
   logger.info('Initializing Terraform with remote backend...')
 
   // Change to terraform directory
-  process.chdir(terraformDir)
+  chdir(terraformDir)
 
-  await $`terraform init -backend-config=bucket=${config.bucketForTerraformStateName} -backend-config=prefix=terraform/state`
+  await $`terraform init -backend-config=bucket=${bucketForTerraformStateName} -backend-config=prefix=terraform/state`
 
   logger.emptyLine()
   logger.info(`Selecting workspace: ${props.env}`)

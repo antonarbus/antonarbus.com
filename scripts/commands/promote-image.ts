@@ -9,7 +9,6 @@ type Props = {
 }
 
 export async function promoteImage(props: Props): Promise<void> {
-  // Use shared config for common values
   const { region, projectId, artifactRegistryName, dockerImageName } = sharedConfigVariables
 
   // Construct image URLs (same registry, different tags)

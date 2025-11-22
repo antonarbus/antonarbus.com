@@ -13,11 +13,10 @@ export async function terraformApply(props: Props): Promise<void> {
 
   const { bucketForTerraformStateName } = configVariables[props.env]
 
-  // Resolve paths
-  const terraformDir = resolve(__dirname, '../../terraform/infrastructure')
-  const configFilePath = resolve(__dirname, `../../config/${props.env}.tfvars`)
+  const TERRAFORM_DIR = resolve(__dirname, '../../terraform/infrastructure')
+  const TFVARS_FILE_PATH = resolve(__dirname, `../../config/${props.env}.tfvars`)
 
-  logger.info(`Config: ${configFilePath}`)
+  logger.info(`Config: ${TFVARS_FILE_PATH}`)
   logger.emptyLine()
 
   logger.section(`Deploying main infrastructure for environment: ${props.env}`)
@@ -26,7 +25,7 @@ export async function terraformApply(props: Props): Promise<void> {
   logger.info('Initializing Terraform with remote backend...')
 
   // Change to terraform directory
-  chdir(terraformDir)
+  chdir(TERRAFORM_DIR)
 
   await $`terraform init -backend-config=bucket=${bucketForTerraformStateName} -backend-config=prefix=terraform/state`
 
@@ -42,10 +41,10 @@ export async function terraformApply(props: Props): Promise<void> {
 
   logger.emptyLine()
   logger.info('Applying Terraform configuration...')
-  logger.info(`Config file: ${configFilePath}`)
+  logger.info(`Config file: ${TFVARS_FILE_PATH}`)
   logger.emptyLine()
 
-  await $`terraform apply -auto-approve -var-file=${configFilePath}`
+  await $`terraform apply -auto-approve -var-file=${TFVARS_FILE_PATH}`
 
   logger.emptyLine()
   logger.success('Terraform apply completed successfully')

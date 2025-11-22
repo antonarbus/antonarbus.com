@@ -8,11 +8,19 @@ import { verifyDeployment } from './commands/verify-deployment'
 import { terraformApply } from './commands/terraform-apply'
 import { promoteImage } from './commands/promote-image'
 import { validatePromotion } from './commands/validate-promotion'
+import { generateTfvars } from './commands/generate-tfvars'
 import { envSchema } from '/config/configVariables'
 
 const program = new Command()
 
 program.name('deploy-cli').description('Deployment automation for antonarbus.com').version('1.0.0')
+
+program
+  .command('generate-tfvars')
+  .description('Generate .tfvars files from TypeScript config')
+  .action(async () => {
+    await generateTfvars()
+  })
 
 program
   .command('detect-env')

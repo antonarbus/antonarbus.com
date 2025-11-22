@@ -9,7 +9,7 @@ type Props = {
   targetEnv: Env
 }
 
-export async function promoteImage(props: Props): Promise<void> {
+export const promoteImage = async (props: Props): Promise<void> => {
   const { region, projectId, artifactRegistryName, dockerImageName } = sharedConfigVariables
 
   // Construct image URLs (same registry, different tags)

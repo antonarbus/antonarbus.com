@@ -9,7 +9,7 @@ type Props = {
   previousImage?: string
 }
 
-export async function verifyDeployment(props: Props): Promise<void> {
+export const verifyDeployment = async (props: Props): Promise<void> => {
   const { cloudRunServiceName, region, projectId } = configVariables[props.env]
 
   try {

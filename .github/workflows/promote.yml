@@ -1,12 +1,12 @@
 name: 'Promote Release'
-run-name: 'Promote ${{ inputs.source_env }} → ${{ inputs.target_env }} by ${{ github.actor }}'
+run-name: 'Promote ${{ inputs.source-env }} → ${{ inputs.target-env }} by ${{ github.actor }}'
 
 # Promotes a tested Docker image from one environment to another
 # Instead of rebuilding, copies the exact same image that was tested
 on:
   workflow_dispatch:
     inputs:
-      source_env:
+      source-env:
         description: 'Source environment (where the tested image is)'
         required: true
         type: choice
@@ -14,7 +14,7 @@ on:
           - dev
           - test
           - pilot
-      target_env:
+      target-env:
         description: 'Target environment (where to deploy)'
         required: true
         type: choice
@@ -40,15 +40,15 @@ jobs:
         run: bun run generate-tfvars
 
       - name: 'Check promotion path'
-        run: bun scripts/cli.ts validate-promotion --source-env "${{ github.event.inputs.source_env }}" --target-env "${{ github.event.inputs.target_env }}"
+        run: bun scripts/cli.ts validate-promotion --source-env "${{ github.event.inputs.source-env }}" --target-env "${{ github.event.inputs.target-env }}"
 
   promote:
-    name: 'Promote to ${{ github.event.inputs.target_env }}'
+    name: 'Promote to ${{ github.event.inputs.target-env }}'
     needs: validate
     runs-on: ubuntu-latest
     # GitHub Environment for approval gates
     # Configure required reviewers in GitHub repo settings -> Environments
-    environment: ${{ github.event.inputs.target_env }}
+    environment: ${{ github.event.inputs.target-env }}
 
     permissions:
       contents: read
@@ -68,7 +68,7 @@ jobs:
 
       - name: 'Load target environment config'
         id: config
-        run: bun scripts/cli.ts load-config --env "${{ github.event.inputs.target_env }}" >> $GITHUB_OUTPUT
+        run: bun scripts/cli.ts load-config --env "${{ github.event.inputs.target-env }}" >> $GITHUB_OUTPUT
 
       - name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v3'
@@ -81,22 +81,22 @@ jobs:
 
       - name: 'Promote Docker Image'
         id: promote
-        run: bun scripts/cli.ts promote-image --source-env "${{ github.event.inputs.source_env }}" --target-env "${{ github.event.inputs.target_env }}" >> $GITHUB_OUTPUT
+        run: bun scripts/cli.ts promote-image --source-env "${{ github.event.inputs.source-env }}" --target-env "${{ github.event.inputs.target-env }}" >> $GITHUB_OUTPUT
 
       - name: 'Deploy promoted image to Cloud Run'
         id: deploy
-        run: bun scripts/cli.ts deploy-cloudrun --env "${{ github.event.inputs.target_env }}" >> $GITHUB_OUTPUT
+        run: bun scripts/cli.ts deploy-cloudrun --env "${{ github.event.inputs.target-env }}" >> $GITHUB_OUTPUT
 
       - name: 'Verify Deployment'
-        run: bun scripts/cli.ts verify-deployment --env "${{ github.event.inputs.target_env }}" --previous-image "${{ steps.deploy.outputs.previousImage }}"
+        run: bun scripts/cli.ts verify-deployment --env "${{ github.event.inputs.target-env }}" --previous-image "${{ steps.deploy.outputs.previousImage }}"
 
       - name: 'Add promotion summary'
         if: always()
         run: |
           echo "## Release Promotion Summary" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
-          echo "**Source**: ${{ github.event.inputs.source_env }}" >> "$GITHUB_STEP_SUMMARY"
-          echo "**Target**: ${{ github.event.inputs.target_env }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "**Source**: ${{ github.event.inputs.source-env }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "**Target**: ${{ github.event.inputs.target-env }}" >> "$GITHUB_STEP_SUMMARY"
           echo "**Digest**: \`${{ steps.promote.outputs.sourceImageDigest }}\`" >> "$GITHUB_STEP_SUMMARY"
           echo "**Promoted by**: ${{ github.actor }}" >> "$GITHUB_STEP_SUMMARY"
           echo "**Timestamp**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")" >> "$GITHUB_STEP_SUMMARY"

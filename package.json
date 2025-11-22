@@ -16,7 +16,7 @@
     "docker-start": "docker compose -f docker-compose.prod.yml up",
     "deploy": "bun scripts/cli.ts",
     "deploy:help": "bun scripts/cli.ts --help",
-    "generate-tfvars": "bun scripts/commands/generate-tfvars.ts"
+    "generate-tfvars": "bun scripts/cli.ts generate-tfvars"
   },
   "dependencies": {
     "@emotion/css": "^11.10.5",

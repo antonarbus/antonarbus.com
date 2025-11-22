@@ -10,58 +10,38 @@ export const gcp = {
     await $`gcloud config set project ${projectId}`
   },
 
-  /**
-   * Check if required APIs are enabled
-   */
+  /** Check if required APIs are enabled   */
   async ensureAPIsEnabled(projectId: string): Promise<void> {
-    logger.section('Checking if required Google Cloud APIs are enabled...')
+    const requiredApis = [
+      'iam.googleapis.com',
+      'cloudresourcemanager.googleapis.com',
+      'storage.googleapis.com',
+      'containerscanning.googleapis.com'
+    ]
 
-    // Quick check if APIs are already enabled
+    // Check if all required APIs are already enabled
     try {
       const result =
-        await $`gcloud services list --enabled --project=${projectId} --filter=name:iam.googleapis.com --format=value(name)`.text()
+        await $`gcloud services list --enabled --project=${projectId} --format=value(name)`.text()
 
-      if (result.includes('iam.googleapis.com')) {
-        logger.success('APIs already enabled')
+      const enabledApis = result.trim().split('\n')
+
+      const allEnabled = requiredApis.every((api) => enabledApis.includes(api))
+
+      if (allEnabled) {
+        logger.success('All required APIs already enabled')
         return
       }
-    } catch {
-      // If check fails, proceed to enable APIs
+
+      logger.info('Some APIs need to be enabled')
+    } catch (error) {
+      logger.warning('Could not check API status, will attempt to enable anyway')
     }
 
     logger.info('Enabling required Google Cloud APIs...')
-    await $`gcloud services enable iam.googleapis.com cloudresourcemanager.googleapis.com storage.googleapis.com containerscanning.googleapis.com --project=${projectId}`
+    await $`gcloud services enable ${requiredApis.join(' ')} --project=${projectId}`
 
-    logger.emptyLine()
-    logger.info('Waiting for API activation to propagate...')
-
-    // Retry loop with shorter intervals (max 30 seconds)
-    const maxAttempts = 6
-    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-      logger.info(`  Checking API status (attempt ${attempt}/${maxAttempts})...`)
-
-      try {
-        const result =
-          await $`gcloud services list --enabled --project=${projectId} --filter=name:iam.googleapis.com --format=value(name)`.text()
-
-        if (result.includes('iam.googleapis.com')) {
-          logger.success('  APIs are active')
-          break
-        }
-      } catch {
-        // Continue retrying
-      }
-
-      if (attempt === maxAttempts) {
-        logger.warning('  APIs may still be propagating, continuing anyway...')
-        break
-      }
-
-      await Bun.sleep(5000) // 5 seconds
-    }
-
-    logger.emptyLine()
-    logger.success('GCP project setup complete')
+    logger.success('GCP APIs enabled')
   },
 
   /**

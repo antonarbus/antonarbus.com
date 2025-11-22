@@ -13,6 +13,9 @@ type Props = {
 export const showDeploymentInfo = async (props: Props): Promise<void> => {
   const { region, projectId, cloudRunServiceName } = configVariables[props.env]
 
+  // Print section header
+  logger.section(`${props.env.toUpperCase()}`)
+
   try {
     // Get current image URL
     const format = 'value(spec.template.spec.containers[0].image)'
@@ -35,22 +38,49 @@ export const showDeploymentInfo = async (props: Props): Promise<void> => {
     if (tag.match(/^[0-9a-f]{40}$/)) {
       gitSha = tag
     } else {
-      // Tag is environment name, find other tags for the same image
+      // Tag is environment name, try to get digest and find SHA tag
       try {
+        logger.info(`Looking for git SHA tag for image: ${imageUrl}`)
+
+        // Get the digest of the current deployed image
+        const digestFormat = 'value(image_summary.digest)'
+        const digestOutput =
+          await $`gcloud artifacts docker images describe ${imageUrl} --project=${projectId} --format=${digestFormat}`.text()
+        const digest = digestOutput.trim()
+        logger.info(`Image digest: ${digest}`)
+
+        // Now find all tags that point to this same digest
         const baseImageUrl = imageUrl.split(':')[0]
-        const imagesOutput =
-          await $`gcloud artifacts docker images list ${baseImageUrl} --project=${projectId} --format=value(tags)`.text()
+        logger.info(`Base image URL: ${baseImageUrl}`)
 
-        // Parse the output to find tags
-        const allTags = imagesOutput
-          .trim()
-          .split('\n')
-          .flatMap((line) => line.split(','))
-          .map((t) => t.trim())
+        const listFormat = 'json'
+        const listOutput =
+          await $`gcloud artifacts docker images list ${baseImageUrl} --project=${projectId} --include-tags --format=${listFormat}`.text()
 
-        // Find a tag that looks like a git SHA (40 hex chars)
-        gitSha = allTags.find((t) => t.match(/^[0-9a-f]{40}$/)) || null
+        logger.info(`Found ${listOutput.length} chars of JSON output`)
+
+        const images = JSON.parse(listOutput)
+        logger.info(`Parsed ${images.length} images from registry`)
+
+        // Find the image with matching digest and extract its tags
+        for (const image of images) {
+          logger.info(`Checking image with digest: ${image.digest}`)
+          if (image.digest === digest && image.tags) {
+            logger.info(`Found matching image with tags: ${image.tags.join(', ')}`)
+            // Look for a git SHA tag (40 hex chars)
+            gitSha = image.tags.find((t: string) => t.match(/^[0-9a-f]{40}$/)) || null
+            if (gitSha) {
+              logger.info(`Found git SHA: ${gitSha}`)
+              break
+            }
+          }
+        }
+
+        if (!gitSha) {
+          logger.warning('No git SHA tag found in any image')
+        }
       } catch (error) {
+        logger.error(`Error fetching git SHA: ${error}`)
         logger.warning('Could not fetch git SHA from image tags')
       }
     }

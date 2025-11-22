@@ -51,14 +51,16 @@ export const showDeploymentInfo = async (props: Props): Promise<void> => {
         const allTags = lines.map((line) => line.split(':').pop()?.trim()).filter(Boolean)
 
         logger.info(`Found ${allTags.length} tags in repository`)
+        logger.info(`Sample tags: ${allTags.slice(0, 5).join(', ')}`)
 
-        // Find a tag that looks like a git SHA (40 hex chars)
-        gitSha = allTags.find((t) => t && t.match(/^[0-9a-f]{40}$/)) || null
+        // Find a tag that looks like a git SHA (7-40 hex chars)
+        gitSha = allTags.find((t) => t && t.match(/^[0-9a-f]{7,40}$/)) || null
 
         if (gitSha) {
-          logger.info(`Found git SHA tag: ${gitSha.substring(0, 7)}`)
+          logger.info(`Found git SHA tag: ${gitSha}`)
         } else {
           logger.warning('No git SHA tag found in repository')
+          logger.info(`All tags: ${allTags.join(', ')}`)
         }
       } catch (error) {
         logger.warning('Could not list repository tags')

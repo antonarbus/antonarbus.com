@@ -54,7 +54,7 @@ export const promoteImage = async (props: Props): Promise<void> => {
   // Add target environment tag to the same image (no pull/push needed)
   // This is much faster than copying between registries
   logger.info('Adding target environment tag...')
-  await $`gcloud artifacts docker tags add ${sourceImage} ${targetImage} --quiet`
+  await $`gcloud artifacts docker tags add ${sourceImage} ${targetImage} --project=${projectId} --quiet`
 
   logger.emptyLine()
   logger.success('Image promoted successfully')

@@ -2,7 +2,6 @@
 import { Command } from 'commander'
 import { detectEnvironment } from './commands/detect-env'
 import { loadConfig } from './commands/load-config'
-import { setupGcp } from './commands/setup-gcp'
 import { deployCloudRun } from './commands/deploy-cloudrun'
 import { verifyDeployment } from './commands/verify-deployment'
 import { terraformApply } from './commands/terraform-apply'
@@ -36,13 +35,6 @@ program
   .action(async (options: { env: string }) => {
     const validatedEnv = envSchema.parse(options.env)
     loadConfig({ env: validatedEnv })
-  })
-
-program
-  .command('setup-gcp')
-  .description('Setup GCP project and enable required APIs')
-  .action(async () => {
-    await setupGcp()
   })
 
 program

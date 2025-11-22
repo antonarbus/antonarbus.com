@@ -57,9 +57,9 @@ jobs:
           workload_identity_provider: 'projects/${{ steps.source-config.outputs.projectNumber }}/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
           service_account: 'github-actions-sa@${{ steps.source-config.outputs.projectId }}.iam.gserviceaccount.com'
 
-      - name: 'Show current deployments'
+      - name: 'Show source and target deployment info'
         run: |
-          echo "## Current Deployment Status" >> "$GITHUB_STEP_SUMMARY"
+          echo "## Promotion Preview" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
           echo "### Source: ${{ github.event.inputs.source-env }}" >> "$GITHUB_STEP_SUMMARY"
           bun scripts/cli.ts show-deployment-info --env "${{ github.event.inputs.source-env }}" >> "$GITHUB_STEP_SUMMARY" 2>&1 || echo "No deployment found" >> "$GITHUB_STEP_SUMMARY"

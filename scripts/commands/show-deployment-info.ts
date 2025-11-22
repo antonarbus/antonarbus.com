@@ -28,24 +28,30 @@ export const showDeploymentInfo = async (props: Props): Promise<void> => {
     logger.info(`Service: ${cloudRunServiceName}`)
     logger.info(`Image tag: ${tag}`)
 
-    // Try to find git SHA - could be the tag itself or a separate tag
+    // Try to find git SHA - could be the tag itself or get it from the image digest
     let gitSha: string | null = null
 
     // Check if tag itself is a git SHA (40 chars hex)
     if (tag.match(/^[0-9a-f]{40}$/)) {
       gitSha = tag
     } else {
-      // Tag is environment name, try to find associated git SHA tag
+      // Tag is environment name, find other tags for the same image
       try {
         const baseImageUrl = imageUrl.split(':')[0]
-        const tagsOutput =
-          await $`gcloud artifacts docker tags list ${baseImageUrl} --project=${projectId} --format=value(tag)`.text()
-        const tags = tagsOutput.trim().split('\n')
+        const imagesOutput =
+          await $`gcloud artifacts docker images list ${baseImageUrl} --project=${projectId} --format=value(tags)`.text()
 
-        // Find a tag that looks like a git SHA (7-40 hex chars)
-        gitSha = tags.find((t) => t.match(/^[0-9a-f]{7,40}$/)) || null
-      } catch {
-        logger.warning('Could not fetch image tags from registry')
+        // Parse the output to find tags
+        const allTags = imagesOutput
+          .trim()
+          .split('\n')
+          .flatMap((line) => line.split(','))
+          .map((t) => t.trim())
+
+        // Find a tag that looks like a git SHA (40 hex chars)
+        gitSha = allTags.find((t) => t.match(/^[0-9a-f]{40}$/)) || null
+      } catch (error) {
+        logger.warning('Could not fetch git SHA from image tags')
       }
     }
 

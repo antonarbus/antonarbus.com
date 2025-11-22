@@ -1,6 +1,7 @@
 import { logger, githubOutput } from '../lib/output'
-import { gcloud } from '../lib/gcloud'
 import { configVariables, Env } from '../../config/configVariables'
+import { getCurrentCloudRunImage } from '../lib/gcloud/getCurrentCloudRunImage'
+import { updateCloudRunService } from '../lib/gcloud/updateCloudRunService'
 
 type Props = {
   env: Env
@@ -18,13 +19,22 @@ export async function deployCloudRun(props: Props): Promise<void> {
 
   // Capture current image for potential rollback
   logger.info('Capturing current image for rollback capability...')
-  const previousImage = await gcloud.getCurrentCloudRunImage(cloudRunServiceName, region, projectId)
+  const previousImage = await getCurrentCloudRunImage({
+    cloudRunServiceName,
+    region,
+    projectId
+  })
 
   logger.info(`  Previous image: ${previousImage || 'none'}`)
 
   // Export for use in verify-deployment (even if null - verification handles it)
-  githubOutput({ PREVIOUS_IMAGE: previousImage || '' })
+  githubOutput({ previousImage: previousImage || '' })
 
   // Deploy to Cloud Run
-  await gcloud.updateCloudRunService(cloudRunServiceName, imageUrl, region, projectId)
+  await updateCloudRunService({
+    cloudRunServiceName,
+    imageUrl,
+    region,
+    projectId
+  })
 }

@@ -88,7 +88,7 @@ jobs:
         run: bun scripts/cli.ts deploy-cloudrun --env "${{ github.event.inputs.target_env }}" >> $GITHUB_OUTPUT
 
       - name: 'Verify Deployment'
-        run: bun scripts/cli.ts verify-deployment --env "${{ github.event.inputs.target_env }}" --previous-image "${{ steps.deploy.outputs.PREVIOUS_IMAGE }}"
+        run: bun scripts/cli.ts verify-deployment --env "${{ github.event.inputs.target_env }}" --previous-image "${{ steps.deploy.outputs.previousImage }}"
 
       - name: 'Add promotion summary'
         if: always()

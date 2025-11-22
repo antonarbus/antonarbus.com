@@ -46,9 +46,13 @@ function generateTfvarsContent(env: string, config: Record<string, string>): str
 
   // Helper to add entries
   const addEntries = (keys: string[], label?: string) => {
-    if (label) lines.push(`# ${label}\n`)
+    if (label) {
+      lines.push(`# ${label}\n`)
+    }
+
     for (const key of keys) {
       const entry = entries.find(([k]) => k === key)
+
       if (entry) {
         const [k, v] = entry
         const snakeKey = toSnakeCase(k)
@@ -56,6 +60,7 @@ function generateTfvarsContent(env: string, config: Record<string, string>): str
         lines.push(`${paddedKey} = "${v}"`)
       }
     }
+
     lines.push('')
   }
 

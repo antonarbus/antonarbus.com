@@ -92,4 +92,4 @@ jobs:
         run: bun scripts/cli.ts deploy-cloudrun --env ${{ steps.detect-env.outputs.env }} >> $GITHUB_OUTPUT
 
       - name: 'Verify Deployment'
-        run: bun scripts/cli.ts verify-deployment --env ${{ steps.detect-env.outputs.env }} --previous-image "${{ steps.deploy.outputs.PREVIOUS_IMAGE }}"
+        run: bun scripts/cli.ts verify-deployment --env ${{ steps.detect-env.outputs.env }} --previous-image "${{ steps.deploy.outputs.previousImage }}"

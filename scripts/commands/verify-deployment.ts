@@ -1,7 +1,8 @@
 import { logger } from '../lib/output'
-import { gcloud } from '../lib/gcloud'
 import { configVariables, Env } from '../../config/configVariables'
 import { exit } from 'process'
+import { getCloudRunServiceUrl } from '../lib/gcloud/getCloudRunServiceUrl'
+import { rollbackCloudRunService } from '../lib/gcloud/rollbackCloudRunService'
 
 type Props = {
   env: Env
@@ -18,7 +19,7 @@ export async function verifyDeployment(props: Props): Promise<void> {
     logger.emptyLine()
     logger.info('Getting service URL...')
 
-    const url = await gcloud.getCloudRunServiceUrl(cloudRunServiceName, region, projectId)
+    const url = await getCloudRunServiceUrl({ cloudRunServiceName, region, projectId })
 
     logger.info(`Testing URL: ${url}`)
     logger.emptyLine()
@@ -89,12 +90,12 @@ export async function verifyDeployment(props: Props): Promise<void> {
 
         // Trigger rollback for smoke test failures
         if (props.previousImage && props.previousImage !== 'none') {
-          await gcloud.rollbackCloudRunService(
+          await rollbackCloudRunService({
             cloudRunServiceName,
-            props.previousImage,
+            previousImage: props.previousImage,
             region,
             projectId
-          )
+          })
         }
 
         exit(1)
@@ -105,12 +106,12 @@ export async function verifyDeployment(props: Props): Promise<void> {
 
       // Attempt rollback if previous image is available
       if (props.previousImage && props.previousImage !== 'none') {
-        await gcloud.rollbackCloudRunService(
+        await rollbackCloudRunService({
           cloudRunServiceName,
-          props.previousImage,
+          previousImage: props.previousImage,
           region,
           projectId
-        )
+        })
 
         logger.emptyLine()
         logger.info('Waiting 10s for rollback to stabilize...')

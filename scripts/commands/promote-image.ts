@@ -37,18 +37,18 @@ export async function promoteImage(props: Props): Promise<void> {
   logger.emptyLine()
 
   // Get the digest (hash) of the source image for traceability
-  let sourceDigest = 'unknown'
+  let sourceImageDigest = 'unknown'
 
   try {
     const digestOutput =
       await $`gcloud artifacts docker images describe ${sourceImage} --project=${projectId} --format=value(image_summary.digest)`.text()
 
-    sourceDigest = digestOutput.trim()
+    sourceImageDigest = digestOutput.trim()
   } catch {
     logger.warning('Could not retrieve source image digest')
   }
 
-  logger.info(`Source image digest (hash): ${sourceDigest}`)
+  logger.info(`Source image digest (hash): ${sourceImageDigest}`)
 
   // Add target environment tag to the same image (no pull/push needed)
   // This is much faster than copying between registries
@@ -59,11 +59,8 @@ export async function promoteImage(props: Props): Promise<void> {
   logger.success('Image promoted successfully')
   logger.info(`  Source: ${sourceImage}`)
   logger.info(`  Target: ${targetImage}`)
-  logger.info(`  Digest: ${sourceDigest} (same image, new tag)`)
+  logger.info(`  Digest: ${sourceImageDigest} (same image, new tag)`)
 
-  // Export promoted image tag for deployment step
-  githubOutput({
-    PROMOTED_IMAGE_TAG: props.targetEnv,
-    SOURCE_IMAGE_DIGEST: sourceDigest
-  })
+  // Export source image digest for traceability
+  githubOutput({ sourceImageDigest })
 }

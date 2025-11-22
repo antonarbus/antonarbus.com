@@ -97,7 +97,7 @@ jobs:
           echo "" >> "$GITHUB_STEP_SUMMARY"
           echo "**Source**: ${{ github.event.inputs.source_env }}" >> "$GITHUB_STEP_SUMMARY"
           echo "**Target**: ${{ github.event.inputs.target_env }}" >> "$GITHUB_STEP_SUMMARY"
-          echo "**Digest**: \`${{ steps.promote.outputs.SOURCE_IMAGE_DIGEST }}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "**Digest**: \`${{ steps.promote.outputs.sourceImageDigest }}\`" >> "$GITHUB_STEP_SUMMARY"
           echo "**Promoted by**: ${{ github.actor }}" >> "$GITHUB_STEP_SUMMARY"
           echo "**Timestamp**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"

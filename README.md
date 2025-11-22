@@ -66,6 +66,21 @@ gcloud auth application-default login
 
 # Verify project
 gcloud projects describe antonarbus
+
+# Enable required Google Cloud APIs
+# IMPORTANT: These must be enabled BEFORE running bootstrap terraform
+# One-time operation, requires Owner/Admin permissions
+gcloud services enable \
+  iam.googleapis.com \
+  cloudresourcemanager.googleapis.com \
+  storage.googleapis.com \
+  artifactregistry.googleapis.com \
+  run.googleapis.com \
+  containerscanning.googleapis.com \
+  --project=antonarbus
+
+# Verify APIs are enabled
+gcloud services list --enabled --filter="name:(iam.googleapis.com OR cloudresourcemanager.googleapis.com OR storage.googleapis.com OR artifactregistry.googleapis.com OR run.googleapis.com)" --format="table(name)"
 ```
 
 ### 2. Run Bootstrap (One-Time)

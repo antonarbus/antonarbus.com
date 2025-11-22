@@ -57,7 +57,7 @@ jobs:
         with:
           terraform_version: '1.5.0'
 
-      - name: 'Set GCP Project and Enable APIs'
+      - name: 'Set GCP Project'
         run: bun scripts/cli.ts setup-gcp
 
       - name: 'Terraform Format Check'

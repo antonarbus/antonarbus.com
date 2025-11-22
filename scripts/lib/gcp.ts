@@ -2,51 +2,13 @@ import { $ } from 'bun'
 import { logger } from './output'
 
 export const gcp = {
-  /**
-   * Set the default GCP project
-   */
+  /** Set the default GCP project */
   async setProject(projectId: string): Promise<void> {
     logger.info(`Setting default GCP project: ${projectId}`)
     await $`gcloud config set project ${projectId}`
   },
 
-  /** Check if required APIs are enabled   */
-  async ensureAPIsEnabled(projectId: string): Promise<void> {
-    const requiredApis = [
-      'iam.googleapis.com',
-      'cloudresourcemanager.googleapis.com',
-      'storage.googleapis.com',
-      'containerscanning.googleapis.com'
-    ]
-
-    // Check if all required APIs are already enabled
-    try {
-      const result =
-        await $`gcloud services list --enabled --project=${projectId} --format=value(name)`.text()
-
-      const enabledApis = result.trim().split('\n')
-
-      const allEnabled = requiredApis.every((api) => enabledApis.includes(api))
-
-      if (allEnabled) {
-        logger.success('All required APIs already enabled')
-        return
-      }
-
-      logger.info('Some APIs need to be enabled')
-    } catch (error) {
-      logger.warning('Could not check API status, will attempt to enable anyway')
-    }
-
-    logger.info('Enabling required Google Cloud APIs...')
-    await $`gcloud services enable ${requiredApis.join(' ')} --project=${projectId}`
-
-    logger.success('GCP APIs enabled')
-  },
-
-  /**
-   * Check if Terraform state exists for an environment
-   */
+  /** Check if Terraform state exists for an environment */
   async checkTerraformStateExists(bucket: string, environment: string): Promise<boolean> {
     const statePath = `gs://${bucket}/terraform/state/${environment}.tfstate`
 
@@ -58,18 +20,14 @@ export const gcp = {
     }
   },
 
-  /**
-   * Configure Docker authentication for Artifact Registry
-   */
+  /** Configure Docker authentication for Artifact Registry */
   async configureDockerAuth(region: string): Promise<void> {
     logger.info('Configuring Docker authentication for Artifact Registry...')
     await $`gcloud auth configure-docker ${region}-docker.pkg.dev`
     logger.success('Docker authentication configured')
   },
 
-  /**
-   * Update Cloud Run service with new image
-   */
+  /** Update Cloud Run service with new image */
   async updateCloudRunService(
     serviceName: string,
     imageUrl: string,
@@ -89,9 +47,7 @@ export const gcp = {
     logger.success('Docker image deployed to Cloud Run successfully')
   },
 
-  /**
-   * Get current image of Cloud Run service
-   */
+  /** Get current image of Cloud Run service */
   async getCurrentCloudRunImage(
     serviceName: string,
     region: string,
@@ -111,9 +67,7 @@ export const gcp = {
     }
   },
 
-  /**
-   * Get Cloud Run service URL
-   */
+  /** Get Cloud Run service URL */
   async getCloudRunServiceUrl(
     serviceName: string,
     region: string,
@@ -121,12 +75,11 @@ export const gcp = {
   ): Promise<string> {
     const result =
       await $`gcloud run services describe ${serviceName} --region ${region} --project ${projectId} --format=json`.json()
+
     return result.status.url
   },
 
-  /**
-   * Rollback Cloud Run service to previous image
-   */
+  /** Rollback Cloud Run service to previous image */
   async rollbackCloudRunService(
     serviceName: string,
     previousImage: string,

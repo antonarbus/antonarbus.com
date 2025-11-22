@@ -13,7 +13,7 @@ export const detectEnvironment = async (): Promise<Env> => {
 
     logger.info(`Environment: ${env} (from branch: ${branchName})`)
     logger.success('Environment detection complete')
-    githubOutput({ ENVIRONMENT: env })
+    githubOutput({ ENV: env })
 
     return env
   }

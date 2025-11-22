@@ -38,7 +38,7 @@ jobs:
 
       - name: 'Load Config'
         id: config
-        run: bun scripts/cli.ts load-config --env ${{ steps.detect-env.outputs.ENVIRONMENT }} >> $GITHUB_OUTPUT
+        run: bun scripts/cli.ts load-config --env ${{ steps.detect-env.outputs.ENV }} >> $GITHUB_OUTPUT
 
       - name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v3'
@@ -66,7 +66,7 @@ jobs:
         working-directory: ./terraform
 
       - name: 'Terraform Apply'
-        run: bun scripts/cli.ts terraform-apply --env ${{ steps.detect-env.outputs.ENVIRONMENT }}
+        run: bun scripts/cli.ts terraform-apply --env ${{ steps.detect-env.outputs.ENV }}
 
       # ============================================================================
       # DOCKER STEPS
@@ -84,12 +84,12 @@ jobs:
           file: ./dockerfile.prod
           push: true
           tags: |
-            ${{ steps.config.outputs.REGION }}-docker.pkg.dev/${{ steps.config.outputs.PROJECT_ID }}/${{ steps.config.outputs.ARTIFACT_REGISTRY_NAME }}/${{ steps.config.outputs.DOCKER_IMAGE_NAME }}:${{ steps.detect-env.outputs.ENVIRONMENT }}
+            ${{ steps.config.outputs.REGION }}-docker.pkg.dev/${{ steps.config.outputs.PROJECT_ID }}/${{ steps.config.outputs.ARTIFACT_REGISTRY_NAME }}/${{ steps.config.outputs.DOCKER_IMAGE_NAME }}:${{ steps.detect-env.outputs.ENV }}
             ${{ steps.config.outputs.REGION }}-docker.pkg.dev/${{ steps.config.outputs.PROJECT_ID }}/${{ steps.config.outputs.ARTIFACT_REGISTRY_NAME }}/${{ steps.config.outputs.DOCKER_IMAGE_NAME }}:${{ github.sha }}
 
       - name: 'Deploy Docker Image to Cloud Run'
         id: deploy
-        run: bun scripts/cli.ts deploy-cloudrun --env ${{ steps.detect-env.outputs.ENVIRONMENT }} >> $GITHUB_OUTPUT
+        run: bun scripts/cli.ts deploy-cloudrun --env ${{ steps.detect-env.outputs.ENV }} >> $GITHUB_OUTPUT
 
       - name: 'Verify Deployment'
-        run: bun scripts/cli.ts verify-deployment --env ${{ steps.detect-env.outputs.ENVIRONMENT }} --previous-image "${{ steps.deploy.outputs.PREVIOUS_IMAGE }}"
+        run: bun scripts/cli.ts verify-deployment --env ${{ steps.detect-env.outputs.ENV }} --previous-image "${{ steps.deploy.outputs.PREVIOUS_IMAGE }}"

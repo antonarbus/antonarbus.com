@@ -55,10 +55,11 @@ Next.js web application deployed to Google Cloud Run with Terraform infrastructu
 ## Development
 
 ```bash
-bun install
+bun install              # Install dependencies
 bun run dev              # Local development at http://localhost:3000
 bun run build            # Build production
 bun run docker-build     # Build Docker image locally
+bun scripts/cli.ts       # Interactive deployment CLI
 ```
 
 ---
@@ -195,29 +196,18 @@ Push to `master` branch triggers deployment to the environment specified by `MAS
 
 ## CLI Commands
 
-All deployment automation is handled by a TypeScript CLI located in `scripts/cli.ts`.
-
-### Common Commands
-
-**Generate Terraform variables:**
+All deployment automation is handled by an interactive TypeScript CLI:
 
 ```bash
-bun scripts/cli.ts generate-tfvars
+bun scripts/cli.ts
 ```
 
-**Show deployment info:**
+This will prompt you to:
+1. Select a command (generate-tfvars, show-deployment-info, terraform-apply)
+2. Select an environment (if needed)
+3. Execute the command
 
-```bash
-bun scripts/cli.ts show-deployment-info --env dev
-```
-
-**Manual infrastructure deployment:**
-
-```bash
-bun scripts/cli.ts terraform-apply --env dev
-```
-
-For other commands (deploy-cloudrun, promote-image, verify-deployment, etc.), see `bun run deploy:help`.
+**Direct usage:** You can also run commands directly with arguments. Use `bun run deploy:help` to see all available commands.
 
 ---
 

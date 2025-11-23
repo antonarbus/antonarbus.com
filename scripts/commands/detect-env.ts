@@ -1,5 +1,5 @@
 import { getCurrentGitBranchName } from '../lib/git/getCurrentGitBranchName'
-import { Env } from '/config/configVariables'
+import { Env, MASTER_DEPLOYS_TO_ENV } from '/config/configVariables'
 import { exit } from 'process'
 import { githubOutput } from '../lib/output/githubOutput'
 import { logger } from '../lib/output/logger'
@@ -7,20 +7,24 @@ import { logger } from '../lib/output/logger'
 export const detectEnvironment = async (): Promise<Env> => {
   const branchName = await getCurrentGitBranchName()
 
-  // Master branch always deploys to 'dev' github environment
+  // Master/Main branch deploys to the environment specified in config
   // Other environments are reached via promotion workflow at GitHub, not direct push
-  if (['master', 'main'].includes(branchName) === true) {
-    const env: Env = 'dev'
+  const isMaster = ['master', 'main'].includes(branchName) === true
 
-    logger.info(`Environment: ${env} (from branch: ${branchName})`)
+  if (isMaster) {
+    logger.info(`Environment: ${MASTER_DEPLOYS_TO_ENV} (from branch: ${branchName})`)
     logger.success('Environment detection complete')
-    githubOutput({ env })
+    githubOutput({ env: MASTER_DEPLOYS_TO_ENV })
 
-    return env
+    return MASTER_DEPLOYS_TO_ENV
   }
 
-  logger.error(`Only master/main branch triggers deployment to dev environment`)
+  logger.error(
+    `Only master/main branch triggers deployment to ${MASTER_DEPLOYS_TO_ENV} environment`
+  )
+
   logger.error(`Current branch: ${branchName}`)
   logger.error('Use the Promote Release workflow at GitHub to deploy to other environments')
+
   exit(1)
 }

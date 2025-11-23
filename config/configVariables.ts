@@ -57,6 +57,13 @@ export const configVariables = {
 
 export type ConfigVariables = (typeof configVariables)[keyof typeof configVariables]
 
+/**
+ * Defines which environment master/main branch deploys to
+ * - For production-only repos: set to 'prod'
+ * - For repos with staging: set to 'dev'
+ */
+export const MASTER_DEPLOYS_TO_ENV: Env = envName.prod
+
 export const allowedPromotionPath = [
   `${envName.dev}-${envName.test}`,
   `${envName.test}-${envName.pilot}`,

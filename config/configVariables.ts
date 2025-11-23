@@ -64,6 +64,14 @@ export type ConfigVariables = (typeof configVariables)[keyof typeof configVariab
  */
 export const MASTER_DEPLOYS_TO_ENV: Env = envName.prod
 
+/**
+ * Allowed promotion paths for environments (e.g., dev→test→pilot→prod)
+ *
+ * NOTE: When MASTER_DEPLOYS_TO_ENV is set to 'prod' (direct master→prod workflow),
+ * these promotion paths are NOT applicable and deployment happens directly from master branch.
+ * All environment stages (dev, test, pilot) are kept here as a template for future use
+ * and do not harm the production-only workflow.
+ */
 export const allowedPromotionPath = [
   `${envName.dev}-${envName.test}`,
   `${envName.test}-${envName.pilot}`,

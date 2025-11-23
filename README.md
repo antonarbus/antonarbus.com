@@ -30,6 +30,10 @@ Next.js web application deployed to Google Cloud Run with Terraform infrastructu
 
 **Git workflow**: Single `master` branch. Environments are deployment targets, not branches.
 
+**Deployment mode**: Configured via `MASTER_DEPLOYS_TO_ENV` in `config/configVariables.ts`:
+- Set to `prod`: Master deploys directly to production (single-stage workflow)
+- Set to `dev`: Master deploys to dev, other environments use promotion workflow
+
 ### Shared Resources (created in bootstrap)
 
 - **Artifact Registry**: `docker-images` (single registry for all environments)
@@ -162,16 +166,19 @@ After first deployment to each environment:
 
 ### Automatic (via GitHub Actions)
 
-Push to `master` branch triggers deployment to **dev** environment:
+Push to `master` branch triggers deployment to the environment specified by `MASTER_DEPLOYS_TO_ENV`:
 
 1. Push/merge to `master` branch
-2. Detects changes (Terraform and/or application code)
-3. If Terraform changed: applies infrastructure updates
-4. If code changed: builds Docker image (tagged with `dev` + git SHA)
-5. Deploys to dev Cloud Run service
-6. Verifies deployment (auto-rollback on failure)
+2. Detects target environment from `MASTER_DEPLOYS_TO_ENV` config
+3. Detects changes (Terraform and/or application code)
+4. If Terraform changed: applies infrastructure updates
+5. If code changed: builds Docker image (tagged with environment + git SHA)
+6. Deploys to Cloud Run service
+7. Verifies deployment (auto-rollback on failure)
 
-**Other environments** (test, pilot, prod) use the [Release Promotion](#release-promotion) workflow.
+**When `MASTER_DEPLOYS_TO_ENV='prod'`**: Master deploys directly to production. Other environments (dev, test, pilot) are kept as templates and do not harm the workflow.
+
+**When `MASTER_DEPLOYS_TO_ENV='dev'`**: Master deploys to dev. Other environments (test, pilot, prod) use the [Release Promotion](#release-promotion) workflow.
 
 ### Manual Terraform (Infrastructure Only)
 
@@ -321,6 +328,11 @@ scripts/
 ```
 dev → test → pilot → prod
 ```
+
+**NOTE**: This promotion workflow is only applicable when `MASTER_DEPLOYS_TO_ENV` is set to `dev`.
+When set to `prod`, deployment happens directly from master branch to production,
+and the promotion workflow is not used. The environment definitions (dev, test, pilot)
+remain in config as templates and do not interfere with the production-only workflow.
 
 ### Using the Promotion Workflow
 

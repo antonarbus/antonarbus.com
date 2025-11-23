@@ -3,6 +3,10 @@ run-name: 'Promote ${{ inputs.source-env }} → ${{ inputs.target-env }} by ${{ 
 
 # Promotes a tested Docker image from one environment to another
 # Instead of rebuilding, copies the exact same image that was tested
+#
+# NOTE: This workflow is only used when following a multi-stage deployment path (dev→test→pilot→prod).
+# When MASTER_DEPLOYS_TO_ENV is set to 'prod', deployment happens directly from master branch
+# to production, and this promotion workflow is not applicable.
 on:
   workflow_dispatch:
     inputs:

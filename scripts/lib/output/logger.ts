@@ -3,7 +3,7 @@ import chalk from 'chalk'
 /**
  * - Real-time logs to stderr (for human-readable messages)
  * - Won't interfere with stdout which is required for github to pass data between steps
- * */
+ */
 export const logger = {
   info: (message: string): void => {
     console.error(chalk.blue(`ℹ ${message}`))

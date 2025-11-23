@@ -19,7 +19,7 @@ export async function terraformApply(props: Props): Promise<void> {
   logger.info(`Config: ${TFVARS_FILE_PATH}`)
   logger.emptyLine()
 
-  logger.section(`Deploying main infrastructure for environment: ${props.env}`)
+  logger.warning(`Deploying main infrastructure for environment: ${props.env}`)
   logger.emptyLine()
 
   logger.info('Initializing Terraform with remote backend...')

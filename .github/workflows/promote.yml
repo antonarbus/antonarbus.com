@@ -49,7 +49,7 @@ jobs:
           bun-version: latest
 
       - name: 'Generate Terraform Variables'
-        run: bun run generate-tfvars
+        run: bun scripts/cli.ts generate-tfvars
 
       - name: 'Check promotion path'
         run: bun scripts/cli.ts validate-promotion --source-env "${{ github.event.inputs.source-env }}" --target-env "${{ github.event.inputs.target-env }}"
@@ -95,7 +95,7 @@ jobs:
           bun-version: latest
 
       - name: 'Generate Terraform Variables'
-        run: bun run generate-tfvars
+        run: bun scripts/cli.ts generate-tfvars
 
       - name: 'Load target environment config'
         id: config

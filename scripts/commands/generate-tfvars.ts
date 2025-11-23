@@ -14,7 +14,7 @@ type Props = {
  * Run this after modifying config/configVariables.ts
  */
 export const generateTfvars = async (): Promise<void> => {
-  logger.section('Generating .tfvars files from TypeScript config...')
+  logger.warning('Generating .tfvars files from TypeScript config...')
   logger.emptyLine()
 
   const generateTfvarsContent = (props: Props): string => {

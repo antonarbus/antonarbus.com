@@ -14,7 +14,7 @@ export const showDeploymentInfo = async (props: Props): Promise<void> => {
   const { region, projectId, cloudRunServiceName } = configVariables[props.env]
 
   // Print section header
-  logger.section(`${props.env.toUpperCase()}`)
+  logger.warning(`${props.env.toUpperCase()}`)
 
   try {
     // Get current image URL

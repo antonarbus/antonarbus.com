@@ -35,6 +35,27 @@ provider "google" {
 }
 
 # ==============================================================================
+# ENABLE REQUIRED GOOGLE CLOUD APIS
+# ==============================================================================
+# These APIs must be enabled before creating infrastructure resources
+# Note: iam.googleapis.com, cloudresourcemanager.googleapis.com, and
+# storage.googleapis.com must be enabled manually first (see README.md)
+
+resource "google_project_service" "required_services" {
+  for_each = toset([
+    "iamcredentials.googleapis.com", # Required for Workload Identity (GitHub Actions)
+    "artifactregistry.googleapis.com", # Required for Docker image storage
+    "run.googleapis.com",              # Required for Cloud Run services
+    "logging.googleapis.com",          # Required for Cloud Run logs
+    "monitoring.googleapis.com",       # Required for Cloud Run metrics
+  ])
+
+  project            = var.project_id
+  service            = each.key
+  disable_on_destroy = false # Keep APIs enabled even if this resource is destroyed
+}
+
+# ==============================================================================
 # TERRAFORM STATE BUCKET
 # ==============================================================================
 

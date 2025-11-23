@@ -15,7 +15,8 @@
     "docker-build-no-cache": "docker compose -f docker-compose.prod.yml build --no-cache",
     "docker-start": "docker compose -f docker-compose.prod.yml up",
     "cli": "bun scripts/cli.ts",
-    "cli:help": "bun scripts/cli.ts --help"
+    "cli:help": "bun scripts/cli.ts --help",
+    "gcp:services": "gcloud services list --enabled --project=antonarbus"
   },
   "dependencies": {
     "@emotion/css": "^11.10.5",

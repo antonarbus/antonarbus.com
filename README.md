@@ -207,7 +207,7 @@ This will prompt you to:
 2. Select an environment (if needed)
 3. Execute the command
 
-**Direct usage:** You can also run commands directly with arguments. Use `bun run deploy:help` to see all available commands.
+**Direct usage:** You can also run commands directly with arguments. Use `bun run cli:help` to see all available commands.
 
 ---
 

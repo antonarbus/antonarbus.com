@@ -12,8 +12,9 @@ import { showDeploymentInfo } from './commands/show-deployment-info'
 import { envSchema } from '/config/configVariables'
 import { runInteractiveMode } from './lib/interactive'
 
-// If no arguments provided, run interactive mode and exit
-if (process.argv.length === 2) {
+const noArgumentsProvided = process.argv.length === 2
+
+if (noArgumentsProvided) {
   await runInteractiveMode()
   process.exit(0)
 }

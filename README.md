@@ -94,18 +94,23 @@ gcloud projects describe antonarbus
 # IMPORTANT: These must be enabled BEFORE running bootstrap terraform
 # One-time operation, requires Owner/Admin permissions
 gcloud services enable iam.googleapis.com --project=antonarbus
+gcloud services enable iamcredentials.googleapis.com --project=antonarbus
 gcloud services enable cloudresourcemanager.googleapis.com --project=antonarbus
 gcloud services enable storage.googleapis.com --project=antonarbus
 gcloud services enable artifactregistry.googleapis.com --project=antonarbus
 gcloud services enable run.googleapis.com --project=antonarbus
-gcloud services enable containerscanning.googleapis.com --project=antonarbus
+gcloud services enable logging.googleapis.com --project=antonarbus
+gcloud services enable monitoring.googleapis.com --project=antonarbus
 
 # Verify APIs are enabled
 gcloud services list --enabled --filter="name:iam.googleapis.com"
+gcloud services list --enabled --filter="name:iamcredentials.googleapis.com"
 gcloud services list --enabled --filter="name:cloudresourcemanager.googleapis.com"
 gcloud services list --enabled --filter="name:storage.googleapis.com"
 gcloud services list --enabled --filter="name:artifactregistry.googleapis.com"
 gcloud services list --enabled --filter="name:run.googleapis.com"
+gcloud services list --enabled --filter="name:logging.googleapis.com"
+gcloud services list --enabled --filter="name:monitoring.googleapis.com"
 ```
 
 ### 2. Run Bootstrap (One-Time)
@@ -203,6 +208,7 @@ bun scripts/cli.ts
 ```
 
 This will prompt you to:
+
 1. Select a command (generate-tfvars, show-deployment-info, terraform-apply)
 2. Select an environment (if needed)
 3. Execute the command

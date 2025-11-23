@@ -3,7 +3,7 @@ import z from 'zod'
 /**
  * - This file is the authoritative source for all environment configs.
  * - The .tfvars files are GENERATED from this file by `bun run generate-tfvars.ts`
- * - DO NOT MODIFY! Even if you do not use these stages
+ * * DO NOT MODIFY! Even if you do not use these stages, it does not hurt
  */
 
 const envName = {
@@ -13,7 +13,9 @@ const envName = {
   prod: 'prod'
 } as const
 
-/** DO NOT MODIFY! Even if you do not use these stages */
+/**
+ * * DO NOT MODIFY! Even if you do not use these stages, it does not hurt
+ * */
 export const envSchema = z.enum([envName.dev, envName.test, envName.pilot, envName.prod])
 
 export type Env = z.infer<typeof envSchema>
@@ -34,7 +36,9 @@ export const sharedConfigVariables = {
   containerPort: '8080'
 } as const
 
-/** DO NOT MODIFY stages! Even if you do not use these stages */
+/**
+ * * DO NOT MODIFY stages! Even if you do not use these stages, it does not hurt
+ */
 export const configVariables = {
   [envName.prod]: {
     ...sharedConfigVariables,
@@ -64,7 +68,7 @@ export type ConfigVariables = (typeof configVariables)[keyof typeof configVariab
  * Defines which environment master/main branch deploys to
  * - For production-only repos: set to 'prod'
  * - For repos with staging: set to 'dev'
- * - MODIFY if needed!
+ * * MODIFY, if needed!
  */
 export const MASTER_DEPLOYS_TO_ENV: Env = envName.prod
 
@@ -76,7 +80,7 @@ export const MASTER_DEPLOYS_TO_ENV: Env = envName.prod
  * All environment stages (dev, test, pilot) are kept here as a template for future use
  * and do not harm the production-only workflow.
  *
- * - DO NOT MODIFY, but can! Most likely this is correct
+ * * DO NOT MODIFY, but may! Most likely this is correct
  */
 export const allowedPromotionPath = [
   `${envName.dev}-${envName.test}`,

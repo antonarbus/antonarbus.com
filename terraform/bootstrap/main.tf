@@ -37,13 +37,15 @@ provider "google" {
 # ==============================================================================
 # ENABLE REQUIRED GOOGLE CLOUD APIS
 # ==============================================================================
-# These APIs must be enabled before creating infrastructure resources
-# Note: iam.googleapis.com, cloudresourcemanager.googleapis.com, and
-# storage.googleapis.com must be enabled manually first (see README.md)
+# These APIs are enabled automatically by Terraform bootstrap
+# Note: serviceusage.googleapis.com and cloudresourcemanager.googleapis.com
+# must be enabled manually first due to circular dependency (see README.md)
 
 resource "google_project_service" "required_services" {
   for_each = toset([
+    "iam.googleapis.com",              # Required for service account management
     "iamcredentials.googleapis.com",   # Required for Workload Identity (GitHub Actions)
+    "storage.googleapis.com",          # Required for GCS buckets (Terraform state)
     "artifactregistry.googleapis.com", # Required for Docker image storage
     "run.googleapis.com",              # Required for Cloud Run services
     "logging.googleapis.com",          # Required for Cloud Run logs

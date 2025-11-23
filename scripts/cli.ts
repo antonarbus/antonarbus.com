@@ -12,101 +12,97 @@ import { showDeploymentInfo } from './commands/show-deployment-info'
 import { envSchema } from '/config/configVariables'
 import { runInteractiveMode } from './lib/interactive'
 
-// If no arguments provided, run interactive mode
+// If no arguments provided, run interactive mode and exit
 if (process.argv.length === 2) {
-  runInteractiveMode()
-    .then(() => process.exit(0))
-    .catch((error) => {
-      console.error(error)
-      process.exit(1)
-    })
-} else {
-  // Otherwise, use Commander for CLI arguments
-  const program = new Command()
-
-  program.name('deploy-cli').description('Deployment automation for antonarbus.com').version('1.0.0')
-
-  program
-    .command('show-deployment-info')
-    .description('Show deployment info for a specific environment')
-    .requiredOption('--env <environment>', 'Environment name (dev, test, pilot, prod)')
-    .action(async (options: { env: string }) => {
-      const validatedEnv = envSchema.parse(options.env)
-      await showDeploymentInfo({ env: validatedEnv })
-    })
-
-  program
-    .command('generate-tfvars')
-    .description('Generate .tfvars files from TypeScript config')
-    .action(async () => {
-      await generateTfvars()
-    })
-
-  program
-    .command('detect-env')
-    .description('Detect deployment environment from git branch')
-    .action(async () => {
-      await detectEnvironment()
-    })
-
-  program
-    .command('load-config')
-    .description('Load config for specified environment and output as env vars')
-    .requiredOption('--env <environment>', 'Environment name (dev, test, pilot, prod)')
-    .action(async (options: { env: string }) => {
-      const validatedEnv = envSchema.parse(options.env)
-      loadConfig({ env: validatedEnv })
-    })
-
-  program
-    .command('terraform-apply')
-    .description('Apply Terraform configuration for environment')
-    .requiredOption('--env <environment>', 'Environment name (dev, test, pilot, prod)')
-    .action(async (options: { env: string }) => {
-      const validatedEnv = envSchema.parse(options.env)
-      await terraformApply({ env: validatedEnv })
-    })
-
-  program
-    .command('deploy-cloudrun')
-    .description('Deploy Docker image to Cloud Run')
-    .requiredOption('--env <environment>', 'Environment name (dev, test, pilot, prod)')
-    .action(async (options: { env: string }) => {
-      const validatedEnv = envSchema.parse(options.env)
-      await deployCloudRun({ env: validatedEnv })
-    })
-
-  program
-    .command('verify-deployment')
-    .description('Verify Cloud Run deployment')
-    .requiredOption('--env <environment>', 'Environment name (dev, test, pilot, prod)')
-    .option('--previous-image <image>', 'Previous image URL for rollback')
-    .action(async (options: { env: string; previousImage?: string }) => {
-      const validatedEnv = envSchema.parse(options.env)
-      await verifyDeployment({ env: validatedEnv, previousImage: options.previousImage })
-    })
-
-  program
-    .command('validate-promotion')
-    .description('Validate promotion path between environments')
-    .requiredOption('--source-env <environment>', 'Source environment name')
-    .requiredOption('--target-env <environment>', 'Target environment name')
-    .action((options: { sourceEnv: string; targetEnv: string }) => {
-      const validatedSourceEnv = envSchema.parse(options.sourceEnv)
-      const validatedTargetEnv = envSchema.parse(options.targetEnv)
-      validatePromotion({ sourceEnv: validatedSourceEnv, targetEnv: validatedTargetEnv })
-    })
-
-  program
-    .command('promote-image')
-    .description('Promote Docker image from source to target environment')
-    .requiredOption('--source-env <environment>', 'Source environment name')
-    .requiredOption('--target-env <environment>', 'Target environment name')
-    .action(async (options: { sourceEnv: string; targetEnv: string }) => {
-      const validatedSourceEnv = envSchema.parse(options.sourceEnv)
-      const validatedTargetEnv = envSchema.parse(options.targetEnv)
-      await promoteImage({ sourceEnv: validatedSourceEnv, targetEnv: validatedTargetEnv })
-    })
-
-  program.parse()
+  await runInteractiveMode()
+  process.exit(0)
 }
+
+// Otherwise, use Commander for CLI arguments
+const program = new Command()
+
+program.name('deploy-cli').description('Deployment automation for antonarbus.com').version('1.0.0')
+
+program
+  .command('show-deployment-info')
+  .description('Show deployment info for a specific environment')
+  .requiredOption('--env <environment>', 'Environment name (dev, test, pilot, prod)')
+  .action(async (options: { env: string }) => {
+    const validatedEnv = envSchema.parse(options.env)
+    await showDeploymentInfo({ env: validatedEnv })
+  })
+
+program
+  .command('generate-tfvars')
+  .description('Generate .tfvars files from TypeScript config')
+  .action(async () => {
+    await generateTfvars()
+  })
+
+program
+  .command('detect-env')
+  .description('Detect deployment environment from git branch')
+  .action(async () => {
+    await detectEnvironment()
+  })
+
+program
+  .command('load-config')
+  .description('Load config for specified environment and output as env vars')
+  .requiredOption('--env <environment>', 'Environment name (dev, test, pilot, prod)')
+  .action(async (options: { env: string }) => {
+    const validatedEnv = envSchema.parse(options.env)
+    loadConfig({ env: validatedEnv })
+  })
+
+program
+  .command('terraform-apply')
+  .description('Apply Terraform configuration for environment')
+  .requiredOption('--env <environment>', 'Environment name (dev, test, pilot, prod)')
+  .action(async (options: { env: string }) => {
+    const validatedEnv = envSchema.parse(options.env)
+    await terraformApply({ env: validatedEnv })
+  })
+
+program
+  .command('deploy-cloudrun')
+  .description('Deploy Docker image to Cloud Run')
+  .requiredOption('--env <environment>', 'Environment name (dev, test, pilot, prod)')
+  .action(async (options: { env: string }) => {
+    const validatedEnv = envSchema.parse(options.env)
+    await deployCloudRun({ env: validatedEnv })
+  })
+
+program
+  .command('verify-deployment')
+  .description('Verify Cloud Run deployment')
+  .requiredOption('--env <environment>', 'Environment name (dev, test, pilot, prod)')
+  .option('--previous-image <image>', 'Previous image URL for rollback')
+  .action(async (options: { env: string; previousImage?: string }) => {
+    const validatedEnv = envSchema.parse(options.env)
+    await verifyDeployment({ env: validatedEnv, previousImage: options.previousImage })
+  })
+
+program
+  .command('validate-promotion')
+  .description('Validate promotion path between environments')
+  .requiredOption('--source-env <environment>', 'Source environment name')
+  .requiredOption('--target-env <environment>', 'Target environment name')
+  .action((options: { sourceEnv: string; targetEnv: string }) => {
+    const validatedSourceEnv = envSchema.parse(options.sourceEnv)
+    const validatedTargetEnv = envSchema.parse(options.targetEnv)
+    validatePromotion({ sourceEnv: validatedSourceEnv, targetEnv: validatedTargetEnv })
+  })
+
+program
+  .command('promote-image')
+  .description('Promote Docker image from source to target environment')
+  .requiredOption('--source-env <environment>', 'Source environment name')
+  .requiredOption('--target-env <environment>', 'Target environment name')
+  .action(async (options: { sourceEnv: string; targetEnv: string }) => {
+    const validatedSourceEnv = envSchema.parse(options.sourceEnv)
+    const validatedTargetEnv = envSchema.parse(options.targetEnv)
+    await promoteImage({ sourceEnv: validatedSourceEnv, targetEnv: validatedTargetEnv })
+  })
+
+program.parse()

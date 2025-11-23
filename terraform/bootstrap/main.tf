@@ -43,7 +43,7 @@ provider "google" {
 
 resource "google_project_service" "required_services" {
   for_each = toset([
-    "iamcredentials.googleapis.com", # Required for Workload Identity (GitHub Actions)
+    "iamcredentials.googleapis.com",   # Required for Workload Identity (GitHub Actions)
     "artifactregistry.googleapis.com", # Required for Docker image storage
     "run.googleapis.com",              # Required for Cloud Run services
     "logging.googleapis.com",          # Required for Cloud Run logs

@@ -1,11 +1,12 @@
 import z from 'zod'
 
-/**
- * - This file is the authoritative source for all environment configs.
- * - The .tfvars files are GENERATED from this file by `bun run generate-tfvars.ts`
- * * DO NOT MODIFY! Even if you do not use these stages, it does not hurt
- */
+//* MODIFY
+const DOMAIN = 'antonarbus.com'
 
+/**
+ * The .tfvars files are GENERATED from this file by `bun run generate-tfvars.ts`
+ * * DO NOT MODIFY, does not hurt.
+ */
 const envName = {
   dev: 'dev',
   test: 'test',
@@ -13,13 +14,12 @@ const envName = {
   prod: 'prod'
 } as const
 
-/**
- * * DO NOT MODIFY! Even if you do not use these stages, it does not hurt
- * */
+//* DO NOT MODIFY, does not hurt.
 export const envSchema = z.enum([envName.dev, envName.test, envName.pilot, envName.prod])
 
 export type Env = z.infer<typeof envSchema>
 
+//* MODIFY
 export const sharedConfigVariables = {
   projectId: 'antonarbus',
   projectNumber: '850593405209',
@@ -36,29 +36,27 @@ export const sharedConfigVariables = {
   containerPort: '8080'
 } as const
 
-/**
- * * DO NOT MODIFY stages! Even if you do not use these stages, it does not hurt
- */
+//* DO NOT MODIFY, does not hurt
 export const configVariables = {
   [envName.prod]: {
     ...sharedConfigVariables,
     cloudRunServiceName: 'web-app-prod',
-    customDomain: 'antonarbus.com'
+    customDomain: DOMAIN
   },
   [envName.pilot]: {
     ...sharedConfigVariables,
     cloudRunServiceName: 'web-app-pilot',
-    customDomain: 'pilot.antonarbus.com'
+    customDomain: `pilot.${DOMAIN}`
   },
   [envName.test]: {
     ...sharedConfigVariables,
     cloudRunServiceName: 'web-app-test',
-    customDomain: 'test.antonarbus.com'
+    customDomain: `test.${DOMAIN}`
   },
   [envName.dev]: {
     ...sharedConfigVariables,
     cloudRunServiceName: 'web-app-dev',
-    customDomain: 'dev.antonarbus.com'
+    customDomain: `dev.${DOMAIN}`
   }
 } as const
 
@@ -68,19 +66,20 @@ export type ConfigVariables = (typeof configVariables)[keyof typeof configVariab
  * Defines which environment master/main branch deploys to
  * - For production-only repos: set to 'prod'
  * - For repos with staging: set to 'dev'
- * * MODIFY, if needed!
+ * * MODIFY (if needed)
  */
 export const MASTER_DEPLOYS_TO_ENV: Env = envName.prod
 
 /**
- * Allowed promotion paths for environments (e.g., dev→test→pilot→prod)
+ * Allowed promotion paths for environments (e.g., dev → test → pilot → prod)
  *
- * NOTE: When MASTER_DEPLOYS_TO_ENV is set to 'prod' (direct master→prod workflow),
+ * NOTE: When MASTER_DEPLOYS_TO_ENV is set to 'prod' (direct master → prod workflow),
  * these promotion paths are NOT applicable and deployment happens directly from master branch.
  * All environment stages (dev, test, pilot) are kept here as a template for future use
  * and do not harm the production-only workflow.
  *
- * * DO NOT MODIFY, but may! Most likely this is correct
+ * * DO NOT MODIFY, but may (most likely this is correct)
+ * * If modified, then to be aligned with .github/workflows/promote.yml:12
  */
 export const allowedPromotionPath = [
   `${envName.dev}-${envName.test}`,

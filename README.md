@@ -59,7 +59,7 @@ bun install              # Install dependencies
 bun run dev              # Local development at http://localhost:3000
 bun run build            # Build production
 bun run docker-build     # Build Docker image locally
-bun scripts/cli.ts       # Interactive deployment CLI
+bun deploy-scripts/cli.ts       # Interactive deployment CLI
 ```
 
 ---
@@ -152,7 +152,7 @@ Set up approval gates for release promotion:
 Generate `.tfvars` files from the TypeScript configuration:
 
 ```bash
-bun scripts/cli.ts generate-tfvars
+bun deploy-scripts/cli.ts generate-tfvars
 ```
 
 This creates/updates all environment `.tfvars` files from `config/configVariables.ts`.
@@ -192,7 +192,7 @@ Push to `master` branch triggers deployment to the environment specified by `MAS
 All deployment automation is handled by an interactive TypeScript CLI:
 
 ```bash
-bun scripts/cli.ts
+bun deploy-scripts/cli.ts
 ```
 
 This will prompt you to:
@@ -248,7 +248,7 @@ export const configVariables = {
 }
 ```
 
-The `.tfvars` files are **generated** from this TypeScript config using `bun scripts/cli.ts generate-tfvars`.
+The `.tfvars` files are **generated** from this TypeScript config using `bun deploy-scripts/cli.ts generate-tfvars`.
 
 ### Key Variables
 
@@ -265,7 +265,7 @@ The `.tfvars` files are **generated** from this TypeScript config using `bun scr
 ### Changing Configuration
 
 1. Edit `config/configVariables.ts`
-2. Run `bun scripts/cli.ts generate-tfvars` to regenerate `.tfvars` files
+2. Run `bun deploy-scripts/cli.ts generate-tfvars` to regenerate `.tfvars` files
 3. Commit both files
 4. Push to `master` (auto-applies to target environment)
 5. For non-target environments: manual Terraform or promotion workflow
@@ -351,7 +351,7 @@ Domain verification missing. See [Domain Verification](#3-domain-verification-on
 **Config validation fails**
 
 - Check `config/configVariables.ts` for missing properties
-- Regenerate: `bun scripts/cli.ts generate-tfvars`
+- Regenerate: `bun deploy-scripts/cli.ts generate-tfvars`
 
 **GCP commands fail**
 
@@ -396,7 +396,7 @@ gcloud run domain-mappings list --region=us-central1
 │   ├── test.tfvars               # Generated from configVariables.ts
 │   ├── pilot.tfvars              # Generated from configVariables.ts
 │   └── prod.tfvars               # Generated from configVariables.ts
-├── scripts/                      # TypeScript CLI for deployment automation
+├── deploy-scripts/                      # TypeScript CLI for deployment automation
 │   ├── cli.ts                    # Main CLI entry point
 │   ├── commands/                 # Command implementations
 │   └── lib/                      # Shared utilities (gcloud, output, etc.)

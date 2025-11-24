@@ -14,8 +14,8 @@
     "docker-build": "docker compose -f docker-compose.prod.yml build",
     "docker-build-no-cache": "docker compose -f docker-compose.prod.yml build --no-cache",
     "docker-start": "docker compose -f docker-compose.prod.yml up",
-    "cli": "bun scripts/cli.ts",
-    "cli-help": "bun scripts/cli.ts --help",
+    "cli": "bun deploy-scripts/cli.ts",
+    "cli-help": "bun deploy-scripts/cli.ts --help",
     "gcp-list-enabled-services": "gcloud services list --enabled --project=antonarbus",
     "terraform-format": "terraform fmt -recursive terraform/"
   },

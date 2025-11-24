@@ -4,7 +4,7 @@ import z from 'zod'
 const DOMAIN = 'antonarbus.com'
 
 /**
- * The .tfvars files are GENERATED from this file by `bun scripts/cli.ts generate-tfvars`
+ * The .tfvars files are GENERATED from this file by `bun deploy-scripts/cli.ts generate-tfvars`
  * * DO NOT MODIFY, does not hurt.
  */
 const envName = {

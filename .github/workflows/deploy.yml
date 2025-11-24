@@ -31,15 +31,15 @@ jobs:
           bun-version: latest
 
       - name: 'Generate Terraform Variables'
-        run: bun scripts/cli.ts generate-tfvars
+        run: bun deploy-scripts/cli.ts generate-tfvars
 
       - name: 'Detect Environment'
         id: detect-env
-        run: bun scripts/cli.ts detect-env >> $GITHUB_OUTPUT
+        run: bun deploy-scripts/cli.ts detect-env >> $GITHUB_OUTPUT
 
       - name: 'Load Config'
         id: config
-        run: bun scripts/cli.ts load-config --env ${{ steps.detect-env.outputs.env }} >> $GITHUB_OUTPUT
+        run: bun deploy-scripts/cli.ts load-config --env ${{ steps.detect-env.outputs.env }} >> $GITHUB_OUTPUT
 
       - name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v3'
@@ -64,7 +64,7 @@ jobs:
         working-directory: ./terraform
 
       - name: 'Terraform Apply'
-        run: bun scripts/cli.ts terraform-apply --env ${{ steps.detect-env.outputs.env }}
+        run: bun deploy-scripts/cli.ts terraform-apply --env ${{ steps.detect-env.outputs.env }}
 
       # ============================================================================
       # DOCKER STEPS
@@ -87,7 +87,7 @@ jobs:
 
       - name: 'Deploy Docker Image to Cloud Run'
         id: deploy
-        run: bun scripts/cli.ts deploy-cloudrun --env ${{ steps.detect-env.outputs.env }} >> $GITHUB_OUTPUT
+        run: bun deploy-scripts/cli.ts deploy-cloudrun --env ${{ steps.detect-env.outputs.env }} >> $GITHUB_OUTPUT
 
       - name: 'Verify Deployment'
-        run: bun scripts/cli.ts verify-deployment --env ${{ steps.detect-env.outputs.env }} --previous-image "${{ steps.deploy.outputs.previousImage }}"
+        run: bun deploy-scripts/cli.ts verify-deployment --env ${{ steps.detect-env.outputs.env }} --previous-image "${{ steps.deploy.outputs.previousImage }}"

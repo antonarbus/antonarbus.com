@@ -7,6 +7,7 @@ This guide helps you apply the deployment approach from this project to other pr
 ### Phase 1: Runtime Migration (Node → Bun)
 
 **Local Development:**
+
 - [ ] Install Bun: `curl -fsSL https://bun.sh/install | bash`
 - [ ] Update package.json scripts:
   - [ ] Replace `npm run` with `bun run`
@@ -17,6 +18,7 @@ This guide helps you apply the deployment approach from this project to other pr
 - [ ] Commit `bun.lockb` to git
 
 **Docker:**
+
 - [ ] Update `Dockerfile` base image:
   ```dockerfile
   # FROM node:20-alpine
@@ -29,6 +31,7 @@ This guide helps you apply the deployment approach from this project to other pr
 - [ ] Test Docker container runs correctly
 
 **CI/CD (GitHub Actions):**
+
 - [ ] Replace `actions/setup-node@v4` with `oven-sh/setup-bun@v2`
 - [ ] Update all `npm` commands to `bun`
 - [ ] Test workflows in a feature branch first
@@ -36,12 +39,14 @@ This guide helps you apply the deployment approach from this project to other pr
 ### Phase 2: Project Setup
 
 **Prerequisites:**
+
 - [ ] Verify GCP project exists
 - [ ] Enable required APIs (copy from current project's README)
 - [ ] Install gcloud CLI
 - [ ] Authenticate: `gcloud auth application-default login`
 
 **Configuration:**
+
 - [ ] Copy `config/configVariables.ts` template
 - [ ] Update domain name (e.g., `example.com`)
 - [ ] Update GCP project ID
@@ -52,6 +57,7 @@ This guide helps you apply the deployment approach from this project to other pr
 ### Phase 3: Terraform Setup
 
 **Bootstrap (One-time per project):**
+
 - [ ] Copy `terraform/bootstrap/` directory
 - [ ] Update `variables.tf` if needed
 - [ ] Run bootstrap manually first time:
@@ -67,17 +73,19 @@ This guide helps you apply the deployment approach from this project to other pr
   - [ ] Workload Identity configured
 
 **Infrastructure:**
+
 - [ ] Copy `terraform/infrastructure/` directory
 - [ ] Review and adjust resources for project needs
 - [ ] Test terraform init with backend:
   ```bash
-  bun scripts/cli.ts terraform-apply --env dev
+  bun deploy-scripts/cli.ts terraform-apply --env dev
   ```
 
 ### Phase 4: Scripts & CLI
 
 **Copy CLI infrastructure:**
-- [ ] Copy `scripts/` directory entirely
+
+- [ ] Copy `deploy-scripts/` directory entirely
 - [ ] Copy `tsconfig.json` (or merge settings)
 - [ ] Install dependencies:
   ```bash
@@ -86,25 +94,28 @@ This guide helps you apply the deployment approach from this project to other pr
 - [ ] Update `package.json` scripts:
   ```json
   {
-    "cli": "bun scripts/cli.ts",
-    "cli:help": "bun scripts/cli.ts --help"
+    "cli": "bun deploy-scripts/cli.ts",
+    "cli:help": "bun deploy-scripts/cli.ts --help"
   }
   ```
-- [ ] Test CLI works: `bun scripts/cli.ts`
+- [ ] Test CLI works: `bun deploy-scripts/cli.ts`
 
 **Customize commands:**
-- [ ] Review `scripts/commands/` - keep what you need
-- [ ] Update `scripts/lib/interactive.ts` with relevant commands
+
+- [ ] Review `deploy-scripts/commands/` - keep what you need
+- [ ] Update `deploy-scripts/lib/interactive.ts` with relevant commands
 - [ ] Remove promotion workflow if using direct-to-prod
 
 ### Phase 5: GitHub Actions
 
 **Copy workflows:**
+
 - [ ] Copy `.github/workflows/deploy.yml`
 - [ ] Copy `.github/workflows/promote.yml` (if using multi-stage)
 - [ ] Update workflow names/descriptions
 
 **Configure GitHub secrets/environments:**
+
 - [ ] Create GitHub environments (dev, test, pilot, prod)
 - [ ] Configure required reviewers per environment
 - [ ] Configure Workload Identity Federation (already done via bootstrap)
@@ -113,11 +124,13 @@ This guide helps you apply the deployment approach from this project to other pr
 ### Phase 6: Domain & DNS
 
 **Domain verification:**
+
 - [ ] Verify domain ownership in Google Search Console
 - [ ] Or add TXT record to DNS
 - [ ] Run domain mapping after verification
 
 **DNS Configuration:**
+
 - [ ] Add CNAME records for subdomains:
   ```
   dev.example.com    → ghs.googlehosted.com
@@ -129,11 +142,13 @@ This guide helps you apply the deployment approach from this project to other pr
 ### Phase 7: First Deployment
 
 **Generate configs:**
-- [ ] Run: `bun scripts/cli.ts generate-tfvars`
+
+- [ ] Run: `bun deploy-scripts/cli.ts generate-tfvars`
 - [ ] Verify `.tfvars` files look correct
 - [ ] Commit generated files
 
 **Deploy to dev:**
+
 - [ ] Push to master branch
 - [ ] Watch GitHub Actions workflow
 - [ ] Verify deployment succeeds
@@ -143,6 +158,7 @@ This guide helps you apply the deployment approach from this project to other pr
 ### Phase 8: Documentation
 
 **Update README:**
+
 - [ ] Copy README.md template
 - [ ] Update project name
 - [ ] Update domain names
@@ -153,12 +169,14 @@ This guide helps you apply the deployment approach from this project to other pr
 ### Phase 9: Cleanup & Validation
 
 **Remove old stuff:**
+
 - [ ] Remove old deployment scripts
 - [ ] Remove old Terraform files (if restructuring)
 - [ ] Remove old CI/CD workflows
 - [ ] Remove `package-lock.json` or `yarn.lock`
 
 **Validation checklist:**
+
 - [ ] `bun install` works
 - [ ] `bun run dev` works locally
 - [ ] `bun run build` succeeds
@@ -205,7 +223,7 @@ If you're migrating a project that's very similar to this one:
 
 ```bash
 # 1. Copy these files/directories to new project:
-cp -r config/ scripts/ terraform/ .github/ <new-project>/
+cp -r config/ deploy-scripts/ terraform/ .github/ <new-project>/
 cp tsconfig.json package.json bun.lockb <new-project>/
 
 # 2. Update configuration
@@ -222,7 +240,7 @@ terraform apply -var-file="../../config/prod.tfvars"
 
 # 5. Test deployment
 cd ../..
-bun scripts/cli.ts
+bun deploy-scripts/cli.ts
 ```
 
 ---

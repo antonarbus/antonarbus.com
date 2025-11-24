@@ -16,7 +16,6 @@
     "docker-start": "docker compose -f docker-compose.prod.yml up",
     "cli": "bun deploy-scripts/cli.ts",
     "cli-help": "bun deploy-scripts/cli.ts --help",
-    "gcp-list-enabled-services": "gcloud services list --enabled --project=antonarbus",
     "terraform-format": "terraform fmt -recursive terraform/"
   },
   "dependencies": {

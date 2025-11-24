@@ -4,6 +4,7 @@ import { Env } from '/config/configVariables'
 import { generateTfvars } from '../commands/generate-tfvars'
 import { showDeploymentInfo } from '../commands/show-deployment-info'
 import { terraformApply } from '../commands/terraform-apply'
+import { listGcloudServices } from '../commands/list-gcloud-services'
 
 type Command = {
   name: string
@@ -19,6 +20,12 @@ export async function runInteractiveMode(): Promise<void> {
       description: 'Generate .tfvars files from TypeScript config',
       requiresEnv: false,
       action: async () => generateTfvars()
+    },
+    {
+      name: 'list-gcloud-services',
+      description: 'List enabled Google Cloud services',
+      requiresEnv: false,
+      action: async () => listGcloudServices()
     },
     {
       name: 'show-deployment-info',

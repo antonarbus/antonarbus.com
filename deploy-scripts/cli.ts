@@ -9,6 +9,7 @@ import { promoteImage } from './commands/promote-image'
 import { validatePromotion } from './commands/validate-promotion'
 import { generateTfvars } from './commands/generate-tfvars'
 import { showDeploymentInfo } from './commands/show-deployment-info'
+import { listGcloudServices } from './commands/list-gcloud-services'
 import { envSchema } from '/config/configVariables'
 import { runInteractiveMode } from './lib/interactive'
 
@@ -31,6 +32,13 @@ program
   .action(async (options: { env: string }) => {
     const validatedEnv = envSchema.parse(options.env)
     await showDeploymentInfo({ env: validatedEnv })
+  })
+
+program
+  .command('list-gcloud-services')
+  .description('List all enabled Google Cloud services for the project')
+  .action(async () => {
+    await listGcloudServices()
   })
 
 program

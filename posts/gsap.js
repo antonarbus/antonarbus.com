@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, Lnk, React, useEffect, useState, useRef, jsxToStr, H } from '/components/post/reExport'
 import CocaColaSvg from '/pics/cocaCola.svg'
 import styled from 'styled-components'

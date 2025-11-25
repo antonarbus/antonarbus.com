@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Suspense, use } from 'react'
 import { Code, Lnk, useState, useEffect, jsxToStr, H } from '/components/post/reExport'
 import axios from 'axios'

@@ -1,3 +1,5 @@
+'use client'
+
 export function Wrapper(props) {
   return (
     <div>

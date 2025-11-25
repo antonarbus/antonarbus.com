@@ -1,3 +1,5 @@
+'use client'
+
 // components/post/LazyImg.js
 import LazyLoad from 'react-lazyload'
 import { Spinner } from '/functions/Spinner'

@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, jsxToStr } from '/components/post/reExport'
 import syncWait from '/functions/syncWait'
 import axios from 'axios'

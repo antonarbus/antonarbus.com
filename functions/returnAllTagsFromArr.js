@@ -1,3 +1,5 @@
+'use client'
+
 export default function returnAllTagsFromArr(arr) {
   // Set can have only unique vals
   const allTags = new Set()

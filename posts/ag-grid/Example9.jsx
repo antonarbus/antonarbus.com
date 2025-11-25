@@ -1,3 +1,6 @@
+'use client'
+
+
 /** @jsxImportSource @emotion/react */
 import { useMemo, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react'

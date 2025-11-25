@@ -1,3 +1,6 @@
+'use client'
+
+
 import { jsxToStr, H, Code, LazyImg, Lnk } from '/components/post/reExport'
 import { useState, useTransition, useDeferredValue, useEffect } from 'react'
 import randomNumFromTo from '/functions/randomNumFromTo'

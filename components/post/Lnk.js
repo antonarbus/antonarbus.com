@@ -1,3 +1,5 @@
+'use client'
+
 // if we do not provide any link specifically via 'link' or 'path or url' or 'src' it will be taken from the tag content (props.children)
 
 export function Lnk(props) {

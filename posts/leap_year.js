@@ -1,3 +1,6 @@
+'use client'
+
+
 import { LeapYear } from './leapYear/LeapYear'
 import { Code, LazyImg, jsxToStr } from '/components/post/reExport'
 

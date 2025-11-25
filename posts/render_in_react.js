@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, Hs, React, useEffect, useState, useRef, useCallback, useMemo, jsxToStr } from '/components/post/reExport'
 import blinkWithCssProp from '/functions/blinkWithCssProp'
 import randomNumFromTo from '/functions/randomNumFromTo'

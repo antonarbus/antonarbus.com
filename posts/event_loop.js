@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, Hs, Lnk, React, jsxToStr } from '/components/post/reExport'
 
 function Cmpt0() {

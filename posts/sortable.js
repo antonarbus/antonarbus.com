@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, Lnk, useState, jsxToStr } from '/components/post/reExport'
 
 import { sortableContainer, sortableElement, sortableHandle } from 'react-sortable-hoc'

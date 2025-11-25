@@ -1,3 +1,6 @@
+'use client'
+
+
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'

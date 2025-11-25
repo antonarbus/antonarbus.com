@@ -1,3 +1,6 @@
+'use client'
+
+
 import { useRef, jsxToStr, Code } from '/components/post/reExport'
 import caretTo from '../functions/caretTo'
 

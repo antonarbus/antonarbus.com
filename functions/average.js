@@ -1,3 +1,5 @@
+'use client'
+
 const average = (...nums) => {
   let arr = []
   // may pass array or args separately

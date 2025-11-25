@@ -1,3 +1,5 @@
+'use client'
+
 export function CodeSpan(props) {
   const lang = props.code || props.lang || props.type || 'jsx'
 

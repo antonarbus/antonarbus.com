@@ -1,3 +1,5 @@
+'use client'
+
 // blinkWithCssProp.js
 export default function blinkWithCssProp(args) {
   const { el, cssPropToChange, value, time } = {

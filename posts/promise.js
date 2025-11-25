@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, Hs, Lnk, jsxToStr, useState } from '/components/post/reExport'
 import axios from 'axios'
 import pMap from 'p-map'

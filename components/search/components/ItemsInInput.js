@@ -1,7 +1,9 @@
+'use client'
+
 import { TagInInput } from './TagInInput'
 import { WordInInput } from './WordInInput'
 import { useContext } from 'react'
-import { PostsContext } from '/pages/posts/index'
+import { PostsContext } from '/contexts/PostsContext'
 
 export function ItemsInInput(props) {
   const { itemsInInput } = useContext(PostsContext)

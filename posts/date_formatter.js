@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, jsxToStr } from '/components/post/reExport'
 import { ddmmyyyyHHMMSS } from '/functions/ddmmyyyyHHMMSS'
 

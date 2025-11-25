@@ -1,3 +1,6 @@
+'use client'
+
+
 // import & set icons
 import { FaReact } from 'react-icons/fa'
 import { AiOutlinePlus } from 'react-icons/ai'

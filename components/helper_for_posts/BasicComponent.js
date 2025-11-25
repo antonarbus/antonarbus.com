@@ -1,3 +1,5 @@
+'use client'
+
 // components/helper_for_posts/NotLazyComponent.js
 import React from 'react'
 

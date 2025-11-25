@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, useRef, jsxToStr } from '/components/post/reExport'
 import { isClickedElInsideThisEl } from '/functions/isClickedElInsideThisEl'
 const style = { border: '2px solid grey', padding: '10px', margin: '10px', maxWidth: '500px' }

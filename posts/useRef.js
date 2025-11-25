@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, Lnk, React, useRef, jsxToStr } from '/components/post/reExport'
 
 // #region useRef

@@ -1,3 +1,5 @@
+'use client'
+
 import jsxToStr from './jsxToStr'
 
 function isIterable (value) {

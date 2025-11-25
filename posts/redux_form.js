@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, Lnk, jsxToStr, LazyImg } from '/components/post/reExport'
 import { combineReducers } from 'redux'
 import { Provider } from 'react-redux'

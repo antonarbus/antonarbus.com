@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, React, jsxToStr } from '/components/post/reExport'
 import returnUniquesArr from '/functions/uniquesArr'
 

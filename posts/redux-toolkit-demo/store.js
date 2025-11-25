@@ -1,3 +1,6 @@
+'use client'
+
+
 // redux-toolkit-demo/store.js
 import { configureStore } from '@reduxjs/toolkit'
 import { createLogger } from 'redux-logger'

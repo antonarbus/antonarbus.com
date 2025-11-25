@@ -1,3 +1,6 @@
+'use client'
+
+
 // redux-toolkit-demo/slices/loginSlice.js
 import { createSlice } from '@reduxjs/toolkit'
 import { changeGreeting } from './greetingsSlice'

@@ -1,3 +1,6 @@
+'use client'
+
+
 // posts/leapYear/isLeapYear.test.js
 import { isLeapYear } from './isLeapYear.js'
 

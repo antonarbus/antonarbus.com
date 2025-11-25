@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, Lnk, jsxToStr } from '/components/post/reExport'
 import { Spinner } from '/functions/Spinner'
 

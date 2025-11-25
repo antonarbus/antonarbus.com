@@ -1,0 +1,39 @@
+.homeContainer {
+  display: flex;
+  padding-top: 10vh;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  color: grey;
+  font-size: 2rem;
+}
+
+.homeButton {
+  cursor: pointer;
+  color: #666 !important;
+  background: transparent !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  border-radius: 0.25rem !important;
+  box-shadow: none !important;
+  font-family: system-ui !important;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  padding: 8px 24px !important;
+  margin: 10px !important;
+  text-decoration: none !important;
+  transition: all 150ms ease !important;
+  user-select: none !important;
+  display: inline-block !important;
+}
+
+.homeButton:hover,
+.homeButton:focus {
+  background: rgba(0, 0, 0, 0.03) !important;
+  border-color: rgba(0, 0, 0, 0.15) !important;
+  color: #555 !important;
+}
+
+.homeButton:active {
+  background: rgba(0, 0, 0, 0.05) !important;
+  border-color: rgba(0, 0, 0, 0.2) !important;
+}

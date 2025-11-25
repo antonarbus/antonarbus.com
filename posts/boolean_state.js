@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, Lnk, jsxToStr } from '/components/post/reExport'
 import useBoolean from '/functions/useBoolean'
 

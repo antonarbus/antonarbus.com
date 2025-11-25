@@ -8,8 +8,12 @@
     ],
     // "baseUrl": ".",
     "paths": {
-      "/*": ["./*"],
-      "@st/*": ["/styles/*"]
+      "/*": [
+        "./*"
+      ],
+      "@st/*": [
+        "/styles/*"
+      ]
     },
     "allowJs": true,
     "skipLibCheck": true,
@@ -23,17 +27,21 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "jsxImportSource": "@emotion/react"
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
-    "next-env.d.ts",
+    "**/*.js",
+    "**/*.js",
     "**/*.ts",
     "**/*.tsx",
-    "**/*.js",
-    "**/*.js"
-,
-"posts/typescript.jsx"
-],
+    "next-env.d.ts",
+    "posts/typescript.jsx",
+    ".next/types/**/*.ts"
+  ],
   "exclude": [
     ".git",
     ".app-cache",
@@ -46,6 +54,6 @@
     "subfolder/dist",
     "subfolder/node_modules",
     "**/dist/*",
-    "**/node_modules/*",
+    "**/node_modules/*"
   ]
 }

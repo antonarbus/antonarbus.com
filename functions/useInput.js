@@ -1,3 +1,5 @@
+'use client'
+
 // functions\useInput.js
 import { useState } from 'react'
 

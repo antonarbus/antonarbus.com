@@ -1,3 +1,6 @@
+'use client'
+
+
 // redux-toolkit-demo/slices/counterSlice.js
 import { createSlice } from '@reduxjs/toolkit'
 

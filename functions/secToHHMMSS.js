@@ -1,3 +1,5 @@
+'use client'
+
 export default function secToHHMMSS(sec = 0) {
   const hours = Math.floor(sec / (60 * 60))
   const remainingSec = sec % (60 * 60)

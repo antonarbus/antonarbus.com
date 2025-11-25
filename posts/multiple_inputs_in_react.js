@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, Lnk, useState, jsxToStr } from '/components/post/reExport'
 
 function Component() {

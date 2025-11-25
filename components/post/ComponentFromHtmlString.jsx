@@ -1,3 +1,5 @@
+'use client'
+
 import { useRef, useState } from 'react'
 import root from 'react-shadow'
 import { Resizable } from 're-resizable'

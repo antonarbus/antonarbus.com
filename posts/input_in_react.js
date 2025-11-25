@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, Hs, Lnk, useState, useRef, jsxToStr } from '/components/post/reExport'
 import useInput from '/functions/useInput'
 

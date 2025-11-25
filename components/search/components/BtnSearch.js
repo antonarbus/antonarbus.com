@@ -1,5 +1,7 @@
+'use client'
+
 import { useContext } from 'react'
-import { PostsContext } from '/pages/posts/index'
+import { PostsContext } from '/contexts/PostsContext'
 
 export function BtnSearch() {
   const {
@@ -32,8 +34,14 @@ export function BtnSearch() {
     const tagsToSearch = newItemsInInput.filter(item => item.tag).map(item => item.val)
     const textsToSearch = newItemsInInput.filter(item => item.text).map(item => item.val)
     const foundPosts = posts
-      .filter(post => tagsToSearch.every(tagToSearch => post.tags.includes(tagToSearch)))
-      .filter(post => textsToSearch.every(textToSearch => post.bodyStr.toLowerCase().includes(textToSearch.toLowerCase())))
+      .filter(post => {
+        if (!post.tags || !Array.isArray(post.tags)) return tagsToSearch.length === 0
+        return tagsToSearch.every(tagToSearch => post.tags.includes(tagToSearch))
+      })
+      .filter(post => {
+        if (!post.bodyStr) return tagsToSearch.length > 0 // If searching by tags only, include posts without bodyStr
+        return textsToSearch.every(textToSearch => post.bodyStr.toLowerCase().includes(textToSearch.toLowerCase()))
+      })
     setFoundPostsState(foundPosts)
   }
 

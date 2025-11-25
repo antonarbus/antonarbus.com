@@ -1,6 +1,8 @@
+'use client'
+
 import { useContext } from 'react'
 import { LinkBox } from './LinkBox'
-import { PostsContext } from '/pages/posts/index'
+import { PostsContext } from '/contexts/PostsContext'
 
 export function PostLinks(props) {
   const { foundPostsState, tabPosPost, postsOrdered, setPostsOrdered } = useContext(PostsContext)
@@ -14,14 +16,24 @@ export function PostLinks(props) {
           {foundPostsState.length ? <span> ordered by <span className='clickable' onClick={() => { setPostsOrdered(!postsOrdered) }}>{postsOrdered ? 'date' : 'name'}</span></span> : ''}
         </div>
         <div className="container">
-          {foundPostsState
-            .sort((a, b) => postsOrdered ? b.date.localeCompare(a.date) : a.title.localeCompare(b.title))
+          {[...foundPostsState]
+            .sort((a, b) => {
+              if (postsOrdered) {
+                const dateA = a.date || ''
+                const dateB = b.date || ''
+                return dateB.localeCompare(dateA)
+              } else {
+                const titleA = a.title || a.fileName || ''
+                const titleB = b.title || b.fileName || ''
+                return titleA.localeCompare(titleB)
+              }
+            })
             .map((post, index) => (
             <LinkBox
-              key={post.title}
+              key={post.fileName || post.title || index}
               tabbed={(index === tabPosPost)}
             >
-              <a href={post.url}>{post.title}</a>
+              <a href={post.url}>{post.title || post.fileName}</a>
             </LinkBox>
             ))}
         </div>

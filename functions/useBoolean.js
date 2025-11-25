@@ -1,3 +1,5 @@
+'use client'
+
 // functions\useBoolean.js
 import { useState } from 'react'
 

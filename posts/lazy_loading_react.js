@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, Lnk, React, H, jsxToStr } from '/components/post/reExport'
 import { Suspense } from 'react'
 import BasicComponent from '/components/helper_for_posts/BasicComponent'

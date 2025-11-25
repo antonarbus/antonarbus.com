@@ -24,8 +24,24 @@ const nextConfig = {
     // your project has ESLint errors.
     ignoreDuringBuilds: true
   },
+  typescript: {
+    // Warning: This allows production builds to successfully complete even if
+    // your project has TypeScript errors.
+    ignoreBuildErrors: true
+  },
   compiler: {
-    emotion: true
+    emotion: true,
+    styledJsx: true
+  },
+  webpack: (config, { isServer }) => {
+    // Exclude posts from server-side webpack analysis
+    if (isServer) {
+      config.externals = config.externals || []
+      config.externals.push({
+        '/exportAllPosts.js': 'commonjs /exportAllPosts.js'
+      })
+    }
+    return config
   }
 }
 

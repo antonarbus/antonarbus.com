@@ -1,3 +1,5 @@
+'use client'
+
 import { Title } from './Title.js'
 import { Section } from './Section.js'
 import { Date } from './Date.js'

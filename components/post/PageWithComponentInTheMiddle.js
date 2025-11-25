@@ -1,3 +1,5 @@
+'use client'
+
 export default function PageWithComponentInTheMiddle(props) {
   return (
     <div className="container">

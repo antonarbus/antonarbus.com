@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, Hs, LazyImg, Lnk, React, useEffect, useState, useRef, useCallback, useMemo, jsxToStr } from '/components/post/reExport'
 
 function Square1() {

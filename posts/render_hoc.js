@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, jsxToStr, useRef, useState } from '/components/post/reExport'
 import { gsap } from 'gsap'
 import { useUpdateEffect } from 'react-use'

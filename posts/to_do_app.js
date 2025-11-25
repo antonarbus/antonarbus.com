@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, useState, jsxToStr } from '/components/post/reExport'
 import styled from 'styled-components'
 import shortid from 'shortid'

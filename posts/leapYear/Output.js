@@ -1,3 +1,6 @@
+'use client'
+
+
 export function Output({ yearTypeState }) {
   return (
     <div data-testid="output">

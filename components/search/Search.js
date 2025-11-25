@@ -1,3 +1,5 @@
+'use client'
+
 import { BtnCancel } from './components/BtnCancel'
 import { BtnSearch } from './components/BtnSearch'
 import { Input } from './components/Input'

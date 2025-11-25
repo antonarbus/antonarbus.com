@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, LazyImg, jsxToStr, H } from '/components/post/reExport'
 
 const style = { height: '200px', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '50px' }

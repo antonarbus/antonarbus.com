@@ -1,3 +1,6 @@
+'use client'
+
+
 // posts/zustandStore/counterSlice.js
 export const counterSlice = (set, get) => ({
   counter: 0,

@@ -1,3 +1,6 @@
+'use client'
+
+
 // @ts-check
 import { Code, H, LazyImg, Lnk, jsxToStr, Hs } from '/components/post/reExport'
 

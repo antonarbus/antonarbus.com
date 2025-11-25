@@ -1,3 +1,6 @@
+'use client'
+
+
 // @ts-check
 import { Code, H, React, jsxToStr } from '/components/post/reExport'
 

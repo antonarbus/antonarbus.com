@@ -1,3 +1,5 @@
+'use client'
+
 export function setCookie(cName, cVal, expDays) {
   const d = new Date();
   d.setTime(d.getTime() + (expDays * 24 * 60 * 60 * 1000));

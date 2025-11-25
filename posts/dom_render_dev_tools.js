@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, LazyImg, useState, jsxToStr } from '/components/post/reExport'
 
 function Component() {

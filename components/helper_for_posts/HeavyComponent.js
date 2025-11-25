@@ -1,3 +1,5 @@
+'use client'
+
 // components/helper_for_posts/LazyComponent.js
 import React from 'react'
 import syncWait from '/functions/syncWait'

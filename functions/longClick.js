@@ -1,3 +1,5 @@
+'use client'
+
 // functions/longClick.js
 export function longClick(args) {
   const { el, delay, cb } = {

@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, Hs, LazyImg, useState, useRef, jsxToStr } from '/components/post/reExport'
 
 function Form() {

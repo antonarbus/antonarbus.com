@@ -1,3 +1,5 @@
+'use client'
+
 export default function randomNumFromTo(from, to) {
   from = parseInt(from)
   to = parseInt(to)

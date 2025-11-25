@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, Lnk, useReducer, jsxToStr } from '/components/post/reExport'
 
 // #region general

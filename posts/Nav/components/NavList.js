@@ -1,3 +1,6 @@
+'use client'
+
+
 import styled from 'styled-components'
 import { NavItem } from './NavItem'
 import navStructure from '../navStructure'

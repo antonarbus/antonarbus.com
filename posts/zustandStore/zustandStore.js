@@ -1,3 +1,6 @@
+'use client'
+
+
 // posts/zustandStore/zustandStore.js
 import create from 'zustand'
 import { devtools } from 'zustand/middleware'

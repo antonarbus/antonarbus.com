@@ -1,6 +1,8 @@
+'use client'
+
 import Link from 'next/link'
 import { useContext } from 'react'
-import { PostsContext } from '/pages/posts/index'
+import { PostsContext } from '/contexts/PostsContext'
 
 export function PostsInHints(props) {
   const postsInHintsState = useContext(PostsContext).postsInHintsState

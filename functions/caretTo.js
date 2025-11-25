@@ -1,3 +1,5 @@
+'use client'
+
 // functions/caretTo.js
 export default function caretTo(args) {
   const { el, toPos, toStart, toEnd } = { toPos: 0, toStart: false, toEnd: false, ...args }

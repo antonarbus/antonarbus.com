@@ -1,3 +1,6 @@
+'use client'
+
+
 import { jsxToStr, Code, Lnk, H } from '/components/post/reExport'
 import { combineReducers } from 'redux'
 import { Provider, connect } from 'react-redux'

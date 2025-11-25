@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, Lnk, jsxToStr } from '/components/post/reExport'
 import { combineReducers, createStore, applyMiddleware } from 'redux'
 import { Provider, useSelector, useDispatch } from 'react-redux'

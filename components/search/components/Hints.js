@@ -1,6 +1,8 @@
+'use client'
+
 import { TagInHint } from './TagInHint'
 import { useContext } from 'react'
-import { PostsContext } from '/pages/posts/index'
+import { PostsContext } from '/contexts/PostsContext'
 import { PostInHint } from './PostInHint'
 
 export function Hints(props) {
@@ -9,7 +11,8 @@ export function Hints(props) {
   return (
     <>
       {hints.map((hint, index) => {
-        if (!hint.title) {
+        // Check if it's a string (tag) or object (post)
+        if (typeof hint === 'string') {
           return (
             <TagInHint
               key={`tag-${hint}`}
@@ -18,17 +21,18 @@ export function Hints(props) {
             />
           )
         }
-        if (hint.title) {
+        // It's a post object
+        if (typeof hint === 'object' && hint !== null) {
           return (
             <PostInHint
-              key={`hint-${hint.title}`}
+              key={`hint-${hint.fileName || hint.title || index}`}
               url={hint.url}
-              title={hint.title}
+              title={hint.title || hint.fileName}
               tabbed={index === tabPosHint}
             />
           )
         }
-        return false
+        return null
       })}
     </>
   )

@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, jsxToStr, H } from '/components/post/reExport'
 import areWordsInText from '/functions/areWordsInText'
 import isSomeWordInText from '/functions/isSomeWordInText'

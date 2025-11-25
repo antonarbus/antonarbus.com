@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, useEffect, useState, jsxToStr } from '/components/post/reExport'
 
 export const getJsxWithBoldSubstr = (text, subString) => {

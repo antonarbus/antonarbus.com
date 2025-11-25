@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, React, jsxToStr } from '/components/post/reExport'
 import average from '/functions/average'
 

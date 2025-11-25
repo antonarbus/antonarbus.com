@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, LazyImg, Lnk, React, jsxToStr } from '/components/post/reExport'
 import { FaRedhat, FaRedhat as HatIcon } from 'react-icons/fa'
 

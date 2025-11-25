@@ -1,3 +1,6 @@
+'use client'
+
+
 import { React, jsxToStr, H, Code, Lnk } from '/components/post/reExport'
 import Button from '@mui/material/Button'
 

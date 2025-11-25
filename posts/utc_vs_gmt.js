@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, Hs, Lnk, useEffect, useState, jsxToStr } from '/components/post/reExport'
 import { ddmmyyyyHHMMSS } from '/functions/ddmmyyyyHHMMSS'
 

@@ -1,3 +1,5 @@
+'use client'
+
 export default function areElsFromSmallArrInsideBigArr(smallArr, bigArr) {
   const smallARR = smallArr.map(el => el.toLowerCase())
   const bigARR = bigArr.map(el => el.toLowerCase())

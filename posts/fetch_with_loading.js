@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Suspense, use } from 'react'
 import { Code, Lnk, useState, jsxToStr, H } from '/components/post/reExport'
 import randomNumFromTo from '/functions/randomNumFromTo'

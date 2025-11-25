@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, LazyImg, Lnk, React, jsxToStr } from '/components/post/reExport'
 import styled from 'styled-components'
 import { RiAddLine as Plus } from 'react-icons/ri'

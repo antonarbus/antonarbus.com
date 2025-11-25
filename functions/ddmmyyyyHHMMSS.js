@@ -1,3 +1,5 @@
+'use client'
+
 // functions/ddmmyyyyHHMMSS.js
 export const ddmmyyyyHHMMSS = (date = new Date(), utc = false) => {
   if (isNaN(Date.parse(date))) return 'can not parse date'

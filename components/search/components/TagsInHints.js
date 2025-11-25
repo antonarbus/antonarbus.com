@@ -1,6 +1,8 @@
+'use client'
+
 import { TagInHint } from './TagInHint'
 import { useContext } from 'react'
-import { PostsContext } from '/pages/posts/index'
+import { PostsContext } from '/contexts/PostsContext'
 
 export function TagsInHints(props) {
   const { tagsInHintsState } = useContext(PostsContext)

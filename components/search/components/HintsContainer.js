@@ -1,6 +1,8 @@
+'use client'
+
 // hits for tag and post names, doesn't to a post content
 import { useContext, useEffect } from 'react'
-import { PostsContext } from '/pages/posts/index'
+import { PostsContext } from '/contexts/PostsContext'
 
 export function HintsContainer(props) {
   const { showHintsState, setShowHintsState, hintsRef, inputRef, isHintsContainer } = useContext(PostsContext)

@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, useState, jsxToStr } from '/components/post/reExport'
 import isiOS from '/functions/isIos'
 

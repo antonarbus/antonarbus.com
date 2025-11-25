@@ -1,3 +1,5 @@
+'use client'
+
 export const sum = (...nums) => {
   let arr = []
   // may pass array or args separately

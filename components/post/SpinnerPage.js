@@ -1,3 +1,5 @@
+'use client'
+
 import PageWithComponentInTheMiddle from './PageWithComponentInTheMiddle'
 import { Spinner } from './Spinner'
 

@@ -1,3 +1,6 @@
+'use client'
+
+
 export function isLeapYear(inputVal) {
   const year = Number(inputVal)
   // if string or zero

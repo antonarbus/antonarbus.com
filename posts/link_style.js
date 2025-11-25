@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Lnk, Code, H, Hs, jsxToStr } from '/components/post/reExport'
 
 function GoogleLink1() {

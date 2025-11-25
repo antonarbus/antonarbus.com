@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, jsxToStr } from '/components/post/reExport'
 
 // #region idea

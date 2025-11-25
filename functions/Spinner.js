@@ -1,3 +1,5 @@
+'use client'
+
 // functions\Spinner.js
 export function Spinner({ color, width, height }) {
   return (

@@ -1,3 +1,6 @@
+'use client'
+
+
 // posts/zustandStore/loginOutSlice.js
 export const loginOutSlice = (set, get) => ({
   isLogged: false,

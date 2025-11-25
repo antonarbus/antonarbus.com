@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, Hs, LazyImg, Lnk, jsxToStr } from '/components/post/reExport'
 import football from '/pics/football.jpg'
 import Image from 'next/image'

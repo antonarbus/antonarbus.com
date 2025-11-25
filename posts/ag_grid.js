@@ -1,3 +1,6 @@
+'use client'
+
+
 /** @jsxImportSource @emotion/react */
 import { Code, H, Lnk, jsxToStr } from '/components/post/reExport'
 import 'ag-grid-community/styles/ag-grid.css'

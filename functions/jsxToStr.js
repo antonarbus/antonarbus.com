@@ -1,3 +1,5 @@
+'use client'
+
 // src/helpers/functions/jsxToStr.js
 export default function jsxToStr(el) {
   if (!el) return ''

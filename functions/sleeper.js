@@ -1,3 +1,5 @@
+'use client'
+
 // sleeper.js
 export default function sleeper (ms = 1000) {
   return function (x) {

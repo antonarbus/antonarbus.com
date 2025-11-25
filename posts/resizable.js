@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, Lnk, useState, jsxToStr } from '/components/post/reExport'
 
 import { Resizable } from 're-resizable'

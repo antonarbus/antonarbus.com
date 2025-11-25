@@ -1,5 +1,7 @@
+'use client'
+
 import { useContext } from 'react'
-import { PostsContext } from '/pages/posts/index'
+import { PostsContext } from '/contexts/PostsContext'
 
 export function TagInHint({ tag, tabbed }) {
   const {

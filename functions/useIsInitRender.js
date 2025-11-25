@@ -1,3 +1,5 @@
+'use client'
+
 // /functions/useIsInitRender'
 import { useRef, useEffect } from 'react'
 

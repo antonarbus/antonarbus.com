@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, Hs, Lnk, React, useState, jsxToStr } from '/components/post/reExport'
 import styled, { keyframes, ThemeProvider, useTheme } from 'styled-components'
 

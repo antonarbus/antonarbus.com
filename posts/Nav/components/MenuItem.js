@@ -1,3 +1,6 @@
+'use client'
+
+
 import styled from 'styled-components'
 import { FaChevronRight as ForwardIcon } from 'react-icons/fa'
 import React from 'react'

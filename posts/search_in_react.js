@@ -1,3 +1,6 @@
+'use client'
+
+
 import { useEffect, useState, jsxToStr, H, Code } from '/components/post/reExport'
 import { useDeferredValue } from 'react'
 import syncWait from '/functions/syncWait'

@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, useEffect, useState, useRef, jsxToStr } from '/components/post/reExport'
 import secToHHMMSS from '/functions/secToHHMMSS'
 

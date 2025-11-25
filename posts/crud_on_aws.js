@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, Hs, LazyImg, Lnk, useEffect, useState, useRef, jsxToStr } from '/components/post/reExport'
 import axios from 'axios'
 import shortid from 'shortid'

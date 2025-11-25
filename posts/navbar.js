@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Nav } from './Nav/Nav'
 import { H, jsxToStr } from '/components/post/reExport'
 

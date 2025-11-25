@@ -1,3 +1,5 @@
+'use client'
+
 import { Tag } from './Tag'
 
 export function Tags(props) {

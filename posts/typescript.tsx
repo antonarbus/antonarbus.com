@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, Hs, LazyImg, Lnk, React, jsxToStr } from '/components/post/reExport'
 import { ExportedTypes } from '/types/types'
 import { UserContext, UserContextProvider } from '/types/UserContext'

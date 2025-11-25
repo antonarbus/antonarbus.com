@@ -1,3 +1,6 @@
+'use client'
+
+
 import { useState, Code, Hs, jsxToStr } from '/components/post/reExport'
 
 function Cmpt() {

@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, Hs, Lnk, jsxToStr } from '/components/post/reExport'
 
 const postObj = {

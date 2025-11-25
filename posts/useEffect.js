@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, Lnk, useEffect, useState, useRef, jsxToStr } from '/components/post/reExport'
 
 // #region - basics

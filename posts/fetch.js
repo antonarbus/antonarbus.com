@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, Hs, Lnk, jsxToStr, LazyImg } from '/components/post/reExport'
 
 async function fetchPage() {

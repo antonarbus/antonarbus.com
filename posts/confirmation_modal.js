@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Lnk, Code, useState, jsxToStr, H } from '/components/post/reExport'
 import { forwardRef } from 'react'
 import Button from '@mui/material/Button'

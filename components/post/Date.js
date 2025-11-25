@@ -1,3 +1,5 @@
+'use client'
+
 export function Date(props) {
   return <time>
     {props.children}

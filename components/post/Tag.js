@@ -1,3 +1,5 @@
+'use client'
+
 export function Tag(props) {
   return (
     <div className='tag'>

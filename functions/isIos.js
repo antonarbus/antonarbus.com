@@ -1,3 +1,5 @@
+'use client'
+
 // functions/isIos.js
 export default function isiOS() {
   return ['iPad Simulator', 'iPhone Simulator', 'iPod Simulator', 'iPad', 'iPhone', 'iPod'

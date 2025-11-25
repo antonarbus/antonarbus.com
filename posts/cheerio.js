@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, Lnk, useRef, jsxToStr } from '/components/post/reExport'
 import * as cheerio from 'cheerio'
 

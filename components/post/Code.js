@@ -1,3 +1,5 @@
+'use client'
+
 import { Resizable } from 're-resizable'
 import { useEffect, useRef, useState } from 'react'
 

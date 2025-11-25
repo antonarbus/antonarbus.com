@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, Lnk, useState, useRef, jsxToStr } from '/components/post/reExport'
 import { CSSTransition, Transition } from 'react-transition-group'
 

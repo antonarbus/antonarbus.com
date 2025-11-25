@@ -1,3 +1,5 @@
+'use client'
+
 export function InputWrapper(props) {
   return (
     <div>

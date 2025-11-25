@@ -1,5 +1,7 @@
+'use client'
+
 import { useContext } from 'react'
-import { PostsContext } from '/pages/posts/index'
+import { PostsContext } from '/contexts/PostsContext'
 
 export function WordInInput(props) {
   const { itemsInInput, setItemsInInput, inputRef, searchBtnRef } = useContext(PostsContext)

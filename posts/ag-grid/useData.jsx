@@ -1,3 +1,6 @@
+'use client'
+
+
 const { useQuery } = require('react-query')
 
 export function useData() {

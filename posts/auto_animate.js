@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, Lnk, jsxToStr } from '/components/post/reExport'
 import { useState, useRef, useEffect } from 'react'
 import autoAnimate from '@formkit/auto-animate'

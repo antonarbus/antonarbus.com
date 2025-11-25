@@ -1,5 +1,7 @@
+'use client'
+
 import { useContext, useEffect } from 'react'
-import { PostsContext } from '/pages/posts/index'
+import { PostsContext } from '/contexts/PostsContext'
 
 export function Input() {
   const {
@@ -26,8 +28,14 @@ export function Input() {
   function tagsAndPostsForHints(e) {
     const inputVal = e.target.value
 
-    const foundTags = tags.filter(tag => tag.toLowerCase().trim().includes(inputVal.toLowerCase().trim()))
-    const foundPosts = posts.filter(post => post.title.toLowerCase().trim().includes(inputVal.toLowerCase().trim()))
+    const foundTags = tags.filter(tag => {
+      if (!tag || typeof tag !== 'string') return false
+      return tag.toLowerCase().trim().includes(inputVal.toLowerCase().trim())
+    })
+    const foundPosts = posts.filter(post => {
+      const searchText = (post.title || post.fileName || '').toLowerCase().trim()
+      return searchText.includes(inputVal.toLowerCase().trim())
+    })
     if (foundTags.length === 0 && foundPosts.length === 0) {
       setShowHintsState(false)
       isHintsContainer.current = false

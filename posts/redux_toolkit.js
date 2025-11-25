@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, Hs, Lnk, jsxToStr } from '/components/post/reExport'
 import { Provider, useSelector, useDispatch } from 'react-redux'
 import { store } from './redux-toolkit-demo/store'

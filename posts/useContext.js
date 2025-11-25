@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, jsxToStr } from '/components/post/reExport'
 import { createContext, useContext, useState, useReducer } from 'react'
 import shortid from 'shortid'

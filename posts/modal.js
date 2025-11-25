@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, jsxToStr } from '/components/post/reExport'
 import { useModalWithBackground } from '/functions/useModalWithBackground'
 import { useModalWithoutBackground } from '/functions/useModalWithoutBackground'

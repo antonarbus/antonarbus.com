@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, jsxToStr, Lnk, LazyImg } from '/components/post/reExport'
 
 const postObj = {

@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, jsxToStr } from '/components/post/reExport'
 import blinkWithCssProp from '/functions/blinkWithCssProp'
 

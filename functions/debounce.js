@@ -1,3 +1,5 @@
+'use client'
+
 // returns debounced function, not calling it
 function debounce(fn, delay = 300) {
   let timeoutId

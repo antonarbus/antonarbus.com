@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, Lnk, jsxToStr } from '/components/post/reExport'
 import { v1 as uuidv1, v4 as uuidv4 } from 'uuid'
 import { nanoid } from 'nanoid'

@@ -1,3 +1,6 @@
+'use client'
+
+
 import { Code, H, Hs, React, useState, jsxToStr } from '/components/post/reExport'
 
 // #region Without state

@@ -10,8 +10,8 @@ import { validatePromotion } from './commands/validate-promotion'
 import { generateTfvars } from './commands/generate-tfvars'
 import { showDeploymentInfo } from './commands/show-deployment-info'
 import { listGcloudServices } from './commands/list-gcloud-services'
-import { envSchema } from '/config/configVariables'
 import { runInteractiveMode } from './lib/interactive'
+import { envSchema } from '../config/configVariables'
 
 const noArgumentsProvided = process.argv.length === 2
 

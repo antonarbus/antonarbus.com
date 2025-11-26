@@ -3,7 +3,7 @@ import {
   Env,
   allowedPromotionPath,
   allowedPromotionPathSchema
-} from '/config/configVariables'
+} from '../../config/configVariables'
 import { exit } from 'process'
 
 type Props = {

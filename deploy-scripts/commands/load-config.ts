@@ -1,4 +1,4 @@
-import { configVariables, Env } from '/config/configVariables'
+import { configVariables, Env } from '../../config/configVariables'
 import { exit } from 'process'
 import { githubOutput } from '../lib/output/githubOutput'
 import { logger } from '../lib/output/logger'

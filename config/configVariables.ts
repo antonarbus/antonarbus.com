@@ -66,6 +66,7 @@ export type ConfigVariables = (typeof configVariables)[keyof typeof configVariab
  * Defines which environment master/main branch deploys to
  * - For production-only repos: set to 'prod'
  * - For repos with staging: set to 'dev'
+ * - If set to 'dev' and you need to push hot-fix asap, switch to 'prod'
  * * MODIFY (if needed)
  */
 export const MASTER_DEPLOYS_TO_ENV: Env = envName.prod

@@ -23,10 +23,10 @@ Next.js web application deployed to Google Cloud Run with Terraform infrastructu
 
 | Environment | Cloud Run Service | Domain               |
 | ----------- | ----------------- | -------------------- |
-| **Prod**    | `web-app-prod`    | antonarbus.com       |
-| **Pilot**   | `web-app-pilot`   | pilot.antonarbus.com |
-| **Test**    | `web-app-test`    | test.antonarbus.com  |
 | **Dev**     | `web-app-dev`     | dev.antonarbus.com   |
+| **Test**    | `web-app-test`    | test.antonarbus.com  |
+| **Pilot**   | `web-app-pilot`   | pilot.antonarbus.com |
+| **Prod**    | `web-app-prod`    | antonarbus.com       |
 
 **Git workflow**: Single `master` branch. Environments are deployment targets.
 
@@ -105,8 +105,17 @@ gcloud services list --enabled --filter="name:serviceusage.googleapis.com OR nam
 
 Bootstrap creates shared resources that all environments use.
 
+**IMPORTANT**: Before running bootstrap, you must first generate the `.tfvars` files from TypeScript config (see [Generate Terraform Variables](#5-generate-terraform-variables) below).
+
 ```bash
+# First, generate .tfvars files if you haven't already
+bun deploy-scripts/cli.ts generate-tfvars
+
+# Then run bootstrap
 cd terraform/bootstrap
+
+# Remove any leftovers from the template or old project
+rm -rf .terraform .terraform.lock.hcl terraform.tfstate terraform.tfstate.backup
 
 # Initialize Terraform
 terraform init

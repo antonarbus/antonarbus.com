@@ -4,6 +4,7 @@ import { Env } from '../../config/configVariables'
 import { generateTfvars } from '../commands/generate-tfvars'
 import { showDeploymentInfo } from '../commands/show-deployment-info'
 import { terraformApply } from '../commands/terraform-apply'
+import { terraformPlan } from '../commands/terraform-plan'
 import { listGcloudServices } from '../commands/list-gcloud-services'
 
 type Command = {
@@ -34,6 +35,15 @@ export async function runInteractiveMode(): Promise<void> {
       action: async (env?: Env) => {
         if (!env) throw new Error('Environment required')
         await showDeploymentInfo({ env })
+      }
+    },
+    {
+      name: 'terraform-plan',
+      description: 'Plan infrastructure changes',
+      requiresEnv: true,
+      action: async (env?: Env) => {
+        if (!env) throw new Error('Environment required')
+        await terraformPlan({ env })
       }
     },
     {

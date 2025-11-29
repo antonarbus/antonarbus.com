@@ -44,7 +44,7 @@ resource "google_iam_workload_identity_pool_provider" "github_provider" {
   }
 
   # Restrict to your specific GitHub repository
-  attribute_condition = "assertion.repository == 'antonarbus/antonarbus.com'"
+  attribute_condition = "assertion.repository == '${var.github_repository}'"
 
   oidc {
     issuer_uri = "https://token.actions.githubusercontent.com"
@@ -60,5 +60,5 @@ resource "google_iam_workload_identity_pool_provider" "github_provider" {
 resource "google_service_account_iam_member" "workload_identity_user" {
   service_account_id = "projects/${var.project_id}/serviceAccounts/github-actions-sa@${var.project_id}.iam.gserviceaccount.com"
   role               = "roles/iam.workloadIdentityUser"
-  member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github_pool.name}/attribute.repository/antonarbus/antonarbus.com"
+  member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github_pool.name}/attribute.repository/${var.github_repository}"
 }

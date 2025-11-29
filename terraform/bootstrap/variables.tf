@@ -118,3 +118,9 @@ variable "project_number" {
   type        = string
   default     = null
 }
+
+variable "github_repository" {
+  description = "GitHub repository in format 'owner/repo' for Workload Identity Federation"
+  type        = string
+  # Value provided by config/*.tfvars file
+}

@@ -28,6 +28,7 @@ export const sharedConfigVariables = {
   artifactRegistryName: 'docker-images',
   dockerImageName: 'web-app',
   githubActionsSaName: 'github-actions-sa',
+  githubRepository: 'antonarbus/antonarbus.com',
   cloudRunSaName: 'cloud-run-sa',
   minInstances: '0',
   maxInstances: '5',

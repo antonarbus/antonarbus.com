@@ -23,12 +23,12 @@ export type Env = z.infer<typeof envSchema>
 export const sharedConfigVariables = {
   projectId: 'antonarbus',
   projectNumber: '850593405209',
-  region: 'us-central1',
+  githubRepository: 'antonarbus/antonarbus.com',
   bucketForTerraformStateName: 'antonarbus-terraform-state',
+  region: 'us-central1',
   artifactRegistryName: 'docker-images',
   dockerImageName: 'web-app',
   githubActionsSaName: 'github-actions-sa',
-  githubRepository: 'antonarbus/antonarbus.com',
   cloudRunSaName: 'cloud-run-sa',
   minInstances: '0',
   maxInstances: '5',
@@ -41,23 +41,27 @@ export const sharedConfigVariables = {
 export const configVariables = {
   [envName.prod]: {
     ...sharedConfigVariables,
-    cloudRunServiceName: 'web-app-prod',
-    customDomain: DOMAIN
+    cloudRunServiceName: `web-app-${envName.prod}`,
+    customDomain: DOMAIN,
+    environment: envName.prod
   },
   [envName.pilot]: {
     ...sharedConfigVariables,
-    cloudRunServiceName: 'web-app-pilot',
-    customDomain: `pilot.${DOMAIN}`
+    cloudRunServiceName: `web-app-${envName.pilot}`,
+    customDomain: `${envName.pilot}.${DOMAIN}`,
+    environment: envName.pilot
   },
   [envName.test]: {
     ...sharedConfigVariables,
-    cloudRunServiceName: 'web-app-test',
-    customDomain: `test.${DOMAIN}`
+    cloudRunServiceName: `web-app-${envName.test}`,
+    customDomain: `${envName.test}.${DOMAIN}`,
+    environment: envName.test
   },
   [envName.dev]: {
     ...sharedConfigVariables,
-    cloudRunServiceName: 'web-app-dev',
-    customDomain: `dev.${DOMAIN}`
+    cloudRunServiceName: `web-app-${envName.dev}`,
+    customDomain: `${envName.dev}.${DOMAIN}`,
+    environment: envName.dev
   }
 } as const
 

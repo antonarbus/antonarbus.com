@@ -164,3 +164,20 @@ variable "custom_domain" {
   # 3. Add them to your domain registrar (GoDaddy, Namecheap, etc.)
   # Value provided by config/*.tfvars file
 }
+
+# ==============================================================================
+# ENVIRONMENT
+# ==============================================================================
+
+variable "environment" {
+  description = "Environment name (dev, test, pilot, prod)"
+  type        = string
+  # Used for labels and tracking which environment resources belong to
+  # Value provided by config/*.tfvars file
+}
+
+variable "github_repository" {
+  description = "GitHub repository in format 'owner/repo' - not used in infrastructure but prevents warnings"
+  type        = string
+  default     = null
+}

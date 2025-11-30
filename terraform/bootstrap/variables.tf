@@ -124,3 +124,9 @@ variable "github_repository" {
   type        = string
   # Value provided by config/*.tfvars file
 }
+
+variable "environment" {
+  description = "Environment name (dev, test, pilot, prod) - not used in bootstrap but prevents warnings"
+  type        = string
+  default     = null
+}

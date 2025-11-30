@@ -1,14 +1,14 @@
 # ==============================================================================
 # TERRAFORM CONFIGURATION
 # ==============================================================================
-# This file defines infrastructure for antonarbus.com:
+# This file defines infrastructure for the web application:
 #
 # ARCHITECTURE: Hybrid - Shared + Isolated Resources
 #
 # SHARED ACROSS ALL ENVIRONMENTS:
-#   - GCP Project (antonarbus)
+#   - GCP Project
 #   - GCS Bucket for Terraform state
-#   - Region (us-central1)
+#   - Region
 #   - GitHub Actions Service Account (github-actions-sa) - shared CI/CD
 #   - Cloud Run Service Account (cloud-run-sa) - shared runtime identity
 #   - 6 IAM permissions for GitHub Actions SA
@@ -93,17 +93,17 @@ data "google_service_account" "cloud_run_service" {
 # IMPORTANT: One-time manual setup required!
 #
 # Before domain mappings can be created automatically, the GitHub Actions
-# service account must be added as a verified owner of antonarbus.com.
+# service account must be added as a verified owner of your domain.
 #
 # This is a ONE-TIME setup that enables all environments (dev, test, pilot, prod).
 #
-# Setup instructions: See terraform/bootstrap/DOMAIN_VERIFICATION_SETUP.md
+# Setup instructions: See README.md - Domain Verification section
 #
 # Quick steps:
 #   1. Go to https://search.google.com/search-console
-#   2. Select antonarbus.com property
+#   2. Select your domain property
 #   3. Settings → Users and permissions → Add user
-#   4. Add: github-actions-sa@antonarbus.iam.gserviceaccount.com
+#   4. Add: github-actions-sa@{PROJECT_ID}.iam.gserviceaccount.com
 #   5. Grant Owner permission
 #
 # After this setup, all automated domain mappings will work.
@@ -127,7 +127,7 @@ resource "google_cloud_run_v2_service" "main" {
     # Labels for the template (managed by Terraform)
     labels = {
       managed-by  = "terraform"
-      environment = "production"
+      environment = var.environment
     }
 
     # Scaling settings: how many instances (copies) of your app can run
@@ -227,13 +227,13 @@ resource "google_cloud_run_v2_service_iam_member" "public_access" {
 # ==============================================================================
 # CUSTOM DOMAIN MAPPING
 # ==============================================================================
-# Maps your custom domain (antonarbus.com) to the Cloud Run service
-# This will import and update the existing domain mapping to point to cloud-run
+# Maps your custom domain to the Cloud Run service
+# Automatically provisions SSL certificate
 
 # Cloud Run domain mapping (v1 API)
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloud_run_domain_mapping
 resource "google_cloud_run_domain_mapping" "main" {
-  name     = var.custom_domain # Domain: "antonarbus.com"
+  name     = var.custom_domain # Custom domain from config (e.g., "antonarbus.com", "dev.antonarbus.com")
   location = var.region        # Same region as Cloud Run service
 
   # Project namespace

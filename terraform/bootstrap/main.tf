@@ -99,7 +99,7 @@ resource "google_storage_bucket" "terraform_state" {
 resource "google_artifact_registry_repository" "docker_repo" {
   location      = var.region
   repository_id = var.artifact_registry_name
-  description   = "Shared Docker repository for antonarbus.com (all environments)"
+  description   = "Shared Docker repository for all environments (dev, test, pilot, prod)"
   format        = "DOCKER"
 
   # Cleanup policy: automatically delete old, unused images to save storage costs

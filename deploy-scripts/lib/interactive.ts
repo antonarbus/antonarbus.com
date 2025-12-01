@@ -5,6 +5,7 @@ import { generateTfvars } from '../commands/generate-tfvars'
 import { showDeploymentInfo } from '../commands/show-deployment-info'
 import { terraformApply } from '../commands/terraform-apply'
 import { terraformPlan } from '../commands/terraform-plan'
+import { terraformFormat } from '../commands/terraform-format'
 import { listGcloudServices } from '../commands/list-gcloud-services'
 
 type Command = {
@@ -54,6 +55,12 @@ export async function runInteractiveMode(): Promise<void> {
         if (!env) throw new Error('Environment required')
         await terraformApply({ env })
       }
+    },
+    {
+      name: 'terraform-format',
+      description: 'Format Terraform files',
+      requiresEnv: false,
+      action: async () => terraformFormat()
     },
     {
       name: 'exit',

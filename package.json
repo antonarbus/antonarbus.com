@@ -15,8 +15,7 @@
     "docker-build-no-cache": "docker compose -f docker-compose.prod.yml build --no-cache",
     "docker-start": "docker compose -f docker-compose.prod.yml up & sleep 5 && open http://localhost:8080",
     "cli": "bun deploy-scripts/cli.ts",
-    "cli-help": "bun deploy-scripts/cli.ts --help",
-    "terraform-format": "terraform fmt -recursive terraform/"
+    "cli-help": "bun deploy-scripts/cli.ts --help"
   },
   "dependencies": {
     "@emotion/css": "^11.10.5",

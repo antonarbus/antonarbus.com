@@ -10,6 +10,7 @@ import { validatePromotion } from './commands/validate-promotion'
 import { generateTfvars } from './commands/generate-tfvars'
 import { showDeploymentInfo } from './commands/show-deployment-info'
 import { listGcloudServices } from './commands/list-gcloud-services'
+import { terraformFormat } from './commands/terraform-format'
 import { runInteractiveMode } from './lib/interactive'
 import { envSchema } from '../config/configVariables'
 
@@ -71,6 +72,13 @@ program
   .action(async (options: { env: string }) => {
     const validatedEnv = envSchema.parse(options.env)
     await terraformApply({ env: validatedEnv })
+  })
+
+program
+  .command('terraform-format')
+  .description('Format Terraform files')
+  .action(async () => {
+    await terraformFormat()
   })
 
 program

@@ -44,7 +44,8 @@ resource "google_iam_workload_identity_pool_provider" "github_provider" {
   }
 
   # Restrict to your specific GitHub repository
-  attribute_condition = "assertion.repository == '${var.github_repository}'"
+  # Check if the subject contains the repository (case-insensitive via startsWith)
+  attribute_condition = "assertion.sub.startsWith('repo:${var.github_repository}:')"
 
   oidc {
     issuer_uri = "https://token.actions.githubusercontent.com"

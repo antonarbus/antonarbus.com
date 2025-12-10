@@ -6,8 +6,25 @@ interface PostPageProps {
   params: Promise<{ post: string }>
 }
 
-// Make this route fully dynamic
-export const dynamic = 'force-dynamic'
+// Generate static pages at build time
+export const dynamic = 'force-static'
+
+// Generate all post pages at build time
+export async function generateStaticParams() {
+  const files = fs.readdirSync('./posts/')
+  const posts = files
+    .filter(fileName =>
+      (fileName.includes('.js') || fileName.includes('.ts') || fileName.includes('.jsx') || fileName.includes('.tsx')) &&
+      fileName !== '_xxx.js' &&
+      fileName !== 'index.js' &&
+      !fileName.includes('.test.js')
+    )
+    .map(fileName => ({
+      post: fileName.replace('.jsx', '').replace('.tsx', '').replace('.js', '').replace('.ts', '')
+    }))
+
+  return posts
+}
 
 // Generate basic metadata without importing post modules
 export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {

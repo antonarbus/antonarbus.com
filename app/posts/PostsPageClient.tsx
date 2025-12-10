@@ -97,10 +97,10 @@ export default function PostsPageClient() {
     return () => { document.removeEventListener('keydown', keyDownHandler) }
   }, [tabPosPost, hints, tabPosHint, foundPostsState, router])
 
-  // Load posts data on client side
+  // Load posts data on client side from static JSON file
   useEffect(() => {
     async function loadPosts() {
-      const response = await fetch('/api/allPosts')
+      const response = await fetch('/posts.json')
       const postsData = await response.json()
 
       setPosts(postsData)

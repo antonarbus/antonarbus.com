@@ -38,10 +38,24 @@ async function compilePostsList() {
     }
   }
 
-  // Write as JSON export
+  // Write as JSON export for SSR/build-time usage
   const jsonExport = `export const postsData = ${JSON.stringify(postsData, null, 2)}`
   fs.writeFileSync('exportAllPosts.js', jsonExport)
   console.log('File with post exports is compiled')
+
+  // Write as static JSON file for client-side usage
+  const posts = Object.entries(postsData).map(([fileName, post]) => ({
+    fileName,
+    url: `/posts/${fileName}`,
+    ...post
+  }))
+
+  // Ensure public directory exists
+  if (!fs.existsSync('public')) {
+    fs.mkdirSync('public')
+  }
+  fs.writeFileSync('public/posts.json', JSON.stringify(posts))
+  console.log('Static posts.json file created in public directory')
 }
 
 compilePostsList()

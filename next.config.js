@@ -1,22 +1,24 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
-  output: 'standalone',
+  output: 'export',
   reactStrictMode: false,
-  redirects: async () => {
-    return [
-      {
-        source: '/about',
-        destination: '/',
-        permanent: false
-      },
-      {
-        source: '/old-blog/:id',
-        destination: '/new-blog/:id',
-        permanent: true
-      }
-    ]
-  },
+  // Note: redirects don't work with output: 'export'
+  // If you need redirects, configure them in your hosting provider (Cloudflare, Netlify, Vercel, etc.)
+  // redirects: async () => {
+  //   return [
+  //     {
+  //       source: '/about',
+  //       destination: '/',
+  //       permanent: false
+  //     },
+  //     {
+  //       source: '/old-blog/:id',
+  //       destination: '/new-blog/:id',
+  //       permanent: true
+  //     }
+  //   ]
+  // },
   // distDir: 'build',
   cleanDistDir: true,
   eslint: {
@@ -32,16 +34,6 @@ const nextConfig = {
   compiler: {
     emotion: true,
     styledJsx: true
-  },
-  webpack: (config, { isServer }) => {
-    // Exclude posts from server-side webpack analysis
-    if (isServer) {
-      config.externals = config.externals || []
-      config.externals.push({
-        '/exportAllPosts.js': 'commonjs /exportAllPosts.js'
-      })
-    }
-    return config
   }
 }
 

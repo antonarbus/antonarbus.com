@@ -419,3 +419,16 @@ gcloud run domain-mappings list --region=us-central1
 ├── dockerfile.prod               # Production Docker image
 └── README.md                     # This file
 ```
+
+## Move away from cloud-run to Cloudflare
+
+Option 3: Cloudflare Pages (easiest, FREE)
+
+Your Domain → Cloudflare DNS → Cloudflare CDN (300+ locations) → your static files
+
+Setup:
+
+1. Sign up for Cloudflare
+2. Deploy out/ folder (CLI or git)
+3. Point your domain nameservers to Cloudflare OR add a CNAME record
+4. Cloudflare handles everything: HTTPS, CDN, routing

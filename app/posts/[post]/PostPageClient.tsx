@@ -23,7 +23,7 @@ export default function PostPageClient(props: PostPageClientProps) {
   async function loadPost(fileName: string, ext: string) {
     const module = await import(`/posts/${fileName}.${ext}`)
     postObj.current = module.default
-    setTimeout(() => { setIsLoading(false) }, 350)
+    setIsLoading(false)
   }
 
   useEffect(() => {

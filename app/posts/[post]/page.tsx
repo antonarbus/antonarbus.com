@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import PostPageClient from './PostPageClient'
 import fs from 'fs'
+import { postsData } from '/exportAllPosts'
 
 interface PostPageProps {
   params: Promise<{ post: string }>
@@ -26,23 +27,24 @@ export async function generateStaticParams() {
   return posts
 }
 
-// Generate basic metadata without importing post modules
+// Generate metadata from serialized post data
 export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
   const { post: fileName } = await params
+  const postData = postsData[fileName]
 
   return {
-    title: fileName,
-    description: 'Blog post',
+    title: postData?.title || fileName,
+    description: postData?.desc || 'Blog post',
     openGraph: {
-      title: fileName,
+      title: postData?.title || fileName,
       type: 'website',
       url: `https://antonarbus.com/posts/${fileName}`,
-      images: ['https://antonarbus.com/favicon.png?v999'],
+      images: [postData?.imgUrl || 'https://antonarbus.com/favicon.png?v999'],
     },
   }
 }
 
-// Server Component - just check if file exists and pass to client
+// Server Component - pass serialized post data to client
 export default async function PostPage({ params }: PostPageProps) {
   const { post: fileName } = await params
 
@@ -53,6 +55,21 @@ export default async function PostPage({ params }: PostPageProps) {
   if (!ext && fs.existsSync(`posts/${fileName}.tsx`)) ext = 'tsx'
   const postExists = !!ext
 
-  // Pass minimal data to client - client will load the full post
-  return <PostPageClient fileName={fileName} ext={ext || ''} postExists={postExists} />
+  // Get serialized post data for SEO
+  const postData = postsData[fileName] || {}
+
+  // Pass serialized data to client - this will be in the HTML for crawlers
+  return (
+    <PostPageClient
+      fileName={fileName}
+      ext={ext || ''}
+      postExists={postExists}
+      title={postData.title}
+      desc={postData.desc}
+      date={postData.date}
+      tags={postData.tags}
+      imgUrl={postData.imgUrl}
+      bodyStr={postData.bodyStr}
+    />
+  )
 }

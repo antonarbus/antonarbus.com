@@ -2,6 +2,7 @@
 import '/styles/globals.css'
 import '/styles/prism.css'
 import type { Metadata } from 'next'
+import Script from 'next/script'
 import ClientProviders from './ClientProviders'
 
 export const metadata: Metadata = {
@@ -37,6 +38,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-1QQYF8CG9X"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-1QQYF8CG9X');
+          `}
+        </Script>
         <ClientProviders>
           {children}
         </ClientProviders>

@@ -156,34 +156,6 @@ resource "google_cloud_run_v2_service" "main" {
       ports {
         container_port = var.container_port # Port 8080: where your app listens for HTTP requests
       }
-
-      # Startup probe: Checks if the container is ready to receive traffic
-      # This runs when the container first starts up
-      # Cloud Run waits for this to succeed before routing traffic
-      startup_probe {
-        http_get {
-          path = "/"                # HTTP GET request to root path
-          port = var.container_port # Port 8080
-        }
-        initial_delay_seconds = 10 # Wait 10 seconds before first check (Next.js startup time)
-        timeout_seconds       = 3  # Each check times out after 3 seconds
-        period_seconds        = 5  # Check every 5 seconds
-        failure_threshold     = 3  # Fail after 3 consecutive failures
-      }
-
-      # Liveness probe: Checks if the container is still healthy
-      # If this fails, Cloud Run restarts the container
-      # This helps recover from deadlocks or hung processes
-      liveness_probe {
-        http_get {
-          path = "/"                # HTTP GET request to root path
-          port = var.container_port # Port 8080
-        }
-        initial_delay_seconds = 30 # Wait 30 seconds after startup before checking
-        timeout_seconds       = 1  # Each check times out after 1 second
-        period_seconds        = 10 # Check every 10 seconds
-        failure_threshold     = 3  # Restart after 3 consecutive failures
-      }
     }
 
     # Which service account the running container uses

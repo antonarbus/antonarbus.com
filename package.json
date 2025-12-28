@@ -3,20 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "exportAllPostsCreate": "node exportAllPostsCreate.js",
-    "dev": "bun exportAllPostsCreate && bun --bun next dev --turbopack",
-    "build": "npm run exportAllPostsCreate && next build",
-    "start": "next start",
-    "lint": "next lint",
-    "test": "bun test --watch",
-    "tsc": "tsc --noEmit",
-    "mocha": "bun mocha",
-    "update-packages": "bunx npm-check-updates -i",
-    "docker-build": "docker compose -f docker-compose.prod.yml build",
-    "docker-build-no-cache": "docker compose -f docker-compose.prod.yml build --no-cache",
-    "docker-start": "docker compose -f docker-compose.prod.yml up & sleep 5 && open http://localhost:8080",
-    "cli": "bun deploy-scripts/cli.ts",
-    "cli-help": "bun deploy-scripts/cli.ts --help"
+    "dev": "node exportAllPostsCreate.js && next dev --turbopack",
+    "build": "node exportAllPostsCreate.js && next build"
   },
   "dependencies": {
     "@emotion/css": "^11.10.5",

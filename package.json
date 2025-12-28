@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node exportAllPostsCreate.js && next dev --turbopack",
-    "build": "node exportAllPostsCreate.js && next build"
+    "dev": "bun exportAllPostsCreate.js && bun --bun next dev --turbopack",
+    "build": "bun exportAllPostsCreate.js && bun --bun next build"
   },
   "dependencies": {
     "@emotion/css": "^11.10.5",

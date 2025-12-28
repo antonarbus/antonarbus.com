@@ -1,8 +1,7 @@
 'use client'
 
-
 import { Code, jsxToStr } from '/components/post/reExport'
-import bytesToSize from '/functions/bytesToSize'
+import bytesToSize from '../helpers/bytesToSize'
 
 function Component() {
   let variable = ''
@@ -14,7 +13,8 @@ function Component() {
 
   return (
     <>
-      Size of variable <b>{variable.slice(0, 30) + '...'}</b> (x{i} times) is <b>{sizeBytes} bytes</b>, which is <b>{bytesToSize(sizeBytes)}</b>
+      Size of variable <b>{variable.slice(0, 30) + '...'}</b> (x{i} times) is{' '}
+      <b>{sizeBytes} bytes</b>, which is <b>{bytesToSize(sizeBytes)}</b>
     </>
   )
 }
@@ -27,7 +27,9 @@ const postObj = {
   desc: 'function to convert bytes into KB, MB, GB, TB',
   body: (
     <>
-      <p>Usually we get data in bytes which is not convenient. Here is the function to convert it.</p>
+      <p>
+        Usually we get data in bytes which is not convenient. Here is the function to convert it.
+      </p>
 
       <Code block jsx>{`
       // /functions/bytesToSize

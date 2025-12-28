@@ -1,23 +1,27 @@
 'use client'
 
-
 import { Code, jsxToStr } from '/components/post/reExport'
-import blinkWithCssProp from '/functions/blinkWithCssProp'
+import blinkWithCssProp from '../helpers/blinkWithCssProp'
 
 function Component() {
   const style = { padding: '10px', margin: '10px' }
   const blinkWithBorders = (e) => blinkWithCssProp({ el: e.target })
-  const blinkWithBackground = (e) => blinkWithCssProp({
-    el: e.target,
-    cssPropToChange: 'background',
-    value: 'orange',
-    time: 1000
-  })
+  const blinkWithBackground = (e) =>
+    blinkWithCssProp({
+      el: e.target,
+      cssPropToChange: 'background',
+      value: 'orange',
+      time: 1000
+    })
 
   return (
     <>
-      <button style={style} onClick={blinkWithBorders}>Blink borders</button>
-      <button style={style} onClick={blinkWithBackground}>Blink background</button>
+      <button style={style} onClick={blinkWithBorders}>
+        Blink borders
+      </button>
+      <button style={style} onClick={blinkWithBackground}>
+        Blink background
+      </button>
     </>
   )
 }

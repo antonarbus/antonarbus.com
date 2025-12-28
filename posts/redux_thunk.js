@@ -1,13 +1,12 @@
 'use client'
 
-
 import { Code, H, Lnk, jsxToStr } from '/components/post/reExport'
 import { combineReducers, createStore, applyMiddleware } from 'redux'
 import { Provider, useSelector, useDispatch } from 'react-redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
 import axios from 'axios'
-import sleeper from '/functions/sleeper'
+import sleeper from '../helpers/sleeper'
 
 // #region REDUCER
 const initialState = { loading: false, users: [], err: '' }
@@ -20,7 +19,8 @@ const users = (state = initialState, action) => {
       return { loading: false, users: action.payload, err: '' }
     case 'FETCH_USERS_FAILURE':
       return { loading: false, users: [], err: action.payload }
-    default: return state
+    default:
+      return state
   }
 }
 
@@ -36,38 +36,37 @@ const fetchUsersFailure = (err) => ({ type: 'FETCH_USERS_FAILURE', payload: err 
 const fetchUsers = () => {
   return (dispatch) => {
     dispatch(fetchUsersRequest())
-    axios.get('https://jsonplaceholder.typicode.com/users')
+    axios
+      .get('https://jsonplaceholder.typicode.com/users')
       .then(sleeper(1000))
-      .then(res => dispatch(fetchUsersSuccess(res.data)))
-      .catch(err => dispatch(fetchUsersFailure(err.message)))
+      .then((res) => dispatch(fetchUsersSuccess(res.data)))
+      .catch((err) => dispatch(fetchUsersFailure(err.message)))
   }
 }
 // #endregion
 
 // #region STORE
 const middlewares = [thunk]
-const store = createStore(
-  rootReducer,
-  composeWithDevTools(
-    applyMiddleware(...middlewares)
-  )
-)
+const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(...middlewares)))
 // #endregion
 
 // #region Component
 const style = { border: '2px solid grey', padding: '10px', margin: '10px', maxWidth: '500px' }
 
 function Component() {
-  const users = useSelector(state => state.users)
+  const users = useSelector((state) => state.users)
   const dispatch = useDispatch()
 
   return (
     <div style={style}>
-      <button onClick={() => dispatch(fetchUsers())}>Fetch users</button><br />
+      <button onClick={() => dispatch(fetchUsers())}>Fetch users</button>
+      <br />
       <div>
         {users.loading && 'Loading...'}
         {users.err && users.err}
-        {!users.loading && !!users.users.length && users.users.map(user => <div key={user.id}>{user.name}</div>)}
+        {!users.loading &&
+          !!users.users.length &&
+          users.users.map((user) => <div key={user.id}>{user.name}</div>)}
       </div>
     </div>
   )
@@ -91,14 +90,24 @@ const postObj = {
       <H>Idea</H>
 
       <p>
-        <Lnk path='https://redux.js.org/usage/writing-logic-thunks'>Redux thunk</Lnk> is needed for asynchronous calls, such as data fetching.
+        <Lnk path="https://redux.js.org/usage/writing-logic-thunks">Redux thunk</Lnk> is needed for
+        asynchronous calls, such as data fetching.
       </p>
 
-      <p>Thunk middleware allows for an action creator function to return a function instead of an action object.</p>
+      <p>
+        Thunk middleware allows for an action creator function to return a function instead of an
+        action object.
+      </p>
 
-      <p>Redux-thunk does is a middleware that looks at every action that passes through the system, and if it’s a function, it calls that function.</p>
+      <p>
+        Redux-thunk does is a middleware that looks at every action that passes through the system,
+        and if it’s a function, it calls that function.
+      </p>
 
-      <p>Great <Lnk path='https://daveceddia.com/what-is-a-thunk/'>explanation</Lnk> what the thunk is.</p>
+      <p>
+        Great <Lnk path="https://daveceddia.com/what-is-a-thunk/">explanation</Lnk> what the thunk
+        is.
+      </p>
 
       <p>Basic 'action creator' function.</p>
 

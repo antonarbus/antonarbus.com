@@ -1,11 +1,20 @@
 'use client'
 
-
-import { Code, H, Hs, LazyImg, Lnk, useEffect, useState, useRef, jsxToStr } from '/components/post/reExport'
+import {
+  Code,
+  H,
+  Hs,
+  LazyImg,
+  Lnk,
+  useEffect,
+  useState,
+  useRef,
+  jsxToStr
+} from '/components/post/reExport'
 import axios from 'axios'
 import shortid from 'shortid'
 import { FaInfoCircle as Info, FaTrashAlt as Bin } from 'react-icons/fa'
-import { Spinner } from '/functions/Spinner'
+import { Spinner } from '../helpers/Spinner'
 
 // #region toDoApp
 function ToDoApp() {
@@ -25,23 +34,42 @@ function ToDoApp() {
   }, [])
 
   return (
-    <div className='toDoContainer'>
-      {loadingState && <div className='center'><Spinner width='30px'/></div> }
-      {toDosState.length === 0 && !loadingState && <div className='center'>Empty</div> }
+    <div className="toDoContainer">
+      {loadingState && (
+        <div className="center">
+          <Spinner width="30px" />
+        </div>
+      )}
+      {toDosState.length === 0 && !loadingState && <div className="center">Empty</div>}
       {toDosState.map((toDo, index) => (
-        <div className='toDoLine' key={toDo.id}>
-          <div className='left'>
-            <Counter num={index + 1}/>
-            <ToDoTxt toDoTxt={toDo.toDoName} toDoId={toDo.id} updatingState={updatingState} setUpdatingState={setUpdatingState}/>
+        <div className="toDoLine" key={toDo.id}>
+          <div className="left">
+            <Counter num={index + 1} />
+            <ToDoTxt
+              toDoTxt={toDo.toDoName}
+              toDoId={toDo.id}
+              updatingState={updatingState}
+              setUpdatingState={setUpdatingState}
+            />
           </div>
-          <div className='right'>
+          <div className="right">
             <InfoBtn toDoId={toDo.id} />
-            <DelBtn toDoId={toDo.id} toDosState={toDosState} setToDosState={setToDosState}/>
+            <DelBtn toDoId={toDo.id} toDosState={toDosState} setToDosState={setToDosState} />
           </div>
         </div>
       ))}
-      {!loadingState && <ToDoInput toDosState={toDosState} setToDosState={setToDosState} getAllToDos={getAllToDos}/>}
-      {updatingState && <span className='center'><Spinner height='30px' /></span> }
+      {!loadingState && (
+        <ToDoInput
+          toDosState={toDosState}
+          setToDosState={setToDosState}
+          getAllToDos={getAllToDos}
+        />
+      )}
+      {updatingState && (
+        <span className="center">
+          <Spinner height="30px" />
+        </span>
+      )}
 
       <style jsx>{`
         .toDoContainer {
@@ -70,13 +98,12 @@ function ToDoApp() {
           flex-wrap: nowrap;
           align-items: center;
           flex-shrink: 1;
-
         }
         .right {
           display: flex;
           flex-wrap: nowrap;
-          row-gap: 5px; 
-          column-gap: 5px; 
+          row-gap: 5px;
+          column-gap: 5px;
           justify-content: flex-end;
         }
       `}</style>
@@ -86,7 +113,7 @@ function ToDoApp() {
 
 function Counter({ num }) {
   return (
-    <span className='counter'>
+    <span className="counter">
       {num}
 
       <style jsx>{`
@@ -143,14 +170,9 @@ function ToDoTxt({ toDoTxt, toDoId, setUpdatingState }) {
   }
 
   return (
-    <span
-      className='toDoTxt'
-      contentEditable
-      onFocus={saveInitText}
-      onBlur={didTextChange}
-    >
+    <span className="toDoTxt" contentEditable onFocus={saveInitText} onBlur={didTextChange}>
       {toDoTxt}
-      {showDetailsState && detailsState && <span className='details'>{detailsState}</span>}
+      {showDetailsState && detailsState && <span className="details">{detailsState}</span>}
 
       <style jsx>{`
         .toDoTxt {
@@ -184,7 +206,7 @@ function InfoBtn({ toDoId }) {
 
   return (
     <button onClick={showInfo}>
-      {loadingState ? <Spinner height='16px' /> : <Info />}
+      {loadingState ? <Spinner height="16px" /> : <Info />}
 
       <style jsx>{`
         button {
@@ -221,7 +243,7 @@ function DelBtn({ toDoId, toDosState, setToDosState }) {
     const isSuccess = res.data.Message === 'SUCCESS'
 
     if (isSuccess) {
-      const updatedToDos = toDosState.filter(item => item.id !== toDoId)
+      const updatedToDos = toDosState.filter((item) => item.id !== toDoId)
       setToDosState(updatedToDos)
     }
     if (!isSuccess) alert('smth wrong')
@@ -230,7 +252,7 @@ function DelBtn({ toDoId, toDosState, setToDosState }) {
 
   return (
     <button onClick={remove}>
-      {deletingState ? <Spinner height='16px' /> : <Bin />}
+      {deletingState ? <Spinner height="16px" /> : <Bin />}
 
       <style jsx>{`
         button {
@@ -277,7 +299,7 @@ function ToDoInput({ getAllToDos }) {
 
   return (
     <form onSubmit={addToList}>
-      <input type="text" ref={inputRef} placeholder='to do...'/>
+      <input type="text" ref={inputRef} placeholder="to do..." />
       <button>{addingState ? 'Adding...' : 'Add'}</button>
 
       <style jsx>{`
@@ -311,7 +333,9 @@ const postObj = {
   desc: 'aws lambda function',
   body: (
     <>
-      <p>Based on <Lnk path='https://www.youtube.com/watch?v=Ut5CkSz6NR0'>tutorial</Lnk>.</p>
+      <p>
+        Based on <Lnk path="https://www.youtube.com/watch?v=Ut5CkSz6NR0">tutorial</Lnk>.
+      </p>
 
       <H>ToDo app</H>
 
@@ -628,17 +652,22 @@ const postObj = {
       <Hs>CRUD</Hs>
 
       <ul>
-        <li><b>CRUD</b> - <b>C</b>reate, <b>R</b>ead, <b>U</b>pdate, <b>D</b>elete API functionality.</li>
+        <li>
+          <b>CRUD</b> - <b>C</b>reate, <b>R</b>ead, <b>U</b>pdate, <b>D</b>elete API functionality.
+        </li>
       </ul>
 
       <Hs>Overview</Hs>
 
-      <LazyImg noShadow path='/imgs/aws/aws crud api overview.png' />
+      <LazyImg noShadow path="/imgs/aws/aws crud api overview.png" />
 
       <Hs>Lambda function</Hs>
 
       <ul>
-        <li>AWS <Lnk path='https://aws.amazon.com/lambda/'>Lambda</Lnk> is a containerized self-managed server which runs a function.</li>
+        <li>
+          AWS <Lnk path="https://aws.amazon.com/lambda/">Lambda</Lnk> is a containerized
+          self-managed server which runs a function.
+        </li>
         <li>Invoiced for compute time only, not for idle time</li>
         <li>Scaled & shrunk automatically</li>
       </ul>
@@ -646,69 +675,124 @@ const postObj = {
       <Hs>Dynamo DB</Hs>
 
       <ul>
-        <li>It is a no-sql <Lnk path='https://aws.amazon.com/dynamodb/'>database</Lnk> from AWS</li>
+        <li>
+          It is a no-sql <Lnk path="https://aws.amazon.com/dynamodb/">database</Lnk> from AWS
+        </li>
       </ul>
 
       <Hs>API Gateway</Hs>
 
       <ul>
-        <li>It is a <Lnk path='https://aws.amazon.com/api-gateway/'>service</Lnk> from AWS that allows to create APIs points for RESTful and WebSocket APIs</li>
+        <li>
+          It is a <Lnk path="https://aws.amazon.com/api-gateway/">service</Lnk> from AWS that allows
+          to create APIs points for RESTful and WebSocket APIs
+        </li>
       </ul>
 
       <Hs>IAM</Hs>
 
       <ul>
-        <li><b>IAM</b> - <b>I</b>dentity and <b>A</b>ccess <b>M</b>anagement <Lnk path='https://aws.amazon.com/iam/'>service</Lnk></li>
+        <li>
+          <b>IAM</b> - <b>I</b>dentity and <b>A</b>ccess <b>M</b>anagement{' '}
+          <Lnk path="https://aws.amazon.com/iam/">service</Lnk>
+        </li>
         <li>Allows to specify who can access which services on AWS and under which conditions</li>
       </ul>
 
       <H>DynamoDB</H>
 
       <ul>
-        <li>Search for <i>DynamoDB</i> service</li>
-        <li>Note down your region from at the top right corner - <Code>eu-north-1</Code></li>
-        <li>Push <i>Create table</i> button</li>
-        <li>Table name - <Code>toDoTable</Code>, partition key - <i>id</i></li>
+        <li>
+          Search for <i>DynamoDB</i> service
+        </li>
+        <li>
+          Note down your region from at the top right corner - <Code>eu-north-1</Code>
+        </li>
+        <li>
+          Push <i>Create table</i> button
+        </li>
+        <li>
+          Table name - <Code>toDoTable</Code>, partition key - <i>id</i>
+        </li>
       </ul>
 
       <H>Lambda function</H>
 
       <ul>
-        <li>Search for <i>Lambda</i> service</li>
-        <li>Hit <i>Create function</i> button</li>
-        <li>Function name - <i>toDoApi</i>, runtime - <i>Node.js</i>, execution role - <i>New role from AWS policy templates</i>, role name - <i>toDoRoles</i></li>
+        <li>
+          Search for <i>Lambda</i> service
+        </li>
+        <li>
+          Hit <i>Create function</i> button
+        </li>
+        <li>
+          Function name - <i>toDoApi</i>, runtime - <i>Node.js</i>, execution role -{' '}
+          <i>New role from AWS policy templates</i>, role name - <i>toDoRoles</i>
+        </li>
       </ul>
 
       <H>IAM</H>
 
       <ul>
-        <li>In our lambda function under <i>Configuration</i> - <i>Permissions</i> - <i>Execution role</i> click on <i>toDoRoles</i> name</li>
-        <li>We re-directed into <i>IAM</i> to our role</li>
-        <li>Click <i>Add permissions</i> - <i>Attach policies</i></li>
-        <li>Add <i>CloudWatchFullAccess</i>, <i>AmazonDynamoDBFullAccess</i></li>
+        <li>
+          In our lambda function under <i>Configuration</i> - <i>Permissions</i> -{' '}
+          <i>Execution role</i> click on <i>toDoRoles</i> name
+        </li>
+        <li>
+          We re-directed into <i>IAM</i> to our role
+        </li>
+        <li>
+          Click <i>Add permissions</i> - <i>Attach policies</i>
+        </li>
+        <li>
+          Add <i>CloudWatchFullAccess</i>, <i>AmazonDynamoDBFullAccess</i>
+        </li>
       </ul>
 
       <H>API Gateway</H>
 
       <ul>
-        <li>Search for <i>API Gateway</i> service</li>
-        <li>Create <i>New</i> <i>REST API</i> with name <i>toDoApiGateway</i></li>
-        <li>In <i>Actions</i> create a <i>Resource</i> with name <i>health</i>, <i>items</i>, <i>item</i> with CORS enabled</li>
-        <li>Select resource and <i>Create method</i> via <i>Actions</i> with adding our lambda function name and region</li>
-        <LazyImg path='/imgs/aws/getMethod.png'/>
-        <li>Add different resources with <i>GET</i>, <i>POST</i>, <i>DELETE</i>, <i>PATCH</i> methods connected to our <i>toDoApi</i> lambda function</li>
-        <LazyImg path='/imgs/aws/all api methods.png'/>
-        <li>Then <i>Deploy API</i> from <i>Actions</i> dropdown with stage name <i>prod</i></li>
-        <li>In return we get API end point url to use our API <Code>https://zitdmv25la.execute-api.us-east-1.amazonaws.com/prod</Code></li>
+        <li>
+          Search for <i>API Gateway</i> service
+        </li>
+        <li>
+          Create <i>New</i> <i>REST API</i> with name <i>toDoApiGateway</i>
+        </li>
+        <li>
+          In <i>Actions</i> create a <i>Resource</i> with name <i>health</i>, <i>items</i>,{' '}
+          <i>item</i> with CORS enabled
+        </li>
+        <li>
+          Select resource and <i>Create method</i> via <i>Actions</i> with adding our lambda
+          function name and region
+        </li>
+        <LazyImg path="/imgs/aws/getMethod.png" />
+        <li>
+          Add different resources with <i>GET</i>, <i>POST</i>, <i>DELETE</i>, <i>PATCH</i> methods
+          connected to our <i>toDoApi</i> lambda function
+        </li>
+        <LazyImg path="/imgs/aws/all api methods.png" />
+        <li>
+          Then <i>Deploy API</i> from <i>Actions</i> dropdown with stage name <i>prod</i>
+        </li>
+        <li>
+          In return we get API end point url to use our API{' '}
+          <Code>https://zitdmv25la.execute-api.us-east-1.amazonaws.com/prod</Code>
+        </li>
       </ul>
 
       <H>Lambda event and response formats</H>
 
-      <Lnk path='https://docs.aws.amazon.com/lambda/latest/dg/services-apigateway.html'>https://docs.aws.amazon.com/lambda/latest/dg/services-apigateway.html</Lnk>
+      <Lnk path="https://docs.aws.amazon.com/lambda/latest/dg/services-apigateway.html">
+        https://docs.aws.amazon.com/lambda/latest/dg/services-apigateway.html
+      </Lnk>
 
       <Hs>Event</Hs>
 
-      <p>Amazon API Gateway invokes your function with an event that contains a JSON representation of the HTTP request.</p>
+      <p>
+        Amazon API Gateway invokes your function with an event that contains a JSON representation
+        of the HTTP request.
+      </p>
 
       <Code block json>{`
       {
@@ -924,39 +1008,63 @@ const postObj = {
 
       <Hs>health</Hs>
 
-      <p><Code>GET</Code> request to <Lnk path='https://zitdmv25la.execute-api.us-east-1.amazonaws.com/prod/health'>https://zitdmv25la.execute-api.us-east-1.amazonaws.com/prod/health</Lnk></p>
+      <p>
+        <Code>GET</Code> request to{' '}
+        <Lnk path="https://zitdmv25la.execute-api.us-east-1.amazonaws.com/prod/health">
+          https://zitdmv25la.execute-api.us-east-1.amazonaws.com/prod/health
+        </Lnk>
+      </p>
 
-      <LazyImg path='/imgs/aws/postman health get.png'/>
+      <LazyImg path="/imgs/aws/postman health get.png" />
 
       <Hs>item post</Hs>
 
-      <p><Code>POST</Code> request to <Code>https://zitdmv25la.execute-api.us-east-1.amazonaws.com/prod/item</Code></p>
+      <p>
+        <Code>POST</Code> request to{' '}
+        <Code>https://zitdmv25la.execute-api.us-east-1.amazonaws.com/prod/item</Code>
+      </p>
 
-      <LazyImg path='/imgs/aws/postman item post.png'/>
+      <LazyImg path="/imgs/aws/postman item post.png" />
 
       <Hs>item get</Hs>
 
-      <p><Code>GET</Code> request to <Lnk path='https://zitdmv25la.execute-api.us-east-1.amazonaws.com/prod/item?id=10003'>https://zitdmv25la.execute-api.us-east-1.amazonaws.com/prod/item?id=10003</Lnk></p>
+      <p>
+        <Code>GET</Code> request to{' '}
+        <Lnk path="https://zitdmv25la.execute-api.us-east-1.amazonaws.com/prod/item?id=10003">
+          https://zitdmv25la.execute-api.us-east-1.amazonaws.com/prod/item?id=10003
+        </Lnk>
+      </p>
 
-      <LazyImg path='/imgs/aws/postman item get.png'/>
+      <LazyImg path="/imgs/aws/postman item get.png" />
 
       <Hs>item patch</Hs>
 
-      <p><Code>PATCH</Code> request to <Code>https://zitdmv25la.execute-api.us-east-1.amazonaws.com/prod/item</Code></p>
+      <p>
+        <Code>PATCH</Code> request to{' '}
+        <Code>https://zitdmv25la.execute-api.us-east-1.amazonaws.com/prod/item</Code>
+      </p>
 
-      <LazyImg path='/imgs/aws/postman item patch.png'/>
+      <LazyImg path="/imgs/aws/postman item patch.png" />
 
       <Hs>item delete</Hs>
 
-      <p><Code>DELETE</Code> request to <Code>https://zitdmv25la.execute-api.us-east-1.amazonaws.com/prod/item</Code></p>
+      <p>
+        <Code>DELETE</Code> request to{' '}
+        <Code>https://zitdmv25la.execute-api.us-east-1.amazonaws.com/prod/item</Code>
+      </p>
 
-      <LazyImg path='/imgs/aws/postman item delete.png'/>
+      <LazyImg path="/imgs/aws/postman item delete.png" />
 
       <Hs>items get</Hs>
 
-      <p><Code>GET</Code> request to <Lnk path='https://zitdmv25la.execute-api.us-east-1.amazonaws.com/prod/items'>https://zitdmv25la.execute-api.us-east-1.amazonaws.com/prod/items</Lnk></p>
+      <p>
+        <Code>GET</Code> request to{' '}
+        <Lnk path="https://zitdmv25la.execute-api.us-east-1.amazonaws.com/prod/items">
+          https://zitdmv25la.execute-api.us-east-1.amazonaws.com/prod/items
+        </Lnk>
+      </p>
 
-      <LazyImg path='/imgs/aws/postman items get.png'/>
+      <LazyImg path="/imgs/aws/postman items get.png" />
     </>
   )
 }

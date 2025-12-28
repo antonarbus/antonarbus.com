@@ -1,26 +1,28 @@
 'use client'
 
-
 import { Code, useRef, jsxToStr } from '/components/post/reExport'
-import { isClickedElInsideThisEl } from '/functions/isClickedElInsideThisEl'
+import { isClickedElInsideThisEl } from '../helpers/isClickedElInsideThisEl'
 const style = { border: '2px solid grey', padding: '10px', margin: '10px', maxWidth: '500px' }
 
 function Component() {
   const ref = useRef()
 
-  const listenerHandler = e => {
+  const listenerHandler = (e) => {
     const clickedEl = e.target
     const cBox = ref.current
     const clickedInside = isClickedElInsideThisEl(clickedEl, cBox)
     clickedEl.style.background = clickedInside ? 'lightgreen' : 'lightpink'
-    setTimeout(() => { clickedEl.style.background = '' }, 1000)
+    setTimeout(() => {
+      clickedEl.style.background = ''
+    }, 1000)
   }
   const startListening = () => document.addEventListener('click', listenerHandler)
   const stopListening = () => document.removeEventListener('click', listenerHandler)
 
   return (
     <>
-      <button onClick={startListening}>Listen if click inside 'C' element</button><br />
+      <button onClick={startListening}>Listen if click inside 'C' element</button>
+      <br />
       <button onClick={stopListening}>Stop listening</button>
 
       <div style={style}>
@@ -28,10 +30,7 @@ function Component() {
         <div style={style}>
           B
           <div style={style} ref={ref}>
-            C
-            <div style={style}>
-              D
-            </div>
+            C<div style={style}>D</div>
           </div>
         </div>
       </div>

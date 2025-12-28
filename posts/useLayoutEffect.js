@@ -1,6 +1,5 @@
 'use client'
 
-
 import {
   Code,
   Hs,
@@ -12,8 +11,8 @@ import {
   useLayoutEffect,
   jsxToStr
 } from '/components/post/reExport'
-import syncWait from '/functions/syncWait'
-import useIsInitRender from '/functions/useIsInitRender'
+import syncWait from '../helpers/syncWait'
+import useIsInitRender from '../helpers/useIsInitRender'
 
 function Component() {
   const [state, setState] = useState(false)

@@ -1,11 +1,10 @@
 'use client'
 
-
 import { jsxToStr, H, Code, LazyImg, Lnk } from '/components/post/reExport'
 import { useState, useTransition, useDeferredValue, useEffect } from 'react'
-import randomNumFromTo from '/functions/randomNumFromTo'
+import randomNumFromTo from '../helpers/randomNumFromTo'
 import { useUpdateEffect } from 'react-use'
-import syncWait from '/functions/syncWait'
+import syncWait from '../helpers/syncWait'
 
 const containerStyles = { border: '1px solid grey', margin: '10px', padding: '10px' }
 const bigArray = [...Array(20000).keys()]

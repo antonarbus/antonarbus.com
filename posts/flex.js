@@ -1,8 +1,7 @@
 'use client'
 
-
 import { useEffect, useState, useRef, jsxToStr } from '/components/post/reExport'
-import useInput from '/functions/useInput'
+import useInput from '../helpers/useInput'
 
 function Cmpt() {
   const [childrenQty, bindChildrenQty] = useInput(10)

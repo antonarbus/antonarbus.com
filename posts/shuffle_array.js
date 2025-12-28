@@ -1,8 +1,7 @@
 'use client'
 
-
 import { Code, React, jsxToStr } from '/components/post/reExport'
-import returnShuffledArr from '/functions/shuffleArr'
+import returnShuffledArr from '../helpers/shuffleArr'
 
 function Component() {
   const [arrayState, setArrayState] = React.useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])

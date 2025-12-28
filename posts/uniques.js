@@ -1,13 +1,14 @@
 'use client'
 
-
 import { Code, React, jsxToStr } from '/components/post/reExport'
-import returnUniquesArr from '/functions/uniquesArr'
+import returnUniquesArr from '../helpers/uniquesArr'
 
 function Component() {
   const prepareInputArr = (str) => str.split(' ')
   const [inputValState, setInputValState] = React.useState('a a b b c c')
-  const [outputState, setOutputState] = React.useState(JSON.stringify(returnUniquesArr(prepareInputArr(inputValState.trim()))))
+  const [outputState, setOutputState] = React.useState(
+    JSON.stringify(returnUniquesArr(prepareInputArr(inputValState.trim())))
+  )
   const updateInput = (e) => setInputValState(e.target.value)
   const onChangeHandler = (e) => {
     updateInput(e)
@@ -61,7 +62,6 @@ const postObj = {
         )
       }
       `}</Code>
-
     </>
   )
 }

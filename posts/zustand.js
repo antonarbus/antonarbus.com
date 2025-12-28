@@ -1,92 +1,133 @@
 'use client'
 
-
 import { Code, H, Hs, Lnk, jsxToStr } from '/components/post/reExport'
 import create from 'zustand'
 import { subscribeWithSelector, devtools } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 import axios from 'axios'
-import sleeper from '/functions/sleeper'
+import sleeper from '../helpers/sleeper'
 import produce from 'immer'
 import { zustandStore } from './zustandStore/zustandStore'
 
 // #region STORE
-const useStore = create(immer(subscribeWithSelector(devtools((set, get) => ({
-  counter: 0,
-  add: (num) => set((state) => ({ counter: state.counter + (num || 1) })),
-  addWithImmer: (num) => set((state) => produce(state, (state) => {
-    state.counter = state.counter + (num || 1)
-  })),
-  addWithImmerCurried: (num) => set(produce((state) => {
-    state.counter = state.counter + (num || 1)
-  })),
-  addWithImmerMW: (num) => set((state) => { state.counter = state.counter + (num || 1) }),
-  reset: () => set({ counter: 0 }),
-  isLogged: false,
-  logInOut: () => set((state) => ({ isLogged: !state.isLogged }), false, 'log in or out'),
-  deleteStates: () => set({}, true),
-  users: [],
-  usersLoading: false,
-  fetchUsers: async () => {
-    set({ usersLoading: true })
-    const res = await axios.get('https://jsonplaceholder.typicode.com/users')
-    await sleeper(3000)()
-    const users = res.data
-    set({ users, usersLoading: false })
-  },
-  alertCounter: () => alert(get().counter.toString())
-}), { name: 'Zustand store' }))))
+const useStore = create(
+  immer(
+    subscribeWithSelector(
+      devtools(
+        (set, get) => ({
+          counter: 0,
+          add: (num) => set((state) => ({ counter: state.counter + (num || 1) })),
+          addWithImmer: (num) =>
+            set((state) =>
+              produce(state, (state) => {
+                state.counter = state.counter + (num || 1)
+              })
+            ),
+          addWithImmerCurried: (num) =>
+            set(
+              produce((state) => {
+                state.counter = state.counter + (num || 1)
+              })
+            ),
+          addWithImmerMW: (num) =>
+            set((state) => {
+              state.counter = state.counter + (num || 1)
+            }),
+          reset: () => set({ counter: 0 }),
+          isLogged: false,
+          logInOut: () => set((state) => ({ isLogged: !state.isLogged }), false, 'log in or out'),
+          deleteStates: () => set({}, true),
+          users: [],
+          usersLoading: false,
+          fetchUsers: async () => {
+            set({ usersLoading: true })
+            const res = await axios.get('https://jsonplaceholder.typicode.com/users')
+            await sleeper(3000)()
+            const users = res.data
+            set({ users, usersLoading: false })
+          },
+          alertCounter: () => alert(get().counter.toString())
+        }),
+        { name: 'Zustand store' }
+      )
+    )
+  )
+)
 
-const unsubscribe = useStore.subscribe(state => state.isLogged, (prev, now) => { console.log('triggered log in/out', 'prev state', prev, 'state now', now) })
+const unsubscribe = useStore.subscribe(
+  (state) => state.isLogged,
+  (prev, now) => {
+    console.log('triggered log in/out', 'prev state', prev, 'state now', now)
+  }
+)
 // #endregion
 
 // #region Component
 function Component() {
-  const counter = useStore(state => state.counter)
+  const counter = useStore((state) => state.counter)
   const counterWithCustomEqualityFn = useStore(
-    state => state.counter,
+    (state) => state.counter,
     (prevState, newState) => {
       if (newState > 5) return false // render
       if (newState <= 5) return true // no render
     }
   )
-  const add = useStore(state => state.add)
-  const addWithImmer = useStore(state => state.addWithImmer)
-  const addWithImmerCurried = useStore(state => state.addWithImmerCurried)
-  const addWithImmerMW = useStore(state => state.addWithImmerMW)
-  const reset = useStore(state => state.reset)
-  const isLogged = useStore(state => state.isLogged)
-  const logInOut = useStore(state => state.logInOut)
-  const deleteStates = useStore(state => state.deleteStates)
-  const users = useStore(state => state.users)
-  const usersLoading = useStore(state => state.usersLoading)
-  const fetchUsers = useStore(state => state.fetchUsers)
-  const alertCounter = useStore(state => state.alertCounter)
+  const add = useStore((state) => state.add)
+  const addWithImmer = useStore((state) => state.addWithImmer)
+  const addWithImmerCurried = useStore((state) => state.addWithImmerCurried)
+  const addWithImmerMW = useStore((state) => state.addWithImmerMW)
+  const reset = useStore((state) => state.reset)
+  const isLogged = useStore((state) => state.isLogged)
+  const logInOut = useStore((state) => state.logInOut)
+  const deleteStates = useStore((state) => state.deleteStates)
+  const users = useStore((state) => state.users)
+  const usersLoading = useStore((state) => state.usersLoading)
+  const fetchUsers = useStore((state) => state.fetchUsers)
+  const alertCounter = useStore((state) => state.alertCounter)
 
   const style = { border: '2px solid grey', padding: '10px', margin: '10px', maxWidth: '500px' }
   return (
     <div style={style}>
-      <div>Counter: <strong>{counter}</strong></div>
-      <div>Counter with custom equality func: <strong>{counterWithCustomEqualityFn}</strong></div>
+      <div>
+        Counter: <strong>{counter}</strong>
+      </div>
+      <div>
+        Counter with custom equality func: <strong>{counterWithCustomEqualityFn}</strong>
+      </div>
       <button onClick={() => add()}>Increment +1</button>
       <button onClick={() => addWithImmer()}>Increment with Immer +1</button>
       <button onClick={() => addWithImmerCurried()}>Increment with Immer Curried +1</button>
       <button onClick={() => addWithImmerMW()}>Increment with Immer Middleware +1</button>
       <button onClick={() => add(3)}>Increment +3</button>
       <button onClick={() => add(-5)}>Decrement -5</button>
-      <button onClick={() => { useStore.setState({ counter: 666 }) }}>Set counter state outside component</button>
-      <button onClick={() => alertCounter()}>Alert counter</button><br />
-      <button onClick={() => reset()}>Reset</button><br />
-      <div>isLogged: <strong>{isLogged?.toString()}</strong></div>
-      <button onClick={() => logInOut()}>Log in/out</button><br />
+      <button
+        onClick={() => {
+          useStore.setState({ counter: 666 })
+        }}
+      >
+        Set counter state outside component
+      </button>
+      <button onClick={() => alertCounter()}>Alert counter</button>
+      <br />
+      <button onClick={() => reset()}>Reset</button>
+      <br />
+      <div>
+        isLogged: <strong>{isLogged?.toString()}</strong>
+      </div>
+      <button onClick={() => logInOut()}>Log in/out</button>
+      <br />
       <div>Fetch users</div>
-      <button onClick={() => fetchUsers()}>Fetch users</button><br />
+      <button onClick={() => fetchUsers()}>Fetch users</button>
+      <br />
       <div>
         {usersLoading && 'Loading...'}
-        {!usersLoading && !!users?.length && users.map(user => <div key={user.id}>{user.name}</div>)}
+        {!usersLoading &&
+          !!users?.length &&
+          users.map((user) => <div key={user.id}>{user.name}</div>)}
       </div>
       <div>Replace the store's object content</div>
-      <button onClick={() => deleteStates()}>Delete states</button><br />
+      <button onClick={() => deleteStates()}>Delete states</button>
+      <br />
     </div>
   )
 }
@@ -94,18 +135,23 @@ function Component() {
 
 // #region Component with store from slices
 function ComponentWithStoreFromSlices() {
-  const counter = zustandStore(state => state.counter)
-  const add = zustandStore(state => state.add)
-  const isLogged = zustandStore(state => state.isLogged)
-  const logInOut = zustandStore(state => state.logInOut)
+  const counter = zustandStore((state) => state.counter)
+  const add = zustandStore((state) => state.add)
+  const isLogged = zustandStore((state) => state.isLogged)
+  const logInOut = zustandStore((state) => state.logInOut)
 
   const style = { border: '2px solid grey', padding: '10px', margin: '10px', maxWidth: '500px' }
   return (
     <div style={style}>
-      <div>Counter: <strong>{counter}</strong></div>
+      <div>
+        Counter: <strong>{counter}</strong>
+      </div>
       <button onClick={() => add()}>Increment +1</button>
-      <div>isLogged: <strong>{isLogged?.toString()}</strong></div>
-      <button onClick={() => logInOut()}>Log in/out</button><br />
+      <div>
+        isLogged: <strong>{isLogged?.toString()}</strong>
+      </div>
+      <button onClick={() => logInOut()}>Log in/out</button>
+      <br />
     </div>
   )
 }
@@ -121,11 +167,16 @@ const postObj = {
     <>
       <H>Info</H>
 
-      <p><Lnk path='https://github.com/pmndrs/zustand'>Zustand</Lnk> state manager is the simplest state manager ever.</p>
+      <p>
+        <Lnk path="https://github.com/pmndrs/zustand">Zustand</Lnk> state manager is the simplest
+        state manager ever.
+      </p>
 
       <H>Installation</H>
 
-      <p><Code bash>npm install zustand</Code></p>
+      <p>
+        <Code bash>npm install zustand</Code>
+      </p>
 
       <H>App</H>
 
@@ -148,9 +199,17 @@ const postObj = {
       <H>Set</H>
 
       <ul>
-        <li><code>{'set({ counter: 0 })'}</code> pushes counter state into the store object, merges by default</li>
-        <li><code>{'set({ counter: 0 }, true)'}</code> replaces whole store with counter state</li>
-        <li><code>{'set((state) => ({ counter: state.counter + 1 }))'}</code> pushes updated counter state into the store object</li>
+        <li>
+          <code>{'set({ counter: 0 })'}</code> pushes counter state into the store object, merges by
+          default
+        </li>
+        <li>
+          <code>{'set({ counter: 0 }, true)'}</code> replaces whole store with counter state
+        </li>
+        <li>
+          <code>{'set((state) => ({ counter: state.counter + 1 }))'}</code> pushes updated counter
+          state into the store object
+        </li>
       </ul>
 
       <H>Reactive binding</H>
@@ -295,7 +354,10 @@ const postObj = {
       })))))
       `}</Code>
 
-      <p>Devtools can not dispatch an action, but can register it if we provide actions name as 3rd argument in <i>set</i> function.</p>
+      <p>
+        Devtools can not dispatch an action, but can register it if we provide actions name as 3rd
+        argument in <i>set</i> function.
+      </p>
 
       <H>Whole code</H>
 

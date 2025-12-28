@@ -1,9 +1,8 @@
 'use client'
 
-
 import { Code, H, jsxToStr } from '/components/post/reExport'
-import { useModalWithBackground } from '/functions/useModalWithBackground'
-import { useModalWithoutBackground } from '/functions/useModalWithoutBackground'
+import { useModalWithBackground } from '../helpers/useModalWithBackground'
+import { useModalWithoutBackground } from '../helpers/useModalWithoutBackground'
 
 function ModalWithBackground() {
   const [showModalState, openModal, Modal] = useModalWithBackground()

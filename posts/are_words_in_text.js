@@ -1,9 +1,8 @@
 'use client'
 
-
 import { Code, jsxToStr, H } from '/components/post/reExport'
-import areWordsInText from '/functions/areWordsInText'
-import isSomeWordInText from '/functions/isSomeWordInText'
+import areWordsInText from '../helpers/areWordsInText'
+import isSomeWordInText from '../helpers/isSomeWordInText'
 
 const postObj = {
   title: 'are words in text',
@@ -23,8 +22,14 @@ const postObj = {
       }
       `}</Code>
 
-      <div><Code js>{"areWordsInText(['a', 'b', 'c'], 'abcd')"}</Code> = <b>{JSON.stringify(areWordsInText(['a', 'b', 'c'], 'abcd'))}</b></div>
-      <div><Code js>{"areWordsInText(['a', 'b', 'q'], 'abcd')"}</Code> = <b>{JSON.stringify(areWordsInText(['a', 'b', 'q'], 'abcd'))}</b></div>
+      <div>
+        <Code js>{"areWordsInText(['a', 'b', 'c'], 'abcd')"}</Code> ={' '}
+        <b>{JSON.stringify(areWordsInText(['a', 'b', 'c'], 'abcd'))}</b>
+      </div>
+      <div>
+        <Code js>{"areWordsInText(['a', 'b', 'q'], 'abcd')"}</Code> ={' '}
+        <b>{JSON.stringify(areWordsInText(['a', 'b', 'q'], 'abcd'))}</b>
+      </div>
 
       <H>Is some word in text</H>
 
@@ -36,8 +41,14 @@ const postObj = {
       }
       `}</Code>
 
-      <div><Code js>{"isSomeWordInText(['a', 'b', 'c'], 'abcd')"}</Code> = <b>{JSON.stringify(isSomeWordInText(['a', 'b', 'c'], 'abcd'))}</b></div>
-      <div><Code js>{"isSomeWordInText(['a', 'b', 'q'], 'abcd')"}</Code> = <b>{JSON.stringify(isSomeWordInText(['a', 'b', 'q'], 'abcd'))}</b></div>
+      <div>
+        <Code js>{"isSomeWordInText(['a', 'b', 'c'], 'abcd')"}</Code> ={' '}
+        <b>{JSON.stringify(isSomeWordInText(['a', 'b', 'c'], 'abcd'))}</b>
+      </div>
+      <div>
+        <Code js>{"isSomeWordInText(['a', 'b', 'q'], 'abcd')"}</Code> ={' '}
+        <b>{JSON.stringify(isSomeWordInText(['a', 'b', 'q'], 'abcd'))}</b>
+      </div>
     </>
   )
 }

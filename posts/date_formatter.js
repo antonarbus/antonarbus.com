@@ -1,8 +1,7 @@
 'use client'
 
-
 import { Code, H, jsxToStr } from '/components/post/reExport'
-import { ddmmyyyyHHMMSS } from '/functions/ddmmyyyyHHMMSS'
+import { ddmmyyyyHHMMSS } from '../helpers/ddmmyyyyHHMMSS'
 
 const postObj = {
   title: 'date formatter',
@@ -16,7 +15,9 @@ const postObj = {
 
       <p>Date object converted into the string doesn't look good.</p>
 
-      <p><Code js>new Date().toString()</Code> <i>{new Date().toString()}</i></p>
+      <p>
+        <Code js>new Date().toString()</Code> <i>{new Date().toString()}</i>
+      </p>
 
       <H>Function</H>
 
@@ -38,12 +39,27 @@ const postObj = {
 
       <H>Output</H>
 
-      <div><Code js>{'new Date().toString()'}</Code> <i>{new Date().toString()}</i></div>
-      <div><Code js>{'new Date().toISOString()'}</Code> <i>{new Date().toISOString()}</i></div>
-      <div><Code js>{'ddmmyyyyHHMMSS(new Date())'}</Code> <i>{ddmmyyyyHHMMSS(new Date())}</i></div>
-      <div><Code js>{'ddmmyyyyHHMMSS(new Date(), true)'}</Code> <i>{ddmmyyyyHHMMSS(new Date(), true)}</i></div>
-      <div><Code js>{'ddmmyyyyHHMMSS("1999-12-31T15:16:17.340Z")'}</Code> <i>{ddmmyyyyHHMMSS('1999-12-31T15:16:17.340Z')}</i></div>
-      <div><Code js>{'ddmmyyyyHHMMSS("1999-12-31T15:16:17.340Z", true)'}</Code> <i>{ddmmyyyyHHMMSS('1999-12-31T15:16:17.340Z', true)}</i></div>
+      <div>
+        <Code js>{'new Date().toString()'}</Code> <i>{new Date().toString()}</i>
+      </div>
+      <div>
+        <Code js>{'new Date().toISOString()'}</Code> <i>{new Date().toISOString()}</i>
+      </div>
+      <div>
+        <Code js>{'ddmmyyyyHHMMSS(new Date())'}</Code> <i>{ddmmyyyyHHMMSS(new Date())}</i>
+      </div>
+      <div>
+        <Code js>{'ddmmyyyyHHMMSS(new Date(), true)'}</Code>{' '}
+        <i>{ddmmyyyyHHMMSS(new Date(), true)}</i>
+      </div>
+      <div>
+        <Code js>{'ddmmyyyyHHMMSS("1999-12-31T15:16:17.340Z")'}</Code>{' '}
+        <i>{ddmmyyyyHHMMSS('1999-12-31T15:16:17.340Z')}</i>
+      </div>
+      <div>
+        <Code js>{'ddmmyyyyHHMMSS("1999-12-31T15:16:17.340Z", true)'}</Code>{' '}
+        <i>{ddmmyyyyHHMMSS('1999-12-31T15:16:17.340Z', true)}</i>
+      </div>
     </>
   )
 }

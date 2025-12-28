@@ -1,8 +1,7 @@
 'use client'
 
-
 import { Code, H, Lnk, jsxToStr } from '/components/post/reExport'
-import { Spinner } from '/functions/Spinner'
+import { Spinner } from '../helpers/Spinner'
 
 const postObj = {
   title: 'spinner',
@@ -13,7 +12,10 @@ const postObj = {
     <>
       <H>SVG spinner component</H>
 
-      <p>Taken from <Lnk path='https://codepen.io/supah/pen/BjYLdW'>https://codepen.io/supah/pen/BjYLdW</Lnk></p>
+      <p>
+        Taken from{' '}
+        <Lnk path="https://codepen.io/supah/pen/BjYLdW">https://codepen.io/supah/pen/BjYLdW</Lnk>
+      </p>
 
       <Code block jsx>{`
       // functions\\Spinner.js
@@ -65,8 +67,8 @@ const postObj = {
       <Spinner/>
       `}</Code>
 
-      <Spinner width='30px' color='red'/>
-      <Spinner/>
+      <Spinner width="30px" color="red" />
+      <Spinner />
     </>
   )
 }

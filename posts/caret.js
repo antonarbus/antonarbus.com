@@ -1,8 +1,7 @@
 'use client'
 
-
 import { useRef, jsxToStr, Code } from '/components/post/reExport'
-import caretTo from '../functions/caretTo'
+import caretTo from '../helpers/caretTo'
 
 function Caret(props) {
   const inputRef = useRef()
@@ -26,7 +25,7 @@ function Caret(props) {
       <button onClick={setCaretToStart}>Set caret to the start</button> <br />
       <button onClick={setCaretToEnd}>Set caret to the end</button> <br />
       <button onClick={setCaretTo2CharsFromBack}>Set caret to pos 2 from the back</button> <br />
-      <input ref={inputRef} defaultValue='some text' />
+      <input ref={inputRef} defaultValue="some text" />
     </div>
   )
 }

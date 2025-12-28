@@ -1,13 +1,12 @@
 'use client'
 
-
 import { Code, useState, jsxToStr } from '/components/post/reExport'
-import randomNumFromTo from '/functions/randomNumFromTo'
-import useInput from '/functions/useInput'
+import randomNumFromTo from '../helpers/randomNumFromTo'
+import useInput from '../helpers/useInput'
 
 const style = { width: '50px', marginRight: '10px' }
 
-function Component () {
+function Component() {
   const [valState, setValState] = useState(0)
   const [inputFromState, bindInputFrom] = useInput()
   const [inputToState, bindInputTo] = useInput()
@@ -33,7 +32,9 @@ const postObj = {
   desc: 'random integer number function',
   body: (
     <>
-      <p>Function returns integer number between values <i>from</i> & <i>to</i>.</p>
+      <p>
+        Function returns integer number between values <i>from</i> & <i>to</i>.
+      </p>
 
       <Code block jsx>{`
       function randomNumFromTo(from, to) {

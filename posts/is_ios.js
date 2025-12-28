@@ -1,8 +1,7 @@
 'use client'
 
-
 import { Code, useState, jsxToStr } from '/components/post/reExport'
-import isiOS from '/functions/isIos'
+import isiOS from '../helpers/isIos'
 
 function Component() {
   const [isIOsState, setIsIOsState] = useState('do not know')
@@ -14,7 +13,9 @@ function Component() {
   return (
     <>
       <button onClick={isIOS}>is iOS?</button>
-      <div><b>{isIOsState}</b></div>
+      <div>
+        <b>{isIOsState}</b>
+      </div>
     </>
   )
 }

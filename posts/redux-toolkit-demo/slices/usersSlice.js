@@ -1,10 +1,9 @@
 'use client'
 
-
 // redux-toolkit-demo/slices/usersSlice.js
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
-import sleeper from '/functions/sleeper'
+import sleeper from '../../../helpers/sleeper'
 
 const initialState = {
   loading: false,
@@ -14,9 +13,10 @@ const initialState = {
 
 // generates 'pending', 'fulfilled' & 'rejected' action types automatically
 const fetchUsers = createAsyncThunk('users/fetchUsers', () => {
-  return axios.get('https://jsonplaceholder.typicode.com/users')
+  return axios
+    .get('https://jsonplaceholder.typicode.com/users')
     .then(sleeper(1000))
-    .then(res => res.data)
+    .then((res) => res.data)
 })
 
 const usersSlice = createSlice({

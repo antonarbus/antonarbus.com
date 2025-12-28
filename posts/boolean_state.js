@@ -1,8 +1,7 @@
 'use client'
 
-
 import { Code, Lnk, jsxToStr } from '/components/post/reExport'
-import useBoolean from '/functions/useBoolean'
+import useBoolean from '../helpers/useBoolean'
 
 function Component() {
   const [state, toggleState] = useBoolean(true)
@@ -22,7 +21,11 @@ const postObj = {
   body: (
     <>
       <ul>
-        <li> We often need to have a boolean <i>state</i> and switch between <code>true</code> & <code>false</code> to show/hide something on a screen</li>
+        <li>
+          {' '}
+          We often need to have a boolean <i>state</i> and switch between <code>true</code> &{' '}
+          <code>false</code> to show/hide something on a screen
+        </li>
         <li> We can put such simple logic into a custom hook and make components a bit cleaner</li>
       </ul>
 
@@ -55,7 +58,15 @@ const postObj = {
 
       <Component />
 
-      <p>Similar function can be found in the <Lnk path='https://www.npmjs.com/package/react-use'> react-use </Lnk> package under the <Lnk path="https://github.com/streamich/react-use/blob/HEAD/docs/useToggle.md"> useToggle </Lnk> hook.</p>
+      <p>
+        Similar function can be found in the{' '}
+        <Lnk path="https://www.npmjs.com/package/react-use"> react-use </Lnk> package under the{' '}
+        <Lnk path="https://github.com/streamich/react-use/blob/HEAD/docs/useToggle.md">
+          {' '}
+          useToggle{' '}
+        </Lnk>{' '}
+        hook.
+      </p>
     </>
   )
 }

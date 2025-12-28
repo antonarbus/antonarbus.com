@@ -1,8 +1,7 @@
 'use client'
 
-
 import { Code, useEffect, useState, useRef, jsxToStr } from '/components/post/reExport'
-import secToHHMMSS from '/functions/secToHHMMSS'
+import secToHHMMSS from '../helpers/secToHHMMSS'
 
 function Component() {
   const [timerState, setTimerState] = useState(0)
@@ -16,7 +15,7 @@ function Component() {
     }
 
     intervalRef.current = setInterval(function () {
-      setTimerState(prevVal => prevVal + 1)
+      setTimerState((prevVal) => prevVal + 1)
     }, 1000)
 
     return () => clearInterval(intervalRef.current)
@@ -30,7 +29,9 @@ function Component() {
 
   return (
     <>
-      <div>Timer <b>{secToHHMMSS(timerState)}</b></div>
+      <div>
+        Timer <b>{secToHHMMSS(timerState)}</b>
+      </div>
       <button onClick={() => setTimerState(timerState + 1)}>Start</button>
       <button onClick={() => clearInterval(intervalRef.current)}>Pause</button>
       <button onClick={resetTimer}>Reset</button>
@@ -49,14 +50,28 @@ const postObj = {
       <Component />
 
       <ul>
-        <li>The idea is to update the <i>timerState</i> by adding +1s</li>
-        <li>It will trigger <i>useEffect</i> hook and set a timer for 1000 ms</li>
-        <li>Timer will change <i>timerState</i> with +1s, which will trigger <i>useEffect</i> again...</li>
+        <li>
+          The idea is to update the <i>timerState</i> by adding +1s
+        </li>
+        <li>
+          It will trigger <i>useEffect</i> hook and set a timer for 1000 ms
+        </li>
+        <li>
+          Timer will change <i>timerState</i> with +1s, which will trigger <i>useEffect</i> again...
+        </li>
         <li>On component unmount timer is destroyed</li>
-        <li>Btw we skip <i>useEffect</i> on first render with <i>firstRenderRef</i> flag</li>
+        <li>
+          Btw we skip <i>useEffect</i> on first render with <i>firstRenderRef</i> flag
+        </li>
         <li>On timer pause we destroy timer</li>
-        <li>Note that timer is kept in <i>useRef</i> global variable, because we need to access it from different places</li>
-        <li>On reset button we reset all variables & fool <i>useEffect</i> telling it is the first render, which he will skip</li>
+        <li>
+          Note that timer is kept in <i>useRef</i> global variable, because we need to access it
+          from different places
+        </li>
+        <li>
+          On reset button we reset all variables & fool <i>useEffect</i> telling it is the first
+          render, which he will skip
+        </li>
       </ul>
 
       <Code block jsx>{`

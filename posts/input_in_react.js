@@ -1,8 +1,7 @@
 'use client'
 
-
 import { Code, H, Hs, Lnk, useState, useRef, jsxToStr } from '/components/post/reExport'
-import useInput from '/functions/useInput'
+import useInput from '../helpers/useInput'
 
 function ControlledInput() {
   const [inpVal, setInpVal] = useState('initial text')
@@ -10,11 +9,7 @@ function ControlledInput() {
   return (
     <>
       <h1>{inpVal}</h1>
-      <input
-        type="text"
-        value={inpVal}
-        onChange={e => setInpVal(e.target.value)}
-      />
+      <input type="text" value={inpVal} onChange={(e) => setInpVal(e.target.value)} />
     </>
   )
 }
@@ -39,7 +34,7 @@ function UncontrolledInput() {
 function FormWithInputWithoutCustomHook() {
   const [nameState, setNameState] = useState('')
 
-  const submitHandler = e => {
+  const submitHandler = (e) => {
     e.preventDefault()
     alert(`hello ${nameState}`)
     setNameState('')
@@ -47,7 +42,7 @@ function FormWithInputWithoutCustomHook() {
 
   return (
     <form onSubmit={submitHandler}>
-      <input placeholder="Name" value={nameState} onChange={e => setNameState(e.target.value)} />
+      <input placeholder="Name" value={nameState} onChange={(e) => setNameState(e.target.value)} />
       <button>Submit</button>
     </form>
   )
@@ -56,7 +51,7 @@ function FormWithInputWithoutCustomHook() {
 function FormWithInputWithCustomHook() {
   const [nameState, bindName, resetName] = useInput()
 
-  const submitHandler = e => {
+  const submitHandler = (e) => {
     e.preventDefault()
     alert(`hello ${nameState}`)
     resetName()
@@ -81,8 +76,15 @@ const postObj = {
 
       <ul>
         <li> Uncontrolled component data is handled by the DOM. </li>
-        <li> We need to use <Code inline >useRef()</Code> <Lnk link='https://reactjs.org/docs/hooks-reference.html#useref'>hook</Lnk> to get form values from the DOM. </li>
-        <li><Code inline>inpRef.current</Code> refers to the DOM element.</li>
+        <li>
+          {' '}
+          We need to use <Code inline>useRef()</Code>{' '}
+          <Lnk link="https://reactjs.org/docs/hooks-reference.html#useref">hook</Lnk> to get form
+          values from the DOM.{' '}
+        </li>
+        <li>
+          <Code inline>inpRef.current</Code> refers to the DOM element.
+        </li>
       </ul>
 
       <Code block>{`
@@ -113,7 +115,11 @@ const postObj = {
       <H>Controlled component</H>
 
       <ul>
-        <li>Controlled component data is handled by a React component via <Code inline >useState()</Code> <Lnk link={'https://reactjs.org/docs/hooks-reference.html#usestate'}>hook</Lnk>. </li>
+        <li>
+          Controlled component data is handled by a React component via{' '}
+          <Code inline>useState()</Code>{' '}
+          <Lnk link={'https://reactjs.org/docs/hooks-reference.html#usestate'}>hook</Lnk>.{' '}
+        </li>
         <li>Event handler takes care of a state update.</li>
       </ul>
 
@@ -144,10 +150,15 @@ const postObj = {
 
       <Hs>Form with input</Hs>
 
-      <p>With controlled component input values are always driven by the React state and we always need to create such logic for every input.</p>
+      <p>
+        With controlled component input values are always driven by the React state and we always
+        need to create such logic for every input.
+      </p>
 
       <ul>
-        <li>We control input value via react state with <i>onChange</i> event</li>
+        <li>
+          We control input value via react state with <i>onChange</i> event
+        </li>
         <li>On form submit we prevent the default action and do our logic</li>
         <li>After submission we reset input fields with initial empty string</li>
       </ul>
@@ -178,7 +189,10 @@ const postObj = {
 
       <ul>
         <li>Let's make a custom hook for an input control</li>
-        <li>We extract the logic into a separate file <code>useInput.js</code> and export back the input <code>value</code> & <code>onChange</code> attributes in the object + reset function</li>
+        <li>
+          We extract the logic into a separate file <code>useInput.js</code> and export back the
+          input <code>value</code> & <code>onChange</code> attributes in the object + reset function
+        </li>
       </ul>
 
       <Code block>{`
@@ -200,7 +214,10 @@ const postObj = {
 
       <ul>
         <li>In the main file we bring and destruct values from the custom hook</li>
-        <li>Note how we bring <code>value</code> and <code>onChange</code> attributes by spreading the object into the input field</li>
+        <li>
+          Note how we bring <code>value</code> and <code>onChange</code> attributes by spreading the
+          object into the input field
+        </li>
       </ul>
 
       <Code block>{`
@@ -226,7 +243,6 @@ const postObj = {
       `}</Code>
 
       <FormWithInputWithCustomHook />
-
     </>
   )
 }

@@ -17,7 +17,7 @@ import { Hs } from './Hs'
 import { LazyImg } from './LazyImg'
 import { Lnk } from './Lnk'
 import { ComponentFromHtmlString } from './ComponentFromHtmlString'
-import jsxToStr from '/functions/jsxToStr'
+import jsxToStr from '../../helpers/jsxToStr'
 
 export {
   styled,

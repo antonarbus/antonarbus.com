@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import idFromPropsChildrenWithJSX from '/functions/idFromPropsChildrenWithJSX'
+import idFromPropsChildrenWithJSX from '../../helpers/idFromPropsChildrenWithJSX'
 
 export function Hs(props) {
   const ref = React.useRef(null)
@@ -16,7 +16,7 @@ export function Hs(props) {
   }
 
   return (
-    <h5 className='Hs'ref={ref} onClick={addHashToUrl}>
+    <h5 className="Hs" ref={ref} onClick={addHashToUrl}>
       {props.children}
 
       <style jsx>{`

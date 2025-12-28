@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import idFromPropsChildrenWithJSX from '/functions/idFromPropsChildrenWithJSX'
+import idFromPropsChildrenWithJSX from '../../helpers/idFromPropsChildrenWithJSX'
 
 export function Content({ headings }) {
   return (

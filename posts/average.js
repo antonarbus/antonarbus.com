@@ -1,19 +1,18 @@
 'use client'
 
-
 import { Code, H, React, jsxToStr } from '/components/post/reExport'
-import average from '/functions/average'
+import average from '../helpers/average'
 
 function Component() {
   const [inputValState, setInputValState] = React.useState('1 2 3 4 5')
   const [averageState, setAverageState] = React.useState(average(inputValState.split(' ')))
 
-  const onChangeHandler = e => {
+  const onChangeHandler = (e) => {
     const inpVal = e.target.value
     setInputValState(inpVal)
     const numsArr = inpVal
       .match(/[-]{0,1}[\d]*[.]{0,1}[\d]+/g) // match numbers
-      .filter(el => el) // remove empty elements
+      .filter((el) => el) // remove empty elements
     setAverageState(average(numsArr))
   }
 

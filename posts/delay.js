@@ -1,33 +1,34 @@
 'use client'
 
-
 import { Code, H, jsxToStr } from '/components/post/reExport'
-import syncWait from '/functions/syncWait'
+import syncWait from '../helpers/syncWait'
 import axios from 'axios'
-import sleeper from '/functions/sleeper'
+import sleeper from '../helpers/sleeper'
 
 // #region SYNC delay
-function SynchDelay () {
+function SynchDelay() {
   const sayHiWithDelay = () => {
     syncWait(2000)
     alert('hi')
   }
-  return <>
-    <button onClick={sayHiWithDelay}>Say 'hi' with delay</button>
-  </>
+  return (
+    <>
+      <button onClick={sayHiWithDelay}>Say 'hi' with delay</button>
+    </>
+  )
 }
 // #endregion
 
 // #region promise with delay
-function PromiseWithDelayExample () {
+function PromiseWithDelayExample() {
   return (
     <>
       <button
         onClick={() => {
           alert('start request')
           axios('https://jsonplaceholder.typicode.com/posts/1')
-            .then(res => alert(`Title: ${res.data.title}`))
-            .catch(err => alert(JSON.stringify(err)))
+            .then((res) => alert(`Title: ${res.data.title}`))
+            .catch((err) => alert(JSON.stringify(err)))
         }}
       >
         Get respond from server
@@ -38,8 +39,8 @@ function PromiseWithDelayExample () {
           alert('start request with 3s delay')
           axios('https://jsonplaceholder.typicode.com/posts/1')
             .then(sleeper(3000))
-            .then(res => alert(`Title: ${res.data.title}`))
-            .catch(err => alert(JSON.stringify(err)))
+            .then((res) => alert(`Title: ${res.data.title}`))
+            .catch((err) => alert(JSON.stringify(err)))
         }}
       >
         Get respond from server with delay
@@ -147,7 +148,6 @@ const postObj = {
           return res.json({ url: '/api', data: 'some data' })
         })
       `}</Code>
-
     </>
   )
 }

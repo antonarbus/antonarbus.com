@@ -2,12 +2,12 @@
 
 // components/post/LazyImg.js
 import LazyLoad from 'react-lazyload'
-import { Spinner } from '/functions/Spinner'
+import { Spinner } from '../../helpers/Spinner'
 
 export function LazyImg(props) {
   return (
     <LazyLoad
-      placeholder={<Spinner width='20px'/>}
+      placeholder={<Spinner width="20px" />}
       offset={100}
       once
       scrollContainer={props.scrollContainer}

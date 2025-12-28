@@ -1,10 +1,9 @@
 'use client'
 
-
 import { Suspense, use } from 'react'
 import { Code, Lnk, useState, jsxToStr, H } from '/components/post/reExport'
-import randomNumFromTo from '/functions/randomNumFromTo'
-import sleeper from '/functions/sleeper'
+import randomNumFromTo from '../helpers/randomNumFromTo'
+import sleeper from '../helpers/sleeper'
 import axios from 'axios'
 import { ErrorBoundary } from 'react-error-boundary'
 
@@ -198,7 +197,8 @@ function ComponentWithUseState() {
       <H>Via use() hook</H>
 
       <p>
-        Modern approach using React's <Code>use()</Code> hook with <Code>Suspense</Code> for loading states and <Code>ErrorBoundary</Code> for error handling.
+        Modern approach using React's <Code>use()</Code> hook with <Code>Suspense</Code> for loading
+        states and <Code>ErrorBoundary</Code> for error handling.
       </p>
 
       <Code block jsx>{`

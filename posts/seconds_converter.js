@@ -1,17 +1,26 @@
 'use client'
 
-
 import { Code, jsxToStr } from '/components/post/reExport'
-import secToHHMMSS from '/functions/secToHHMMSS'
+import secToHHMMSS from '../helpers/secToHHMMSS'
 
 function Component() {
   return (
     <>
-      <div>No sec is <b>{secToHHMMSS()}</b></div>
-      <div>9 sec is <b>{secToHHMMSS(9)}</b></div>
-      <div>57 sec is <b>{secToHHMMSS(57)}</b></div>
-      <div>65 sec is <b>{secToHHMMSS(65)}</b></div>
-      <div>3988 sec is <b>{secToHHMMSS(3988)}</b></div>
+      <div>
+        No sec is <b>{secToHHMMSS()}</b>
+      </div>
+      <div>
+        9 sec is <b>{secToHHMMSS(9)}</b>
+      </div>
+      <div>
+        57 sec is <b>{secToHHMMSS(57)}</b>
+      </div>
+      <div>
+        65 sec is <b>{secToHHMMSS(65)}</b>
+      </div>
+      <div>
+        3988 sec is <b>{secToHHMMSS(3988)}</b>
+      </div>
     </>
   )
 }

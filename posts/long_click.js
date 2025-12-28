@@ -1,8 +1,7 @@
 'use client'
 
-
 import { jsxToStr, Code } from '/components/post/reExport'
-import { longClick } from '/functions/longClick'
+import { longClick } from '../helpers/longClick'
 
 function Component(props) {
   longClick({

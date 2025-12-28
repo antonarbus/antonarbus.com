@@ -1,10 +1,18 @@
 'use client'
 
-
-import { Code, Lnk, React, useEffect, useState, useRef, jsxToStr, H } from '/components/post/reExport'
+import {
+  Code,
+  Lnk,
+  React,
+  useEffect,
+  useState,
+  useRef,
+  jsxToStr,
+  H
+} from '/components/post/reExport'
 import CocaColaSvg from '/pics/cocaCola.svg'
 import styled from 'styled-components'
-import randomNumFromTo from '/functions/randomNumFromTo'
+import randomNumFromTo from '../helpers/randomNumFromTo'
 import { gsap } from 'gsap'
 import { ScrollToPlugin } from 'gsap/dist/ScrollToPlugin' // in next
 // import { ScrollToPlugin } from 'gsap/ScrollToPlugin' // in react
@@ -15,7 +23,15 @@ import { TextPlugin } from 'gsap/dist/TextPlugin' // in next
 import { MotionPathPlugin } from 'gsap/dist/MotionPathPlugin' // in next
 // import { MotionPathPlugin } from 'gsap/MotionPathPlugin' // in react
 
-const style = { width: '200px', height: '50px', margin: '10px', border: '1px solid black', display: 'flex', justifyContent: 'center', alignItems: 'center' }
+const style = {
+  width: '200px',
+  height: '50px',
+  margin: '10px',
+  border: '1px solid black',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center'
+}
 
 function BasicExample() {
   const ref1 = useRef()
@@ -90,16 +106,7 @@ function EaseFunctions() {
   const ref4 = useRef()
   const allEls = useRef([])
 
-  useEffect(
-    () =>
-      (allEls.current = [
-        ref1.current,
-        ref2.current,
-        ref3.current,
-        ref4.current
-      ]),
-    []
-  )
+  useEffect(() => (allEls.current = [ref1.current, ref2.current, ref3.current, ref4.current]), [])
 
   const animate = () => {
     gsap.set(allEls.current, { x: 0 })
@@ -205,8 +212,7 @@ function FromTo() {
 
   return (
     <>
-      <img ref={ref} src={CocaColaSvg.src} style={{ width: '100px' }} />{' '}
-      {/* eslint-disable-line */}
+      <img ref={ref} src={CocaColaSvg.src} style={{ width: '100px' }} /> {/* eslint-disable-line */}
       <div>
         <button onClick={animateFrom}>AnimateFrom</button>
       </div>
@@ -234,14 +240,9 @@ Circle.displayName = 'Circle custom name'
 function Stagger() {
   const ref = useRef()
   const circles = useRef()
-  useEffect(
-    () => (circles.current = ref.current.querySelectorAll('.circle945')),
-    []
-  )
-  const resetAnimation = () =>
-    gsap.set(circles.current, { scale: '.2', opacity: '.2', y: '-50' })
-  const animate = () =>
-    gsap.to(circles.current, { duration: 1, scale: 1, opacity: 1, y: 0 })
+  useEffect(() => (circles.current = ref.current.querySelectorAll('.circle945')), [])
+  const resetAnimation = () => gsap.set(circles.current, { scale: '.2', opacity: '.2', y: '-50' })
+  const animate = () => gsap.to(circles.current, { duration: 1, scale: 1, opacity: 1, y: 0 })
   const animateWithStagger = () =>
     gsap.to(circles.current, {
       duration: 1,
@@ -301,10 +302,7 @@ function Stagger() {
 function Random() {
   const ref = useRef()
   const circles = useRef()
-  useEffect(
-    () => (circles.current = ref.current.querySelectorAll('.circle945')),
-    []
-  )
+  useEffect(() => (circles.current = ref.current.querySelectorAll('.circle945')), [])
   const animate = () =>
     gsap.from(circles.current, {
       duration: 1,
@@ -560,11 +558,10 @@ function Defaults() {
 
   const animate = () => {
     const tl = gsap.timeline({ defaults: { duration: 1 } })
-    tl.fromTo(
+    tl.fromTo(ref.current, { width: '10px', background: 'red' }, { width: '100px' }).to(
       ref.current,
-      { width: '10px', background: 'red' },
-      { width: '100px' }
-    ).to(ref.current, { width: '200px', background: 'orange' })
+      { width: '200px', background: 'orange' }
+    )
   }
 
   return (
@@ -630,22 +627,16 @@ function GettersSetters() {
       <button onClick={() => alert(tween.progress())}>tween.progress()</button>
       <button onClick={() => alert(tween.duration())}>tween.duration()</button>
       <button onClick={() => alert(tween.delay())}>tween.delay()</button>
-      <button onClick={() => alert(tween.timeScale())}>
-        tween.timeScale()
-      </button>
+      <button onClick={() => alert(tween.timeScale())}>tween.timeScale()</button>
       <div>setters</div>
-      <button onClick={() => tween.time(parseFloat(prompt('', '5')))}>
-        tween.time(arg)
-      </button>
+      <button onClick={() => tween.time(parseFloat(prompt('', '5')))}>tween.time(arg)</button>
       <button onClick={() => tween.progress(parseFloat(prompt('', '0.9')))}>
         tween.progress(arg)
       </button>
       <button onClick={() => tween.duration(parseFloat(prompt('', '1')))}>
         tween.duration(arg)
       </button>
-      <button
-        onClick={() => tween.delay(parseFloat(prompt('', '1'))).restart(true)}
-      >
+      <button onClick={() => tween.delay(parseFloat(prompt('', '1'))).restart(true)}>
         tween.delay(arg)
       </button>
       <button onClick={() => tween.timeScale(parseFloat(prompt('', '5')))}>
@@ -730,7 +721,17 @@ function GsapWithReact() {
 
   return (
     <>
-      <div ref={ref} style={{ width: '100px', height: '100px', background: 'LightGrey', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <div
+        ref={ref}
+        style={{
+          width: '100px',
+          height: '100px',
+          background: 'LightGrey',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+      >
         Box
       </div>
       <button onClick={rotate}>Rotate</button>
@@ -739,13 +740,16 @@ function GsapWithReact() {
 }
 gsap.registerPlugin(ScrollToPlugin)
 const rand = () => randomNumFromTo(0, 255)
-const Line = () => <div style={{
-  background: `rgb(${rand()} ${rand()} ${rand()} / 30%)`,
-  width: '1000px'
-}}
->
-  line
-</div>
+const Line = () => (
+  <div
+    style={{
+      background: `rgb(${rand()} ${rand()} ${rand()} / 30%)`,
+      width: '1000px'
+    }}
+  >
+    line
+  </div>
+)
 const Div = styled.div`
   height: 300px;
   overflow: auto;
@@ -754,10 +758,16 @@ function ScrollTo() {
   const ref = useRef()
   const scroll400pxDown = () => gsap.to(ref.current, { duration: 2, scrollTo: 400 })
   const scrollToId = () => gsap.to(ref.current, { duration: 2, scrollTo: '#final-line' })
-  const scrollToIdWithOffset = () => gsap.to(ref.current, { duration: 2, scrollTo: { y: '#final-line', offsetY: 50 } })
+  const scrollToIdWithOffset = () =>
+    gsap.to(ref.current, { duration: 2, scrollTo: { y: '#final-line', offsetY: 50 } })
   const scrollWindow = () => gsap.to(window, { duration: 2, scrollTo: 400 })
-  const scrollXY = () => gsap.to(ref.current, { duration: 2, scrollTo: { y: 500, x: 500 }, ease: 'power2' })
-  const scrollWithAutoKill = () => gsap.to(ref.current, { duration: 4, scrollTo: { y: 400, autoKill: true, onAutoKill: () => alert('autoKill') } })
+  const scrollXY = () =>
+    gsap.to(ref.current, { duration: 2, scrollTo: { y: 500, x: 500 }, ease: 'power2' })
+  const scrollWithAutoKill = () =>
+    gsap.to(ref.current, {
+      duration: 4,
+      scrollTo: { y: 400, autoKill: true, onAutoKill: () => alert('autoKill') }
+    })
   const scrollMax = () => gsap.to(ref.current, { duration: 2, scrollTo: { y: 'max' } })
   const scrollMin = () => gsap.to(ref.current, { duration: 2, scrollTo: { y: 'min' } })
 
@@ -773,9 +783,15 @@ function ScrollTo() {
       <button onClick={scrollMin}>scroll min</button>
 
       <Div ref={ref}>
-        {new Array(20).fill('').map((el, i) => <Line key={`start lines ${i}`} />)}
-        <div id="final-line" style={{ background: 'red' }}>final line with id</div>
-        {new Array(20).fill('').map((el, i) => <Line key={`end lines ${i}`} />)}
+        {new Array(20).fill('').map((el, i) => (
+          <Line key={`start lines ${i}`} />
+        ))}
+        <div id="final-line" style={{ background: 'red' }}>
+          final line with id
+        </div>
+        {new Array(20).fill('').map((el, i) => (
+          <Line key={`end lines ${i}`} />
+        ))}
       </Div>
     </div>
   )
@@ -808,7 +824,6 @@ function ScrollTriggerCmpt() {
         onSnapComplete: () => console.log('onSnapComplete'),
         onToggle: () => console.log('onToggle'),
         once: false
-
       },
       duration: 5, // not applied here 'coz scrub is enabled
       rotate: 360 * 2,
@@ -819,7 +834,9 @@ function ScrollTriggerCmpt() {
   return (
     <div style={{ overflow: 'auto', height: '300px' }} ref={ref}>
       Scroll down
-      <Box top={100} ref={ref1}>box1</Box>
+      <Box top={100} ref={ref1}>
+        box1
+      </Box>
       <Box top={350}>box2</Box>
     </div>
   )
@@ -832,7 +849,7 @@ const Box = styled.div`
   width: 50px;
   height: 50px;
   border: 1px solid black;
-  top: ${props => props.top}px;
+  top: ${(props) => props.top}px;
 `
 gsap.registerPlugin(TextPlugin)
 function TextPluginCmpt() {
@@ -859,22 +876,43 @@ function TextPluginCmpt() {
   return (
     <>
       <button onClick={replaceByCharacters}>Type text</button> <br />
-      <span ref={textRef}></span><span ref={cursorRef} style={{ marginLeft: '1px' }}>|</span>
+      <span ref={textRef}></span>
+      <span ref={cursorRef} style={{ marginLeft: '1px' }}>
+        |
+      </span>
     </>
   )
 }
 gsap.registerPlugin(MotionPathPlugin)
-const path = [{ x: 30, y: 100 }, { x: 100, y: 150 }, { x: 200, y: 100 }, { x: 300, y: 50 }, { x: 400, y: 100 }]
+const path = [
+  { x: 30, y: 100 },
+  { x: 100, y: 150 },
+  { x: 200, y: 100 },
+  { x: 300, y: 50 },
+  { x: 400, y: 100 }
+]
 function MotionPathPluginCmpt() {
   const ref = useRef()
 
   useEffect(() => {
-    gsap.set(ref.current, { x: 30, y: 100, xPercent: -50, yPercent: -50, transformOrigin: '50% 50%' })
+    gsap.set(ref.current, {
+      x: 30,
+      y: 100,
+      xPercent: -50,
+      yPercent: -50,
+      transformOrigin: '50% 50%'
+    })
   }, [])
 
   function animate() {
     // gsap.set(ref.current, {x: 30, y: 100})
-    gsap.set(ref.current, { x: 30, y: 100, xPercent: -50, yPercent: -50, transformOrigin: '50% 50%' })
+    gsap.set(ref.current, {
+      x: 30,
+      y: 100,
+      xPercent: -50,
+      yPercent: -50,
+      transformOrigin: '50% 50%'
+    })
     gsap.to(ref.current, {
       motionPath: {
         path,
@@ -895,8 +933,12 @@ function MotionPathPluginCmpt() {
   return (
     <div style={{ height: '200px', position: 'relative' }}>
       <Div2 ref={ref} />
-      <div><button onClick={animate}>Animate</button></div>
-      {path.map((o, i) => <Coords key={`cords ${i}`} style={{ top: o.y, left: o.x }} />)}
+      <div>
+        <button onClick={animate}>Animate</button>
+      </div>
+      {path.map((o, i) => (
+        <Coords key={`cords ${i}`} style={{ top: o.y, left: o.x }} />
+      ))}
     </div>
   )
 }
@@ -920,7 +962,6 @@ const Div2 = styled.div`
   /* border-radius: 50%; */
   border: 1px solid grey;
   position: absolute;
-  
 `
 
 const postObj = {
@@ -934,7 +975,8 @@ const postObj = {
       <H>Installation</H>
 
       <p>
-        Install the <Lnk path="https://www.npmjs.com/package/gsap">library</Lnk> via npm <Code>{'npm i gsap'}</Code>
+        Install the <Lnk path="https://www.npmjs.com/package/gsap">library</Lnk> via npm{' '}
+        <Code>{'npm i gsap'}</Code>
       </p>
 
       <H>Guideline</H>
@@ -945,19 +987,15 @@ const postObj = {
       </p>
 
       <p>
-        All properties in one{' '}
-        <Lnk path="https://greensock.com/cheatsheet/">cheatsheet</Lnk>.
+        All properties in one <Lnk path="https://greensock.com/cheatsheet/">cheatsheet</Lnk>.
       </p>
 
       <p>
-        <b>Target elements.</b> We can access elements in gsap by reference &
-        query selector. We also can have an array of target elements.
+        <b>Target elements.</b> We can access elements in gsap by reference & query selector. We
+        also can have an array of target elements.
       </p>
 
-      <p>
-        GSAP converts parameters into inline style parameters and animate
-        them.
-      </p>
+      <p>GSAP converts parameters into inline style parameters and animate them.</p>
 
       <H>Basic example</H>
 
@@ -1067,15 +1105,11 @@ const postObj = {
           <Code>{'gsap.set(target, propertiesObj)'}</Code>
         </b>{' '}
         can be used to set initial state{' '}
-        <Lnk path="https://greensock.com/docs/v3/GSAP/gsap.set">
-          properties
-        </Lnk>
-        .
+        <Lnk path="https://greensock.com/docs/v3/GSAP/gsap.set">properties</Lnk>.
       </p>
 
       <p>
-        Also <Code>startAt</Code> property of a tween can set initial
-        state.
+        Also <Code>startAt</Code> property of a tween can set initial state.
       </p>
 
       <Code block jsx>{`
@@ -1104,9 +1138,8 @@ const postObj = {
       <H>Custom object property</H>
 
       <p>
-        <b>Custom object</b> property can be animated with gsap. We may pass
-        custom callbacks into gsap properties <Code>onStart</Code>,{' '}
-        <Code>onUpdate</Code>, <Code>onComplete</Code>,{' '}
+        <b>Custom object</b> property can be animated with gsap. We may pass custom callbacks into
+        gsap properties <Code>onStart</Code>, <Code>onUpdate</Code>, <Code>onComplete</Code>,{' '}
         <Code>onRepeat</Code>, <Code>onReverseComplete</Code>
       </p>
 
@@ -1151,8 +1184,7 @@ const postObj = {
 
       <p>
         <b>
-          <Code>gsap.to()</Code> vs <Code>gsap.from()</Code>{' '}
-          vs <Code>gsap.fromTo()</Code>
+          <Code>gsap.to()</Code> vs <Code>gsap.from()</Code> vs <Code>gsap.fromTo()</Code>
         </b>
       </p>
 
@@ -1197,17 +1229,11 @@ const postObj = {
           <Code>stagger</Code>
         </b>{' '}
         property puts a delay between animations.
-        <Lnk path="https://greensock.com/docs/v3/Staggers">
-          {' '}
-          Advanced
-        </Lnk>{' '}
-        stagger object can be applied.
+        <Lnk path="https://greensock.com/docs/v3/Staggers"> Advanced</Lnk> stagger object can be
+        applied.
       </p>
 
-      <p>
-        We also can set a property with a callback function instead of a fixed
-        value.
-      </p>
+      <p>We also can set a property with a callback function instead of a fixed value.</p>
 
       <Code block jsx>{`
         const Circle = React.forwardRef((props, ref) => {
@@ -1240,8 +1266,7 @@ const postObj = {
       <H>Random</H>
 
       <p>
-        <b>random</b> property exists in string form in GSAP{' '}
-        <Code>'random(-200, 200)'</Code>
+        <b>random</b> property exists in string form in GSAP <Code>'random(-200, 200)'</Code>
       </p>
 
       <Code block jsx>{`
@@ -1293,22 +1318,18 @@ const postObj = {
       <H>Timeline</H>
 
       <p>
-        <b>Timeline.</b> We can put different animations on a single timeline
-        and control them in whole. Timeline can be created with{' '}
-        <Code>gsap.timeline()</Code>
+        <b>Timeline.</b> We can put different animations on a single timeline and control them in
+        whole. Timeline can be created with <Code>gsap.timeline()</Code>
       </p>
 
       <p>
-        Tweens are added to the end of the timeline, so the second tween
-        starts on the end of the first tween. No delays are needed anymore.
+        Tweens are added to the end of the timeline, so the second tween starts on the end of the
+        first tween. No delays are needed anymore.
       </p>
 
       <p>
-        With a delay we can shift our tweens on the timeline, but better to
-        use a third{' '}
-        <Lnk path="https://greensock.com/position-parameter/">
-          position parameter
-        </Lnk>
+        With a delay we can shift our tweens on the timeline, but better to use a third{' '}
+        <Lnk path="https://greensock.com/position-parameter/">position parameter</Lnk>
       </p>
 
       <Code block jsx>{`
@@ -1371,14 +1392,12 @@ const postObj = {
       <H>Label</H>
 
       <p>
-        <b>Label.</b> Instead of using a <i>position</i> parameter we can
-        refer to a specific tween by creating a <i>label</i> and position our
-        tween at a label.
+        <b>Label.</b> Instead of using a <i>position</i> parameter we can refer to a specific tween
+        by creating a <i>label</i> and position our tween at a label.
       </p>
 
       <p>
-        To create a label use a{' '}
-        <Code>tl.addLabel('name', '+=1')</Code> method.
+        To create a label use a <Code>tl.addLabel('name', '+=1')</Code> method.
       </p>
 
       <Code block jsx>{`
@@ -1413,8 +1432,7 @@ const postObj = {
       <H>Repeat</H>
 
       <p>
-        <b>Repeat.</b> Tween or timeline can be repeated with a delay, yoyoed
-        or infinite.
+        <b>Repeat.</b> Tween or timeline can be repeated with a delay, yoyoed or infinite.
       </p>
 
       <Code block jsx>{`
@@ -1458,11 +1476,9 @@ const postObj = {
       <H>Play, resume, restart, progress</H>
 
       <p>
-        <b>Control.</b> Timeline or tween can be controlled with methods{' '}
-        <Code>play()</Code>, <Code>pause()</Code>,{' '}
-        <Code>resume()</Code>, <Code>reverse()</Code>,{' '}
-        <Code>restart()</Code>, <Code>timeScale()</Code>,{' '}
-        <Code>progress()</Code>, <Code>kill()</Code>
+        <b>Control.</b> Timeline or tween can be controlled with methods <Code>play()</Code>,{' '}
+        <Code>pause()</Code>, <Code>resume()</Code>, <Code>reverse()</Code>, <Code>restart()</Code>,{' '}
+        <Code>timeScale()</Code>, <Code>progress()</Code>, <Code>kill()</Code>
       </p>
 
       <p>
@@ -1535,12 +1551,8 @@ const postObj = {
       <H>Defaults</H>
 
       <p>
-        <b>Defaults.</b> Repetitive properties of tweens in a timeline can be
-        centrally assigned to defaults{' '}
-        <Code>
-          {'tl = gsap.timeline({ defaults: { duration: 1 } })'}
-        </Code>
-        .
+        <b>Defaults.</b> Repetitive properties of tweens in a timeline can be centrally assigned to
+        defaults <Code>{'tl = gsap.timeline({ defaults: { duration: 1 } })'}</Code>.
       </p>
 
       <Code block jsx>{`
@@ -1570,8 +1582,10 @@ const postObj = {
       <H>Callbacks</H>
 
       <p>
-        <b>Callback parameters.</b> Parameters to a callback function should
-        be passed in an array in a special properties: <Code>onStartParams: [params]</Code>, <Code>onCompleteParams: [params]</Code>, <Code>onRepeatParams: [params]</Code>, <Code>onReverseCompleteParams: [params]</Code>, <Code>onUpdateParams: [params]</Code>
+        <b>Callback parameters.</b> Parameters to a callback function should be passed in an array
+        in a special properties: <Code>onStartParams: [params]</Code>,{' '}
+        <Code>onCompleteParams: [params]</Code>, <Code>onRepeatParams: [params]</Code>,{' '}
+        <Code>onReverseCompleteParams: [params]</Code>, <Code>onUpdateParams: [params]</Code>
       </p>
 
       <Code block jsx>{`
@@ -1606,9 +1620,8 @@ const postObj = {
       <H>Getters & setters</H>
 
       <p>
-        <b>Getters & setters.</b> With some methods like{' '}
-        <Code>time()</Code>, <Code>progress()</Code>,{' '}
-        <Code>duration()</Code>, <Code>delay()</Code>,{' '}
+        <b>Getters & setters.</b> With some methods like <Code>time()</Code>,{' '}
+        <Code>progress()</Code>, <Code>duration()</Code>, <Code>delay()</Code>,{' '}
         <Code>timeScale()</Code> we can both get and set values.
       </p>
 
@@ -1650,9 +1663,8 @@ const postObj = {
       <H>getProperty</H>
 
       <p>
-        <b>Property value of animated element </b> can be taken within a
-        non-arrow callback function accessing{' '}
-        <Code>this.targets()</Code>.
+        <b>Property value of animated element </b> can be taken within a non-arrow callback function
+        accessing <Code>this.targets()</Code>.
       </p>
 
       <p>
@@ -1692,15 +1704,13 @@ const postObj = {
       <H>Set value via function</H>
 
       <p>
-        May use a <b>function</b> instead of a number/string for almost any
-        property. Func will be called for each target. Returned value by the
-        function will be set as the property value.
+        May use a <b>function</b> instead of a number/string for almost any property. Func will be
+        called for each target. Returned value by the function will be set as the property value.
       </p>
 
       <p>
-        GSAP will pass the following parameters into the function: - index -
-        element being affected - An array of all elements affected by the
-        tween
+        GSAP will pass the following parameters into the function: - index - element being affected
+        - An array of all elements affected by the tween
       </p>
 
       <Code block jsx>{`
@@ -1774,20 +1784,22 @@ const postObj = {
       <H>ScrollTo plugin</H>
 
       <p>
-        Scroll on click can be smoothed natively by {' '}
-        <Lnk path="https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-behavior">CSS</Lnk> property <Code>{'scroll-behavior: smooth'}</Code>.
+        Scroll on click can be smoothed natively by{' '}
+        <Lnk path="https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-behavior">CSS</Lnk>{' '}
+        property <Code>{'scroll-behavior: smooth'}</Code>.
       </p>
 
       <p>
-        Or by{' '}
-        <Lnk path="https://css-tricks.com/snippets/jquery/smooth-scrolling/">JS</Lnk> with{' '}
+        Or by <Lnk path="https://css-tricks.com/snippets/jquery/smooth-scrolling/">JS</Lnk> with{' '}
         <Code js>{"window.scroll({top: 2500, left: 0, behavior: 'smooth'})"}</Code> or{' '}
-        <Code js>{"window.scrollBy({top: 100, left: 0, behavior: 'smooth'})"}</Code>{' '}
-        or <Code js>{"el.scrollIntoView({ behavior: 'smooth' })"}</Code>
+        <Code js>{"window.scrollBy({top: 100, left: 0, behavior: 'smooth'})"}</Code> or{' '}
+        <Code js>{"el.scrollIntoView({ behavior: 'smooth' })"}</Code>
       </p>
 
       <p>
-        But with <Lnk path="https://greensock.com/docs/v3/Plugins/ScrollToPlugin">GSAP ScrollToPlugin</Lnk> we can control the smoothness of scroll.
+        But with{' '}
+        <Lnk path="https://greensock.com/docs/v3/Plugins/ScrollToPlugin">GSAP ScrollToPlugin</Lnk>{' '}
+        we can control the smoothness of scroll.
       </p>
 
       <Code block jsx>{`
@@ -1849,7 +1861,8 @@ const postObj = {
       <H>ScrollTrigger plugin</H>
 
       <p>
-        <Lnk path="https://greensock.com/docs/v3/Plugins/ScrollTrigger">GSAP ScrollTrigger</Lnk> plugin animates anything on scroll.
+        <Lnk path="https://greensock.com/docs/v3/Plugins/ScrollTrigger">GSAP ScrollTrigger</Lnk>{' '}
+        plugin animates anything on scroll.
       </p>
 
       <Code block jsx>{`
@@ -1922,12 +1935,11 @@ const postObj = {
       <H>TextPlugin</H>
 
       <p>
-        <Lnk path="https://greensock.com/docs/v3/Plugins/TextPlugin">GSAP TextPlugin</Lnk> can put or replaces text characters or words.
+        <Lnk path="https://greensock.com/docs/v3/Plugins/TextPlugin">GSAP TextPlugin</Lnk> can put
+        or replaces text characters or words.
       </p>
 
-      <p>
-        It is probably the simplest text animation typewriting tool.
-      </p>
+      <p>It is probably the simplest text animation typewriting tool.</p>
 
       <Code block jsx>{`
       import React, { useEffect, useRef } from 'react';
@@ -1972,18 +1984,27 @@ const postObj = {
       <H>MotionPathPlugin</H>
 
       <p>
-        With <Lnk path="https://greensock.com/docs/v3/Plugins/MotionPathPlugin">GSAP MotionPathPlugin</Lnk> we can move an element along a curve.
+        With{' '}
+        <Lnk path="https://greensock.com/docs/v3/Plugins/MotionPathPlugin">
+          GSAP MotionPathPlugin
+        </Lnk>{' '}
+        we can move an element along a curve.
       </p>
 
       <p>
-        There is a great <Lnk path="https://greensock.com/docs/v3/Plugins/MotionPathHelper">MotionPathHelper</Lnk> tool to create a path curve, but unfortunately it is a paid tool.
+        There is a great{' '}
+        <Lnk path="https://greensock.com/docs/v3/Plugins/MotionPathHelper">MotionPathHelper</Lnk>{' '}
+        tool to create a path curve, but unfortunately it is a paid tool.
       </p>
       <p>
-        But we can create one on official <Lnk path="https://codepen.io/GreenSock/pen/aYYOdN">gsap codepen</Lnk> where all plugins are accessible.
+        But we can create one on official{' '}
+        <Lnk path="https://codepen.io/GreenSock/pen/aYYOdN">gsap codepen</Lnk> where all plugins are
+        accessible.
       </p>
 
       <p>
-        Here is my simplified curve on <Lnk path="https://codepen.io/sherbsherb/pen/LYjoRNp">codepen</Lnk>.
+        Here is my simplified curve on{' '}
+        <Lnk path="https://codepen.io/sherbsherb/pen/LYjoRNp">codepen</Lnk>.
       </p>
 
       <Code block jsx>{`
@@ -2064,17 +2085,19 @@ const postObj = {
 
       <p>JS can not select pseudo elements, but 'CSSRulePlugin' can.</p>
 
-      <p>With <Lnk path="https://greensock.com/docs/v3/Plugins/CSSRulePlugin">CSSRulePlugin</Lnk> we can animate <i>::after</i> element.</p>
-
       <p>
-        Selector in{' '}
-        <Code>{'CSSRulePlugin.getRule(selector)'}</Code>{' '}
-        should be exactly the same as in CSS stylesheet.
+        With <Lnk path="https://greensock.com/docs/v3/Plugins/CSSRulePlugin">CSSRulePlugin</Lnk> we
+        can animate <i>::after</i> element.
       </p>
 
       <p>
-        Because of that I use real CSS sheet for styling instead of{' '}
-        <i>Styled Components</i> because it applies random class names.
+        Selector in <Code>{'CSSRulePlugin.getRule(selector)'}</Code> should be exactly the same as
+        in CSS stylesheet.
+      </p>
+
+      <p>
+        Because of that I use real CSS sheet for styling instead of <i>Styled Components</i> because
+        it applies random class names.
       </p>
 
       <Code block jsx>{`
@@ -2130,13 +2153,20 @@ const postObj = {
       `}</Code>
 
       <p>
-        Note that we use <Code>{'gsap.set()'}</Code> to set initial color.
-        No clue why but without it the element blinks on the button first click.
+        Note that we use <Code>{'gsap.set()'}</Code> to set initial color. No clue why but without
+        it the element blinks on the button first click.
       </p>
 
       <p>
-        On my phone it still blinks, maybe easier to avoid pseudo elements animation and use normal elements.
-        And indeed, GSAP creators <Lnk path='https://greensock.com/docs/v3/Plugins/CSSRulePlugin#:~:text=convert%20your%20pseudo%2Delements%20to%20real%20HTML%20elements%20and%20animate%20them%20directly'>suggest to</Lnk> <i><q>convert your pseudo-elements to real HTML elements and animate them</q></i>.
+        On my phone it still blinks, maybe easier to avoid pseudo elements animation and use normal
+        elements. And indeed, GSAP creators{' '}
+        <Lnk path="https://greensock.com/docs/v3/Plugins/CSSRulePlugin#:~:text=convert%20your%20pseudo%2Delements%20to%20real%20HTML%20elements%20and%20animate%20them%20directly">
+          suggest to
+        </Lnk>{' '}
+        <i>
+          <q>convert your pseudo-elements to real HTML elements and animate them</q>
+        </i>
+        .
       </p>
 
       <p>No example here, some problem in Next.</p>

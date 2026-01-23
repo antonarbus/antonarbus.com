@@ -29,12 +29,12 @@ const postObj = {
       <ul>
         <li>Sometimes need to test a polyfill with old browser</li>
         <li>
-          Download from{' '}
           <Lnk path="https://developer.chrome.com/blog/chrome-for-testing">
             https://developer.chrome.com/blog/chrome-for-testing
           </Lnk>
         </li>
         <li>
+          Download with{' '}
           <Code inline bash>
             npx @puppeteer/browsers install chrome@116.0.5793.0
           </Code>

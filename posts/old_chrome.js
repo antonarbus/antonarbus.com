@@ -21,7 +21,7 @@ const postObj = {
   date: '2026.01.23',
   tags: ['tools'],
   imgUrl: 'https://antonarbus.com/imgs/xxx.png',
-  desc: 'old chrome verstion',
+  desc: 'old chrome version',
   body: (
     <>
       <H>old chrome version</H>

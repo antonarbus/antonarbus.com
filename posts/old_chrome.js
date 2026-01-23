@@ -18,7 +18,7 @@ import {
 
 const postObj = {
   title: 'Old chrome version',
-  date: '2026.11.xx',
+  date: '2026.01.23',
   tags: ['tools'],
   imgUrl: 'https://antonarbus.com/imgs/xxx.png',
   desc: 'Old chrome verstion',

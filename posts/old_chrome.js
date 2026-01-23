@@ -17,18 +17,19 @@ import {
 } from '/components/post/reExport'
 
 const postObj = {
-  title: 'Old chrome version',
+  title: 'old chrome version',
   date: '2026.01.23',
   tags: ['tools'],
   imgUrl: 'https://antonarbus.com/imgs/xxx.png',
-  desc: 'Old chrome verstion',
+  desc: 'old chrome verstion',
   body: (
     <>
-      <H>Old chrome version</H>
+      <H>old chrome version</H>
 
       <ul>
         <li>Sometimes need to test a polyfill with old browser</li>
         <li>
+          Download from{' '}
           <Lnk path="https://developer.chrome.com/blog/chrome-for-testing">
             https://developer.chrome.com/blog/chrome-for-testing
           </Lnk>

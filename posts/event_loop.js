@@ -1,6 +1,5 @@
 'use client'
 
-
 import { Code, H, Hs, Lnk, React, jsxToStr } from '/components/post/reExport'
 
 function Cmpt0() {
@@ -159,70 +158,93 @@ const postObj = {
 
       <ol>
         <li>
-          M<span style={{ color: 'red', fontWeight: 600 }}>a</span>crotask (script, event handler){' '}
-          <br />
+          <b>Macrotask</b> - one task from queue (script, setTimeout, event handler)
         </li>
         <li>
-          M<span style={{ color: 'red', fontWeight: 600 }}>i</span>crotask (promise handlers &{' '}
-          <Code>queueMicrotask(func)</Code>) <br />
+          <b>All microtasks</b> - drain queue (promises, queueMicrotask)
         </li>
         <li>
-          Render <br />
+          <b>Render</b> - if needed: rAF → style → layout → paint
         </li>
         <li>
-          M<span style={{ color: 'red', fontWeight: 600 }}>a</span>crotask set by{' '}
-          <Code>setTimeout(func)</Code> <br />
+          <b>Idle</b> - requestIdleCallback (if time remains)
         </li>
-        <li>... again & again</li>
+        <li>...repeat</li>
       </ol>
 
-      <pre style={{ whiteSpace: 'pre-wrap' }}>
-        {`
-          Call stack (synchronous code):
-            1) code1
-            2) setTimeout(callback2) or setInterval(callback2)
-            3) Promise.resolve().then(callback3) or queueMicrotask(callback3)
-            4) react.setState('new value') or store.dispatch('some action')
-            5) requestAnimationFrame(callback4)
-            6) code5
+      <Code block>{`
+Event loop cycle (one iteration):
 
-          Execution order
+1. MACROTASK (pick one from queue)
+   └── script execution, setTimeout, setInterval, event handlers
+   └── Redux: dispatch() runs reducer synchronously here
 
-          Call stack (synchronous code):
-            - code1 runs
-            - setTimeout(callback2) schedules a macrotask (runs later)
-            - Promise.resolve().then(callback3) schedules a microtask (runs soon)
-            - store.dispatch('some action') runs
-                React updates state and commits DOM changes synchronously (in this same stack)
-                React useLayoutEffect callbacks run here synchronously after DOM mutations
-            - requestAnimationFrame(callback4) schedules a callback for the next frame
-            - code5 runs
-            - call stack empties
+2. ALL MICROTASKS (drain entire queue)
+   └── Promise.then/catch/finally, queueMicrotask, MutationObserver
+   └── React: batched setState re-renders (React 18+)
 
-          Microtasks queue:
-            - all previously queued microtasks
-            - callback3 (Promise/queueMicrotask) runs now
-            - (microtasks can enqueue more microtasks; the queue is fully drained before painting)
-            - 🕒 this happens **before the browser paints**
+3. RENDER (if needed, ~60fps = every 16ms)
+   ├── requestAnimationFrame callbacks
+   ├── Style calculation
+   ├── Layout
+   ├── React: useLayoutEffect (sync, before paint)
+   └── Paint
 
-          Browser rendering cycle (current frame):
-            - style recalculation (CSS)
-            - layout (positions and sizes)
-            - DOM updates from React are now visible
-            - PAINT #1!!! current frame (if anything visually changed)
-            - React \`useEffect\` callbacks run after paint (asynchronously via MessageChannel or similar)
+4. AFTER PAINT
+   └── React: useEffect (async, after paint)
 
-          Next frame:
-            - requestAnimationFrame(callback4) runs (just before this frame's paint)
-            - PAINT #2!!! next frame (≈16 ms at 60 Hz):
-            - 🕒 if nothing changed in the UI, the browser may skip actual repaint work,
-                  but requestAnimationFrame() still fires on the next refresh tick (~16 ms)
-                  as long as the page is visible
+5. IDLE (if time left before next frame)
+   └── requestIdleCallback
 
-          Next macrotask:
-            - setTimeout / setInterval callback (→ callback2) runs in a new event-loop tick
-        `}
-      </pre>
+...repeat
+      `}</Code>
+
+      <H>React timing</H>
+
+      <ul>
+        <li>
+          <Code>setState</Code> / <Code>useState</Code> — synchronous call, re-render batched as
+          microtask
+        </li>
+        <li>
+          <Code>useLayoutEffect</Code> — runs after DOM mutations, before paint (blocking)
+        </li>
+        <li>
+          <Code>useEffect</Code> — runs after paint (non-blocking)
+        </li>
+        <li>
+          Redux <Code>dispatch</Code> — synchronous (reducers run immediately), React re-render
+          scheduled
+        </li>
+      </ul>
+
+      <Code block>{`
+// Example: what runs when?
+
+console.log('1 sync')                          // 1. runs immediately
+
+setTimeout(() => console.log('5 timeout'))     // macrotask queue
+
+Promise.resolve().then(() => 
+  console.log('3 promise')                     // microtask queue
+)
+
+queueMicrotask(() => 
+  console.log('4 microtask')                   // microtask queue
+)
+
+requestAnimationFrame(() => 
+  console.log('6 rAF')                         // before next paint
+)
+
+requestIdleCallback(() => 
+  console.log('7 idle')                        // when browser is idle
+)
+
+console.log('2 sync')                          // 2. runs immediately
+
+// Output: 1 sync → 2 sync → 3 promise → 4 microtask → 6 rAF → 5 timeout → 7 idle
+      `}</Code>
 
       <H>Web workers</H>
 

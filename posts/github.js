@@ -1,6 +1,5 @@
 'use client'
 
-
 import { Code, H, Lnk, jsxToStr } from '/components/post/reExport'
 
 const postObj = {
@@ -133,7 +132,7 @@ const postObj = {
         </tbody>
       </table>
 
-      <p>Useful Search Prompts for Commits</p>
+      <H>Useful Search Prompts for Commits</H>
 
       <table border="1" cellpadding="6" cellspacing="0">
         <thead>
@@ -203,7 +202,7 @@ const postObj = {
         </tbody>
       </table>
 
-      <p>Date Range Syntax</p>
+      <H>Date Range Syntax</H>
 
       <table border="1" cellpadding="6" cellspacing="0">
         <thead>
@@ -246,13 +245,13 @@ const postObj = {
         </tbody>
       </table>
 
-      <h3>Combine Filters</h3>
+      <H>Combine Filters</H>
 
       <ul>
         <li>{'org:COMPANY author:NAME is:pr is:merged created:>=2025-01-01 "zod"'}</li>
       </ul>
 
-      <p>Tips</p>
+      <H>Tips</H>
 
       <ul>
         <li>
@@ -268,6 +267,53 @@ const postObj = {
           <code>draft:true</code> to filter PRs by state.
         </li>
         <li>You can click “Save search” in GitHub UI to bookmark filters.</li>
+      </ul>
+
+      <H>Several accounts</H>
+
+      <ul>
+        <li>Have personal and company account</li>
+        <li>Probably one SSH key is enough to manage repos from different accounts</li>
+        <li>
+          In my case personal account was used in company and after migration same key can not be
+          used
+        </li>
+        <li>Need 2 separate keys</li>
+        <li>But computer can not distinguish between 2 keys and picks the top one</li>
+        <li>
+          The only way is to declare 2 keys in <code>config</code> file and use an alias
+        </li>
+        <li>
+          <Code inline bash>
+            code ~/.ssh/config
+          </Code>
+        </li>
+        <Code block bash>{`
+          # Personal account (default)
+          Host github.com
+            IdentityFile ~/.ssh/id_rsa
+
+          # Corporate account
+          Host abc
+            HostName github.com
+            IdentityFile ~/.ssh/company_ssh
+        `}</Code>
+        <li>
+          then we replace domain in upstream url <code>github.com</code> with alias <code>abc</code>
+        </li>
+        <li>
+          <code>git@github.com:company/repo.git</code> to be <code>git@abc:company/repo.git</code>
+        </li>
+        <li>
+          Clone instead of <code>git clone git@github.com:company/repo.git</code> with alias{' '}
+          <code>git clone git@abc:company/repo.git</code>
+        </li>
+        <li>For existing repo change upstream url</li>
+        <li>
+          Check "remote" URL pointing to where repo lives on GitHub by <code>git remote -v</code>
+        </li>
+        <li>Add alias 'abc' to the remote url instead of 'github.com'</li>
+        <li>git remote set-url origin git@abc:company/repo.git</li>
       </ul>
     </>
   )

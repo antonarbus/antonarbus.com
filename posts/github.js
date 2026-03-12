@@ -279,10 +279,11 @@ const postObj = {
           another company account the same key can not be used, coz other company account still
           exists with archived repos
         </li>
-        <li>Need 2 separate keys</li>
-        <li>But computer can not distinguish between 2 keys and picks the top one</li>
+        <li>So we need 2 separate keys</li>
+        <li>But computer can not distinguish between them and picks the top one</li>
         <li>
-          The only way is to declare 2 keys in <code>config</code> file and use an alias
+          The only way is to declare 2 keys in <code>config</code> file and use an alias for
+          different repositories
         </li>
         <li>
           <Code inline bash>
@@ -300,18 +301,18 @@ const postObj = {
             IdentityFile ~/.ssh/company_ssh
         `}</Code>
         <li>
-          then we replace domain in upstream url <code>github.com</code> with alias <code>abc</code>
+          Then we replace domain in upstream url <code>github.com</code> with alias <code>abc</code>
         </li>
         <li>
           <code>git@github.com:company/repo.git</code> to be <code>git@abc:company/repo.git</code>
         </li>
         <li>
-          Clone instead of <code>git clone git@github.com:company/repo.git</code> with alias{' '}
-          <code>git clone git@abc:company/repo.git</code>
+          Clone with alias <code>git clone git@abc:company/repo.git</code> instead of{' '}
+          <code>git clone git@github.com:company/repo.git</code>
         </li>
-        <li>For existing repo change upstream url</li>
+        <li>For existing repos change upstream url manually</li>
         <li>
-          Check "remote" URL pointing to where repo lives on GitHub by <code>git remote -v</code>
+          Check "remote" URL where repo lives on GitHub by <code>git remote -v</code>
         </li>
         <li>Add alias 'abc' to the remote url instead of 'github.com'</li>
         <li>git remote set-url origin git@abc:company/repo.git</li>

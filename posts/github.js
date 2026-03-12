@@ -275,8 +275,9 @@ const postObj = {
         <li>Have personal and company account</li>
         <li>Probably one SSH key is enough to manage repos from different accounts</li>
         <li>
-          In my case personal account was used in company and after migration same key can not be
-          used
+          In my case the personal account was used inside company account and after migration to
+          another company account the same key can not be used, coz other company account still
+          exists with archived repos
         </li>
         <li>Need 2 separate keys</li>
         <li>But computer can not distinguish between 2 keys and picks the top one</li>

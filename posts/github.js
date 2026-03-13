@@ -315,7 +315,9 @@ const postObj = {
           Check "remote" URL where repo lives on GitHub by <code>git remote -v</code>
         </li>
         <li>Add alias 'abc' to the remote url instead of 'github.com'</li>
-        <li>git remote set-url origin git@abc:company/repo.git</li>
+        <li>
+          <code>git remote set-url origin git@abc:company/repo.git</code>
+        </li>
       </ul>
     </>
   )

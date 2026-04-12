@@ -1,6 +1,5 @@
 'use client'
 
-
 import {
   Code,
   H,
@@ -564,11 +563,11 @@ const postObj = {
       <Code block jsx>{`
         // 📁 main.test.ts
 
-        // ✅ Auto-mock the entire module
-        vi.mock('./utils') 
-
         import * as utilsModule from './utils'
         import { run } from './main'
+
+        // ✅ Auto-mock the entire module
+        vi.mock(import('./utils')) 
 
         describe('run', () => {
           it('uses mocked myFunction - version 1', () => {
@@ -633,6 +632,7 @@ const postObj = {
           // Dynamically mock axios
           vi.mock(import('axios'), async (importOriginal) => {
             const axios = await importOriginal()
+
             return {
               ...axios,  // Spread the original axios module
               get: vi.fn(() => Promise.resolve({ data: 'mocked' }))  // Mock only the get method

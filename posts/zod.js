@@ -1,6 +1,5 @@
 'use client'
 
-
 import {
   Code,
   H,
@@ -223,6 +222,41 @@ const postObj = {
         
         const b = z.string().trim().toUpperCase().default("  tuna  ");
         b.parse(undefined); // => "  tuna  "
+      `}</Code>
+
+      <H>z.custom()</H>
+
+      <ul>
+        <li>
+          <code>z.custom&lt;T&gt;()</code> tells zod to keep the TypeScript type <code>T</code>
+          without defining runtime validation rules for it
+        </li>
+        <li>
+          Useful when migrating legacy data where shape is known in TS but not yet modeled in zod
+        </li>
+        <li>
+          <code>z.unknown()</code> also skips validation, but loses the type and often requires
+          <code>as</code> casts later
+        </li>
+        <li>
+          Try to replace <code>z.custom()</code> with real schemas when possible to catch corrupted
+          payloads during hydration/parsing
+        </li>
+      </ul>
+
+      <Code block jsx>{`
+        // from the real project 
+        
+        export const chatSessionSchema = z.object({
+          id: z.string(),
+          title: z.string(),
+          createdAt: z.number(),
+          updatedAt: z.number(),
+          // z.custom<T>() keeps the inferred TS type T, but does not validate runtime shape.
+          // TODO: replace with real schemas to catch corrupted data at hydration time.
+          messages: z.array(z.custom<ExtendedMessageType>()),
+          feedbacks: z.record(z.string(), z.custom<SentFeedback>()),
+        })
       `}</Code>
     </>
   )

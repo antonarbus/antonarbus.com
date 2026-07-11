@@ -1,6 +1,5 @@
 'use client'
 
-
 import { Code, H, Hs, Lnk, jsxToStr } from '/components/post/reExport'
 
 const postObj = {
@@ -580,9 +579,19 @@ const postObj = {
       <ul>
         <li>
           <Code>
-            kill -9 <i>PID</i>
+            kill -9 <i>PID</i>{' '}
           </Code>{' '}
           kill the process
+        </li>
+        <li>
+          <Code>ps -eo pid,command | grep -i "Git/" | grep -v grep</Code> show PIDs of process which
+          are run in "Git/" dir
+        </li>
+        <li>
+          <Code>kill 12345 23456 34567</Code> gracefully stop processes
+        </li>
+        <li>
+          <Code>kill -9 12345 23456 34567</Code> stop forcefully processes
         </li>
       </ul>
 

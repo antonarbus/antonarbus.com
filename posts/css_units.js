@@ -1,6 +1,5 @@
 'use client'
 
-
 import { H, jsxToStr, Lnk } from '/components/post/reExport'
 
 const postObj = {
@@ -11,7 +10,13 @@ const postObj = {
   desc: 'css units',
   body: (
     <>
-      <p>Good <Lnk path='https://dev.to/matthias/units-in-css-em-rem-pt-px-vw-vh-vmin-vmax-ex-ch-53l0'>post</Lnk> about units.</p>
+      <p>
+        Good{' '}
+        <Lnk path="https://dev.to/matthias/units-in-css-em-rem-pt-px-vw-vh-vmin-vmax-ex-ch-53l0">
+          post
+        </Lnk>{' '}
+        about units.
+      </p>
 
       <H>px</H>
 
@@ -41,34 +46,86 @@ const postObj = {
 
       <ul>
         <li>relative from parent's same property</li>
-        <li>for <code>margin</code> % is taken from parent's width</li>
-        <li>for <code>line-height</code> % is taken from current font-size</li>
-        <li>for <code>width</code> & <code>height</code> % is taken from parent's w/h</li>
-        <li>for <code>width</code> & <code>height</code> with <code>position:fixed</code> % is taken from window's w/h</li>
-        <li>for <code>width</code> & <code>height</code> with <code>position:absolute</code> %  % is taken from window's w/h if there is no parent</li>
-        <li>for <code>top</code> <code>right</code> <code>bottom</code> <code>left</code> % is taken from parents height & width (as understood)</li>
+        <li>
+          for <code>margin</code> % is taken from parent's width
+        </li>
+        <li>
+          for <code>line-height</code> % is taken from current font-size
+        </li>
+        <li>
+          for <code>width</code> & <code>height</code> % is taken from parent's w/h
+        </li>
+        <li>
+          for <code>width</code> & <code>height</code> with <code>position:fixed</code> % is taken
+          from window's w/h
+        </li>
+        <li>
+          for <code>width</code> & <code>height</code> with <code>position:absolute</code> % is
+          taken from window's w/h if there is no parent
+        </li>
+        <li>
+          for <code>top</code> <code>right</code> <code>bottom</code> <code>left</code> % is taken
+          from parents height & width (as understood)
+        </li>
       </ul>
 
       <H>vw & vh</H>
 
       <ul>
-        <li>1% from window width & height</li>
-        <li>50% means the half of the viewport width & height</li>
+        <li>1% of viewport width & height</li>
+        <li>
+          <code>50vw</code> means half of the viewport width, <code>50vh</code> half of the viewport
+          height
+        </li>
+        <li>
+          based on the <b>initial containing block</b>, does not change when mobile browser UI
+          appears/disappears
+        </li>
+      </ul>
+
+      <H>svh, lvh, dvh (& svw, lvw, dvw)</H>
+
+      <ul>
+        <li>viewport units that account for mobile browser UI (address bar)</li>
+        <li>
+          <code>svh</code> / <code>svw</code> — <b>small</b> viewport: browser UI fully visible
+          (smallest available space)
+        </li>
+        <li>
+          <code>lvh</code> / <code>lvw</code> — <b>large</b> viewport: browser UI fully hidden
+          (largest available space)
+        </li>
+        <li>
+          <code>dvh</code> / <code>dvw</code> — <b>dynamic</b> viewport: updates as browser UI
+          shows/hides
+        </li>
+        <li>
+          use <code>100dvh</code> instead of <code>100vh</code> for full-height mobile layouts to
+          avoid content clipping
+        </li>
       </ul>
 
       <H>vmin & vmax</H>
 
       <ul>
-        <li>min & max from <code>vw</code> & <code>vh</code></li>
-        <li><code>vmin</code> is 1% of viewport's smaller side</li>
-        <li><code>vmax</code> is 1% of viewport's larger side</li>
+        <li>
+          min & max from <code>vw</code> & <code>vh</code>
+        </li>
+        <li>
+          <code>vmin</code> is 1% of viewport's smaller side
+        </li>
+        <li>
+          <code>vmax</code> is 1% of viewport's larger side
+        </li>
         <li>scalable for screen sizes</li>
         <li>good for phones</li>
       </ul>
 
       <H>ex & ch</H>
 
-      <p>Smth like <code>em</code>, not used widely, just forget it.</p>
+      <p>
+        Smth like <code>em</code>, not used widely, just forget it.
+      </p>
 
       <H>mm, cm, pt, pc</H>
 

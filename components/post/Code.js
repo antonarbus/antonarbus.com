@@ -114,6 +114,8 @@ function getLang({ props }) {
   if (props.markup) lang = 'markup'
   if (props.yaml) lang = 'yaml'
   if (props.none) lang = 'none'
+  if (props.md) lang = 'md'
+  if (props.markdown) lang = 'markdown'
 
   const isBlock = Boolean(false || props.block)
   const isInline = Boolean(false || props.inline || (lang && !isBlock))

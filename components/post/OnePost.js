@@ -21,6 +21,7 @@ import 'prismjs/components/prism-ruby'
 import 'prismjs/components/prism-tsx'
 import 'prismjs/components/prism-typescript'
 import 'prismjs/components/prism-ignore'
+import 'prismjs/components/prism-markdown'
 import 'prismjs/plugins/normalize-whitespace/prism-normalize-whitespace'
 import { Resizable } from 're-resizable'
 

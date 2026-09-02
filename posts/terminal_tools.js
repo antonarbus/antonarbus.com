@@ -7,7 +7,7 @@ const postObj = {
   date: '2026.09.02',
   tags: ['terminal', 'tools', 'mac'],
   imgUrl: 'https://antonarbus.com/imgs/xxx.png',
-  desc: 'cheat sheet for modern CLI tools: ripgrep, fd, bat, eza, fzf, zoxide, trash-cli',
+  desc: 'cheat sheet for modern CLI tools: ripgrep, fd, bat, eza, fzf, zoxide, delta, trash-cli',
   body: (
     <>
       <H>Terminal Tools</H>
@@ -171,6 +171,26 @@ const postObj = {
         </li>
         <li>
           <Code>z ask</Code> jump to a visited folder whose name matches "ask"
+        </li>
+      </ul>
+
+      <H>delta (git-delta)</H>
+
+      <ul>
+        <li>
+          Pager for <code>git diff</code> / <code>git show</code> / <code>git log -p</code> — syntax highlighting, word-level change highlighting, line numbers
+        </li>
+        <li>
+          <Lnk path="https://github.com/dandavison/delta">https://github.com/dandavison/delta</Lnk>
+        </li>
+        <li>
+          <Code>brew install git-delta</Code>
+        </li>
+        <li>
+          <Code>git config --global core.pager delta</Code> makes plain <code>git diff</code> render through delta automatically
+        </li>
+        <li>
+          <Code>{'git config --global interactive.diffFilter "delta --color-only"'}</Code> also use it for <code>git add -p</code>
         </li>
       </ul>
 

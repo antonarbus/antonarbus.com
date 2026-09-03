@@ -7,7 +7,7 @@ const postObj = {
   date: '2026.09.02',
   tags: ['terminal', 'tools', 'mac'],
   imgUrl: 'https://antonarbus.com/imgs/xxx.png',
-  desc: 'cheat sheet for modern CLI tools: ripgrep, fd, bat, eza, fzf, zoxide, delta, trash-cli',
+  desc: 'cheat sheet for modern CLI tools: ripgrep, fd, bat, eza, jq, fzf, zoxide, delta, trash-cli',
   body: (
     <>
       <H>Terminal Tools</H>
@@ -27,7 +27,8 @@ const postObj = {
 
       <ul>
         <li>
-          Replaces <code>grep</code> — recursive by default, respects .gitignore, much faster
+          Searches <i>inside file contents</i> for matching text. Replaces <code>grep</code> —
+          recursive by default, respects .gitignore, much faster
         </li>
         <li>
           <Lnk path="https://github.com/BurntSushi/ripgrep">
@@ -52,7 +53,8 @@ const postObj = {
 
       <ul>
         <li>
-          Replaces <code>find</code> — simpler syntax, respects .gitignore
+          Finds files and folders by <i>name</i> — never looks at file contents. Replaces{' '}
+          <code>find</code> — simpler syntax, respects .gitignore
         </li>
         <li>
           <Lnk path="https://github.com/sharkdp/fd">https://github.com/sharkdp/fd</Lnk>
@@ -111,6 +113,36 @@ const postObj = {
         </li>
       </ul>
 
+      <H>jq</H>
+
+      <ul>
+        <li>
+          Command-line JSON processor — extracts, filters, and reshapes JSON instead of just
+          displaying it (unlike <code>bat</code>, which only shows a file as-is)
+        </li>
+        <li>
+          <Lnk path="https://github.com/jqlang/jq">https://github.com/jqlang/jq</Lnk>
+        </li>
+        <li>
+          <Code>brew install jq</Code>
+        </li>
+        <li>
+          <Code>{"cat file.json | jq 'keys'"}</Code> list top-level keys when exploring an
+          unfamiliar JSON file
+        </li>
+        <li>
+          <Code>{"cat package.json | jq '.scripts'"}</Code> see a project's npm scripts without
+          opening the file
+        </li>
+        <li>
+          <Code>{"cat package.json | jq '.devDependencies | keys'"}</Code> drill into one nested
+          field
+        </li>
+        <li>
+          <Code>{"curl ... | jq '.someField'"}</Code> pull one field out of a live API response
+        </li>
+      </ul>
+
       <H>fzf</H>
 
       <ul>
@@ -141,13 +173,13 @@ const postObj = {
 
       <ul>
         <li>
-          <kbd>CTRL+T</kbd> paste the selected files and directories onto the command-line
+          <kbd>CTRL+T</kbd> search and paste the file or directory onto the command-line
         </li>
         <li>
-          <kbd>ALT+C</kbd> cd into the selected directory
+          <kbd>ALT+C</kbd> cd into the found directory
         </li>
         <li>
-          <kbd>CTRL-R</kbd> paste the selected command from history onto the command-line
+          <kbd>CTRL-R</kbd> paste from terminal history onto the command-line
         </li>
         <li>
           <code>{'COMMAND [DIRECTORY/][FUZZY_PATTERN]**<TAB>'}</code> fuzzy completion
@@ -178,7 +210,8 @@ const postObj = {
 
       <ul>
         <li>
-          Pager for <code>git diff</code> / <code>git show</code> / <code>git log -p</code> — syntax highlighting, word-level change highlighting, line numbers
+          Pager for <code>git diff</code> / <code>git show</code> / <code>git log -p</code> — syntax
+          highlighting, word-level change highlighting, line numbers
         </li>
         <li>
           <Lnk path="https://github.com/dandavison/delta">https://github.com/dandavison/delta</Lnk>
@@ -187,10 +220,12 @@ const postObj = {
           <Code>brew install git-delta</Code>
         </li>
         <li>
-          <Code>git config --global core.pager delta</Code> makes plain <code>git diff</code> render through delta automatically
+          <Code>git config --global core.pager delta</Code> makes plain <code>git diff</code> render
+          through delta automatically
         </li>
         <li>
-          <Code>{'git config --global interactive.diffFilter "delta --color-only"'}</Code> also use it for <code>git add -p</code>
+          <Code>{'git config --global interactive.diffFilter "delta --color-only"'}</Code> also use
+          it for <code>git add -p</code>
         </li>
       </ul>
 

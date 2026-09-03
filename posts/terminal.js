@@ -145,6 +145,10 @@ const postObj = {
           </Code>{' '}
           create folder
         </li>
+        <li>
+          <Code bash>mkdir -p a/b/c</Code> create nested folders in one go, no need to create each
+          level separately
+        </li>
       </ul>
 
       <H>Create file</H>
@@ -336,6 +340,10 @@ const postObj = {
             du -h <i>path</i>
           </Code>{' '}
           size of folder
+        </li>
+        <li>
+          <Code>{'du -sh * | sort -h'}</Code> size of every file/folder in the current directory,
+          sorted smallest to largest
         </li>
       </ul>
 
@@ -563,6 +571,156 @@ const postObj = {
         </li>
         <li>
           <Code bash>history</Code> show history commands
+        </li>
+      </ul>
+
+      <H>Vi mode</H>
+
+      <ul>
+        <li>
+          Switches the terminal's line editor from the default Emacs-style keybindings above (
+          <kbd>Ctrl</kbd>+<kbd>A</kbd>, <kbd>Ctrl</kbd>+<kbd>W</kbd>, etc.) to Vim-style modal
+          editing
+        </li>
+        <li>
+          add to <code>~/.zshrc</code>: <code>{'bindkey -v'}</code>
+        </li>
+        <li>
+          apply with <Code bash>source ~/.zshrc</Code>
+        </li>
+        <li>
+          starts in insert mode; press <kbd>Esc</kbd> to enter normal (command) mode, same as Vim
+        </li>
+        <li>
+          only edits the current command line — it's not a full Vim, so most motions/operators work
+          but text objects, marks, and macros generally don't
+        </li>
+        <li>
+          optional: <code>{'export KEYTIMEOUT=1'}</code> removes the small lag after pressing{' '}
+          <kbd>Esc</kbd> before normal mode kicks in
+        </li>
+      </ul>
+
+      <Hs>Mode switching</Hs>
+
+      <ul>
+        <li>
+          <kbd>Esc</kbd> insert → normal mode
+        </li>
+        <li>
+          <kbd>i</kbd> insert before cursor
+        </li>
+        <li>
+          <kbd>a</kbd> insert after cursor
+        </li>
+        <li>
+          <kbd>I</kbd> insert at start of line
+        </li>
+        <li>
+          <kbd>A</kbd> insert at end of line
+        </li>
+      </ul>
+
+      <Hs>Movement (normal mode)</Hs>
+
+      <ul>
+        <li>
+          <kbd>h</kbd> / <kbd>l</kbd> move left / right
+        </li>
+        <li>
+          <kbd>w</kbd> / <kbd>b</kbd> jump forward / backward one word
+        </li>
+        <li>
+          <kbd>e</kbd> jump to end of word
+        </li>
+        <li>
+          <kbd>0</kbd> start of line
+        </li>
+        <li>
+          <kbd>$</kbd> end of line
+        </li>
+        <li>
+          <kbd>^</kbd> first non-blank character
+        </li>
+        <li>
+          <kbd>f</kbd>x jump forward onto the next <code>x</code> on the line; <kbd>F</kbd>x same
+          backward
+        </li>
+        <li>
+          <kbd>;</kbd> repeat the last <kbd>f</kbd>/<kbd>F</kbd> in the same direction
+        </li>
+        <li>
+          <kbd>%</kbd> jump to the matching bracket (<code>()</code>, <code>{'{}'}</code>,{' '}
+          <code>[]</code>) when the cursor is on one — not just <kbd>f</kbd>/<kbd>t</kbd>, this is
+          another supported jump
+        </li>
+        <li>
+          no phrase/string search on the line — <kbd>f</kbd>/<kbd>t</kbd> only ever take a single
+          character (true in real Vim too), and there's no in-line equivalent of Vim's <kbd>/</kbd>
+          pattern; a full command line is usually short enough that this isn't a real limit in
+          practice
+        </li>
+      </ul>
+
+      <Hs>Editing (normal mode)</Hs>
+
+      <ul>
+        <li>
+          <kbd>x</kbd> delete character under cursor
+        </li>
+        <li>
+          <kbd>X</kbd> delete character before cursor
+        </li>
+        <li>
+          <kbd>dd</kbd> clear the whole line
+        </li>
+        <li>
+          <kbd>dw</kbd> delete to the start of the next word — from mid-word this only removes the
+          rest of the current word plus trailing space, not the whole word
+        </li>
+        <li>
+          <kbd>D</kbd> delete to end of line
+        </li>
+        <li>
+          <kbd>cw</kbd> change a word (same caveat as <kbd>dw</kbd> — from mid-word it only replaces
+          the rest of it)
+        </li>
+        <li>
+          "inside"/"around" text objects like <kbd>{'ci('}</kbd> / <kbd>da'</kbd> work, but only for
+          brackets (<code>()</code>, <code>{'{}'}</code>, <code>[]</code>) and quotes (
+          <code>'</code>, <code>"</code>, <code>`</code>) — <kbd>diw</kbd> / <kbd>daw</kbd> for
+          plain words, a very common Vim habit, are <b>not</b> supported by default
+        </li>
+        <li>
+          <kbd>cc</kbd> change the whole line
+        </li>
+        <li>
+          <kbd>p</kbd> / <kbd>P</kbd> paste after / before cursor
+        </li>
+        <li>
+          <kbd>u</kbd> undo
+        </li>
+        <li>
+          <kbd>.</kbd> repeat the last change
+        </li>
+      </ul>
+
+      <Hs>History (normal mode)</Hs>
+
+      <ul>
+        <li>
+          <kbd>k</kbd> / <kbd>j</kbd> previous / next command in history (same idea as{' '}
+          <kbd>Arrow_Up</kbd> / <kbd>Arrow_Down</kbd>)
+        </li>
+      </ul>
+
+      <Hs>Visual mode</Hs>
+
+      <ul>
+        <li>
+          <kbd>v</kbd> in normal mode enters visual (selection) mode — move with any motion (
+          <kbd>h</kbd>/<kbd>l</kbd>/<kbd>w</kbd>/<kbd>$</kbd> etc.) to extend the selection, then{' '}
+          <kbd>y</kbd> to yank, <kbd>d</kbd>/<kbd>x</kbd> to delete, <kbd>p</kbd> to paste after
         </li>
       </ul>
 

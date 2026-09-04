@@ -80,6 +80,66 @@ const postObj = {
           <code>Permission denied (publickey)</code> errors
         </li>
       </ul>
+
+      <Hs>Two GitHub accounts, one host</Hs>
+
+      <ul>
+        <li>
+          problem: if both personal and work keys are loaded into <code>ssh-agent</code>, SSH tries
+          agent keys in order when connecting to <code>github.com</code>, so the wrong account can
+          end up being used
+        </li>
+
+        <li>
+          solution: define two <code>Host</code> aliases in <code>~/.ssh/config</code>, each locked
+          to its own key with <code>IdentitiesOnly yes</code> (ignore the agent, use only the listed
+          key)
+        </li>
+
+        <Code block bash>{`
+        Host github.com
+          IdentityFile ~/.ssh/id_rsa
+          IdentitiesOnly yes
+
+        Host work-github
+          HostName github.com
+          IdentityFile ~/.ssh/work_ssh
+          IdentitiesOnly yes
+        `}</Code>
+
+        <li>
+          <code>work-github</code> is not a real hostname, it's a made-up alias;{' '}
+          <code>HostName github.com</code> tells SSH to actually connect to <code>github.com</code>{' '}
+          when that alias is used
+        </li>
+
+        <li>
+          which key is used is decided by the remote URL, not by the current folder or which key is
+          loaded in the agent
+        </li>
+
+        <li>
+          personal repos keep the normal <code>git@github.com:...</code> remote and pick up{' '}
+          <code>id_rsa</code>
+        </li>
+
+        <li>
+          work repos need the remote rewritten to use the <code>work-github</code> alias, which
+          picks up the <code>work_ssh</code> key:{' '}
+          <Code bash>git remote set-url origin git@work-github:org-name/repo.git</Code>
+        </li>
+
+        <li>
+          <Code bash>git remote -v</Code> check which remote (and therefore which key) a repo is
+          currently using
+        </li>
+
+        <li>
+          this is the standard, idiomatic way to use multiple SSH identities with one host — SSH has
+          no built-in concept of "one key per account", so <code>Host</code> aliasing is the usual
+          fix
+        </li>
+      </ul>
     </>
   )
 }

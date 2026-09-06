@@ -1,7 +1,6 @@
 'use client'
 
-
-import { Code, Lnk, jsxToStr } from '/components/post/reExport'
+import { Code, ComponentFromHtmlString, Lnk, jsxToStr } from '/components/post/reExport'
 
 function Cmpt(props) {
   return (

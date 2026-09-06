@@ -1,30 +1,6 @@
 'use client'
 
-import { Code, H, Hs, Lnk, React, jsxToStr } from '/components/post/reExport'
-
-function Component({ initCss }) {
-  const [cssState, setCssState] = React.useState(initCss)
-  const updateCss = (e) => setCssState(e.target.value)
-  const textAreaStyle = { padding: '5px', width: '100%', height: '150px' }
-
-  return (
-    <>
-      <textarea style={textAreaStyle} value={cssState} onChange={updateCss} />
-
-      <div className="outer">
-        <div className="inner">Inner text</div>
-      </div>
-
-      {/* CSS nesting lets one editable block style both the outer & the nested inner element */}
-      <style jsx>{`
-        .outer {
-          all: initial;
-          ${cssState}
-        }
-      `}</style>
-    </>
-  )
-}
+import { Code, ComponentFromHtmlString, H, Hs, Lnk, jsxToStr } from '/components/post/reExport'
 
 const postObj = {
   title: 'X & Y position in CSS',
@@ -47,8 +23,22 @@ const postObj = {
         <li>Block element fits the children content</li>
       </ul>
 
-      <Component
-        initCss={`display: block; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  display: inline;\n  background: lightyellow;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: block;
+              background: lightblue;
+            }
+            .inner {
+              display: inline;
+              background: lightyellow;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
       <Hs>Margin & padding</Hs>
@@ -59,8 +49,27 @@ const postObj = {
         <li>All paddings work for all elements</li>
       </ul>
 
-      <Component
-        initCss={`display: block; \nmargin: 30px; \npadding: 10px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  display: inline;\n  margin: 50px;\n  padding: 16px;\n  border: 1px solid black;\n  background: lightyellow;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: block;
+              margin: 30px;
+              padding: 10px;
+              background: lightblue;
+            }
+            .inner {
+              display: inline;
+              margin: 50px;
+              padding: 16px;
+              border: 1px solid black;
+              background: lightyellow;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
       <Hs>Height & width</Hs>
@@ -70,8 +79,26 @@ const postObj = {
         <li>Height & width do not have any effect on inline element</li>
       </ul>
 
-      <Component
-        initCss={`display: block; \nwidth: 100px; \nheight: 100px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  display: inline;\n  width: 500px;\n  height: 500px;\n  background: lightyellow;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: block;
+              width: 100px;
+              height: 100px;
+              background: lightblue;
+            }
+            .inner {
+              display: inline;
+              width: 500px;
+              height: 500px;
+              background: lightyellow;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
       <H>Horizontal position of inline element</H>
@@ -80,40 +107,176 @@ const postObj = {
         Set <Code>text-align</Code> property of parent block element
       </p>
 
-      <Component
-        initCss={`display: block; \ntext-align: left; \nwidth: 200px; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  display: inline;\n  background: lightyellow;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: block;
+              text-align: left;
+              width: 200px;
+              height: 50px;
+              background: lightblue;
+            }
+            .inner {
+              display: inline;
+              background: lightyellow;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
-      <Component
-        initCss={`display: block; \ntext-align: center; \nwidth: 200px; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  display: inline;\n  background: lightyellow;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: block;
+              text-align: center;
+              width: 200px;
+              height: 50px;
+              background: lightblue;
+            }
+            .inner {
+              display: inline;
+              background: lightyellow;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
-      <Component
-        initCss={`display: block; \ntext-align: right; \nwidth: 200px; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  display: inline;\n  background: lightyellow;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: block;
+              text-align: right;
+              width: 200px;
+              height: 50px;
+              background: lightblue;
+            }
+            .inner {
+              display: inline;
+              background: lightyellow;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
       <H>Vertical position of inline elements relative to its normal position</H>
 
-      <Component
-        initCss={`display: block; \nwidth: 200px; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  display: inline;\n  vertical-align: -5px;\n  background: lightyellow;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: block;
+              width: 200px;
+              height: 50px;
+              background: lightblue;
+            }
+            .inner {
+              display: inline;
+              vertical-align: -5px;
+              background: lightyellow;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
       <H>Vertical position with align-content</H>
 
-      <Component
-        initCss={`display: block; \nwidth: 300px; \nheight: 200px; \nbackground: lightblue; \nalign-content: start;\n\n.inner {\n  all: unset;\n  display: inline;\n  background: lightyellow;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: block;
+              width: 300px;
+              height: 200px;
+              background: lightblue;
+              align-content: start;
+            }
+            .inner {
+              display: inline;
+              background: lightyellow;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
-      <Component
-        initCss={`display: block; \nwidth: 300px; \nheight: 200px; \nbackground: lightblue; \nalign-content: center;\n\n.inner {\n  all: unset;\n  display: inline;\n  background: lightyellow;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: block;
+              width: 300px;
+              height: 200px;
+              background: lightblue;
+              align-content: center;
+            }
+            .inner {
+              display: inline;
+              background: lightyellow;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
-      <Component
-        initCss={`display: block; \nwidth: 300px; \nheight: 200px; \nbackground: lightblue; \nalign-content: end;\n\n.inner {\n  all: unset;\n  display: inline;\n  background: lightyellow;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: block;
+              width: 300px;
+              height: 200px;
+              background: lightblue;
+              align-content: end;
+            }
+            .inner {
+              display: inline;
+              background: lightyellow;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
-      <Component
-        initCss={`display: block; \nwidth: 300px; \nheight: 200px; \nbackground: lightblue; \nalign-content: stretch;\n\n.inner {\n  all: unset;\n  display: block;\n  background: lightyellow;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: block;
+              width: 300px;
+              height: 200px;
+              background: lightblue;
+              align-content: stretch;
+            }
+            .inner {
+              display: block;
+              background: lightyellow;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
       <H>Vertical centering of inline element with line-height</H>
@@ -125,8 +288,25 @@ const postObj = {
 
       <p>Child should be one line only.</p>
 
-      <Component
-        initCss={`display: block; \nwidth: 200px; \nheight: 50px; \nline-height: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  display: inline;\n  background: lightyellow;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: block;
+              width: 200px;
+              height: 50px;
+              line-height: 50px;
+              background: lightblue;
+            }
+            .inner {
+              display: inline;
+              background: lightyellow;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
       <H>Horizontal position of block element</H>
@@ -140,16 +320,71 @@ const postObj = {
         <li>It will be visible only if block el has a fixed width</li>
       </ul>
 
-      <Component
-        initCss={`display: block; \nmargin-right: auto; \ntext-align: center; \nwidth: 200px; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  display: inline;\n  background: lightyellow;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: block;
+              margin-right: auto;
+              text-align: center;
+              width: 200px;
+              height: 50px;
+              background: lightblue;
+            }
+            .inner {
+              display: inline;
+              background: lightyellow;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
-      <Component
-        initCss={`display: block; \nmargin-left: auto; \nmargin-right: auto; \ntext-align: center; \nwidth: 200px; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  display: inline;\n  background: lightyellow;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: block;
+              margin-left: auto;
+              margin-right: auto;
+              text-align: center;
+              width: 200px;
+              height: 50px;
+              background: lightblue;
+            }
+            .inner {
+              display: inline;
+              background: lightyellow;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
-      <Component
-        initCss={`display: block; \nmargin-left: auto; \ntext-align: center; \nwidth: 200px; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  display: inline;\n  background: lightyellow;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: block;
+              margin-left: auto;
+              text-align: center;
+              width: 200px;
+              height: 50px;
+              background: lightblue;
+            }
+            .inner {
+              display: inline;
+              background: lightyellow;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
       <H>Position of any element within relative parent with known height</H>
@@ -158,8 +393,29 @@ const postObj = {
         Parent's <Code>height</Code> should be set to have any effect on vertical positioning.
       </p>
 
-      <Component
-        initCss={`display: block; \nposition: relative; \nwidth: 200px; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  display: inline;\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  background: lightyellow;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: block;
+              position: relative;
+              width: 200px;
+              height: 50px;
+              background: lightblue;
+            }
+            .inner {
+              display: inline;
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+              background: lightyellow;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
       <H>
@@ -170,88 +426,413 @@ const postObj = {
         <Code>table-cell</Code> is stretched within <Code>table</Code>
       </p>
 
-      <Component
-        initCss={`display: table; \nwidth: 200px; \nheight: 50px; \npadding: 10px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  display: table-cell;\n  text-align: left;\n  vertical-align: top;\n  background: lightyellow;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: table;
+              width: 200px;
+              height: 50px;
+              padding: 10px;
+              background: lightblue;
+            }
+            .inner {
+              display: table-cell;
+              text-align: left;
+              vertical-align: top;
+              background: lightyellow;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
-      <Component
-        initCss={`display: table; \nwidth: 200px; \nheight: 50px; \npadding: 10px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  display: table-cell;\n  text-align: center;\n  vertical-align: middle;\n  background: lightyellow;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: table;
+              width: 200px;
+              height: 50px;
+              padding: 10px;
+              background: lightblue;
+            }
+            .inner {
+              display: table-cell;
+              text-align: center;
+              vertical-align: middle;
+              background: lightyellow;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
-      <Component
-        initCss={`display: table; \nwidth: 200px; \nheight: 50px; \npadding: 10px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  display: table-cell;\n  text-align: right;\n  vertical-align: bottom;\n  background: lightyellow;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: table;
+              width: 200px;
+              height: 50px;
+              padding: 10px;
+              background: lightblue;
+            }
+            .inner {
+              display: table-cell;
+              text-align: right;
+              vertical-align: bottom;
+              background: lightyellow;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
       <H>Position with flex</H>
 
-      <Component
-        initCss={`display: flex; \njustify-content: flex-start; \nalign-items: flex-start; \nwidth: 200px; \nheight: 50px; \npadding: 10px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  background: lightyellow;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: flex;
+              justify-content: flex-start;
+              align-items: flex-start;
+              width: 200px;
+              height: 50px;
+              padding: 10px;
+              background: lightblue;
+            }
+            .inner {
+              background: lightyellow;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
-      <Component
-        initCss={`display: flex; \njustify-content: center; \nalign-items: center; \nwidth: 200px; \nheight: 50px; \npadding: 10px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  background: lightyellow;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              width: 200px;
+              height: 50px;
+              padding: 10px;
+              background: lightblue;
+            }
+            .inner {
+              background: lightyellow;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
-      <Component
-        initCss={`display: flex; \njustify-content: flex-end; \nalign-items: flex-end; \nwidth: 200px; \nheight: 50px; \npadding: 10px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  background: lightyellow;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: flex;
+              justify-content: flex-end;
+              align-items: flex-end;
+              width: 200px;
+              height: 50px;
+              padding: 10px;
+              background: lightblue;
+            }
+            .inner {
+              background: lightyellow;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
-      <Component
-        initCss={`display: flex; \njustify-content: center; \nalign-items: stretch; \nwidth: 200px; \nheight: 50px; \npadding: 10px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  background: lightyellow;\n  width: 80%;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: flex;
+              justify-content: center;
+              align-items: stretch;
+              width: 200px;
+              height: 50px;
+              padding: 10px;
+              background: lightblue;
+            }
+            .inner {
+              background: lightyellow;
+              width: 80%;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
       <H>Position with grid</H>
 
-      <Component
-        initCss={`display: grid; \nplace-items: start; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  background: lightyellow;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: grid;
+              place-items: start;
+              height: 50px;
+              background: lightblue;
+            }
+            .inner {
+              background: lightyellow;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
-      <Component
-        initCss={`display: grid; \nplace-items: center; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  background: lightyellow;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: grid;
+              place-items: center;
+              height: 50px;
+              background: lightblue;
+            }
+            .inner {
+              background: lightyellow;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
-      <Component
-        initCss={`display: grid; \nplace-items: end; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  background: lightyellow;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: grid;
+              place-items: end;
+              height: 50px;
+              background: lightblue;
+            }
+            .inner {
+              background: lightyellow;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
-      <Component
-        initCss={`display: grid; \nplace-items: start start; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  background: lightyellow;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: grid;
+              place-items: start start;
+              height: 50px;
+              background: lightblue;
+            }
+            .inner {
+              background: lightyellow;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
-      <Component
-        initCss={`display: grid; \nplace-items: start center; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  background: lightyellow;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: grid;
+              place-items: start center;
+              height: 50px;
+              background: lightblue;
+            }
+            .inner {
+              background: lightyellow;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
-      <Component
-        initCss={`display: grid; \nplace-items: start end; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  background: lightyellow;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: grid;
+              place-items: start end;
+              height: 50px;
+              background: lightblue;
+            }
+            .inner {
+              background: lightyellow;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
-      <Component
-        initCss={`display: grid; \nplace-items: normal start; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  background: lightyellow;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: grid;
+              place-items: normal start;
+              height: 50px;
+              background: lightblue;
+            }
+            .inner {
+              background: lightyellow;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
-      <Component
-        initCss={`display: grid; \nplace-items: normal center; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  background: lightyellow;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: grid;
+              place-items: normal center;
+              height: 50px;
+              background: lightblue;
+            }
+            .inner {
+              background: lightyellow;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
-      <Component
-        initCss={`display: grid; \nplace-items: normal end; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  background: lightyellow;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: grid;
+              place-items: normal end;
+              height: 50px;
+              background: lightblue;
+            }
+            .inner {
+              background: lightyellow;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
-      <Component
-        initCss={`display: grid; \nplace-items: start normal; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  background: lightyellow;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: grid;
+              place-items: start normal;
+              height: 50px;
+              background: lightblue;
+            }
+            .inner {
+              background: lightyellow;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
-      <Component
-        initCss={`display: grid; \nplace-items: center normal; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  background: lightyellow;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: grid;
+              place-items: center normal;
+              height: 50px;
+              background: lightblue;
+            }
+            .inner {
+              background: lightyellow;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
-      <Component
-        initCss={`display: grid; \nplace-items: end normal; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  background: lightyellow;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: grid;
+              place-items: end normal;
+              height: 50px;
+              background: lightblue;
+            }
+            .inner {
+              background: lightyellow;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
-      <Component
-        initCss={`display: grid; \nplace-items: stretch legacy; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  background: lightyellow;\n}`}
+      <ComponentFromHtmlString
+        htmlString={`
+          <style>
+            .outer {
+              display: grid;
+              place-items: stretch legacy;
+              height: 50px;
+              background: lightblue;
+            }
+            .inner {
+              background: lightyellow;
+            }
+          </style>
+          <div class="outer">
+            <div class="inner">Inner text</div>
+          </div>
+        `}
       />
 
       <H>Horizontal position with float</H>

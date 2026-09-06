@@ -1,55 +1,6 @@
 'use client'
 
-
-import {
-  H,
-  Lnk,
-  Code,
-  jsxToStr,
-  useState,
-  ComponentFromHtmlString
-} from '/components/post/reExport'
-
-function Component({ initOuterCss, initInnerCss }) {
-  const [outerStyleState, setOuterStyleState] = useState(initOuterCss)
-  const [innerStyleState, setInnerStyleState] = useState(initInnerCss)
-  const updateOuterStyles = (e) => setOuterStyleState(e.target.value)
-  const updateInnerStyles = (e) => setInnerStyleState(e.target.value)
-  const textAreaStyle = { padding: '5px', width: '100%', height: '120px' }
-  const containerStyle = { display: 'inline-block', width: '50%' }
-
-  return (
-    <>
-      <div style={{ textAlign: 'center' }}>
-        <div style={containerStyle}>
-          <div>Outer element</div>
-          <textarea style={textAreaStyle} value={outerStyleState} onChange={updateOuterStyles} />
-        </div>
-        <div style={containerStyle}>
-          <div>Inner element</div>
-          <textarea style={textAreaStyle} value={innerStyleState} onChange={updateInnerStyles} />
-        </div>
-      </div>
-
-      <div className="outer">
-        <div className="inner 1">Inner text</div>
-        <div className="inner 2">Inner text</div>
-        <div className="inner 3">Inner text</div>
-      </div>
-
-      <style jsx>{`
-        .outer {
-          all: initial;
-          ${outerStyleState}
-        }
-        .inner {
-          all: unset;
-          ${innerStyleState}
-        }
-      `}</style>
-    </>
-  )
-}
+import { H, Lnk, Code, jsxToStr, ComponentFromHtmlString } from '/components/post/reExport'
 
 const postObj = {
   title: 'display',
@@ -68,11 +19,27 @@ const postObj = {
         </li>
         <li>text is inline element</li>
         <li>inline elements go on the same line one by one</li>
-        <Component
-          initOuterCss={
-            'display: block; \ntext-align: left; \nwidth: 200px; \nheight: 100px; \nbackground: lightblue;'
-          }
-          initInnerCss={'display: inline; \nbackground: lightyellow;'}
+        <ComponentFromHtmlString
+          htmlString={`
+            <style>
+              .outer {
+                display: block;
+                text-align: left;
+                width: 200px;
+                height: 100px;
+                background: lightblue;
+              }
+              .inner {
+                display: inline;
+                background: lightyellow;
+              }
+            </style>
+            <div class="outer">
+              <div class="inner 1">Inner text</div>
+              <div class="inner 2">Inner text</div>
+              <div class="inner 3">Inner text</div>
+            </div>
+          `}
         />
         <li>jumps to the next line if there is no space anymore</li>
         <li>width / height fits the content & can not be set</li>
@@ -87,20 +54,53 @@ const postObj = {
       <ul>
         <li>Block tends to expand to the whole width</li>
         <li>Block elements go one under another (if there is no "float" property)</li>
-        <Component
-          initOuterCss={
-            'display: block; \ntext-align: left; \nwidth: 200px; \nheight: 100px; \nbackground: lightblue;'
-          }
-          initInnerCss={'display: block; \nbackground: lightyellow;'}
+        <ComponentFromHtmlString
+          htmlString={`
+            <style>
+              .outer {
+                display: block;
+                text-align: left;
+                width: 200px;
+                height: 100px;
+                background: lightblue;
+              }
+              .inner {
+                display: block;
+                background: lightyellow;
+              }
+            </style>
+            <div class="outer">
+              <div class="inner 1">Inner text</div>
+              <div class="inner 2">Inner text</div>
+              <div class="inner 3">Inner text</div>
+            </div>
+          `}
         />
         <li>
           block with <code>width: max-content</code> does not take whole width{' '}
         </li>
-        <Component
-          initOuterCss={
-            'display: block; \ntext-align: left; \nwidth: 200px; \nheight: 100px; \nbackground: lightblue;'
-          }
-          initInnerCss={'display: block; \nbackground: lightyellow; \nwidth: max-content;'}
+        <ComponentFromHtmlString
+          htmlString={`
+            <style>
+              .outer {
+                display: block;
+                text-align: left;
+                width: 200px;
+                height: 100px;
+                background: lightblue;
+              }
+              .inner {
+                display: block;
+                background: lightyellow;
+                width: max-content;
+              }
+            </style>
+            <div class="outer">
+              <div class="inner 1">Inner text</div>
+              <div class="inner 2">Inner text</div>
+              <div class="inner 3">Inner text</div>
+            </div>
+          `}
         />
         <li>height / width can be set</li>
         <li>block elements stick to each other w/o gaps (if there is no margin)</li>

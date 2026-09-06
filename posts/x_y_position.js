@@ -2,39 +2,24 @@
 
 import { Code, H, Hs, Lnk, React, jsxToStr } from '/components/post/reExport'
 
-function Component({ initOuterCss, initInnerCss }) {
-  const [outerStyleState, setOuterStyleState] = React.useState(initOuterCss)
-  const [innerStyleState, setInnerStyleState] = React.useState(initInnerCss)
-  const updateOuterStyles = (e) => setOuterStyleState(e.target.value)
-  const updateInnerStyles = (e) => setInnerStyleState(e.target.value)
-  const textAreaStyle = { padding: '5px', width: '100%', height: '120px' }
-  const containerStyle = { display: 'inline-block', width: '50%' }
+function Component({ initCss }) {
+  const [cssState, setCssState] = React.useState(initCss)
+  const updateCss = (e) => setCssState(e.target.value)
+  const textAreaStyle = { padding: '5px', width: '100%', height: '150px' }
 
   return (
     <>
-      <div style={{ textAlign: 'center' }}>
-        <div style={containerStyle}>
-          <div>Outer element</div>
-          <textarea style={textAreaStyle} value={outerStyleState} onChange={updateOuterStyles} />
-        </div>
-        <div style={containerStyle}>
-          <div>Inner element</div>
-          <textarea style={textAreaStyle} value={innerStyleState} onChange={updateInnerStyles} />
-        </div>
-      </div>
+      <textarea style={textAreaStyle} value={cssState} onChange={updateCss} />
 
       <div className="outer">
         <div className="inner">Inner text</div>
       </div>
 
+      {/* CSS nesting lets one editable block style both the outer & the nested inner element */}
       <style jsx>{`
         .outer {
           all: initial;
-          ${outerStyleState}
-        }
-        .inner {
-          all: unset;
-          ${innerStyleState}
+          ${cssState}
         }
       `}</style>
     </>
@@ -63,8 +48,7 @@ const postObj = {
       </ul>
 
       <Component
-        initOuterCss={'display: block; \nbackground: lightblue;'}
-        initInnerCss={'display: inline; \nbackground: lightyellow;'}
+        initCss={`display: block; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  display: inline;\n  background: lightyellow;\n}`}
       />
 
       <Hs>Margin & padding</Hs>
@@ -76,10 +60,7 @@ const postObj = {
       </ul>
 
       <Component
-        initOuterCss={'display: block; \nmargin: 30px; \npadding: 10px; \nbackground: lightblue;'}
-        initInnerCss={
-          'display: inline; \nmargin: 50px; \npadding: 16px; \nborder: 1px solid black; \nbackground: lightyellow;'
-        }
+        initCss={`display: block; \nmargin: 30px; \npadding: 10px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  display: inline;\n  margin: 50px;\n  padding: 16px;\n  border: 1px solid black;\n  background: lightyellow;\n}`}
       />
 
       <Hs>Height & width</Hs>
@@ -90,10 +71,7 @@ const postObj = {
       </ul>
 
       <Component
-        initOuterCss={'display: block; \nwidth: 100px; \nheight: 100px; \nbackground: lightblue;'}
-        initInnerCss={
-          'display: inline; \nwidth: 500px; \nheight: 500px; \nbackground: lightyellow;'
-        }
+        initCss={`display: block; \nwidth: 100px; \nheight: 100px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  display: inline;\n  width: 500px;\n  height: 500px;\n  background: lightyellow;\n}`}
       />
 
       <H>Horizontal position of inline element</H>
@@ -103,61 +81,39 @@ const postObj = {
       </p>
 
       <Component
-        initOuterCss={
-          'display: block; \ntext-align: left; \nwidth: 200px; \nheight: 50px; \nbackground: lightblue;'
-        }
-        initInnerCss={'display: inline; \nbackground: lightyellow;'}
+        initCss={`display: block; \ntext-align: left; \nwidth: 200px; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  display: inline;\n  background: lightyellow;\n}`}
       />
 
       <Component
-        initOuterCss={
-          'display: block; \ntext-align: center; \nwidth: 200px; \nheight: 50px; \nbackground: lightblue;'
-        }
-        initInnerCss={'display: inline; \nbackground: lightyellow;'}
+        initCss={`display: block; \ntext-align: center; \nwidth: 200px; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  display: inline;\n  background: lightyellow;\n}`}
       />
 
       <Component
-        initOuterCss={
-          'display: block; \ntext-align: right; \nwidth: 200px; \nheight: 50px; \nbackground: lightblue;'
-        }
-        initInnerCss={'display: inline; \nbackground: lightyellow;'}
+        initCss={`display: block; \ntext-align: right; \nwidth: 200px; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  display: inline;\n  background: lightyellow;\n}`}
       />
 
       <H>Vertical position of inline elements relative to its normal position</H>
 
       <Component
-        initOuterCss={'display: block; \nwidth: 200px; \nheight: 50px; \nbackground: lightblue;'}
-        initInnerCss={'display: inline;\nvertical-align: -5px; \nbackground: lightyellow;'}
+        initCss={`display: block; \nwidth: 200px; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  display: inline;\n  vertical-align: -5px;\n  background: lightyellow;\n}`}
       />
 
       <H>Vertical position with align-content</H>
 
       <Component
-        initOuterCss={
-          'display: block; \nwidth: 300px; \nheight: 200px; \nbackground: lightblue; \nalign-content: start;'
-        }
-        initInnerCss={'display: inline; \nbackground: lightyellow;'}
+        initCss={`display: block; \nwidth: 300px; \nheight: 200px; \nbackground: lightblue; \nalign-content: start;\n\n.inner {\n  all: unset;\n  display: inline;\n  background: lightyellow;\n}`}
       />
 
       <Component
-        initOuterCss={
-          'display: block; \nwidth: 300px; \nheight: 200px; \nbackground: lightblue; \nalign-content: center;'
-        }
-        initInnerCss={'display: inline; \nbackground: lightyellow;'}
+        initCss={`display: block; \nwidth: 300px; \nheight: 200px; \nbackground: lightblue; \nalign-content: center;\n\n.inner {\n  all: unset;\n  display: inline;\n  background: lightyellow;\n}`}
       />
 
       <Component
-        initOuterCss={
-          'display: block; \nwidth: 300px; \nheight: 200px; \nbackground: lightblue; \nalign-content: end;'
-        }
-        initInnerCss={'display: inline; \nbackground: lightyellow;'}
+        initCss={`display: block; \nwidth: 300px; \nheight: 200px; \nbackground: lightblue; \nalign-content: end;\n\n.inner {\n  all: unset;\n  display: inline;\n  background: lightyellow;\n}`}
       />
 
       <Component
-        initOuterCss={
-          'display: block; \nwidth: 300px; \nheight: 200px; \nbackground: lightblue; \nalign-content: stretch;'
-        }
-        initInnerCss={'display: block; \nbackground: lightyellow;'}
+        initCss={`display: block; \nwidth: 300px; \nheight: 200px; \nbackground: lightblue; \nalign-content: stretch;\n\n.inner {\n  all: unset;\n  display: block;\n  background: lightyellow;\n}`}
       />
 
       <H>Vertical centering of inline element with line-height</H>
@@ -170,10 +126,7 @@ const postObj = {
       <p>Child should be one line only.</p>
 
       <Component
-        initOuterCss={
-          'display: block; \nwidth: 200px; \nheight: 50px; \nline-height: 50px; \nbackground: lightblue;'
-        }
-        initInnerCss={'display: inline; \nbackground: lightyellow;'}
+        initCss={`display: block; \nwidth: 200px; \nheight: 50px; \nline-height: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  display: inline;\n  background: lightyellow;\n}`}
       />
 
       <H>Horizontal position of block element</H>
@@ -188,24 +141,15 @@ const postObj = {
       </ul>
 
       <Component
-        initOuterCss={
-          'display: block; \nmargin-right: auto; \ntext-align: center; \nwidth: 200px; \nheight: 50px; \nbackground: lightblue;'
-        }
-        initInnerCss={'display: inline; \nbackground: lightyellow;'}
+        initCss={`display: block; \nmargin-right: auto; \ntext-align: center; \nwidth: 200px; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  display: inline;\n  background: lightyellow;\n}`}
       />
 
       <Component
-        initOuterCss={
-          'display: block; \nmargin-left: auto; \nmargin-right: auto; \ntext-align: center; \nwidth: 200px; \nheight: 50px; \nbackground: lightblue;'
-        }
-        initInnerCss={'display: inline; \nbackground: lightyellow;'}
+        initCss={`display: block; \nmargin-left: auto; \nmargin-right: auto; \ntext-align: center; \nwidth: 200px; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  display: inline;\n  background: lightyellow;\n}`}
       />
 
       <Component
-        initOuterCss={
-          'display: block; \nmargin-left: auto; \ntext-align: center; \nwidth: 200px; \nheight: 50px; \nbackground: lightblue;'
-        }
-        initInnerCss={'display: inline; \nbackground: lightyellow;'}
+        initCss={`display: block; \nmargin-left: auto; \ntext-align: center; \nwidth: 200px; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  display: inline;\n  background: lightyellow;\n}`}
       />
 
       <H>Position of any element within relative parent with known height</H>
@@ -215,12 +159,7 @@ const postObj = {
       </p>
 
       <Component
-        initOuterCss={
-          'display: block; \nposition: relative; \nwidth: 200px; \nheight: 50px; \nbackground: lightblue;'
-        }
-        initInnerCss={
-          'display: inline; \nposition: absolute; \ntop: 50%; \nleft: 50%; \ntransform: translate(-50%, -50%); \nbackground: lightyellow;'
-        }
+        initCss={`display: block; \nposition: relative; \nwidth: 200px; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  display: inline;\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  background: lightyellow;\n}`}
       />
 
       <H>
@@ -232,151 +171,87 @@ const postObj = {
       </p>
 
       <Component
-        initOuterCss={
-          'display: table; \nwidth: 200px; \nheight: 50px; \npadding: 10px; \nbackground: lightblue;'
-        }
-        initInnerCss={
-          'display: table-cell; \ntext-align: left; \nvertical-align: top; \nbackground: lightyellow;'
-        }
+        initCss={`display: table; \nwidth: 200px; \nheight: 50px; \npadding: 10px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  display: table-cell;\n  text-align: left;\n  vertical-align: top;\n  background: lightyellow;\n}`}
       />
 
       <Component
-        initOuterCss={
-          'display: table; \nwidth: 200px; \nheight: 50px; \npadding: 10px; \nbackground: lightblue;'
-        }
-        initInnerCss={
-          'display: table-cell; \ntext-align: center; \nvertical-align: middle; \nbackground: lightyellow;'
-        }
+        initCss={`display: table; \nwidth: 200px; \nheight: 50px; \npadding: 10px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  display: table-cell;\n  text-align: center;\n  vertical-align: middle;\n  background: lightyellow;\n}`}
       />
 
       <Component
-        initOuterCss={
-          'display: table; \nwidth: 200px; \nheight: 50px; \npadding: 10px; \nbackground: lightblue;'
-        }
-        initInnerCss={
-          'display: table-cell; \ntext-align: right; \nvertical-align: bottom; \nbackground: lightyellow;'
-        }
+        initCss={`display: table; \nwidth: 200px; \nheight: 50px; \npadding: 10px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  display: table-cell;\n  text-align: right;\n  vertical-align: bottom;\n  background: lightyellow;\n}`}
       />
 
       <H>Position with flex</H>
 
       <Component
-        initOuterCss={
-          'display: flex; \njustify-content: flex-start; \nalign-items: flex-start; \nwidth: 200px; \nheight: 50px; \npadding: 10px; \nbackground: lightblue;'
-        }
-        initInnerCss={'background: lightyellow;'}
+        initCss={`display: flex; \njustify-content: flex-start; \nalign-items: flex-start; \nwidth: 200px; \nheight: 50px; \npadding: 10px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  background: lightyellow;\n}`}
       />
 
       <Component
-        initOuterCss={
-          'display: flex; \njustify-content: center; \nalign-items: center; \nwidth: 200px; \nheight: 50px; \npadding: 10px; \nbackground: lightblue;'
-        }
-        initInnerCss={'background: lightyellow;'}
+        initCss={`display: flex; \njustify-content: center; \nalign-items: center; \nwidth: 200px; \nheight: 50px; \npadding: 10px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  background: lightyellow;\n}`}
       />
 
       <Component
-        initOuterCss={
-          'display: flex; \njustify-content: flex-end; \nalign-items: flex-end; \nwidth: 200px; \nheight: 50px; \npadding: 10px; \nbackground: lightblue;'
-        }
-        initInnerCss={'background: lightyellow;'}
+        initCss={`display: flex; \njustify-content: flex-end; \nalign-items: flex-end; \nwidth: 200px; \nheight: 50px; \npadding: 10px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  background: lightyellow;\n}`}
       />
 
       <Component
-        initOuterCss={
-          'display: flex; \njustify-content: center; \nalign-items: stretch; \nwidth: 200px; \nheight: 50px; \npadding: 10px; \nbackground: lightblue;'
-        }
-        initInnerCss={'background: lightyellow; \nwidth: 80%;'}
+        initCss={`display: flex; \njustify-content: center; \nalign-items: stretch; \nwidth: 200px; \nheight: 50px; \npadding: 10px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  background: lightyellow;\n  width: 80%;\n}`}
       />
 
       <H>Position with grid</H>
 
       <Component
-        initOuterCss={
-          'display: grid; \nplace-items: start; \nheight: 50px; \nbackground: lightblue;'
-        }
-        initInnerCss={'background: lightyellow;'}
+        initCss={`display: grid; \nplace-items: start; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  background: lightyellow;\n}`}
       />
 
       <Component
-        initOuterCss={
-          'display: grid; \nplace-items: center; \nheight: 50px; \nbackground: lightblue;'
-        }
-        initInnerCss={'background: lightyellow;'}
+        initCss={`display: grid; \nplace-items: center; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  background: lightyellow;\n}`}
       />
 
       <Component
-        initOuterCss={'display: grid; \nplace-items: end; \nheight: 50px; \nbackground: lightblue;'}
-        initInnerCss={'background: lightyellow;'}
+        initCss={`display: grid; \nplace-items: end; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  background: lightyellow;\n}`}
       />
 
       <Component
-        initOuterCss={
-          'display: grid; \nplace-items: start start; \nheight: 50px; \nbackground: lightblue;'
-        }
-        initInnerCss={'background: lightyellow;'}
+        initCss={`display: grid; \nplace-items: start start; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  background: lightyellow;\n}`}
       />
 
       <Component
-        initOuterCss={
-          'display: grid; \nplace-items: start center; \nheight: 50px; \nbackground: lightblue;'
-        }
-        initInnerCss={'background: lightyellow;'}
+        initCss={`display: grid; \nplace-items: start center; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  background: lightyellow;\n}`}
       />
 
       <Component
-        initOuterCss={
-          'display: grid; \nplace-items: start end; \nheight: 50px; \nbackground: lightblue;'
-        }
-        initInnerCss={'background: lightyellow;'}
+        initCss={`display: grid; \nplace-items: start end; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  background: lightyellow;\n}`}
       />
 
       <Component
-        initOuterCss={
-          'display: grid; \nplace-items: normal start; \nheight: 50px; \nbackground: lightblue;'
-        }
-        initInnerCss={'background: lightyellow;'}
+        initCss={`display: grid; \nplace-items: normal start; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  background: lightyellow;\n}`}
       />
 
       <Component
-        initOuterCss={
-          'display: grid; \nplace-items: normal center; \nheight: 50px; \nbackground: lightblue;'
-        }
-        initInnerCss={'background: lightyellow;'}
+        initCss={`display: grid; \nplace-items: normal center; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  background: lightyellow;\n}`}
       />
 
       <Component
-        initOuterCss={
-          'display: grid; \nplace-items: normal end; \nheight: 50px; \nbackground: lightblue;'
-        }
-        initInnerCss={'background: lightyellow;'}
+        initCss={`display: grid; \nplace-items: normal end; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  background: lightyellow;\n}`}
       />
 
       <Component
-        initOuterCss={
-          'display: grid; \nplace-items: start normal; \nheight: 50px; \nbackground: lightblue;'
-        }
-        initInnerCss={'background: lightyellow;'}
+        initCss={`display: grid; \nplace-items: start normal; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  background: lightyellow;\n}`}
       />
 
       <Component
-        initOuterCss={
-          'display: grid; \nplace-items: center normal; \nheight: 50px; \nbackground: lightblue;'
-        }
-        initInnerCss={'background: lightyellow;'}
+        initCss={`display: grid; \nplace-items: center normal; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  background: lightyellow;\n}`}
       />
 
       <Component
-        initOuterCss={
-          'display: grid; \nplace-items: end normal; \nheight: 50px; \nbackground: lightblue;'
-        }
-        initInnerCss={'background: lightyellow;'}
+        initCss={`display: grid; \nplace-items: end normal; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  background: lightyellow;\n}`}
       />
 
       <Component
-        initOuterCss={
-          'display: grid; \nplace-items: stretch legacy; \nheight: 50px; \nbackground: lightblue;'
-        }
-        initInnerCss={'background: lightyellow;'}
+        initCss={`display: grid; \nplace-items: stretch legacy; \nheight: 50px; \nbackground: lightblue;\n\n.inner {\n  all: unset;\n  background: lightyellow;\n}`}
       />
 
       <H>Horizontal position with float</H>

@@ -21,25 +21,25 @@ const postObj = {
         </li>
         <li>
           <b>interactive shell</b>: one that shows you a prompt and reads your typed commands — a
-          terminal window/tab/split is interactive too. A script is not
+          terminal window/tab/split is interactive too. A script is not the interactive shell.
         </li>
         <li>
-          so a new terminal window/tab/split is both login <b>and</b> interactive → it runs all 4
-          files below, every time you open one
+          New terminal window/tab/split is both login <b>and</b> interactive → it runs all 4 files
+          below, every time you open one.
         </li>
         <li>
-          <code>~/.zshenv</code> — always, every zsh process (login or not, interactive or not,
-          even plain scripts). Global env vars only.
+          <code>~/.zshenv</code> runs on every zsh process. Global env vars only.
         </li>
         <li>
-          <code>~/.zprofile</code> — login shells only. PATH setup, one-time tool init.
+          <code>~/.zprofile</code> runs on login shells only. PATH setup, one-time tool init.
         </li>
         <li>
-          <code>~/.zshrc</code> — interactive shells only. Aliases, prompt, plugins, completions.
+          <code>~/.zshrc</code> runs on interactive shells only. Aliases, prompt, plugins,
+          completions.
         </li>
         <li>
-          <code>~/.zlogin</code> — login shells only, same as <code>.zprofile</code> but read after{' '}
-          <code>.zshrc</code>. Rarely used.
+          <code>~/.zlogin</code> runs on login shells only, same as <code>.zprofile</code> but read
+          after <code>.zshrc</code>. Rarely used.
         </li>
       </ul>
 

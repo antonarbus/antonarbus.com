@@ -10,6 +10,25 @@ const postObj = {
   private: false,
   body: (
     <>
+      <H>Startup config files</H>
+
+      <ul>
+        <li>Runs in this order, every new window/tab/split (each one is its own shell process)</li>
+        <li>
+          <code>~/.zshenv</code> — every zsh process, always. Global env vars only.
+        </li>
+        <li>
+          <code>~/.zprofile</code> — login shells only. PATH setup, one-time tool init.
+        </li>
+        <li>
+          <code>~/.zshrc</code> — every interactive shell. Aliases, prompt, plugins, completions.
+        </li>
+        <li>
+          <code>~/.zlogin</code> — same as <code>.zprofile</code>, but read after{' '}
+          <code>.zshrc</code>. Rarely used.
+        </li>
+      </ul>
+
       <H>Display</H>
 
       <ul>

@@ -204,6 +204,15 @@ const postObj = {
         <li>
           <Code>z ask</Code> jump to a visited folder whose name matches "ask"
         </li>
+        <li>
+          <Code>zi ask</Code> same, but shows a fuzzy-searchable list to pick from instead of
+          jumping straight there
+        </li>
+        <li>
+          if oh-my-zsh's <code>z</code> plugin is also enabled (<code>plugins=(z)</code>), its{' '}
+          <code>z</code> alias silently wins over zoxide's — pick one (recommended: zoxide, keep{' '}
+          <code>plugins=()</code>)
+        </li>
       </ul>
 
       <H>delta (git-delta)</H>

@@ -13,18 +13,32 @@ const postObj = {
       <H>Startup config files</H>
 
       <ul>
-        <li>Runs in this order, every new window/tab/split (each one is its own shell process)</li>
+        <li>Not all zsh processes are the same: a shell can be login and/or interactive</li>
         <li>
-          <code>~/.zshenv</code> — every zsh process, always. Global env vars only.
+          <b>login shell</b>: started as your "entry point" session — a new terminal window/tab/
+          split (Terminal.app/Ghostty do this by default), or <code>ssh user@host</code>. NOT a
+          subshell like <code>(cmd)</code>, and NOT a script run as <code>./script.sh</code>
+        </li>
+        <li>
+          <b>interactive shell</b>: one that shows you a prompt and reads your typed commands — a
+          terminal window/tab/split is interactive too. A script is not
+        </li>
+        <li>
+          so a new terminal window/tab/split is both login <b>and</b> interactive → it runs all 4
+          files below, every time you open one
+        </li>
+        <li>
+          <code>~/.zshenv</code> — always, every zsh process (login or not, interactive or not,
+          even plain scripts). Global env vars only.
         </li>
         <li>
           <code>~/.zprofile</code> — login shells only. PATH setup, one-time tool init.
         </li>
         <li>
-          <code>~/.zshrc</code> — every interactive shell. Aliases, prompt, plugins, completions.
+          <code>~/.zshrc</code> — interactive shells only. Aliases, prompt, plugins, completions.
         </li>
         <li>
-          <code>~/.zlogin</code> — same as <code>.zprofile</code>, but read after{' '}
+          <code>~/.zlogin</code> — login shells only, same as <code>.zprofile</code> but read after{' '}
           <code>.zshrc</code>. Rarely used.
         </li>
       </ul>

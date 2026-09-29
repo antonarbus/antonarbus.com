@@ -1,6 +1,5 @@
 'use client'
 
-
 import { Code, H, Hs, LazyImg, Lnk, React, jsxToStr } from '/components/post/reExport'
 import { ExportedTypes } from '/types/types'
 import { UserContext, UserContextProvider } from '/types/UserContext'
@@ -1583,6 +1582,48 @@ const postObj = {
             alert(data.toUpperCase()) // No TypeScript error
           }
         `}</Code>
+      </ul>
+      <H>Assertion functions</H>
+      <ul>
+        <li>
+          An Assertion Function is a special return type (<code>asserts value is Type</code>) that
+          narrows a variable in the calling scope for every line after the call, instead of only
+          inside an <code>if</code> block like a type predicate does.
+        </li>
+        <li>
+          It doesn't return a boolean — it returns <code>void</code> and throws when the check fails
+        </li>
+        <li>
+          TS trusts that if the function returns normally, the assertion holds from that point on
+        </li>
+        <Code block jsx>{`
+          function assertIsString(value: unknown): asserts value is string {
+            if (typeof value !== 'string') {
+              throw new Error('not a string')
+            }
+          }
+
+          const data: unknown = 'Hello'
+
+          assertIsString(data)
+          alert(data.toUpperCase()) // narrowed here, no "if" needed
+        `}</Code>
+        <li>
+          There's also a plain form without <code>is</code> — <code>asserts value</code> — which
+          just declares "if this returns, value is truthy"
+        </li>
+        <Code block jsx>{`
+          function assertIsDefined(value: unknown): asserts value {
+            if (!value) {
+              throw new Error('value is falsy')
+            }
+          }
+        `}</Code>
+        <li>
+          Handy when a check naturally throws already (e.g.{' '}
+          <code>expect(value).not.toBeNull()</code> in tests) — wrapping it as an assertion function
+          lets TypeScript narrow the type without a manual non-null assertion (<code>value!</code>)
+        </li>
       </ul>
       <H>Mapped types</H>
       <Hs>Mapped types of union</Hs>

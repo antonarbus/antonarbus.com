@@ -1,6 +1,5 @@
 'use client'
 
-
 import { Code, H, Hs, LazyImg, jsxToStr, Lnk } from '/components/post/reExport'
 
 const postObj = {
@@ -1117,6 +1116,80 @@ const postObj = {
             {'}'} --<i>file.txt</i>
           </Code>{' '}
           take specific file from stash and put into working directory
+        </li>
+      </ul>
+
+      <H>Worktree</H>
+
+      <ul>
+        <p>
+          Jaakko suggested to check out another branch in a separate folder without touching the
+          current one. Handy when you have uncommitted changes and need to quickly run or look at
+          another branch, instead of stash → checkout → checkout back → stash pop.
+        </p>
+        <li>
+          <Code>
+            git worktree add <i>../project-x-worktree-1</i> <i>feature-x</i>
+          </Code>{' '}
+          create folder <i>../project-x-worktree-1</i> with branch <i>feature-x</i> checked out,
+          current folder stays as is with all its changes
+        </li>
+        <li>
+          <Code>
+            git worktree add -b <i>new_branch</i> <i>../folder</i>
+          </Code>{' '}
+          create new branch and check it out in a new folder
+        </li>
+        <li>
+          <Code bash>git worktree list</Code> show all worktrees
+        </li>
+        <li>
+          <Code>
+            git worktree remove <i>../project-x-worktree-1</i>
+          </Code>{' '}
+          delete worktree folder
+        </li>
+        <li>
+          <Code bash>git worktree prune</Code> clean up records of worktrees whose folders were
+          deleted manually
+        </li>
+      </ul>
+
+      <Code block lang="bash">{`
+      git worktree add ../project-x-worktree-1 feature-x
+      cd ../project-x-worktree-1
+      npm install # node_modules, .env, build files are not there
+      npm run dev
+      code . # open in separate VS Code window
+      `}</Code>
+
+      <ul>
+        <p>Copies or links?</p>
+        <li>
+          Working files are real full copies, checked out from the repo objects, not from your
+          current folder. Editing a file in one folder does not affect the other
+        </li>
+        <li>
+          Repo data is shared. New folder gets a <Code>.git</Code> <b>file</b> (not a folder)
+          pointing back to the main repo, e.g.{' '}
+          <Code>gitdir: /path/project-x/.git/worktrees/project-x-worktree-1</Code>
+        </li>
+        <li>
+          Commits, branches, tags, remotes, stashes, config are stored once and visible from all
+          worktrees. Much cheaper than <Code>git clone</Code>
+        </li>
+        <li>
+          Each worktree has only its own <Code>HEAD</Code> (checked out branch) and index (staging
+          area)
+        </li>
+        <p>Gotchas</p>
+        <li>
+          Untracked & ignored files (<Code>node_modules</Code>, <Code>.env</Code>) are not copied
+        </li>
+        <li>Same branch can not be checked out in two worktrees at once</li>
+        <li>
+          Branch should exist locally or on remote, do <Code bash>git fetch</Code> first for a
+          colleague's new branch
         </li>
       </ul>
 

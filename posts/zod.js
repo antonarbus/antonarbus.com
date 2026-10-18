@@ -224,39 +224,97 @@ const postObj = {
         b.parse(undefined); // => "  tuna  "
       `}</Code>
 
-      <H>z.custom()</H>
+      <H>object vs strictObject vs looseObject</H>
 
       <ul>
         <li>
-          <code>z.custom&lt;T&gt;()</code> tells zod to keep the TypeScript type <code>T</code>
-          without defining runtime validation rules for it
+          Only the keys declared in the schema are validated, all other keys are copied to the
+          output untouched
         </li>
         <li>
-          Useful when migrating legacy data where shape is known in TS but not yet modeled in zod
+          <code>z.object()</code> strips unknown keys, <code>z.strictObject()</code> throws on them
         </li>
         <li>
-          <code>z.unknown()</code> also skips validation, but loses the type and often requires
-          <code>as</code> casts later
+          Undeclared keys are not validated at all, even a <code>null</code> or a wrong type passes.
+          Declare the key and it starts being checked
         </li>
         <li>
-          Try to replace <code>z.custom()</code> with real schemas when possible to catch corrupted
-          payloads during hydration/parsing
+          Handy for big API payloads: describe only the fields the UI uses, the rest still travels
+          along
+        </li>
+        <li>
+          <code>z.infer</code> knows only the declared keys (plus an index signature{' '}
+          <code>[x: string]: unknown</code>), so the extra data is there at runtime but untyped
+        </li>
+        <li>
+          Works per level: a plain <code>z.object()</code> nested inside strips unknown keys of that
+          nested object only
         </li>
       </ul>
 
       <Code block jsx>{`
-        // from the real project 
-        
-        export const chatSessionSchema = z.object({
-          id: z.string(),
-          title: z.string(),
-          createdAt: z.number(),
-          updatedAt: z.number(),
-          // z.custom<T>() keeps the inferred TS type T, but does not validate runtime shape.
-          // TODO: replace with real schemas to catch corrupted data at hydration time.
-          messages: z.array(z.custom<ExtendedMessageType>()),
-          feedbacks: z.record(z.string(), z.custom<SentFeedback>()),
-        })
+        const data = { id: 1, name: "Anton", extra: null }
+
+        z.object({ id: z.number() }).parse(data)
+        // => { id: 1 }  (name and extra stripped)
+
+        z.strictObject({ id: z.number() }).parse(data)
+        // throws ZodError (unknown keys)
+
+        z.looseObject({ id: z.number() }).parse(data)
+        // => { id: 1, name: "Anton", extra: null }  (unknown keys kept, not validated)
+
+        z.looseObject({ id: z.number(), extra: z.string() }).parse(data)
+        // throws ZodError (extra is declared now, null is not a string)
+
+        // nested plain object strips only inside itself
+        z.looseObject({ user: z.object({ id: z.number() }) })
+          .parse({ user: { id: 1, secret: "x" }, other: 1 })
+        // => { user: { id: 1 }, other: 1 }
+      `}</Code>
+
+      <H>z.custom()</H>
+
+      <ul>
+        <li>
+          <code>z.custom&lt;T&gt;(check)</code> asserts the TypeScript type <code>T</code> and
+          validates with the optional <code>check</code> callback
+        </li>
+        <li>
+          Callback returns <code>true</code> for a valid value, <code>false</code> makes parse throw
+        </li>
+        <li>No callback means no validation, any value passes</li>
+        <li>
+          Type and callback are independent, zod does not verify that they match, so the type can
+          lie
+        </li>
+        <li>
+          Handy for long generated enums: exact union type, but a new value from the backend does
+          not break parsing. Code that assumes the union is complete may get <code>undefined</code>{' '}
+          though
+        </li>
+        <li>
+          Use <code>z.enum([...])</code> to reject unknown values, <code>z.unknown()</code> also
+          skips validation but loses the type
+        </li>
+        <li>Replace with real schemas when possible to catch corrupted data</li>
+      </ul>
+
+      <Code block jsx>{`
+        type Status = "NEW" | "PAID"
+
+        // no callback: anything passes
+        const a = z.custom<Status>()
+        a.parse("NEW")    // => "NEW"
+        a.parse("BANANA") // => "BANANA" (typed as Status, but it is not)
+        a.parse(42)       // => 42
+
+        // with callback: only what the callback checks is validated
+        const b = z.custom<Status>(value => typeof value === "string")
+        b.parse("BANANA") // => "BANANA" (a string, passes)
+        b.parse(42)       // throws ZodError
+
+        type T = z.infer<typeof b> // => "NEW" | "PAID"
       `}</Code>
     </>
   )

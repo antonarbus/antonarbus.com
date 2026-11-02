@@ -316,6 +316,37 @@ const postObj = {
 
         type T = z.infer<typeof b> // => "NEW" | "PAID"
       `}</Code>
+
+      <H>refine()</H>
+
+      <ul>
+        <li>
+          Adds a custom check on top of a schema: callback gets the already parsed value and returns{' '}
+          <code>true</code> (valid) or <code>false</code> (invalid)
+        </li>
+        <li>
+          Base type check runs first, so the callback receives the right type. Output type stays the
+          same, <code>refine()</code> does not change or narrow it
+        </li>
+        <li>
+          Callback may be async, then use <code>parseAsync()</code>
+        </li>
+        <li>
+          Unlike <code>z.custom()</code> it builds on a real schema, so prefer it when a schema
+          exists
+        </li>
+      </ul>
+
+      <Code block jsx>{`
+        const imageSchema = z.instanceof(Blob).refine(
+          blob => blob.type.startsWith("image/"),
+          { error: "Not an image" },
+        )
+
+        imageSchema.parse(new Blob([], { type: "image/png" })) // ok
+        imageSchema.parse(new Blob([], { type: "text/plain" })) // throws ZodError "Not an image"
+        imageSchema.parse("abc") // throws ZodError, the Blob check fails before refine runs
+      `}</Code>
     </>
   )
 }

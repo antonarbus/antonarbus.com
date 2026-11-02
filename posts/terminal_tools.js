@@ -182,8 +182,14 @@ const postObj = {
           <kbd>CTRL-R</kbd> paste from terminal history onto the command-line
         </li>
         <li>
-          <code>{'COMMAND [DIRECTORY/][FUZZY_PATTERN]**<TAB>'}</code> fuzzy completion
+          <code>{"cd **<TAB>"}</code>{" "}
+          <code>
+            {"code **<TAB>"} <code>{"kill -9 **<TAB>"}</code>{" "}
+          </code>{" "}
+          open search and replaces ** with found path
         </li>
+        <li><code>TAB/SHIFT+TAB</code> to select/unselect multiple results</li>
+        <li><code>CTRL+/</code> collapse lines in results</li>
       </ul>
 
       <H>zoxide</H>
